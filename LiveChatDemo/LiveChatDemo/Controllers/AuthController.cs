@@ -1,6 +1,7 @@
 ﻿using LiveChatDemo.DTOs;
 using LiveChatDemo.Models;
 using LiveChatDemo.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,13 @@ namespace LiveChatDemo.Controllers
     {
         private readonly JwtService _jwtService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly CommonService _commonService;
 
-        public AuthController(JwtService jwtService, UserManager<ApplicationUser> userManager)
+        public AuthController(JwtService jwtService, UserManager<ApplicationUser> userManager, CommonService commonService)
         {
             _jwtService = jwtService;
             _userManager = userManager;
+            _commonService = commonService;
         }
 
         // POST: api/auth/login
@@ -76,6 +79,21 @@ namespace LiveChatDemo.Controllers
             if (user == null)
             {
                 return NotFound();
+            }
+
+            return Ok(UserResponseDTO.FromApplicationUser(user));
+        }
+
+        // GET: api/auth/steam
+        [HttpGet("get")]
+        [Authorize]
+        public async Task<ActionResult<UserResponseDTO>> Get()
+        {
+            var user = await _commonService.Authenticate(User);
+
+            if (user == null)
+            {
+                return BadRequest("Bad Credentials");
             }
 
             return Ok(UserResponseDTO.FromApplicationUser(user));
