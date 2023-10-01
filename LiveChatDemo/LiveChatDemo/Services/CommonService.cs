@@ -23,6 +23,6 @@ namespace LiveChatDemo.Services
             var user = await _userManager.FindByIdAsync(userId);
             return user;
         }
-        public static Entity CreateUserEntity() => new() { CreatedAt = DateTime.UtcNow, Type = EntityType.User };
+        public static Entity CreateEntity(EntityType type) => new() { CreatedAt = DateTime.UtcNow, Type = type };
     }
 }
