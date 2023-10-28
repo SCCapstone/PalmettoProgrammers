@@ -1,7 +1,25 @@
+using System.Text;
 using ForcesUnite.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Validates JWT Tokens
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+    {
+        // TODO secure
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new()
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey1234567890")),
+            ValidateLifetime = false,
+            ValidateAudience = false,
+            ValidateIssuer = false,
+        };
+    }
+);
 builder.Services.AddControllers();
 builder.Services.AddScoped<AccountsService>();
 
