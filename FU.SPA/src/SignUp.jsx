@@ -61,6 +61,17 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+              <Grid item xs = {12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  type="username"
+                  name="username"
+                  autofocus
+                />
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
@@ -69,7 +80,6 @@ export default function SignUp() {
                   fullWidth
                   id="firstName"
                   label="First Name"
-                  autoFocus
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -101,6 +111,36 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs ={12} sm = {4}>
+                <TextField 
+                  required
+                  fullWidth
+                  name="ageDay"
+                  label="Day"
+                  type="ageDay"
+                  id="ageDay"
+                />
+              </Grid>
+              <Grid item xs ={12} sm = {4}>
+                <TextField 
+                  required
+                  fullWidth
+                  name="ageMonth"
+                  label="Month"
+                  type="ageMonth"
+                  id="ageMonth"
+                />
+              </Grid>
+              <Grid item xs ={12} sm = {4}>
+                <TextField 
+                  required
+                  fullWidth
+                  name="ageYear"
+                  label="Year"
+                  type="ageYear"
+                  id="ageYear"
                 />
               </Grid>
               <Grid item xs={12}>
