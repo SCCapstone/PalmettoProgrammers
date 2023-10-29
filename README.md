@@ -8,6 +8,7 @@ In order to build this project you first have to install:
 * [npm](https://www.npmjs.com/package/npm)
 * [Docker](https://www.docker.com/get-started/)
 * [PostgreSQL](https://www.postgresql.org/download/)
+* [Entity framework core tools](https://learn.microsoft.com/en-us/ef/core/cli/)
 
 ## Environment Setup
 ### Starting Postgres
