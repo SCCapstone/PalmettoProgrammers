@@ -50,7 +50,11 @@ Not yet deployed. Will deploy to Azure using publish profile
 
 # Authors
 Ethan Adams - epadams@email.sc.edu
+
 Aaron Keys - alkeys@email.sc.edu
+
 Evan Scales - escales@email.sc.edu
+
 Jackson Williams - JRW30@email.sc.edu
+
 James Pretorius - pretorj@email.sc.edu
