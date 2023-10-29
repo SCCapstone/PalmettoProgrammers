@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FU.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231029001028_InitialDatabase")]
+    [Migration("20231029203428_InitialDatabase")]
     partial class InitialDatabase
     {
         /// <inheritdoc />
@@ -244,13 +244,16 @@ namespace FU.API.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("GameId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("MaxPlayers")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("ScheduledFor")
+                    b.Property<DateTime?>("StartTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
@@ -311,32 +314,6 @@ namespace FU.API.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("TagRelations");
-                });
-
-            modelBuilder.Entity("FU.API.Models.Token", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Expiration")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("JwtToken")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("FU.API.Models.UserRelation", b =>
@@ -744,17 +721,6 @@ namespace FU.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("FU.API.Models.Token", b =>
-                {
-                    b.HasOne("FU.API.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FU.API.Models.UserRelation", b =>

@@ -7,7 +7,8 @@
         public Game Game { get; set; }
         public int GameId { get; set; }
         public string? Description { get; set; }
-        public DateTime? ScheduledFor { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public int? MaxPlayers { get; set; }
         public Chat Chat { get; set; }
         public int ChatId { get; set; }
