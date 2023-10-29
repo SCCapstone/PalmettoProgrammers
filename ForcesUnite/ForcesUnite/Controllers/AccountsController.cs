@@ -43,4 +43,12 @@ public class AccountsController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpGet]
+    public IActionResult GetAccount(LoginRequestDTO request)
+    {
+        // TODO get from db
+        string? userId = (string?)HttpContext.Items[CustomContextItems.UserId];
+        return Ok(userId);
+    }
 }
