@@ -3,6 +3,7 @@ using ForcesUnite.Services;
 using ForcesUnite.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using ForcesUnite.Helpers;
 
 namespace ForcesUnite.Controllers;
 
@@ -33,8 +34,12 @@ public class AccountsController : ControllerBase
 
         string? token = await _accountService.GetAuthToken(credentials);
 
-        LoginResponseDTO response = new();
-        if (token is not null) response.Token = token;
+        if (token is null) return Unauthorized();
+
+        LoginResponseDTO response = new()
+        {
+            Token = token
+        };
 
         return Ok(response);
     }

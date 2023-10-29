@@ -1,5 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
+using ForcesUnite.Helpers;
 using ForcesUnite.Models;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,7 +23,12 @@ public class AccountsService
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey1234567890"));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
         // TODO add expiration date
-        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials);
+        List<Claim> claims = new()
+        {
+            new(CustomClaimTypes.UserId, credentials.Username)
+        };
+
+        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, claims: claims);
 
         string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 

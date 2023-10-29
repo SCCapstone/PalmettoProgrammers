@@ -2,6 +2,9 @@ using System.Text;
 using ForcesUnite.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using ForcesUnite.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,13 +16,51 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         options.SaveToken = true;
         options.TokenValidationParameters = new()
         {
+            // TODO add from config
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey1234567890")),
             ValidateLifetime = false,
             ValidateAudience = false,
             ValidateIssuer = false,
         };
+        options.Events = new JwtBearerEvents()
+        {
+            // https://stackoverflow.com/a/75373719
+            // Add the userId claim stored in the token to the HttpContext
+            OnTokenValidated = context =>
+            {
+                string? userId = context.Principal?.FindFirst(CustomClaimTypes.UserId)?.Value;
+
+                if (userId is not null)
+                {
+                    context.HttpContext.Items.Add(CustomContextItems.UserId, userId);
+                }
+
+                return Task.CompletedTask;
+            },
+        };
     }
 );
+
+// https://stackoverflow.com/a/66628583
+var loggedInPolicy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .AddRequirements(new IsLoggedInRequirement())
+    .Build();
+
+// used to get the context in IsLoggedInAuthenticationHandler
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IAuthorizationHandler, IsLoggedInAuthenticationHandler>();
+
+builder.Services.AddAuthorization(options =>
+{
+    // This line can be omitted if you don't need to be
+    // able to explicitly set the policy
+    options.AddPolicy("LoggedIn", loggedInPolicy);
+
+    // If no policy specified, use this
+    options.DefaultPolicy = loggedInPolicy;
+});
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<AccountsService>();
 
