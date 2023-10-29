@@ -20,7 +20,9 @@ Alternativly, install and start a postgreSQL db manually.
 
 ### Setup Postgres
 Run the following command to apply the latest db changes.
+Make sure you have the Entity Framework tool installed.
 ```
+dotnet tool install --global dotnet-ef
 dotnet ef database update
 ```
 
