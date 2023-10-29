@@ -34,6 +34,5 @@ namespace FU.API.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TagRelation> TagRelations { get; set; }
-        public DbSet<Token> Tokens { get; set; }
     }
 }
