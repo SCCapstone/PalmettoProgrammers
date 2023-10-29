@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, TextField, Link, Box, Container, Typography, CssBaseline} from '@mui/material';
+import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avatar } from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 
 export default function SignIn() {
     /* Debugging only, this will change to pass auth details when endpoint is
@@ -24,6 +25,9 @@ export default function SignIn() {
                     flexDirection: 'column',
                     alignItems: 'center'
                 }}>
+                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <LockOutlinedIcon />
+                 </Avatar>
                 <Typography component="h1" variant="h5">Sign in to Forces Unite
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
@@ -32,10 +36,10 @@ export default function SignIn() {
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="email" // Didn't see an autocomplete prop for username, leaving as email, should function the same
                         autoFocus
                     />
                     {/* Password Text Field */}
