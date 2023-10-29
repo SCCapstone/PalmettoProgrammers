@@ -16,7 +16,8 @@ Install and start the DB by installing Docker and running the following command.
 ```
 docker run --name postgres-490 -e POSTGRES_DB=fu_dev -e POSTGRES_PASSWORD=dev -e POSTGRES_USER=dev -p 5432:5432 postgres:alpine
 ```
-To run the container at a later time, run `docker container start postgres-490`
+To run the container at a later time, run:
+```docker container start postgres-490```
 
 Alternatively, install and start a PostgreSQL database manually.
 
