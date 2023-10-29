@@ -42,8 +42,13 @@ Alternativly, start the web app  with the Visual studio IDE
 ### Running SPA
 ```
 cd FU.SPA
+npm install
 npm run dev
 ```
+
+# Coding styles
+## FU.API
+Follow googles C# [style guide](https://google.github.io/styleguide/csharp-style.html)
 
 # Deployment
 Not yet deployed. Will deploy to Azure using publish profile
