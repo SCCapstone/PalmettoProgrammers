@@ -6,6 +6,11 @@ body {
     margin: 0;
 }
 
+.container {
+    margin: 1rem;
+    text-align: center;
+  }
+
 .nav {
     background-color: fuchsia;
     color: white;
