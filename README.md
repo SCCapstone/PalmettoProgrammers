@@ -8,16 +8,18 @@ In order to build this project you first have to install:
 * [npm](https://www.npmjs.com/package/npm)
 * [Docker](https://www.docker.com/get-started/)
 * [PostgreSQL](https://www.postgresql.org/download/)
-* [Entity framework core tools](https://learn.microsoft.com/en-us/ef/core/cli/)
+* [Entity Framework Core tools](https://learn.microsoft.com/en-us/ef/core/cli/)
 
 ## Environment Setup
 ### Starting Postgres
-Install and start the DB by installing docker and running the following command.
+Install and start the DB by installing Docker and running the following command.
 ```
-docker run --name postgres-547 -e POSTGRES_DB=shop_dev -e POSTGRES_PASSWORD=dev -e POSTGRES_USER=dev -p 5432:5432 postgres:alpine
+docker run --name postgres-490 -e POSTGRES_DB=fu_dev -e POSTGRES_PASSWORD=dev -e POSTGRES_USER=dev -p 5432:5432 postgres:alpine
 ```
+To run the container at a later time, run:
+```docker container start postgres-490```
 
-Alternativly, install and start a postgreSQL db manually.
+Alternatively, install and start a PostgreSQL database manually.
 
 ### Setup Postgres
 Run the following command to apply the latest db changes.
@@ -33,7 +35,7 @@ Create a `.env` file that contains the connection string in the projects root di
 CONNECTION_STRING="Host=localhost; Database=ForcesUnite; Username=dev; Password=dev"
 ```
 
-Alternativly, add the connection string to the environment vars.
+Alternatively, add the connection string to the environment vars.
 
 ## Running
 ### Running Web API
@@ -51,10 +53,10 @@ npm run dev
 
 # Coding styles
 ## FU.API
-Follow googles C# [style guide](https://google.github.io/styleguide/csharp-style.html)
+Follow Google's C# [style guide](https://google.github.io/styleguide/csharp-style.html)
 
 # Deployment
-Not yet deployed. Will deploy to Azure using publish profile
+Not yet deployed. Will deploy to Azure using publish profile.
 
 # Authors
 Ethan Adams - epadams@email.sc.edu
