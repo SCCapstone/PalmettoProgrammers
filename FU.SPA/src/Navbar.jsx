@@ -17,14 +17,14 @@ export default function Navbar() {
 }
 
 function CustomLink({to, children, ...props }) {
-  const resovledPath = useResolvedPath(to)
-  const isActive = useMatch({ path: resolvedPath.pathname, end: true})
-  return (
-    <li className={path === to ? "active" : ""}>
-      <Link to={to} {...props}>
-        {children}
+    const resolvedPath = useResolvedPath(to);
+    const isActive = useMatch({ path: resolvedPath.pathname, end: true });
+    return (
+      <li className={isActive ? "active" : ""}>
+        <Link to={to} {...props}>
+          {children}
         </Link>
-    </li>
-  )
+      </li>
+    )
 }
 
