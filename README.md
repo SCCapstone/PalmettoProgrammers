@@ -54,7 +54,10 @@ npm run dev
 # Coding styles
 ## FU.API
 Follow Google's C# [style guide](https://google.github.io/styleguide/csharp-style.html)
+## FU.SPA
+Follow Google's JavaScript [style guide](https://google.github.io/styleguide/jsguide.html)
 
+Follow Google's HTML/CSS [style guide](https://google.github.io/styleguide/htmlcssguide.html)
 # Deployment
 Not yet deployed. Will deploy to Azure using publish profile.
 
