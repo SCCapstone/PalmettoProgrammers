@@ -3,6 +3,7 @@ import Home from "./pages/Home"
 import Discover from "./pages/Discover"
 import Social from "./pages/Social"
 import Create from "./pages/Create"
+import NoPage from "./pages/NoPage"
 import { Route, Routes } from "react-router-dom"
 function App() {
 return (
@@ -10,10 +11,11 @@ return (
   <Navbar />
   <div className="container">
     <Routes>
-      <Route path="/home" element= {<Home />} />
+      <Route index element= {<Home />} />
       <Route path="/discover" element= {<Discover />} />
       <Route path="/social" element= {<Social />} />
       <Route path="/create" element= {<Create />} />
+      <Route path="*" element= {<NoPage />} />
     </Routes>
   </div>
   </>

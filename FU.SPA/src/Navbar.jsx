@@ -7,7 +7,7 @@ export default function Navbar() {
       Forces Unite
       </Link>
       <ul>
-        <CustomLink to="/home">Home</CustomLink>
+        <CustomLink to="/">Home</CustomLink>
         <CustomLink to="/discover">Discover</CustomLink>
         <CustomLink to="/social">Social</CustomLink>
         <CustomLink to="/create">Create</CustomLink>
