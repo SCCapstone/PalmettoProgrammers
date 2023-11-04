@@ -2,12 +2,12 @@
 using System.Text;
 using FU.API.Data;
 using FU.API.Helpers;
+using FU.API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 #pragma warning restore SA1200 // Using directives should be placed correctly
-using FU.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
