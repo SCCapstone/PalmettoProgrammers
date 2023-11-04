@@ -90,7 +90,7 @@ public class AccountsService
         return Convert.ToBase64String(passwordBytes);
     }
 
-    public AccountInfo? getInfo(int userId)
+    public AccountInfo? GetInfo(int userId)
     {
         var userCredentials = _dbContext.UserCredentials.Find(userId);
         if (userCredentials is null) return null;
