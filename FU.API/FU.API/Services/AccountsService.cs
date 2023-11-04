@@ -28,13 +28,12 @@ public class AccountsService
 
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? ""));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-        // TODO add expiration date
         List<Claim> claims = new()
         {
             new(CustomClaimTypes.UserId, credentials.Username)
         };
 
-        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, claims: claims);
+        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: DateTime.UtcNow.AddMinutes(120), claims: claims);
 
         string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
