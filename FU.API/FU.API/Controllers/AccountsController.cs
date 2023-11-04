@@ -4,7 +4,6 @@ using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Helpers;
-using FU.API.Exceptoins;
 
 namespace FU.API.Controllers;
 
@@ -36,15 +35,7 @@ public class AccountsController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Register(Credentials credentials)
     {
-        UserCredentials? userCredentials;
-        try
-        {
-            userCredentials = await _accountService.Register(credentials);
-        }
-        catch (DuplicateUserException)
-        {
-            return Conflict();
-        }
+        UserCredentials? userCredentials = await _accountService.Register(credentials);
 
         if (userCredentials is null) return Unauthorized();
 

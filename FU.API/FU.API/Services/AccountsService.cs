@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Konscious.Security.Cryptography;
 using FU.API.Data;
 using FU.API.Models;
-using FU.API.Exceptoins;
+using FU.API.Exceptions;
 
 namespace FU.API.Services;
 

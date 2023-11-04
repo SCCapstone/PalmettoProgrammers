@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using FU.API.Helpers;
+using FU.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +93,7 @@ else
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = ExceptionHandler.HandleException });
 app.MapControllers();
 
 app.Run();
