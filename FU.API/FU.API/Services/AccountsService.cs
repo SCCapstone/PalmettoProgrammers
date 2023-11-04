@@ -22,7 +22,7 @@ public class AccountsService
     }
 
     // Return user credentials so userId is accessable without a second db call
-    private Task<UserCredentials?> Authenticate(Credentials credentials)
+    private Task<UserCredentials?> authenticate(Credentials credentials)
     {
         UserCredentials userCredentials;
 
@@ -58,7 +58,7 @@ public class AccountsService
 
     public async Task<string?> GetUserAuthToken(Credentials credentials)
     {
-        UserCredentials? userCredentials = await Authenticate(credentials);
+        UserCredentials? userCredentials = await authenticate(credentials);
         if (userCredentials is null) return null;
 
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? ""));

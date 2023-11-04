@@ -58,7 +58,7 @@ public class AccountsController : ControllerBase
         int? userId = int.Parse(userIdString ?? "");
         if (userId is null) return Problem("Could not parse userId from Jwt");
 
-        var accountInfo = _accountService.getInfo((int)userId);
+        var accountInfo = _accountService.GetInfo((int)userId);
 
         if (accountInfo is null) return Problem("Could not find account");
 
