@@ -1,3 +1,5 @@
+using FU.API.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 using ForcesUnite.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,6 +9,15 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using ForcesUnite.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// use environment vars
+DotNetEnv.Env.TraversePath().Load();
+builder.Configuration.AddEnvironmentVariables();
+string? connectionString = builder.Configuration["CONNECTION_STRING"];
+if (connectionString is null) throw new Exception("No Connection String Found");
+
+// Setup the database
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 // Validates JWT Tokens
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
