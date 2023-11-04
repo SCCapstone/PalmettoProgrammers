@@ -22,19 +22,11 @@ public class AccountsService
     }
 
     // Return user credentials so userId is accessable without a second db call
-    public Task<UserCredentials?> Authenticate(Credentials credentials)
+    private Task<UserCredentials?> Authenticate(Credentials credentials)
     {
         UserCredentials userCredentials;
 
-        try
-        {
-            userCredentials = _dbContext.UserCredentials.Where(c => c.Username == credentials.Username).Single();
-        }
-        catch (InvalidOperationException)
-        {
-            Console.WriteLine("Error: Found multiple username's with the same value");
-            return Task.FromResult<UserCredentials?>(null);
-        }
+        userCredentials = _dbContext.UserCredentials.Where(c => c.Username == credentials.Username).Single();
 
         if (userCredentials.PasswordHash == hashPassword(credentials.Password))
         {
