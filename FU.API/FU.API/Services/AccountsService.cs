@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Konscious.Security.Cryptography;
 using FU.API.Data;
 using FU.API.Models;
-using FU.API.Exceptoins;
+using FU.API.Exceptions;
 
 namespace FU.API.Services;
 
@@ -56,7 +56,7 @@ public class AccountsService
         return Task.FromResult<UserCredentials?>(queryUser.First());
     }
 
-    public async Task<string?> GetUserAuthToken(Credentials credentials)
+    public async Task<AuthenticationInfo?> GetUserAuthInfo(Credentials credentials)
     {
         UserCredentials? userCredentials = await authenticate(credentials);
         if (userCredentials is null) return null;
@@ -73,7 +73,7 @@ public class AccountsService
 
         string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-        return token;
+        return new AuthenticationInfo(token, tokenOptions.ValidTo);
     }
 
     private string hashPassword(string password)

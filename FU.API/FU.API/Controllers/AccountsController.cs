@@ -1,10 +1,8 @@
-using FU.API.DTOs;
 using FU.API.Services;
 using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Helpers;
-using FU.API.Exceptoins;
 
 namespace FU.API.Controllers;
 
@@ -25,26 +23,18 @@ public class AccountsController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Authenticate(Credentials credentials)
     {
-        var token = await _accountService.GetUserAuthToken(credentials);
+        var authInfo = await _accountService.GetUserAuthInfo(credentials);
 
-        if (token is null) return Unauthorized();
+        if (authInfo is null) return Unauthorized();
 
-        return Ok(new TokenResponseDTO(token));
+        return Ok(authInfo);
     }
 
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Register(Credentials credentials)
     {
-        UserCredentials? userCredentials;
-        try
-        {
-            userCredentials = await _accountService.Register(credentials);
-        }
-        catch (DuplicateUserException)
-        {
-            return Conflict();
-        }
+        UserCredentials? userCredentials = await _accountService.Register(credentials);
 
         if (userCredentials is null) return Unauthorized();
 
