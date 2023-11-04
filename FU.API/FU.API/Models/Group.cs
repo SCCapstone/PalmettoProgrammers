@@ -1,33 +1,58 @@
 ﻿namespace FU.API.Models
 {
+    /// <summary>
+    /// The group.
+    /// </summary>
     public class Group
     {
+        /// <summary>
+        /// Gets or sets the id of the group.
+        /// </summary>
         public int Id { get; set; }
-        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the group.
+        /// </summary>
+        public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the image url.
+        /// </summary>
         public string? ImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
         public string? Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets when the group was created.
+        /// </summary>
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public ApplicationUser Creator { get; set; }
-        public string CreatorId { get; set; }
-        public Chat Chat { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creator of the group.
+        /// </summary>
+        public ApplicationUser? Creator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id of the creator.
+        /// </summary>
+        public string? CreatorId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the chat of the group.
+        /// </summary>
+        public Chat Chat { get; set; } = new Chat();
+
+        /// <summary>
+        /// Gets or sets the id of the groups chat.
+        /// </summary>
         public int ChatId { get; set; }
-        public ICollection<GroupMembership> Memberships { get; set; }
-    }
 
-    public class GroupMembership
-    {
-        public int Id { get; set; }
-        public ApplicationUser User { get; set; }
-        public string UserId { get; set; }
-        public Group Group { get; set; }
-        public int GroupId { get; set; }
-        public GroupRole Role { get; set; }
-    }
-
-    public enum GroupRole
-    {
-        Leader,
-        Moderator,
-        Member
+        /// <summary>
+        /// Gets or sets the members of the group.
+        /// </summary>
+        public ICollection<GroupMembership> Memberships { get; set; } = new HashSet<GroupMembership>();
     }
 }
