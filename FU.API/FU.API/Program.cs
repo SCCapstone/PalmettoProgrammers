@@ -1,3 +1,4 @@
+#pragma warning disable SA1200 // Using directives should be placed correctly
 using FU.API.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using FU.API.Helpers;
+#pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,7 +75,6 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<AccountsService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
