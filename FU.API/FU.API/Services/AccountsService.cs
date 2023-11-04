@@ -4,6 +4,7 @@ using System.Text;
 using FU.API.Helpers;
 using FU.API.Models;
 using Microsoft.IdentityModel.Tokens;
+using Konscious.Security.Cryptography;
 
 namespace FU.API.Services;
 
@@ -38,5 +39,20 @@ public class AccountsService
         string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
         return Task.FromResult<string?>(token);
+    }
+
+    private string hashPassword(string password)
+    {
+        // based on https://gist.github.com/sixpeteunder/235f93ba0b059035abf140beb2ea4e44
+        var argon2 = new Argon2i(Encoding.UTF8.GetBytes(password))
+        {
+            Iterations = 4,
+            DegreeOfParallelism = 2,
+            MemorySize = 1024 * 4,
+        };
+
+        byte[] passwordBytes = argon2.GetBytes(128);
+        return Convert.ToBase64String(passwordBytes);
+    }
     }
 }
