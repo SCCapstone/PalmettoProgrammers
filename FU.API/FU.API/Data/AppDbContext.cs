@@ -7,7 +7,7 @@
     /// <summary>
     /// Our AppDbContext.
     /// </summary>
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AppDbContext"/> class.
