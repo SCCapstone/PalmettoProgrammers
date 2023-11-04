@@ -1,14 +1,14 @@
+namespace FU.API.Services;
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using FU.API.Helpers;
-using Microsoft.IdentityModel.Tokens;
-using Konscious.Security.Cryptography;
 using FU.API.Data;
-using FU.API.Models;
 using FU.API.Exceptions;
-
-namespace FU.API.Services;
+using FU.API.Helpers;
+using FU.API.Models;
+using Konscious.Security.Cryptography;
+using Microsoft.IdentityModel.Tokens;
 
 public class AccountsService
 {
@@ -22,13 +22,13 @@ public class AccountsService
     }
 
     // Return user credentials so userId is accessable without a second db call
-    private Task<UserCredentials?> authenticate(Credentials credentials)
+    private Task<UserCredentials?> Authenticate(Credentials credentials)
     {
         UserCredentials userCredentials;
 
         userCredentials = _dbContext.UserCredentials.Where(c => c.Username == credentials.Username).Single();
 
-        if (userCredentials.PasswordHash == hashPassword(credentials.Password))
+        if (userCredentials.PasswordHash == HashPassword(credentials.Password))
         {
             return Task.FromResult<UserCredentials?>(userCredentials);
         }
@@ -49,7 +49,7 @@ public class AccountsService
         _dbContext.UserCredentials.Add(new UserCredentials()
         {
             Username = credentials.Username,
-            PasswordHash = hashPassword(credentials.Password),
+            PasswordHash = HashPassword(credentials.Password),
         });
         _dbContext.SaveChanges();
 
@@ -58,15 +58,18 @@ public class AccountsService
 
     public async Task<AuthenticationInfo?> GetUserAuthInfo(Credentials credentials)
     {
-        UserCredentials? userCredentials = await authenticate(credentials);
-        if (userCredentials is null) return null;
+        UserCredentials? userCredentials = await Authenticate(credentials);
+        if (userCredentials is null)
+        {
+            return null;
+        }
 
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? ""));
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-        List<Claim> claims = new()
+        List<Claim> claims = new ()
         {
-            new(CustomClaimTypes.UserId, userCredentials.UserId.ToString())
+            new (CustomClaimTypes.UserId, userCredentials.UserId.ToString())
         };
 
         var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: DateTime.UtcNow.AddMinutes(120), claims: claims);
@@ -76,7 +79,7 @@ public class AccountsService
         return new AuthenticationInfo(token, tokenOptions.ValidTo);
     }
 
-    private string hashPassword(string password)
+    private string HashPassword(string password)
     {
         // based on https://gist.github.com/sixpeteunder/235f93ba0b059035abf140beb2ea4e44
         var argon2 = new Argon2i(Encoding.UTF8.GetBytes(password))
@@ -93,7 +96,11 @@ public class AccountsService
     public AccountInfo? GetInfo(int userId)
     {
         var userCredentials = _dbContext.UserCredentials.Find(userId);
-        if (userCredentials is null) return null;
+
+        if (userCredentials is null)
+        {
+            return null;
+        }
 
         return new AccountInfo()
         {

@@ -1,17 +1,17 @@
+namespace FU.API.Controllers;
+
 using FU.API.Services;
 using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Helpers;
 
-namespace FU.API.Controllers;
-
 [ApiController]
 [Route("[controller]")]
 [Authorize]
 public class AccountsController : ControllerBase
 {
-    public readonly AccountsService _accountService;
+    private readonly AccountsService _accountService;
 
     public AccountsController(AccountsService accountService)
     {
@@ -25,7 +25,10 @@ public class AccountsController : ControllerBase
     {
         var authInfo = await _accountService.GetUserAuthInfo(credentials);
 
-        if (authInfo is null) return Unauthorized();
+        if (authInfo is null)
+        {
+            return Unauthorized();
+        }
 
         return Ok(authInfo);
     }
@@ -45,12 +48,18 @@ public class AccountsController : ControllerBase
     public IActionResult GetAccount()
     {
         string? userIdString = (string?)HttpContext.Items[CustomContextItems.UserId];
-        int? userId = int.Parse(userIdString ?? "");
-        if (userId is null) return Problem("Could not parse userId from Jwt");
+        int? userId = int.Parse(userIdString ?? string.Empty);
+        if (userId is null)
+        {
+            return Problem("Could not parse userId from Jwt");
+        }
 
         var accountInfo = _accountService.GetInfo((int)userId);
 
-        if (accountInfo is null) return Problem("Could not find account");
+        if (accountInfo is null)
+        {
+            return Problem("Could not find account");
+        }
 
         return Ok(accountInfo);
     }
