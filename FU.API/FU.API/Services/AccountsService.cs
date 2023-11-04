@@ -2,43 +2,86 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using FU.API.Helpers;
-using FU.API.Models;
 using Microsoft.IdentityModel.Tokens;
 using Konscious.Security.Cryptography;
+using FU.API.Data;
+using FU.API.Models;
+using FU.API.Exceptoins;
 
 namespace FU.API.Services;
 
 public class AccountsService
 {
     private readonly IConfiguration _configuration;
+    private readonly AppDbContext _dbContext;
 
-    public AccountsService(IConfiguration configuration)
+    public AccountsService(IConfiguration configuration, AppDbContext dbContext)
     {
         _configuration = configuration;
+        _dbContext = dbContext;
     }
 
-    public bool Authenticate(Credentials credentials)
+    // Return user credentials so userId is accessable without a second db call
+    public Task<UserCredentials?> Authenticate(Credentials credentials)
     {
-        // TODO check username and password against db
-        return true;
+        UserCredentials userCredentials;
+
+        try
+        {
+            userCredentials = _dbContext.UserCredentials.Where(c => c.Username == credentials.Username).Single();
+        }
+        catch (InvalidOperationException)
+        {
+            Console.WriteLine("Error: Found multiple username's with the same value");
+            return Task.FromResult<UserCredentials?>(null);
+        }
+
+        if (userCredentials.PasswordHash == hashPassword(credentials.Password))
+        {
+            return Task.FromResult<UserCredentials?>(userCredentials);
+        }
+        else
+        {
+            return Task.FromResult<UserCredentials?>(null);
+        }
     }
 
-    public Task<string?> GetAuthToken(Credentials credentials)
+    public Task<UserCredentials?> Register(Credentials credentials)
     {
-        if (!Authenticate(credentials)) return Task.FromResult<string?>(null);
+        var queryUser = _dbContext.UserCredentials.Where(c => c.Username == credentials.Username);
+        if (queryUser.FirstOrDefault() is not null)
+        {
+            throw new DuplicateUserException();
+        }
+
+        _dbContext.UserCredentials.Add(new UserCredentials()
+        {
+            Username = credentials.Username,
+            PasswordHash = hashPassword(credentials.Password),
+        });
+        _dbContext.SaveChanges();
+
+        return Task.FromResult<UserCredentials?>(queryUser.First());
+    }
+
+    public async Task<string?> GetUserAuthToken(Credentials credentials)
+    {
+        UserCredentials? userCredentials = await Authenticate(credentials);
+        if (userCredentials is null) return null;
 
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? ""));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
         List<Claim> claims = new()
         {
-            new(CustomClaimTypes.UserId, credentials.Username)
+            new(CustomClaimTypes.UserId, userCredentials.UserId.ToString())
         };
 
         var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: DateTime.UtcNow.AddMinutes(120), claims: claims);
 
         string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-        return Task.FromResult<string?>(token);
+        return token;
     }
 
     private string hashPassword(string password)
@@ -54,5 +97,16 @@ public class AccountsService
         byte[] passwordBytes = argon2.GetBytes(128);
         return Convert.ToBase64String(passwordBytes);
     }
+
+    public AccountInfo? getInfo(int userId)
+    {
+        var userCredentials = _dbContext.UserCredentials.Find(userId);
+        if (userCredentials is null) return null;
+
+        return new AccountInfo()
+        {
+            UserId = userCredentials.UserId,
+            Username = userCredentials.Username,
+        };
     }
 }

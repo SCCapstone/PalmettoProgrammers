@@ -4,6 +4,7 @@ using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Helpers;
+using FU.API.Exceptoins;
 
 namespace FU.API.Controllers;
 
@@ -22,33 +23,45 @@ public class AccountsController : ControllerBase
     [HttpPost]
     [Route("auth")]
     [AllowAnonymous]
-    public async Task<IActionResult> Authenticate(LoginRequestDTO request)
+    public async Task<IActionResult> Authenticate(Credentials credentials)
     {
-        Credentials credentials = new()
-        {
-            Username = request.Username,
-            Password = request.Password,
-        };
-
-        if (!_accountService.Authenticate(credentials)) return Unauthorized();
-
-        string? token = await _accountService.GetAuthToken(credentials);
+        var token = await _accountService.GetUserAuthToken(credentials);
 
         if (token is null) return Unauthorized();
 
-        LoginResponseDTO response = new()
-        {
-            Token = token
-        };
+        return Ok(new TokenResponseDTO(token));
+    }
 
-        return Ok(response);
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register(Credentials credentials)
+    {
+        UserCredentials? userCredentials;
+        try
+        {
+            userCredentials = await _accountService.Register(credentials);
+        }
+        catch (DuplicateUserException)
+        {
+            return Conflict();
+        }
+
+        if (userCredentials is null) return Unauthorized();
+
+        return Ok();
     }
 
     [HttpGet]
-    public IActionResult GetAccount(LoginRequestDTO request)
+    public IActionResult GetAccount()
     {
-        // TODO get from db
-        string? userId = (string?)HttpContext.Items[CustomContextItems.UserId];
-        return Ok(userId);
+        string? userIdString = (string?)HttpContext.Items[CustomContextItems.UserId];
+        int? userId = int.Parse(userIdString ?? "");
+        if (userId is null) return Problem("Could not parse userId from Jwt");
+
+        var accountInfo = _accountService.getInfo((int)userId);
+
+        if (accountInfo is null) return Problem("Could not find account");
+
+        return Ok(accountInfo);
     }
 }

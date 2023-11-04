@@ -14,9 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 DotNetEnv.Env.TraversePath().Load();
 builder.Configuration.AddEnvironmentVariables();
 string connectionString = builder.Configuration[ConfigKey.ConnectionString]
-    ?? throw new Exception("No connection string found from env var "+ConfigKey.ConnectionString);
+    ?? throw new Exception("No connection string found from env var " + ConfigKey.ConnectionString);
 string jwtSecret = builder.Configuration[ConfigKey.JwtSecret]
-    ?? throw new Exception("No jwt secret found from env var "+ConfigKey.JwtSecret);
+    ?? throw new Exception("No jwt secret found from env var " + ConfigKey.JwtSecret);
 
 // Setup the database
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
@@ -24,7 +24,6 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 // Validates JWT Tokens
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
     {
-        // TODO secure
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
         options.TokenValidationParameters = new()
