@@ -8,7 +8,7 @@ namespace FU.API.Models
         public bool IsOnline { get; set; }
         public bool IsAdmin { get; set; }
         public string? Bio { get; set; }
-        public int Age { get; set; }
+        public DateOnly? DOB { get; set; }
         public ICollection<GameRelation> FavoriteGames { get; set; }
         public ICollection<TagRelation> FavoriteTags { get; set; }
         public ICollection<GroupMembership> Groups { get; set; }
