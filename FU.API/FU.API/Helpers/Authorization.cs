@@ -1,4 +1,4 @@
-using ForcesUnite.Helpers;
+using FU.API.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
 // Defines a requirement to be checked

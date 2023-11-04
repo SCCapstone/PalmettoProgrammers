@@ -1,11 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ForcesUnite.Helpers;
-using ForcesUnite.Models;
+using FU.API.Helpers;
+using FU.API.Models;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ForcesUnite.Services;
+namespace FU.API.Services;
 
 public class AccountsService
 {

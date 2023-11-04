@@ -1,4 +1,4 @@
-namespace ForcesUnite.Models;
+namespace FU.API.Models;
 
 // TODO use hashed password
 public record Credentials

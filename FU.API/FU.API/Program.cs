@@ -1,12 +1,12 @@
 using FU.API.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
-using ForcesUnite.Services;
+using FU.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using ForcesUnite.Helpers;
+using FU.API.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 

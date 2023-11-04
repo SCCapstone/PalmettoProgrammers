@@ -1,4 +1,4 @@
-namespace ForcesUnite.DTOs;
+namespace FU.API.DTOs;
 
 public record LoginRequestDTO
 {

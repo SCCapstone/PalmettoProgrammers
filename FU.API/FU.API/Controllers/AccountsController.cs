@@ -1,11 +1,11 @@
-using ForcesUnite.DTOs;
-using ForcesUnite.Services;
-using ForcesUnite.Models;
+using FU.API.DTOs;
+using FU.API.Services;
+using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using ForcesUnite.Helpers;
+using FU.API.Helpers;
 
-namespace ForcesUnite.Controllers;
+namespace FU.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
