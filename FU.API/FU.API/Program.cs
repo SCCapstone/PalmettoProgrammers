@@ -13,8 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 // use environment vars
 DotNetEnv.Env.TraversePath().Load();
 builder.Configuration.AddEnvironmentVariables();
-string? connectionString = builder.Configuration["CONNECTION_STRING"];
-if (connectionString is null) throw new Exception("No Connection String Found");
+string connectionString = builder.Configuration["CONNECTION_STRING"]
+    ?? throw new Exception("No Connection String Found");
+string jwtSecret = builder.Configuration["JWT_SECRET"]
+    ?? throw new Exception("No Jwt Secret Found");
 
 // Setup the database
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
@@ -27,8 +29,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         options.SaveToken = true;
         options.TokenValidationParameters = new()
         {
-            // TODO add from config
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey1234567890")),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
             ValidateLifetime = false,
             ValidateAudience = false,
             ValidateIssuer = false,
