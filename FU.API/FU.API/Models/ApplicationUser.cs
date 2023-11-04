@@ -28,7 +28,7 @@
         public string? Bio { get; set; }
 
         /// <summary>
-        /// Gets or sets the age of the user.
+        /// Gets or sets the dob of the user.
         /// </summary>
         public DateOnly? DOB { get; set; }
 

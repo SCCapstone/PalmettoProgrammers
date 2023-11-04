@@ -1,13 +1,11 @@
 #pragma warning disable SA1200 // Using directives should be placed correctly
-using FU.API.Data;
-using Microsoft.EntityFrameworkCore;
 using System.Text;
-using FU.API.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using FU.API.Data;
 using FU.API.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
 #pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +26,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
-        options.TokenValidationParameters = new()
+        options.TokenValidationParameters = new ()
         {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
             ValidateLifetime = true,
@@ -75,6 +73,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
