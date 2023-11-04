@@ -24,6 +24,7 @@ namespace FU.API.Data
 
         // DbSets
         public DbSet<UserRelation> UserRelations { get; set; }
+        public DbSet<UserCredentials> UserCredentials { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatMembership> ChatMemberships { get; set; }
         public DbSet<Message> Messages { get; set; }
