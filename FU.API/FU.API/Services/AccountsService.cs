@@ -9,6 +9,13 @@ namespace ForcesUnite.Services;
 
 public class AccountsService
 {
+    private readonly IConfiguration _configuration;
+
+    public AccountsService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     public bool Authenticate(Credentials credentials)
     {
         // TODO check username and password against db
@@ -19,8 +26,7 @@ public class AccountsService
     {
         if (!Authenticate(credentials)) return Task.FromResult<string?>(null);
 
-        // TODO get from config
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey1234567890"));
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? ""));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
         // TODO add expiration date
         List<Claim> claims = new()
