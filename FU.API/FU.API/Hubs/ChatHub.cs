@@ -36,6 +36,23 @@
         /// <returns>Task.</returns>
         public override Task OnConnectedAsync()
         {
+            var user = _context.Users.FirstOrDefault(u => u.UserName == IdentityName);
+
+            if (user is null || user.UserName is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            if(!ConnectedUsers.Contains(user.UserName))
+            {
+                ConnectedUsers.Add(user.UserName);
+            }
+
+            // Update the online status of the user
+            user.IsOnline = true;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
             return base.OnConnectedAsync();
         }
 
@@ -46,6 +63,23 @@
         /// <returns>Task.</returns>
         public override Task OnDisconnectedAsync(Exception? exception)
         {
+            var user = _context.Users.FirstOrDefault(u => u.UserName == IdentityName);
+
+            if (user is null || user.UserName is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (ConnectedUsers.Contains(user.UserName))
+            {
+                ConnectedUsers.Remove(user.UserName);
+            }
+
+            // Update the online status of the user
+            user.IsOnline= false;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
             return base.OnDisconnectedAsync(exception);
         }
 
@@ -56,7 +90,7 @@
         /// <returns>Task.</returns>
         public async Task JoinChatGroup(int chatId)
         {
-            var user = await _context.Users.FindAsync(IdentityName);
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"ChatGroup-{chatId}");
         }
 
         /// <summary>
@@ -66,13 +100,12 @@
         /// <returns>Task.</returns>
         public async Task LeaveChatGroup(int chatId)
         {
-
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"ChatGroup-{chatId}");
         }
 
         /// <summary>
         /// Gets the identity name from the context.
         /// </summary>
         private string? IdentityName => Context?.User?.Identity?.Name;
-
     }
 }
