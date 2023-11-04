@@ -1,21 +1,20 @@
+#pragma warning disable SA1200 // Using directives should be placed correctly
 using FU.API.Data;
 using Microsoft.EntityFrameworkCore;
+#pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
 
 // use environment vars
 DotNetEnv.Env.TraversePath().Load();
 builder.Configuration.AddEnvironmentVariables();
-string? connectionString = builder.Configuration["CONNECTION_STRING"];
-
-if (connectionString is null) throw new Exception("No Connection String Found");
+string? connectionString = builder.Configuration["CONNECTION_STRING"] ?? throw new Exception("No Connection String Found");
 
 // Setup the database
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
-// Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

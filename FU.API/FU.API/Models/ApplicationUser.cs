@@ -1,37 +1,55 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace FU.API.Models
+﻿namespace FU.API.Models
 {
-    public class ApplicationUser : IdentityUser
-    {
-        public string PfpUrl { get; set; } = "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png";
-        public bool IsOnline { get; set; }
-        public bool IsAdmin { get; set; }
-        public string? Bio { get; set; }
-        public int Age { get; set; }
-        public ICollection<GameRelation> FavoriteGames { get; set; }
-        public ICollection<TagRelation> FavoriteTags { get; set; }
-        public ICollection<GroupMembership> Groups { get; set; }
-        public ICollection<ChatMembership> Chats { get; set; }
-    }
+    using Microsoft.AspNetCore.Identity;
 
     /// <summary>
-    /// Make user1 the one who sent the request
+    /// User of the application.
     /// </summary>
-    public class UserRelation
+    public class ApplicationUser : IdentityUser
     {
-        public int Id { get; set; }
-        public ApplicationUser User1 { get; set; }
-        public string User1Id { get; set; }
-        public ApplicationUser User2 { get; set; }
-        public string User2Id { get; set; }
-        public UserRelationStatus Status { get; set; }
-    }
+        /// <summary>
+        /// Gets or sets the url for profile picture.
+        /// </summary>
+        public string PfpUrl { get; set; } = "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png";
 
-    public enum UserRelationStatus
-    {
-        Pending,
-        Friends,
-        Blocked
+        /// <summary>
+        /// Gets or sets a value indicating whether the user is online or not.
+        /// </summary>
+        public bool IsOnline { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user is admin of the site.
+        /// </summary>
+        public bool IsAdmin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bio of the user.
+        /// </summary>
+        public string? Bio { get; set; }
+
+        /// <summary>
+        /// Gets or sets the age of the user.
+        /// </summary>
+        public int Age { get; set; }
+
+        /// <summary>
+        /// Gets or sets the FavoriteGames.
+        /// </summary>
+        public ICollection<GameRelation> FavoriteGames { get; set; } = new HashSet<GameRelation>();
+
+        /// <summary>
+        /// Gets or sets the FavoriteTags.
+        /// </summary>
+        public ICollection<TagRelation> FavoriteTags { get; set; } = new HashSet<TagRelation>();
+
+        /// <summary>
+        /// Gets or sets the GroupMemberships.
+        /// </summary>
+        public ICollection<GroupMembership> Groups { get; set; } = new HashSet<GroupMembership>();
+
+        /// <summary>
+        /// Gets or sets the ChatMemberships.
+        /// </summary>
+        public ICollection<ChatMembership> Chats { get; set; } = new HashSet<ChatMembership>();
     }
 }
