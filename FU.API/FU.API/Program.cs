@@ -3,6 +3,7 @@ using System.Text;
 using FU.API.Data;
 using FU.API.Helpers;
 using FU.API.Middleware;
+using FU.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,7 @@ var loggedInPolicy = new AuthorizationPolicyBuilder()
 // used to get the context in IsLoggedInAuthenticationHandler
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IAuthorizationHandler, IsLoggedInAuthenticationHandler>();
+builder.Services.AddScoped<AccountsService>();
 
 builder.Services.AddAuthorization(options =>
 {
