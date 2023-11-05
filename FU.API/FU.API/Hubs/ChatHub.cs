@@ -14,7 +14,7 @@
         /// <summary>
         /// List of the connected users names.
         /// </summary>
-        public readonly static List<string> ConnectedUsers = new();
+        public static readonly List<string> ConnectedUsers = new ();
 
         /// <summary>
         /// The app db context.
@@ -24,7 +24,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ChatHub"/> class.
         /// </summary>
-        /// <param name="context">The app db context</param>
+        /// <param name="context">The app db context.</param>
         public ChatHub(AppDbContext context)
         {
             _context = context;
@@ -57,7 +57,7 @@
         }
 
         /// <summary>
-        /// Disconnect the user from the hub
+        /// Disconnect the user from the hub.
         /// </summary>
         /// <param name="exception">Exception.</param>
         /// <returns>Task.</returns>
@@ -76,7 +76,7 @@
             }
 
             // Update the online status of the user
-            user.IsOnline= false;
+            user.IsOnline = false;
             _context.Users.Update(user);
             _context.SaveChanges();
 

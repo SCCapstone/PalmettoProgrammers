@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Helpers;
 
+/// <summary>
+/// Handles accounts endpoint requests.
+/// </summary>
 [ApiController]
 [Route("[controller]")]
 [Authorize]
@@ -13,11 +16,20 @@ public class AccountsController : ControllerBase
 {
     private readonly AccountsService _accountService;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AccountsController"/> class.
+    /// </summary>
+    /// <param name="accountService">Acount Service to use for buisness logic.</param>
     public AccountsController(AccountsService accountService)
     {
         _accountService = accountService;
     }
 
+    /// <summary>
+    /// Authenticates a user and gives them an access token.
+    /// </summary>
+    /// <param name="credentials">Credentials to verify.</param>
+    /// <returns>An object with a Jwt token and timeout.</returns>
     [HttpPost]
     [Route("auth")]
     [AllowAnonymous]
@@ -33,6 +45,11 @@ public class AccountsController : ControllerBase
         return Ok(authInfo);
     }
 
+    /// <summary>
+    /// Creates a new user.
+    /// </summary>
+    /// <param name="credentials">Credentials to register with.</param>
+    /// <returns>Success or failure.</returns>
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Register(Credentials credentials)

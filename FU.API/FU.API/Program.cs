@@ -26,34 +26,33 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 
 // Validates JWT Tokens
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new()
     {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new ()
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+        ValidateLifetime = true,
+        ValidateAudience = false,
+        ValidateIssuer = false,
+    };
+    options.Events = new JwtBearerEvents()
+    {
+        // https://stackoverflow.com/a/75373719
+        // Add the userId claim stored in the token to the HttpContext
+        OnTokenValidated = context =>
         {
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
-            ValidateLifetime = true,
-            ValidateAudience = false,
-            ValidateIssuer = false,
-        };
-        options.Events = new JwtBearerEvents()
-        {
-            // https://stackoverflow.com/a/75373719
-            // Add the userId claim stored in the token to the HttpContext
-            OnTokenValidated = context =>
+            string? userId = context.Principal?.FindFirst(CustomClaimTypes.UserId)?.Value;
+
+            if (userId is not null)
             {
-                string? userId = context.Principal?.FindFirst(CustomClaimTypes.UserId)?.Value;
+                context.HttpContext.Items.Add(CustomContextItems.UserId, userId);
+            }
 
-                if (userId is not null)
-                {
-                    context.HttpContext.Items.Add(CustomContextItems.UserId, userId);
-                }
-
-                return Task.CompletedTask;
-            },
-        };
-    }
-);
+            return Task.CompletedTask;
+        },
+    };
+});
 
 // https://stackoverflow.com/a/66628583
 var loggedInPolicy = new AuthorizationPolicyBuilder()
