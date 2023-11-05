@@ -1,11 +1,14 @@
 ﻿namespace FU.API.Models
 {
-    using Microsoft.AspNetCore.Identity;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// User of the application.
     /// </summary>
-    public class ApplicationUser : IdentityUser
+    [Index(nameof(Username))]
+    public class ApplicationUser
     {
         /// <summary>
         /// Gets or sets the url for profile picture.
@@ -51,5 +54,44 @@
         /// Gets or sets the ChatMemberships.
         /// </summary>
         public ICollection<ChatMembership> Chats { get; set; } = new HashSet<ChatMembership>();
+
+        // ACCCOUNT INFO
+
+        /// <summary>
+        /// Gets or sets the id of the user.
+        /// </summary>
+        [Key]
+        public int UserId { get; set; }
+
+        [NotMapped]
+        private string _username = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        public string Username
+        {
+            get => _username;
+            set
+            {
+                _username = value;
+                NormalizedUsername = value.ToUpper();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the normalized username.
+        /// </summary>
+        public string NormalizedUsername { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the passwordHash.
+        /// </summary>
+        public string PasswordHash { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the user email.
+        /// </summary>
+        public string Email { get; set; } = string.Empty;
     }
 }

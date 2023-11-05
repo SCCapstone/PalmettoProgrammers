@@ -22,44 +22,44 @@ public class AccountsService
     }
 
     // Return user credentials so userId is accessable without a second db call
-    private Task<UserCredentials?> Authenticate(Credentials credentials)
+    private Task<ApplicationUser?> Authenticate(Credentials credentials)
     {
-        UserCredentials userCredentials;
+        ApplicationUser user;
 
-        userCredentials = _dbContext.UserCredentials.Where(c => c.Username == credentials.Username).Single();
+        user = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).Single();
 
-        if (userCredentials.PasswordHash == HashPassword(credentials.Password))
+        if (user.PasswordHash == HashPassword(credentials.Password))
         {
-            return Task.FromResult<UserCredentials?>(userCredentials);
+            return Task.FromResult<ApplicationUser?>(user);
         }
         else
         {
-            return Task.FromResult<UserCredentials?>(null);
+            return Task.FromResult<ApplicationUser?>(null);
         }
     }
 
-    public Task<UserCredentials?> Register(Credentials credentials)
+    public Task<ApplicationUser?> Register(Credentials credentials)
     {
-        var queryUser = _dbContext.UserCredentials.Where(c => c.Username == credentials.Username);
+        var queryUser = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper());
         if (queryUser.FirstOrDefault() is not null)
         {
             throw new DuplicateUserException();
         }
 
-        _dbContext.UserCredentials.Add(new UserCredentials()
+        _dbContext.Users.Add(new ApplicationUser()
         {
             Username = credentials.Username,
             PasswordHash = HashPassword(credentials.Password),
         });
         _dbContext.SaveChanges();
 
-        return Task.FromResult<UserCredentials?>(queryUser.First());
+        return Task.FromResult<ApplicationUser?>(queryUser.First());
     }
 
     public async Task<AuthenticationInfo?> GetUserAuthInfo(Credentials credentials)
     {
-        UserCredentials? userCredentials = await Authenticate(credentials);
-        if (userCredentials is null)
+        var user = await Authenticate(credentials);
+        if (user is null)
         {
             return null;
         }
@@ -69,10 +69,10 @@ public class AccountsService
 
         List<Claim> claims = new ()
         {
-            new (CustomClaimTypes.UserId, userCredentials.UserId.ToString())
+            new (CustomClaimTypes.UserId, user.UserId.ToString())
         };
 
-        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: DateTime.UtcNow.AddMinutes(120), claims: claims);
+        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: DateTime.UtcNow.AddDays(1), claims: claims);
 
         string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
@@ -95,7 +95,7 @@ public class AccountsService
 
     public AccountInfo? GetInfo(int userId)
     {
-        var userCredentials = _dbContext.UserCredentials.Find(userId);
+        var userCredentials = _dbContext.Users.Find(userId);
 
         if (userCredentials is null)
         {

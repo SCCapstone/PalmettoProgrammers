@@ -28,7 +28,7 @@
         /// <summary>
         /// Gets or sets the id of the sender.
         /// </summary>
-        public string SenderId { get; set; } = string.Empty;
+        public int SenderId { get; set; }
 
         /// <summary>
         /// Gets or sets the chat the message belongs to.

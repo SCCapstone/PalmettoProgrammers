@@ -18,7 +18,7 @@
         /// <summary>
         /// Gets or sets the id of the user.
         /// </summary>
-        public string UserId { get; set; } = string.Empty;
+        public int UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the chat of the relation.

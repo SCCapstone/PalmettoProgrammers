@@ -1,9 +1,9 @@
 ﻿namespace FU.API.Hubs
 {
+    using System;
     using FU.API.Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
-    using System;
 
     /// <summary>
     /// The chathub for handleing chat.
@@ -36,16 +36,16 @@
         /// <returns>Task.</returns>
         public override Task OnConnectedAsync()
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == IdentityName);
+            var user = _context.Users.FirstOrDefault(u => u.Username == IdentityName);
 
-            if (user is null || user.UserName is null)
+            if (user is null || user.Username is null)
             {
                 return Task.CompletedTask;
             }
 
-            if(!ConnectedUsers.Contains(user.UserName))
+            if (!ConnectedUsers.Contains(user.Username))
             {
-                ConnectedUsers.Add(user.UserName);
+                ConnectedUsers.Add(user.Username);
             }
 
             // Update the online status of the user
@@ -63,16 +63,16 @@
         /// <returns>Task.</returns>
         public override Task OnDisconnectedAsync(Exception? exception)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == IdentityName);
+            var user = _context.Users.FirstOrDefault(u => u.Username == IdentityName);
 
-            if (user is null || user.UserName is null)
+            if (user is null || user.Username is null)
             {
                 return Task.CompletedTask;
             }
 
-            if (ConnectedUsers.Contains(user.UserName))
+            if (ConnectedUsers.Contains(user.Username))
             {
-                ConnectedUsers.Remove(user.UserName);
+                ConnectedUsers.Remove(user.Username);
             }
 
             // Update the online status of the user

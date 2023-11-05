@@ -1,16 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-
-namespace FU.API.Models;
-
-[Index(nameof(Username))]
-public record UserCredentials
-{
-    [Key]
-    public int UserId { get; set; }
-    public string Username { get; set; } = string.Empty;
-    public string PasswordHash { get; set; } = string.Empty;
-}
+﻿namespace FU.API.Models;
 
 public record Credentials
 {

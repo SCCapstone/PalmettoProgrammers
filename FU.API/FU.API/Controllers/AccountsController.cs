@@ -37,9 +37,12 @@ public class AccountsController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Register(Credentials credentials)
     {
-        UserCredentials? userCredentials = await _accountService.Register(credentials);
+        var user = await _accountService.Register(credentials);
 
-        if (userCredentials is null) return Unauthorized();
+        if (user is null)
+        {
+            return BadRequest();
+        }
 
         return Ok();
     }

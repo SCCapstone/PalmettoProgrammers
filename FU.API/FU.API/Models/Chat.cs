@@ -48,7 +48,7 @@
         /// <summary>
         /// Gets or sets the id of the creator of the chat.
         /// </summary>
-        public string? CreatorId { get; set; }
+        public int? CreatorId { get; set; }
 
         /// <summary>
         /// Gets or sets the members of the chat.
