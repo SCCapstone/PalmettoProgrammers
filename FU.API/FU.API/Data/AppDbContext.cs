@@ -7,7 +7,7 @@
     /// <summary>
     /// Our AppDbContext.
     /// </summary>
-    public class AppDbContext : IdentityDbContext<ApplicationUser>
+    public class AppDbContext : DbContext
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AppDbContext"/> class.
@@ -32,6 +32,11 @@
 
             base.OnModelCreating(builder);
         }
+
+        /// <summary>
+        /// Gets or sets the users.
+        /// </summary>
+        public DbSet<ApplicationUser> Users { get; set; }
 
         /// <summary>
         /// Gets or sets UserRelations.

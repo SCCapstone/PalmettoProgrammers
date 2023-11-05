@@ -18,7 +18,7 @@
         /// <summary>
         /// Gets or sets the user id of the relation.
         /// </summary>
-        public string UserId { get; set; } = string.Empty;
+        public int UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the group of the relation.

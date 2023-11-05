@@ -38,7 +38,7 @@
         /// <summary>
         /// Gets or sets the id of the creator.
         /// </summary>
-        public string? CreatorId { get; set; }
+        public int? CreatorId { get; set; }
 
         /// <summary>
         /// Gets or sets the chat of the group.

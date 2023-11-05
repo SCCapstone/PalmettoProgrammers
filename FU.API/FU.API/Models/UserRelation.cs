@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets or sets the id of the first user.
         /// </summary>
-        public string User1Id { get; set; } = string.Empty;
+        public int User1Id { get; set; }
 
         /// <summary>
         /// Gets or sets the second user.
@@ -29,7 +29,7 @@
         /// <summary>
         /// Gets or sets the id of the second user.
         /// </summary>
-        public string User2Id { get; set; } = string.Empty;
+        public int User2Id { get; set; }
 
         /// <summary>
         /// Gets or sets the status of this relation.

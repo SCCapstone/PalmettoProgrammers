@@ -63,7 +63,7 @@
         /// <summary>
         /// Gets or sets the id of the creator.
         /// </summary>
-        public string CreatorId { get; set; } = string.Empty;
+        public int CreatorId { get; set; }
 
         /// <summary>
         /// Gets or sets when the post was created.

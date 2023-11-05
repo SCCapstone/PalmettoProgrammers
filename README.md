@@ -10,7 +10,13 @@ In order to build this project you first have to install:
 * [PostgreSQL](https://www.postgresql.org/download/)
 * [Entity Framework Core tools](https://learn.microsoft.com/en-us/ef/core/cli/)
 
-## Environment Setup
+### Backend Environment Setup
+Config settings are loaded from the environment variables. To automatically load the environment variable from a file, create a `.env` file in the `FU.API` parent folder.
+### Jwt Secret
+A random string of 32+ characters is required in the `JWT_SECRET` environment variable as a Jwt Secret.
+```
+JWT_SECRET="my-32-character-ultra-secure-and-ultra-long-secret"
+```
 ### Starting Postgres
 Install and start the DB by installing Docker and running the following command.
 ```
@@ -30,12 +36,11 @@ dotnet ef database update
 ```
 
 ### Connect to Postgres
-Create a `.env` file that contains the connection string in the projects root directory. The format is as follows:
+Set the `CONNECTION_STRING` environment variable.
 ```
 CONNECTION_STRING="Host=localhost; Database=ForcesUnite; Username=dev; Password=dev"
 ```
 
-Alternatively, add the connection string to the environment vars.
 
 ## Running
 ### Running Web API
