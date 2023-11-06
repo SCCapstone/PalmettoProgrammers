@@ -1,11 +1,11 @@
+namespace FU.API.Middleware;
+
 using FU.API.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
-namespace FU.API.Middleware;
-
 public static class ExceptionHandler
 {
-    public async static Task HandleException(HttpContext context)
+    public static async Task HandleException(HttpContext context)
     {
         var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
         var error = exceptionHandlerPathFeature?.Error;
