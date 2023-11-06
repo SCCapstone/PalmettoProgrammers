@@ -29,4 +29,19 @@ public class PostsController : ControllerBase
 
         return Created($"posts/{newPost.Id}", newPost);
     }
+
+    [AllowAnonymous]
+    [HttpGet]
+    [Route("{postId}")]
+    public async Task<IActionResult> GetPost(int postId)
+    {
+        var post = await _postService.GetPost(postId);
+
+        if (post is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(post);
+    }
 }

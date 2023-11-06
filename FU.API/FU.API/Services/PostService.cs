@@ -19,4 +19,10 @@ public class PostService
 
         return Task.FromResult<Post?>(newPost.Entity);
     }
+
+    public Task<Post?> GetPost(int postId)
+    {
+        var post = _dbContext.Posts.Find(postId);
+        return Task.FromResult(post);
+    }
 }
