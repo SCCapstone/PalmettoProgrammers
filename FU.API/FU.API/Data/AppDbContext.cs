@@ -1,7 +1,6 @@
 ﻿namespace FU.API.Data
 {
     using FU.API.Models;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>

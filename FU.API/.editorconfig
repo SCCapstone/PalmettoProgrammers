@@ -8,6 +8,7 @@ dotnet_diagnostic.SA1201.severity = none
 
 dotnet_diagnostic.SA1309.severity = none
 dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1600.severity = none
 
 # SA1413: Use trailing comma in multi-line initializers
 dotnet_diagnostic.SA1413.severity = none

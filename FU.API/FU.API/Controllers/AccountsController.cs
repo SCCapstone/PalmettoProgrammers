@@ -10,7 +10,7 @@ using FU.API.Helpers;
 /// Handles accounts endpoint requests.
 /// </summary>
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [Authorize]
 public class AccountsController : ControllerBase
 {
@@ -64,6 +64,10 @@ public class AccountsController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Gets the current signed in user.
+    /// </summary>
+    /// <returns>Returns the username and id of the user.</returns>
     [HttpGet]
     public IActionResult GetAccount()
     {
