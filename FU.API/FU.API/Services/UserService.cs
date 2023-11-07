@@ -22,35 +22,35 @@ public class UserService
 
     public Task<UserProfile?> UpdateUserProfile(UserProfile profileChanges)
     {
-        var profile = _dbContext.Users.Find(profileChanges.Id);
-        if (profile is null)
+        var user = _dbContext.Users.Find(profileChanges.Id);
+        if (user is null)
         {
             return Task.FromResult<UserProfile?>(null);
         }
 
         if (profileChanges.IsOnline is not null)
         {
-            profile.IsOnline = (bool)profileChanges.IsOnline;
+            user.IsOnline = (bool)profileChanges.IsOnline;
         }
 
         if (profileChanges.PfpUrl is not null)
         {
-            profile.PfpUrl = profileChanges.PfpUrl;
+            user.PfpUrl = profileChanges.PfpUrl;
         }
 
         if (profileChanges.Bio is not null)
         {
-            profile.Bio = profileChanges.Bio;
+            user.Bio = profileChanges.Bio;
         }
 
         if (profileChanges.DOB is not null)
         {
-            profile.DOB = profileChanges.DOB;
+            user.DOB = profileChanges.DOB;
         }
 
-        _dbContext.Update(profile);
+        _dbContext.Update(user);
         _dbContext.SaveChanges();
 
-        return Task.FromResult<UserProfile?>(profile.ToProfile());
+        return Task.FromResult<UserProfile?>(user.ToProfile());
     }
 }
