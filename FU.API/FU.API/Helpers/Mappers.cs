@@ -2,7 +2,7 @@ namespace FU.API.Helpers;
 
 using FU.API.Models;
 
-public static class Extensions
+public static class Mappers
 {
     public static UserProfile ToProfile(this ApplicationUser appUser)
     {
