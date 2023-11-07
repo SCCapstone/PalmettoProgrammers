@@ -34,19 +34,19 @@ public class UsersController : ControllerBase
 
     [Authorize]
     [HttpPatch]
-    [Route("{userId}")]
-    public async Task<IActionResult> UpdateProfile([FromRoute] int userId, [FromBody] UserProfile profileChanges)
+    [Route("current")] // Will never change anyone else's profile
+    public async Task<IActionResult> UpdateProfile([FromBody] UserProfile profileChanges)
     {
         // Check if the user to update is the authenticated user
-        int? authUserId = int.Parse((string?)HttpContext.Items[CustomContextItems.UserId] ?? string.Empty);
-        if (userId != authUserId)
+        int? userId = int.Parse((string?)HttpContext.Items[CustomContextItems.UserId] ?? string.Empty);
+        if (userId is null)
         {
-            return Forbid();
+            return Unauthorized();
         }
 
         // Allows updateUserProfile to find the user to update
         // Overrides any client given id that may differ from userId.
-        profileChanges.Id = userId;
+        profileChanges.Id = (int)userId;
 
         var newProfile = await _userService.UpdateUserProfile(profileChanges);
         return Ok(newProfile);
