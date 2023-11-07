@@ -65,6 +65,7 @@ builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IAuthorizationHandler, IsLoggedInAuthenticationHandler>();
 builder.Services.AddScoped<AccountsService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddAuthorization(options =>
 {
