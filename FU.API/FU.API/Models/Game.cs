@@ -1,5 +1,7 @@
 ﻿namespace FU.API.Models
 {
+    using System.ComponentModel.DataAnnotations.Schema;
+
     /// <summary>
     /// The game class.
     /// </summary>
@@ -13,7 +15,20 @@
         /// <summary>
         /// Gets or sets the name of the game.
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                NormalizedName = value.ToLower();
+            }
+        }
+
+        public string NormalizedName { get; set; } = string.Empty;
+
+        [NotMapped]
+        private string _name = string.Empty;
 
         /// <summary>
         /// Gets or sets the url of the image for the game.

@@ -92,6 +92,7 @@
         /// <summary>
         /// Gets or sets the user email.
         /// </summary>
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
     }
 }
