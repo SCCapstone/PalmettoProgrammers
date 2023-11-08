@@ -13,7 +13,19 @@
         /// <summary>
         /// Gets or sets the name of the group.
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                NormalizedName = value.ToUpper();
+            }
+        }
+
+        public string NormalizedName { get; set; } = string.Empty;
+
+        private string _name = string.Empty;
 
         /// <summary>
         /// Gets or sets the image url.

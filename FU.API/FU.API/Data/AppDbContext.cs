@@ -29,6 +29,31 @@
                 .WithOne()
                 .HasForeignKey<Chat>(c => c.LastMessageId);
 
+            // Make sure the username is unique
+            builder.Entity<ApplicationUser>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            // Make sure the email is unique
+            builder.Entity<ApplicationUser>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // Make sure the name of the tag is unique
+            builder.Entity<Tag>()
+                .HasIndex(t => t.Name)
+                .IsUnique();
+
+            // Make sure the name of the group is unique
+            builder.Entity<Group>()
+                .HasIndex(g => g.Name)
+                .IsUnique();
+
+            // Make sure the name of the game is unique
+            builder.Entity<Game>()
+                .HasIndex(g => g.Name)
+                .IsUnique();
+
             base.OnModelCreating(builder);
         }
 
