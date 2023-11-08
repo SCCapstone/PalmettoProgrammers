@@ -21,7 +21,7 @@
             set
             {
                 _name = value;
-                NormalizedName = value.ToLower();
+                NormalizedName = value.ToUpper();
             }
         }
 
