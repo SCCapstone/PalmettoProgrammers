@@ -40,7 +40,7 @@
 
             if (user is null)
             {
-                return Unauthorized();
+                return Unauthorized("User is not signed in");
             }
 
             var chat = await _chatService.GetChat(chatId);
@@ -55,7 +55,7 @@
 
             if (!userInChat)
             {
-                return Unauthorized();
+                return Unauthorized("User is not part of chat");
             }
 
             var newMessage = await _chatService.SaveMessage(chat, message, user);
@@ -85,7 +85,7 @@
 
             if (user is null)
             {
-                return Unauthorized();
+                return Unauthorized("User is not signed in");
             }
 
             var chat = await _chatService.GetChat(chatId);
@@ -100,14 +100,14 @@
 
             if (!userInChat)
             {
-                return Unauthorized();
+                return Unauthorized("User is not part of chat");
             }
 
             var messages = await _chatService.GetChatMessages(chatId, offset, limit);
 
             if (messages is null || !messages.Any())
             {
-                return NotFound();
+                return NotFound("No messages found");
             }
 
             var response = messages.MessagesFromModels();
@@ -130,7 +130,7 @@
 
             if (user is null)
             {
-                return Unauthorized();
+                return Unauthorized("User is not signed in");
             }
 
             if (!Enum.TryParse(type, ignoreCase: true, out ChatType chatType))
@@ -141,7 +141,7 @@
             var chats = await _chatService.GetChats(chatType, user, offset, limit);
             if (chats is null || !chats.Any())
             {
-                return NotFound();
+                return NotFound("No chats found");
             }
 
             var response = chats.ChatsFromModels();
@@ -162,13 +162,13 @@
 
             if (user is null)
             {
-                return Unauthorized();
+                return Unauthorized("User is not signed in");
             }
 
             var chat = await _chatService.GetChat(chatId);
             if (chat is null)
             {
-                return NotFound();
+                return NotFound("Chat not found");
             }
 
             // Make sure the user is in the chat
@@ -176,7 +176,7 @@
 
             if (!userInChat)
             {
-                return Unauthorized();
+                return Unauthorized("User is not part of chat");
             }
 
             var response = chat.ChatFromModel();
@@ -197,7 +197,7 @@
 
             if (user is null)
             {
-                return Unauthorized();
+                return Unauthorized("User is not signed in");
             }
 
             var otherUser = await _accountsService.GetUser(otherUserId);
