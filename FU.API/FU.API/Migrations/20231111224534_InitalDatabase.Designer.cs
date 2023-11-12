@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FU.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231108000604_InitialDatabase")]
-    partial class InitialDatabase
+    [Migration("20231111224534_InitalDatabase")]
+    partial class InitalDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,6 @@ namespace FU.API.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsAdmin")
