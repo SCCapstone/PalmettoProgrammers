@@ -1,16 +1,19 @@
 import * as React from 'react';
 import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
+import { signIn } from '../services/auth-service';
 
 export default function SignIn() {
-    /* Debugging only, this will change to pass auth details when endpoint is
-       finished */
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
+ 
+        var creds = { username: data.get('username'), password: data.get('password') };
+        // Calls sign in and saves token in local storage
+        signIn(creds).then(response => {
+            // console.log('Sign in response', response);
+            localStorage.setItem('token', response['token']);
         });
     };
 
@@ -31,7 +34,7 @@ export default function SignIn() {
                 <Typography component="h1" variant="h5">Sign in to Forces Unite
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
-                    {/* Email Text Field */}
+                    {/* Username Text Field */}
                     <TextField
                         margin="normal"
                         required
