@@ -72,8 +72,13 @@
         Direct,
 
         /// <summary>
-        /// Chat between multiple users.
+        /// Chat for a group of users.
         /// </summary>
-        Group
+        Group,
+
+        /// <summary>
+        /// Chat for a post. (Still a group chat)
+        /// </summary>
+        Post
     }
 }

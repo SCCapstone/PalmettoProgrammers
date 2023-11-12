@@ -2,6 +2,8 @@
 using System.Text;
 using FU.API.Data;
 using FU.API.Helpers;
+using FU.API.Hubs;
+using FU.API.Interfaces;
 using FU.API.Middleware;
 using FU.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 #pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,6 +69,13 @@ builder.Services.AddSingleton<IAuthorizationHandler, IsLoggedInAuthenticationHan
 builder.Services.AddScoped<AccountsService>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IChatService, ChatService>();
+
+// Add SignalR
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
 
 builder.Services.AddAuthorization(options =>
 {
@@ -81,7 +91,40 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Allow to pass JWT from swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "ForcesUnite",
+        Version = "v1"
+    });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter your token in the text input below.\r\n\r\nExample: \"1safsfsdfdfd\"",
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -99,5 +142,8 @@ else
 app.UseHttpsRedirection();
 app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = ExceptionHandler.HandleException });
 app.MapControllers();
+
+// Add SignalR hub endpoint
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
