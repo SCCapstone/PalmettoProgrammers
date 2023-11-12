@@ -116,40 +116,6 @@
         }
 
         /// <summary>
-        /// Gets a list of chats for a user.
-        /// </summary>
-        /// <param name="type">The type of chat (Post, Group, Direct).</param>
-        /// <param name="offset">The offset.</param>
-        /// <param name="limit">The limit.</param>
-        /// <returns>A list of chats.</returns>
-        [HttpGet]
-        [Route("all/{type}")]
-        public async Task<IActionResult> GetChats(string type, [FromQuery] int offset = 1, [FromQuery] int limit = 10)
-        {
-            var user = await _accountsService.GetCurrentUser(User);
-
-            if (user is null)
-            {
-                return Unauthorized("User is not signed in");
-            }
-
-            if (!Enum.TryParse(type, ignoreCase: true, out ChatType chatType))
-            {
-                return BadRequest("Invalid Chat Type");
-            }
-
-            var chats = await _chatService.GetChats(chatType, user, offset, limit);
-            if (chats is null || !chats.Any())
-            {
-                return NotFound("No chats found");
-            }
-
-            var response = chats.ChatsFromModels();
-
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Gets a chat by id.
         /// </summary>
         /// <param name="chatId">The chat id.</param>

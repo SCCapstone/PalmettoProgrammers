@@ -82,20 +82,6 @@
             return messages;
         }
 
-        public async Task<IEnumerable<Chat>?> GetChats(ChatType type, ApplicationUser user, int offset = 1, int limit = 10)
-        {
-            var chats = await _dbContext.Chats
-                .Where(c => c.ChatType == type)
-                .Where(c => c.Members.Any(m => m.UserId == user.UserId))
-                .Include(c => c.Members).ThenInclude(m => m.User)
-                .Include(c => c.LastMessage)
-                .OrderByDescending(c => c.LastMessageAt)
-                .Skip((offset - 1) * limit)
-                .Take(limit)
-                .ToListAsync();
-            return chats;
-        }
-
         public async Task<Message?> SaveMessage(Chat chat, string message, ApplicationUser user)
         {
             // Create the message

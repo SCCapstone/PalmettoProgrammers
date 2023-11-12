@@ -12,8 +12,6 @@
 
         Task<IEnumerable<Message>?> GetChatMessages(int chatId, int offset = 1, int limit = 10);
 
-        Task<IEnumerable<Chat>?> GetChats(ChatType type, ApplicationUser user, int offset = 1, int limit = 10);
-
         Task<Chat?> CreateChat(ApplicationUser user1, ApplicationUser user2);
     }
 }
