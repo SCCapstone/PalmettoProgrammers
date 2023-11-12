@@ -11,6 +11,7 @@ export default function Navbar() {
         <CustomLink to="/discover">Discover</CustomLink>
         <CustomLink to="/social">Social</CustomLink>
         <CustomLink to="/create">Create</CustomLink>
+        <CustomLink to="/SignIn">Sign In</CustomLink>
         <CustomLink to="/SignUp">Sign Up</CustomLink>
       </ul>
     </nav>
