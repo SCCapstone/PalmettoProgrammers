@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://localhost:5278/api";
+import config from '../config/config'
+const API_BASE_URL = config.apiUrl;
 
 // Sign in, passes username and password to API
 export const signIn = async (credentials) => {
