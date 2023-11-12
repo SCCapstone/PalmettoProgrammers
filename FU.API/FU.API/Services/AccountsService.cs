@@ -115,8 +115,7 @@ public class AccountsService
         }
 
         // Try to parse the userId from the claims
-        bool isParseSuccess = int.TryParse(stringId, out int userId);
-        if (!isParseSuccess)
+        if (!int.TryParse(stringId, out int userId))
         {
             return null;
         }
