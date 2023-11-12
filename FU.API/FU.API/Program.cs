@@ -70,6 +70,8 @@ builder.Services.AddScoped<AccountsService>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<ITagService, TagService>();
 
 // Add SignalR
 builder.Services.AddSignalR(options =>

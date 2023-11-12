@@ -1,6 +1,8 @@
 namespace FU.API.Helpers;
 
 using FU.API.DTOs.Chat;
+using FU.API.DTOs.Game;
+using FU.API.DTOs.Tag;
 using FU.API.Models;
 
 public static class Mapper
@@ -49,4 +51,29 @@ public static class Mapper
 
     public static IEnumerable<ChatResponseDTO> ChatsFromModels(this IEnumerable<Chat> chats) =>
         chats.Select(chat => chat.ChatFromModel());
+
+    public static GameResponseDTO GameFromModel(this Game game)
+    {
+        return new GameResponseDTO()
+        {
+            Id = game.Id,
+            Name = game.Name,
+            ImageUrl = game.ImageUrl is null ? string.Empty : game.ImageUrl,
+        };
+    }
+
+    public static IEnumerable<GameResponseDTO> GamesFromModels(this IEnumerable<Game> games) =>
+        games.Select(game => game.GameFromModel());
+
+    public static TagResponseDTO TagFromModel(this Tag tag)
+    {
+        return new TagResponseDTO()
+        {
+            Id = tag.Id,
+            Name = tag.Name,
+        };
+    }
+
+    public static IEnumerable<TagResponseDTO> TagsFromModels(this IEnumerable<Tag> tags) =>
+        tags.Select(tag => tag.TagFromModel());
 }
