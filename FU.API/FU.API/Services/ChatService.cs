@@ -48,6 +48,34 @@
             return chat;
         }
 
+        public async Task<Chat?> CreateChat(ApplicationUser user, ChatType chatType, string chatName)
+        {
+            if (user is null)
+            {
+                return null;
+            }
+
+            var chat = new Chat
+            {
+                ChatType = chatType,
+                Creator = user,
+                ChatName = chatName,
+            };
+
+            var membership = new ChatMembership
+            {
+                Chat = chat,
+                User = user,
+            };
+
+            chat.Members.Add(membership);
+
+            _dbContext.Chats.Add(chat);
+            await _dbContext.SaveChangesAsync();
+
+            return chat;
+        }
+
         public async Task<Chat?> GetChat(int chatId)
         {
             var chat = await _dbContext.Chats
