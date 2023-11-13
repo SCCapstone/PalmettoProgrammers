@@ -1,5 +1,4 @@
-import config from '../config/config'
-const API_BASE_URL = config.apiUrl;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 // Sign in, passes username and password to API
 export const signIn = async (credentials) => {

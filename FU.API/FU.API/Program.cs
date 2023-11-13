@@ -139,6 +139,9 @@ else
     app.UseSwaggerUI();
 }
 
+// Allow any cors
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
 app.UseHttpsRedirection();
 app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = ExceptionHandler.HandleException });
 app.MapControllers();

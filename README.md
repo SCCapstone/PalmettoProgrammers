@@ -41,6 +41,13 @@ Set the `CONNECTION_STRING` environment variable.
 CONNECTION_STRING="Host=localhost; Database=ForcesUnite; Username=dev; Password=dev"
 ```
 
+### SPA Environment Setup
+Config settings are loaded from the environment variables. To automatically load the environment variable from a file, create a `.env` file in the `FU.SPA` parent folder.
+
+Then set the `VITE_API_URL` environment variable
+```
+VITE_API_URL=https://localhost:7171/api
+```
 
 ## Running
 ### Running Web API
