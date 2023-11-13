@@ -95,7 +95,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="ageDay"
-                  label="Day"
+                  label="Birth Day"
                   type="ageDay"
                   id="ageDay"
                 />
@@ -105,7 +105,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="ageMonth"
-                  label="Month"
+                  label="Birth Month"
                   type="ageMonth"
                   id="ageMonth"
                 />
@@ -115,7 +115,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="ageYear"
-                  label="Year"
+                  label="Birth Year"
                   type="ageYear"
                   id="ageYear"
                 />
