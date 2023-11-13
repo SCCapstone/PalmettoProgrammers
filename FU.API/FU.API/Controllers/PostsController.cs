@@ -42,8 +42,6 @@ public class PostsController : ControllerBase
             return BadRequest("Error creating post");
         }
 
-        newPost.Chat = null;
-
         return CreatedAtAction(nameof(GetPost), new { postId = newPost.Id }, newPost);
     }
 
