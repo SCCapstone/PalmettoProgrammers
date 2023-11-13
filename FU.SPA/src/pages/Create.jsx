@@ -198,7 +198,9 @@ export default function Create() {
                   autoComplete="searchHashtags"
                 /> {/* Need to put checkboxes under the hashtag section, which will display*/}
               </Grid>
-
+              {/* <CheckboxLabels></CheckboxLabels> */}
+              <Checkbox>#Ranked</Checkbox>
+              <Checkbox>Mic</Checkbox>
               <Box
               sx={{
                 marginTop: 3,
