@@ -70,6 +70,7 @@ builder.Services.AddScoped<AccountsService>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<SearchService>();
 
 // Add SignalR
 builder.Services.AddSignalR(options =>
