@@ -1,25 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import { Button, Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material'; 
 
 
-const Posts = () => {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    getPosts();
-  }, []);
-
-const getPosts = async () => {
-      const response = await fetch(`http://localhost:5173/api/posts`);
-      const data = await response.json();
-      setPosts(data);
-  };
+const Posts = ({posts}) => {
 
   return (
     <div>
     <ul>
     {posts.map((post) => (
-      <li key={post.Id}>
+      <li key={post.Id}>{post.Title}
         <Card sx={{ maxWidth: 345 }}>
         <CardContent>
         <Typography variant="body5" color="text.primary">
