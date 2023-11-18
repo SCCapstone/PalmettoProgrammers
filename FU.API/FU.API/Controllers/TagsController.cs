@@ -10,12 +10,12 @@
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class TagController : ControllerBase
+    public class TagsController : ControllerBase
     {
         private readonly ITagService _tagService;
         private readonly AccountsService _accountsService;
 
-        public TagController(ITagService tagService, AccountsService accountsService)
+        public TagsController(ITagService tagService, AccountsService accountsService)
         {
             _tagService = tagService;
             _accountsService = accountsService;
@@ -43,7 +43,7 @@
 
             if (tag is null)
             {
-                return BadRequest("Tag already exists");
+                return BadRequest("Error creating tag");
             }
 
             return CreatedAtAction(nameof(GetTag), new { tagId = tag.Id }, tag);
@@ -60,7 +60,7 @@
                 return NotFound("No tags found");
             }
 
-            var response = tags.TagsFromModels();
+            var response = tags.TagsToDtos();
 
             return Ok(response);
         }
@@ -77,14 +77,14 @@
                 return NotFound("Tag not found");
             }
 
-            var response = tag.TagFromModel();
+            var response = tag.TagToDto();
 
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Route("{tagId}")]
-        public async Task<IActionResult> UpdateTag(int tagId, [FromBody] string tagName)
+        public async Task<IActionResult> UpdateTag(int tagId, [FromBody] TagRequestDTO dto)
         {
             var user = await _accountsService.GetCurrentUser(User);
 
@@ -100,7 +100,7 @@
                 return NotFound("Tag not found");
             }
 
-            tag.Name = tagName;
+            tag.Name = dto.Name;
 
             var updatedTag = await _tagService.UpdateTag(tag);
 
@@ -109,7 +109,7 @@
                 return BadRequest("Error updating tag");
             }
 
-            var response = updatedTag.TagFromModel();
+            var response = updatedTag.TagToDto();
 
             return Ok(response);
         }

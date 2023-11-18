@@ -22,7 +22,7 @@ public static class Mapper
         };
     }
 
-    public static MessageResponseDTO MessageFromModel(this Message message)
+    public static MessageResponseDTO MessageToDto(this Message message)
     {
         return new MessageResponseDTO()
         {
@@ -34,10 +34,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<MessageResponseDTO> MessagesFromModels(this IEnumerable<Message> messages) =>
-        messages.Select(message => message.MessageFromModel());
+    public static IEnumerable<MessageResponseDTO> MessagesToDtos(this IEnumerable<Message> messages) =>
+        messages.Select(message => message.MessageToDto());
 
-    public static ChatResponseDTO ChatFromModel(this Chat chat)
+    public static ChatResponseDTO ChatToDto(this Chat chat)
     {
         return new ChatResponseDTO()
         {
@@ -49,12 +49,12 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<ChatResponseDTO> ChatsFromModels(this IEnumerable<Chat> chats) =>
-        chats.Select(chat => chat.ChatFromModel());
+    public static IEnumerable<ChatResponseDTO> ChatsToDtos(this IEnumerable<Chat> chats) =>
+        chats.Select(chat => chat.ChatToDto());
 
-    public static GameResponseDTO GameFromModel(this Game game)
+    public static GameDTO GameToDto(this Game game)
     {
-        return new GameResponseDTO()
+        return new GameDTO()
         {
             Id = game.Id,
             Name = game.Name,
@@ -62,10 +62,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<GameResponseDTO> GamesFromModels(this IEnumerable<Game> games) =>
-        games.Select(game => game.GameFromModel());
+    public static IEnumerable<GameDTO> GamesToDtos(this IEnumerable<Game> games) =>
+        games.Select(game => game.GameToDto());
 
-    public static TagResponseDTO TagFromModel(this Tag tag)
+    public static TagResponseDTO TagToDto(this Tag tag)
     {
         return new TagResponseDTO()
         {
@@ -74,6 +74,6 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<TagResponseDTO> TagsFromModels(this IEnumerable<Tag> tags) =>
-        tags.Select(tag => tag.TagFromModel());
+    public static IEnumerable<TagResponseDTO> TagsToDtos(this IEnumerable<Tag> tags) =>
+        tags.Select(tag => tag.TagToDto());
 }
