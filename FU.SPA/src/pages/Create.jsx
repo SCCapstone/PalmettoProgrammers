@@ -39,7 +39,7 @@ function RadioButtonsGroup() {
       <FormLabel id="demo-radio-buttons-group-label">Communications</FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="Any"
+        defaultValue="female"
         name="radio-buttons-group"
       >
         <FormControlLabel value="Mic" control={<Radio />} label="Mic" />
@@ -73,11 +73,8 @@ export default function Create() {
   };
 
 
-  /* 
-   * I may make this visible upon the clicking of the create game button. I'll
-   * then hide the screen when clicking the create 
-  */
-  return ( 
+
+  return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -127,7 +124,7 @@ export default function Create() {
                   autofocus
                 />
               </Grid>
-              
+
               <Box
               sx={{
                 marginTop: 3,
@@ -201,9 +198,7 @@ export default function Create() {
                   autoComplete="searchHashtags"
                 /> {/* Need to put checkboxes under the hashtag section, which will display*/}
               </Grid>
-              {/* <CheckboxLabels></CheckboxLabels> */}
-              <Checkbox>#Ranked</Checkbox>
-              <Checkbox>Mic</Checkbox>
+
               <Box
               sx={{
                 marginTop: 3,
@@ -268,7 +263,7 @@ export default function Create() {
             </Button>
           </Box>
         </Box>
-        
+
       </Container>
     </ThemeProvider>
   );
