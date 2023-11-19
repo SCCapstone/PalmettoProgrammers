@@ -41,12 +41,7 @@
 
             tag = await _tagService.CreateTag(tagName);
 
-            if (tag is null)
-            {
-                return BadRequest("Error creating tag");
-            }
-
-            return CreatedAtAction(nameof(GetTag), new { tagId = tag.Id }, tag);
+            return await GetTag(tag.Id);
         }
 
         [HttpGet]
@@ -55,12 +50,7 @@
         {
             var tags = await _tagService.GetTags(tagName);
 
-            if (tags is null)
-            {
-                return NotFound("No tags found");
-            }
-
-            var response = tags.TagsToDtos();
+            var response = tags.ToDtos();
 
             return Ok(response);
         }
@@ -77,7 +67,7 @@
                 return NotFound("Tag not found");
             }
 
-            var response = tag.TagToDto();
+            var response = tag.ToDto();
 
             return Ok(response);
         }
@@ -104,12 +94,7 @@
 
             var updatedTag = await _tagService.UpdateTag(tag);
 
-            if (updatedTag is null)
-            {
-                return BadRequest("Error updating tag");
-            }
-
-            var response = updatedTag.TagToDto();
+            var response = updatedTag.ToDto();
 
             return Ok(response);
         }
@@ -134,7 +119,7 @@
 
             await _tagService.DeleteTag(tag);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

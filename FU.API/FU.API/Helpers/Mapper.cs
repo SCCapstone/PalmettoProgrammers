@@ -22,7 +22,7 @@ public static class Mapper
         };
     }
 
-    public static MessageResponseDTO MessageToDto(this Message message)
+    public static MessageResponseDTO ToDto(this Message message)
     {
         return new MessageResponseDTO()
         {
@@ -34,10 +34,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<MessageResponseDTO> MessagesToDtos(this IEnumerable<Message> messages) =>
-        messages.Select(message => message.MessageToDto());
+    public static IEnumerable<MessageResponseDTO> ToDtos(this IEnumerable<Message> messages) =>
+        messages.Select(message => message.ToDto());
 
-    public static ChatResponseDTO ChatToDto(this Chat chat)
+    public static ChatResponseDTO ToDto(this Chat chat)
     {
         return new ChatResponseDTO()
         {
@@ -49,10 +49,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<ChatResponseDTO> ChatsToDtos(this IEnumerable<Chat> chats) =>
-        chats.Select(chat => chat.ChatToDto());
+    public static IEnumerable<ChatResponseDTO> ToDtos(this IEnumerable<Chat> chats) =>
+        chats.Select(chat => chat.ToDto());
 
-    public static GameDTO GameToDto(this Game game)
+    public static GameDTO ToDto(this Game game)
     {
         return new GameDTO()
         {
@@ -62,10 +62,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<GameDTO> GamesToDtos(this IEnumerable<Game> games) =>
-        games.Select(game => game.GameToDto());
+    public static IEnumerable<GameDTO> ToDtos(this IEnumerable<Game> games) =>
+        games.Select(game => game.ToDto());
 
-    public static TagResponseDTO TagToDto(this Tag tag)
+    public static TagResponseDTO ToDto(this Tag tag)
     {
         return new TagResponseDTO()
         {
@@ -74,6 +74,6 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<TagResponseDTO> TagsToDtos(this IEnumerable<Tag> tags) =>
-        tags.Select(tag => tag.TagToDto());
+    public static IEnumerable<TagResponseDTO> ToDtos(this IEnumerable<Tag> tags) =>
+        tags.Select(tag => tag.ToDto());
 }

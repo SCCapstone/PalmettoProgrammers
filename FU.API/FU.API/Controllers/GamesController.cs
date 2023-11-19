@@ -41,11 +41,6 @@
 
             game = await _gameService.CreateGame(gameName);
 
-            if (game is null)
-            {
-                return BadRequest("Error creating game");
-            }
-
             return await GetGame(game.Id);
         }
 
@@ -55,12 +50,7 @@
         {
             var games = await _gameService.GetGames(gameName);
 
-            if (games is null || !games.Any())
-            {
-                return NotFound("No games found");
-            }
-
-            var response = games.GamesToDtos();
+            var response = games.ToDtos();
 
             return Ok(response);
         }
@@ -77,7 +67,7 @@
                 return NotFound("Game not found");
             }
 
-            var response = game.GameToDto();
+            var response = game.ToDto();
 
             return Ok(response);
         }
@@ -105,12 +95,7 @@
 
             var updatedGame = await _gameService.UpdateGame(game);
 
-            if (updatedGame is null)
-            {
-                return BadRequest("Error updating game");
-            }
-
-            var response = updatedGame.GameToDto();
+            var response = updatedGame.ToDto();
 
             return Ok(response);
         }
@@ -135,7 +120,7 @@
 
             await _gameService.DeleteGame(game);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
