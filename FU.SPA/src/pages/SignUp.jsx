@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avatar, FormControlLabel, Icon, Grid, Checkbox } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles'; 
+import { signUp } from '../services/auth-service';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -9,12 +10,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+
+    const creds = { username: data.get('username'), password: data.get('password') };
+    // Passing sign up info to API
+    signUp(creds).then(response => {
+      // console.log(response);
     });
   };
 
@@ -46,7 +50,7 @@ export default function SignUp() {
                   label="Username"
                   type="username"
                   name="username"
-                  autofocus
+                  autoFocus
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
