@@ -1,5 +1,6 @@
 namespace FU.API.Helpers;
 
+using FU.API.DTOs.Search;
 using FU.API.DTOs.Chat;
 using FU.API.Models;
 
@@ -49,4 +50,41 @@ public static class Mapper
 
     public static IEnumerable<ChatResponseDTO> ChatsFromModels(this IEnumerable<Chat> chats) =>
         chats.Select(chat => chat.ChatFromModel());
+
+    public static PostQuery ToPostQuery(this PostSearchRequestDTO dto)
+    {
+        var query = new PostQuery()
+        {
+            After = dto.After,
+            MinimumRequiredPlayers = dto.MinPlayers,
+            DescriptionContains = dto.Keywords.Split(" ").ToList(),
+            Limit = dto.Limit,
+            Offset = dto.Offset,
+            SortBy = new ()
+        };
+
+        // E.g. dto.Sort = "title:asc" or just "title"
+        var arr = dto.Sort.ToLower().Split(":");
+        query.SortBy.Type = arr[0] switch
+        {
+            "players" => SortType.NumberOfPlayers,
+            "soonest" => SortType.NewestCreated,
+            "newest" => SortType.NewestCreated,
+            "title" => SortType.Title,
+            _ => SortType.NewestCreated
+        };
+
+        if (arr.Length > 1 && arr[1].StartsWith("desc"))
+        {
+            query.SortBy.Direction = SortDirection.Descending;
+        }
+        else
+        {
+            query.SortBy.Direction = SortDirection.Ascending;
+        }
+
+        // TODO tags
+        // TODO games
+        return query;
+    }
 }
