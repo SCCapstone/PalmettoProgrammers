@@ -39,7 +39,7 @@ function RadioButtonsGroup() {
       <FormLabel id="demo-radio-buttons-group-label">Communications</FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="female"
+        defaultValue="Any"
         name="radio-buttons-group"
       >
         <FormControlLabel value="Mic" control={<Radio />} label="Mic" />
@@ -73,8 +73,11 @@ export default function Create() {
   };
 
 
-
-  return (
+  /* 
+   * I may make this visible upon the clicking of the create game button. I'll
+   * then hide the screen when clicking the create 
+  */
+  return ( 
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
