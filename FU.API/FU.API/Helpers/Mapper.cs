@@ -116,7 +116,7 @@ public static class Mapper
         return query;
     }
 
-    public static PostResponseDTO PostFromModel(this Post post)
+    public static PostResponseDTO ToDto(this Post post)
     {
         return new PostResponseDTO()
         {
@@ -133,10 +133,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<PostResponseDTO> PostsFromModels(this IEnumerable<Post> posts) =>
-        posts.Select(post => post.PostFromModel());
+    public static IEnumerable<PostResponseDTO> ToDtos(this IEnumerable<Post> posts) =>
+        posts.Select(post => post.ToDto());
 
-    public static Post PostFromRequest(this PostRequestDTO postRequestDTO)
+    public static Post ToModel(this PostRequestDTO postRequestDTO)
     {
         var tagIds = postRequestDTO.TagIds ?? new HashSet<int>();
         return new Post()

@@ -48,13 +48,8 @@
             return chat;
         }
 
-        public async Task<Chat?> CreateChat(ApplicationUser user, ChatType chatType, string chatName)
+        public async Task<Chat> CreateChat(ApplicationUser user, ChatType chatType, string chatName)
         {
-            if (user is null)
-            {
-                return null;
-            }
-
             var chat = new Chat
             {
                 ChatType = chatType,
@@ -70,8 +65,15 @@
 
             chat.Members.Add(membership);
 
-            _dbContext.Chats.Add(chat);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                _dbContext.Chats.Add(chat);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new DbUpdateException();
+            }
 
             return chat;
         }

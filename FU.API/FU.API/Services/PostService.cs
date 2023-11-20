@@ -1,6 +1,7 @@
 namespace FU.API.Services;
 
 using FU.API.Data;
+using FU.API.Exceptions;
 using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +18,10 @@ public class PostService : IPostService
         _chatService = chatService;
     }
 
-    public async Task<Post?> CreatePost(Post post)
+    public async Task<Post> CreatePost(Post post)
     {
         var game = await _dbContext.Games
-            .FindAsync(post.GameId);
-
-        if (game is null)
-        {
-            return null;
-        }
+            .FindAsync(post.GameId) ?? throw new NonexistentGame();
 
         post.Game = game;
 
@@ -33,11 +29,6 @@ public class PostService : IPostService
         var tags = await _dbContext.Tags
             .Where(t => postTagIds.Contains(t.Id))
             .ToListAsync();
-
-        if (tags.Count != postTagIds.Count())
-        {
-            return null;
-        }
 
         // Put tags back into post
         post.Tags.Clear();
@@ -51,37 +42,37 @@ public class PostService : IPostService
 
         var chat = await _chatService.CreateChat(post.Creator, ChatType.Post, post.Title);
 
-        if (chat is null)
-        {
-            return null;
-        }
-
         post.Chat = chat;
 
-        _dbContext.Posts.Add(post);
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            _dbContext.Posts.Add(post);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw new DbUpdateException();
+        }
 
         return post;
     }
 
     public async Task<Post?> GetPost(int postId)
     {
-        var post = await _dbContext.Posts
+        return await _dbContext.Posts
             .Where(p => p.Id == postId)
             .Include(p => p.Creator)
             .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
             .Include(p => p.Game)
             .FirstOrDefaultAsync();
-        return post;
     }
 
-    public async Task<IEnumerable<Post>?> GetPosts()
+    public async Task<IEnumerable<Post>> GetPosts()
     {
-        var posts = await _dbContext.Posts
+        return await _dbContext.Posts
             .Include(p => p.Creator)
             .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
             .Include(p => p.Game)
             .ToListAsync();
-        return posts;
     }
 }

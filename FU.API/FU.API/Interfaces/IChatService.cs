@@ -14,6 +14,6 @@
 
         Task<Chat?> CreateChat(ApplicationUser user1, ApplicationUser user2);
 
-        Task<Chat?> CreateChat(ApplicationUser user, ChatType chatType, string chatName);
+        Task<Chat> CreateChat(ApplicationUser user, ChatType chatType, string chatName);
     }
 }

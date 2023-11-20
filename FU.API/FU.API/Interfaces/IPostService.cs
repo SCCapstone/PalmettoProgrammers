@@ -4,10 +4,10 @@
 
     public interface IPostService
     {
-        Task<Post?> CreatePost(Post post);
+        Task<Post> CreatePost(Post post);
 
         Task<Post?> GetPost(int postId);
 
-        Task<IEnumerable<Post>?> GetPosts();
+        Task<IEnumerable<Post>> GetPosts();
     }
 }

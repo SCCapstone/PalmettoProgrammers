@@ -32,17 +32,12 @@ public class PostsController : ControllerBase
             return Unauthorized("User is not signed in");
         }
 
-        var post = dto.PostFromRequest();
+        var post = dto.ToModel();
         post.Creator = user;
 
         var newPost = await _postService.CreatePost(post);
 
-        if (newPost is null)
-        {
-            return BadRequest("Error creating post");
-        }
-
-        return CreatedAtAction(nameof(GetPost), new { postId = newPost.Id }, newPost);
+        return await GetPost(newPost.Id);
     }
 
     [HttpGet]
@@ -56,7 +51,7 @@ public class PostsController : ControllerBase
             return NotFound();
         }
 
-        var response = post.PostFromModel();
+        var response = post.ToDto();
 
         return Ok(response);
     }
@@ -66,12 +61,7 @@ public class PostsController : ControllerBase
     {
         var posts = await _postService.GetPosts();
 
-        if (posts is null || !posts.Any())
-        {
-            return NotFound();
-        }
-
-        var response = posts.PostsFromModels();
+        var response = posts.ToDtos();
 
         return Ok(response);
     }
