@@ -2,6 +2,8 @@ namespace FU.API.Helpers;
 
 using FU.API.DTOs.Search;
 using FU.API.DTOs.Chat;
+using FU.API.DTOs.Game;
+using FU.API.DTOs.Tag;
 using FU.API.Models;
 
 public static class Mapper
@@ -21,7 +23,7 @@ public static class Mapper
         };
     }
 
-    public static MessageResponseDTO MessageFromModel(this Message message)
+    public static MessageResponseDTO ToDto(this Message message)
     {
         return new MessageResponseDTO()
         {
@@ -33,10 +35,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<MessageResponseDTO> MessagesFromModels(this IEnumerable<Message> messages) =>
-        messages.Select(message => message.MessageFromModel());
+    public static IEnumerable<MessageResponseDTO> ToDtos(this IEnumerable<Message> messages) =>
+        messages.Select(message => message.ToDto());
 
-    public static ChatResponseDTO ChatFromModel(this Chat chat)
+    public static ChatResponseDTO ToDto(this Chat chat)
     {
         return new ChatResponseDTO()
         {
@@ -48,8 +50,33 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<ChatResponseDTO> ChatsFromModels(this IEnumerable<Chat> chats) =>
-        chats.Select(chat => chat.ChatFromModel());
+    public static IEnumerable<ChatResponseDTO> ToDtos(this IEnumerable<Chat> chats) =>
+        chats.Select(chat => chat.ToDto());
+
+    public static GameDTO ToDto(this Game game)
+    {
+        return new GameDTO()
+        {
+            Id = game.Id,
+            Name = game.Name,
+            ImageUrl = game.ImageUrl is null ? string.Empty : game.ImageUrl,
+        };
+    }
+
+    public static IEnumerable<GameDTO> ToDtos(this IEnumerable<Game> games) =>
+        games.Select(game => game.ToDto());
+
+    public static TagResponseDTO ToDto(this Tag tag)
+    {
+        return new TagResponseDTO()
+        {
+            Id = tag.Id,
+            Name = tag.Name,
+        };
+    }
+
+    public static IEnumerable<TagResponseDTO> ToDtos(this IEnumerable<Tag> tags) =>
+        tags.Select(tag => tag.ToDto());
 
     public static PostQuery ToPostQuery(this PostSearchRequestDTO dto)
     {
