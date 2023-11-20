@@ -79,9 +79,9 @@ function createGroupButton() {
   }
 }
 
+//TODO create buttons on the left side of the page, which will then be used inside the creategroup and createpost functions
 
-
-//START OF PAGE CODE, WHICH I'M CHANGING TO CREATE GROUP, BEFORE MAKING IT A BUTTON FUNCTION
+// TODO START OF PAGE CODE, WHICH I'M CHANGING TO CREATE GROUP, BEFORE MAKING IT A BUTTON FUNCTION (semi-completed)
 function createGroup() {
   return (
     <ThemeProvider theme={createTheme}>
