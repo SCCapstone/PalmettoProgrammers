@@ -146,11 +146,9 @@ public class AccountsService
     // Return user credentials so userId is accessable without a second db call
     private Task<ApplicationUser?> Authenticate(Credentials credentials)
     {
-        ApplicationUser user;
+        ApplicationUser? user = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).FirstOrDefault();
 
-        user = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).Single();
-
-        if (user.PasswordHash == HashPassword(credentials.Password))
+        if (user?.PasswordHash == HashPassword(credentials.Password))
         {
             return Task.FromResult<ApplicationUser?>(user);
         }

@@ -8,11 +8,11 @@
 
         Task<Game?> GetGame(string gameName);
 
-        Task<IEnumerable<Game>?> GetGames(string gameName);
+        Task<IEnumerable<Game>> GetGames(string gameName);
 
-        Task<Game?> CreateGame(string gameName);
+        Task<Game> CreateGame(string gameName);
 
-        Task<Game?> UpdateGame(Game game);
+        Task<Game> UpdateGame(Game game);
 
         Task DeleteGame(Game game);
     }

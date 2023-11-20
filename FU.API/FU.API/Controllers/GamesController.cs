@@ -10,19 +10,19 @@
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class GameController : ControllerBase
+    public class GamesController : ControllerBase
     {
         private readonly IGameService _gameService;
         private readonly AccountsService _accountsService;
 
-        public GameController(IGameService gameService, AccountsService accountsService)
+        public GamesController(IGameService gameService, AccountsService accountsService)
         {
             _gameService = gameService;
             _accountsService = accountsService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGame([FromBody] string gameName)
+        public async Task<IActionResult> CreateGame([FromBody] GameDTO dto)
         {
             var user = await _accountsService.GetCurrentUser(User);
 
@@ -31,6 +31,7 @@
                 return Unauthorized("User is not signed in");
             }
 
+            var gameName = dto.Name;
             var game = await _gameService.GetGame(gameName);
 
             if (game is not null)
@@ -40,12 +41,7 @@
 
             game = await _gameService.CreateGame(gameName);
 
-            if (game is null)
-            {
-                return BadRequest("Game already exists");
-            }
-
-            return CreatedAtAction(nameof(GetGame), new { gameId = game.Id }, game);
+            return await GetGame(game.Id);
         }
 
         [HttpGet]
@@ -54,12 +50,7 @@
         {
             var games = await _gameService.GetGames(gameName);
 
-            if (games is null)
-            {
-                return NotFound("No games found");
-            }
-
-            var response = games.GamesFromModels();
+            var response = games.ToDtos();
 
             return Ok(response);
         }
@@ -76,12 +67,12 @@
                 return NotFound("Game not found");
             }
 
-            var response = game.GameFromModel();
+            var response = game.ToDto();
 
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Route("{gameId}")]
         public async Task<IActionResult> UpdateGame(int gameId, [FromBody] UpdateGameDTO updateGame)
         {
@@ -104,12 +95,7 @@
 
             var updatedGame = await _gameService.UpdateGame(game);
 
-            if (updatedGame is null)
-            {
-                return BadRequest("Error updating game");
-            }
-
-            var response = updatedGame.GameFromModel();
+            var response = updatedGame.ToDto();
 
             return Ok(response);
         }
@@ -134,7 +120,7 @@
 
             await _gameService.DeleteGame(game);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

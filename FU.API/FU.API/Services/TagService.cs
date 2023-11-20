@@ -14,23 +14,38 @@
             _dbContext = dbContext;
         }
 
-        public async Task<Tag?> CreateTag(string tagName)
+        public async Task<Tag> CreateTag(string tagName)
         {
             var newTag = new Tag
             {
                 Name = tagName
             };
 
-            _dbContext.Tags.Add(newTag);
-            await _dbContext.SaveChangesAsync();
+
+            try
+            {
+                _dbContext.Tags.Add(newTag);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new DbUpdateException();
+            }
 
             return newTag;
         }
 
         public async Task DeleteTag(Tag tag)
         {
-            _dbContext.Tags.Remove(tag);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                _dbContext.Tags.Remove(tag);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new DbUpdateException();
+            }
         }
 
         public async Task<Tag?> GetTag(int tagId)
@@ -39,7 +54,7 @@
                 .FindAsync(tagId);
         }
 
-        public async Task<IEnumerable<Tag>?> GetTags(string tagName)
+        public async Task<IEnumerable<Tag>> GetTags(string tagName)
         {
             var normalizedTagName = tagName.ToLower();
             return await _dbContext.Tags
@@ -47,10 +62,17 @@
                 .ToListAsync();
         }
 
-        public async Task<Tag?> UpdateTag(Tag tag)
+        public async Task<Tag> UpdateTag(Tag tag)
         {
-            _dbContext.Tags.Update(tag);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                _dbContext.Tags.Update(tag);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new DbUpdateException();
+            }
 
             return tag;
         }

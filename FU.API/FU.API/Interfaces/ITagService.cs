@@ -8,11 +8,11 @@
 
         Task<Tag?> GetTag(string tagName);
 
-        Task<IEnumerable<Tag>?> GetTags(string tagName);
+        Task<IEnumerable<Tag>> GetTags(string tagName);
 
-        Task<Tag?> CreateTag(string tagName);
+        Task<Tag> CreateTag(string tagName);
 
-        Task<Tag?> UpdateTag(Tag tag);
+        Task<Tag> UpdateTag(Tag tag);
 
         Task DeleteTag(Tag tag);
     }

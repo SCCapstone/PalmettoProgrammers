@@ -1,5 +1,6 @@
 namespace FU.API.Helpers;
 
+using FU.API.DTOs.Search;
 using FU.API.DTOs.Chat;
 using FU.API.DTOs.Game;
 using FU.API.DTOs.Post;
@@ -23,7 +24,7 @@ public static class Mapper
         };
     }
 
-    public static MessageResponseDTO MessageFromModel(this Message message)
+    public static MessageResponseDTO ToDto(this Message message)
     {
         return new MessageResponseDTO()
         {
@@ -35,10 +36,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<MessageResponseDTO> MessagesFromModels(this IEnumerable<Message> messages) =>
-        messages.Select(message => message.MessageFromModel());
+    public static IEnumerable<MessageResponseDTO> ToDtos(this IEnumerable<Message> messages) =>
+        messages.Select(message => message.ToDto());
 
-    public static ChatResponseDTO ChatFromModel(this Chat chat)
+    public static ChatResponseDTO ToDto(this Chat chat)
     {
         return new ChatResponseDTO()
         {
@@ -50,12 +51,12 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<ChatResponseDTO> ChatsFromModels(this IEnumerable<Chat> chats) =>
-        chats.Select(chat => chat.ChatFromModel());
+    public static IEnumerable<ChatResponseDTO> ToDtos(this IEnumerable<Chat> chats) =>
+        chats.Select(chat => chat.ToDto());
 
-    public static GameResponseDTO GameFromModel(this Game game)
+    public static GameDTO ToDto(this Game game)
     {
-        return new GameResponseDTO()
+        return new GameDTO()
         {
             Id = game.Id,
             Name = game.Name,
@@ -63,10 +64,10 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<GameResponseDTO> GamesFromModels(this IEnumerable<Game> games) =>
-        games.Select(game => game.GameFromModel());
+    public static IEnumerable<GameDTO> ToDtos(this IEnumerable<Game> games) =>
+        games.Select(game => game.ToDto());
 
-    public static TagResponseDTO TagFromModel(this Tag tag)
+    public static TagResponseDTO ToDto(this Tag tag)
     {
         return new TagResponseDTO()
         {
@@ -75,8 +76,45 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<TagResponseDTO> TagsFromModels(this IEnumerable<Tag> tags) =>
-        tags.Select(tag => tag.TagFromModel());
+    public static IEnumerable<TagResponseDTO> ToDtos(this IEnumerable<Tag> tags) =>
+        tags.Select(tag => tag.ToDto());
+
+    public static PostQuery ToPostQuery(this PostSearchRequestDTO dto)
+    {
+        var query = new PostQuery()
+        {
+            After = dto.After,
+            MinimumRequiredPlayers = dto.MinPlayers,
+            DescriptionContains = dto.Keywords.Split(" ").ToList(),
+            Limit = dto.Limit,
+            Offset = dto.Offset,
+            SortBy = new ()
+        };
+
+        // E.g. dto.Sort = "title:asc" or just "title"
+        var arr = dto.Sort.ToLower().Split(":");
+        query.SortBy.Type = arr[0] switch
+        {
+            "players" => SortType.NumberOfPlayers,
+            "soonest" => SortType.NewestCreated,
+            "newest" => SortType.NewestCreated,
+            "title" => SortType.Title,
+            _ => SortType.NewestCreated
+        };
+
+        if (arr.Length > 1 && arr[1].StartsWith("desc"))
+        {
+            query.SortBy.Direction = SortDirection.Descending;
+        }
+        else
+        {
+            query.SortBy.Direction = SortDirection.Ascending;
+        }
+
+        // TODO tags
+        // TODO games
+        return query;
+    }
 
     public static PostResponseDTO PostFromModel(this Post post)
     {

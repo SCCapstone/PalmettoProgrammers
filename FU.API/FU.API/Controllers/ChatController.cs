@@ -64,7 +64,7 @@
                 return BadRequest();
             }
 
-            var response = newMessage.MessageFromModel();
+            var response = newMessage.ToDto();
             await _hubContext.Clients.Group($"ChatGroup-{chatId}").SendAsync("ReceiveMessage", response);
 
             return CreatedAtAction(nameof(SaveMessage), response);
@@ -107,10 +107,10 @@
 
             if (messages is null || !messages.Any())
             {
-                return NotFound("No messages found");
+                return Ok();
             }
 
-            var response = messages.MessagesFromModels();
+            var response = messages.ToDtos();
 
             return Ok(response);
         }
@@ -145,7 +145,7 @@
                 return Unauthorized("User is not part of chat");
             }
 
-            var response = chat.ChatFromModel();
+            var response = chat.ToDto();
 
             return Ok(response);
         }
@@ -181,7 +181,7 @@
             // Return the chat if one already exists
             if (existingChat is not null)
             {
-                response = existingChat.ChatFromModel();
+                response = existingChat.ToDto();
                 return Ok(response);
             }
 
@@ -193,7 +193,7 @@
                 return BadRequest("Failed to create the new chat");
             }
 
-            response = newChat.ChatFromModel();
+            response = newChat.ToDto();
 
             return Ok(response);
         }

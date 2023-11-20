@@ -10,12 +10,12 @@
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class TagController : ControllerBase
+    public class TagsController : ControllerBase
     {
         private readonly ITagService _tagService;
         private readonly AccountsService _accountsService;
 
-        public TagController(ITagService tagService, AccountsService accountsService)
+        public TagsController(ITagService tagService, AccountsService accountsService)
         {
             _tagService = tagService;
             _accountsService = accountsService;
@@ -41,12 +41,7 @@
 
             tag = await _tagService.CreateTag(tagName);
 
-            if (tag is null)
-            {
-                return BadRequest("Tag already exists");
-            }
-
-            return CreatedAtAction(nameof(GetTag), new { tagId = tag.Id }, tag);
+            return await GetTag(tag.Id);
         }
 
         [HttpGet]
@@ -55,12 +50,7 @@
         {
             var tags = await _tagService.GetTags(tagName);
 
-            if (tags is null)
-            {
-                return NotFound("No tags found");
-            }
-
-            var response = tags.TagsFromModels();
+            var response = tags.ToDtos();
 
             return Ok(response);
         }
@@ -77,14 +67,14 @@
                 return NotFound("Tag not found");
             }
 
-            var response = tag.TagFromModel();
+            var response = tag.ToDto();
 
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Route("{tagId}")]
-        public async Task<IActionResult> UpdateTag(int tagId, [FromBody] string tagName)
+        public async Task<IActionResult> UpdateTag(int tagId, [FromBody] TagRequestDTO dto)
         {
             var user = await _accountsService.GetCurrentUser(User);
 
@@ -100,16 +90,11 @@
                 return NotFound("Tag not found");
             }
 
-            tag.Name = tagName;
+            tag.Name = dto.Name;
 
             var updatedTag = await _tagService.UpdateTag(tag);
 
-            if (updatedTag is null)
-            {
-                return BadRequest("Error updating tag");
-            }
-
-            var response = updatedTag.TagFromModel();
+            var response = updatedTag.ToDto();
 
             return Ok(response);
         }
@@ -134,7 +119,7 @@
 
             await _tagService.DeleteTag(tag);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
