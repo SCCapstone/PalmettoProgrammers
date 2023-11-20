@@ -21,7 +21,6 @@
                 Name = tagName
             };
 
-
             try
             {
                 _dbContext.Tags.Add(newTag);
