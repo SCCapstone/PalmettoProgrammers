@@ -61,19 +61,19 @@ function CheckboxLabels() { //Might change how the page is designed and use the 
     </FormGroup>
   );
 }
-
+//Create button click
 export default function Create() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      email: data.get(''), //change to get information from the post data
+      password: data.get(''),
     });
   };
 
 
-
+//Design of the page
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -174,8 +174,11 @@ export default function Create() {
               </Typography>
               </Box> {/* Need to place radius buttons under the Communication */}
               <Grid item xs={12} sm={5} marginTop={2}>
+                <label>Any</label>
                 <Radio>Any</Radio>
+                <label>Mic</label>
                 <Radio>Mic</Radio>
+                <label>No Mic</label>
                 <Radio>No Mic</Radio>
               </Grid>
               <Box
@@ -248,7 +251,7 @@ export default function Create() {
               </Typography>
               </Box>
               <Grid item xs={12} sm={6} marginTop={2}>
-                <TextareaAutosize>
+                <TextareaAutosize aria-setsize={300}>
 
                 </TextareaAutosize>
               </Grid>

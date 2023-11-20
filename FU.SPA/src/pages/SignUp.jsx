@@ -94,6 +94,17 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="confirmPassword"
+                  id="confirmPassword"
+                  autoComplete="confirmPassword"
+                />
+              </Grid>
               <Grid item xs ={12} sm = {4}>
                 <TextField 
                   required
