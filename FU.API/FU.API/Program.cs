@@ -72,6 +72,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<SearchService>();
 
 // Add SignalR
 builder.Services.AddSignalR(options =>
@@ -140,6 +141,9 @@ else
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Allow any cors
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = ExceptionHandler.HandleException });
