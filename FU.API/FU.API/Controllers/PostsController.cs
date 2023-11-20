@@ -3,7 +3,6 @@ namespace FU.API.Controllers;
 using FU.API.DTOs.Post;
 using FU.API.Helpers;
 using FU.API.Interfaces;
-using FU.API.Models;
 using FU.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
