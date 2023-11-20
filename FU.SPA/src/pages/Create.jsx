@@ -82,6 +82,7 @@ function createGroupButton() {
 //TODO create buttons on the left side of the page, which will then be used inside the creategroup and createpost functions
 
 // TODO START OF PAGE CODE, WHICH I'M CHANGING TO CREATE GROUP, BEFORE MAKING IT A BUTTON FUNCTION (semi-completed)
+// need to add a group image and an upload button to the left under the buttons that will be placed there, as well.
 function createGroup() {
   return (
     <ThemeProvider theme={createTheme}>
