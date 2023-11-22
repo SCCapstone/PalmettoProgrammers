@@ -66,13 +66,4 @@ public class PostService : IPostService
             .Include(p => p.Game)
             .FirstOrDefaultAsync();
     }
-
-    public async Task<IEnumerable<Post>> GetPosts()
-    {
-        return await _dbContext.Posts
-            .Include(p => p.Creator)
-            .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
-            .Include(p => p.Game)
-            .ToListAsync();
-    }
 }

@@ -7,7 +7,5 @@
         Task<Post> CreatePost(Post post);
 
         Task<Post?> GetPost(int postId);
-
-        Task<IEnumerable<Post>> GetPosts();
     }
 }

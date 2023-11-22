@@ -62,7 +62,13 @@ public class SearchService
         // Always end ordering by Id to ensure order is unique. This ensures order is consistent across calls.
         orderedDbQuery = orderedDbQuery.ThenBy(p => p.Id);
 
-        return await orderedDbQuery.Skip(query.Offset).Take(query.Limit).ToListAsync();
+        return await orderedDbQuery
+                .Skip(query.Offset)
+                .Take(query.Limit)
+                .Include(p => p.Creator)
+                .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
+                .Include(p => p.Game)
+                .ToListAsync();
     }
 
     private static Expression<Func<Post, object>> SelectPostProperty(SortType? sortType)

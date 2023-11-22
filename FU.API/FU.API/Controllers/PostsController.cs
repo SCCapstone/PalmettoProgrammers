@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PostsController : ControllerBase
 {
     private readonly IPostService _postService;
@@ -21,7 +22,6 @@ public class PostsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> CreatePost([FromBody] PostRequestDTO dto)
     {
         var user = await _accountsService.GetCurrentUser(User);
@@ -41,6 +41,7 @@ public class PostsController : ControllerBase
 
     [HttpGet]
     [Route("{postId}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPost(int postId)
     {
         var post = await _postService.GetPost(postId);
@@ -51,16 +52,6 @@ public class PostsController : ControllerBase
         }
 
         var response = post.ToDto();
-
-        return Ok(response);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetPosts()
-    {
-        var posts = await _postService.GetPosts();
-
-        var response = posts.ToDtos();
 
         return Ok(response);
     }
