@@ -7,12 +7,13 @@ using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-public class PostService : IPostService
+public class PostService : CommonService, IPostService
 {
     private readonly AppDbContext _dbContext;
     private readonly IChatService _chatService;
 
     public PostService(AppDbContext dbContext, IChatService chatService)
+        : base(dbContext)
     {
         _dbContext = dbContext;
         _chatService = chatService;

@@ -1,9 +1,9 @@
 namespace FU.API.Controllers;
 
 using FU.API.DTOs.Post;
+using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
-using FU.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,23 +13,16 @@ using Microsoft.AspNetCore.Mvc;
 public class PostsController : ControllerBase
 {
     private readonly IPostService _postService;
-    private readonly AccountsService _accountsService;
 
-    public PostsController(IPostService postService, AccountsService accountsService)
+    public PostsController(IPostService postService)
     {
         _postService = postService;
-        _accountsService = accountsService;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreatePost([FromBody] PostRequestDTO dto)
     {
-        var user = await _accountsService.GetCurrentUser(User);
-
-        if (user is null)
-        {
-            return Unauthorized("User is not signed in");
-        }
+        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
         var post = dto.ToModel();
         post.Creator = user;
