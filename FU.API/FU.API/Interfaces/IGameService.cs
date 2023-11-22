@@ -2,7 +2,7 @@
 {
     using FU.API.Models;
 
-    public interface IGameService
+    public interface IGameService : ICommonService
     {
         Task<Game?> GetGame(int gameId);
 

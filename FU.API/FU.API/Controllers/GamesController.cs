@@ -1,9 +1,9 @@
 ﻿namespace FU.API.Controllers
 {
     using FU.API.DTOs.Game;
+    using FU.API.Exceptions;
     using FU.API.Helpers;
     using FU.API.Interfaces;
-    using FU.API.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -13,23 +13,16 @@
     public class GamesController : ControllerBase
     {
         private readonly IGameService _gameService;
-        private readonly AccountsService _accountsService;
 
-        public GamesController(IGameService gameService, AccountsService accountsService)
+        public GamesController(IGameService gameService)
         {
             _gameService = gameService;
-            _accountsService = accountsService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateGame([FromBody] GameDTO dto)
         {
-            var user = await _accountsService.GetCurrentUser(User);
-
-            if (user is null)
-            {
-                return Unauthorized("User is not signed in");
-            }
+            var user = await _gameService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
             var gameName = dto.Name;
             var game = await _gameService.GetGame(gameName);
@@ -76,9 +69,9 @@
         [Route("{gameId}")]
         public async Task<IActionResult> UpdateGame(int gameId, [FromBody] UpdateGameDTO updateGame)
         {
-            var user = await _accountsService.GetCurrentUser(User);
+            var user = await _gameService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-            if (user is null || !user.IsAdmin)
+            if (!user.IsAdmin)
             {
                 return Unauthorized("User is not authorized");
             }
@@ -104,9 +97,9 @@
         [Route("{gameId}")]
         public async Task<IActionResult> DeleteGame(int gameId)
         {
-            var user = await _accountsService.GetCurrentUser(User);
+            var user = await _gameService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-            if (user is null || !user.IsAdmin)
+            if (!user.IsAdmin)
             {
                 return Unauthorized("User is not authorized");
             }
