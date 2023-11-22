@@ -5,20 +5,20 @@ import { Button, Card, CardActions, CardContent, CardHeader, Typography } from '
 const Posts = ({posts}) => {
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
     <ul>
-    {posts.map((post) => (
+  {posts.map((post) => (
       <li key={post.Id}>{post.Title}
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ minWidth: 345, maxWidth: 345 }}>
         <CardContent>
         <Typography variant="body5" color="text.primary">
-            {post.Creator}
+          {post.Creator}
         </Typography>
         <Typography gutterBottom variant="h3" component="div">
           {post.Title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {post.StartTime}
+         {post.StartTime}
         </Typography>
         <Typography variant="body1" color="black">
           {post.Description}
@@ -30,10 +30,9 @@ const Posts = ({posts}) => {
       </CardActions>
     </Card>
     </li>
-          ))}
-        </ul>
-    </div>
+        ))}
+</ul>
+</div>
 );
 };
-
 export default Posts;
