@@ -1,6 +1,8 @@
 namespace FU.API.Controllers;
 
-using FU.API.Models;
+using FU.API.DTOs.Post;
+using FU.API.Helpers;
+using FU.API.Interfaces;
 using FU.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,29 +12,36 @@ using Microsoft.AspNetCore.Mvc;
 [Authorize]
 public class PostsController : ControllerBase
 {
-    private readonly PostService _postService;
+    private readonly IPostService _postService;
+    private readonly AccountsService _accountsService;
 
-    public PostsController(PostService postService)
+    public PostsController(IPostService postService, AccountsService accountsService)
     {
         _postService = postService;
+        _accountsService = accountsService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePost(Post post)
+    public async Task<IActionResult> CreatePost([FromBody] PostRequestDTO dto)
     {
-        var newPost = await _postService.CreatePost(post);
+        var user = await _accountsService.GetCurrentUser(User);
 
-        if (newPost is null)
+        if (user is null)
         {
-            return BadRequest();
+            return Unauthorized("User is not signed in");
         }
 
-        return Created($"posts/{newPost.Id}", newPost);
+        var post = dto.ToModel();
+        post.Creator = user;
+
+        var newPost = await _postService.CreatePost(post);
+
+        return await GetPost(newPost.Id);
     }
 
-    [AllowAnonymous]
     [HttpGet]
     [Route("{postId}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPost(int postId)
     {
         var post = await _postService.GetPost(postId);
@@ -42,6 +51,8 @@ public class PostsController : ControllerBase
             return NotFound();
         }
 
-        return Ok(post);
+        var response = post.ToDto();
+
+        return Ok(response);
     }
 }

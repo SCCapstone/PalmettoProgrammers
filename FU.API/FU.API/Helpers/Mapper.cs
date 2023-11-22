@@ -3,6 +3,7 @@ namespace FU.API.Helpers;
 using FU.API.DTOs.Search;
 using FU.API.DTOs.Chat;
 using FU.API.DTOs.Game;
+using FU.API.DTOs.Post;
 using FU.API.DTOs.Tag;
 using FU.API.Models;
 
@@ -113,5 +114,40 @@ public static class Mapper
         // TODO tags
         // TODO games
         return query;
+    }
+
+    public static PostResponseDTO ToDto(this Post post)
+    {
+        return new PostResponseDTO()
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Game = post.Game.Name,
+            Description = post.Description,
+            StartTime = post.StartTime,
+            EndTime = post.EndTime,
+            MaxPlayers = post.MaxPlayers,
+            ChatId = post.ChatId,
+            Creator = post.Creator.Username,
+            Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
+        };
+    }
+
+    public static IEnumerable<PostResponseDTO> ToDtos(this IEnumerable<Post> posts) =>
+        posts.Select(post => post.ToDto());
+
+    public static Post ToModel(this PostRequestDTO postRequestDTO)
+    {
+        var tagIds = postRequestDTO.TagIds ?? new HashSet<int>();
+        return new Post()
+        {
+            Title = postRequestDTO.Title,
+            Description = postRequestDTO.Description,
+            StartTime = postRequestDTO.StartTime,
+            EndTime = postRequestDTO.EndTime,
+            MaxPlayers = postRequestDTO.MaxPlayers,
+            GameId = postRequestDTO.GameId,
+            Tags = tagIds.Select(tagId => new TagRelation() { TagId = tagId }).ToList(),
+        };
     }
 }

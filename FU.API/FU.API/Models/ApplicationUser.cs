@@ -2,6 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Text.Json.Serialization;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>
@@ -38,21 +39,25 @@
         /// <summary>
         /// Gets or sets the FavoriteGames.
         /// </summary>
+        [JsonIgnore]
         public ICollection<GameRelation> FavoriteGames { get; set; } = new HashSet<GameRelation>();
 
         /// <summary>
         /// Gets or sets the FavoriteTags.
         /// </summary>
+        [JsonIgnore]
         public ICollection<TagRelation> FavoriteTags { get; set; } = new HashSet<TagRelation>();
 
         /// <summary>
         /// Gets or sets the GroupMemberships.
         /// </summary>
+        [JsonIgnore]
         public ICollection<GroupMembership> Groups { get; set; } = new HashSet<GroupMembership>();
 
         /// <summary>
         /// Gets or sets the ChatMemberships.
         /// </summary>
+        [JsonIgnore]
         public ICollection<ChatMembership> Chats { get; set; } = new HashSet<ChatMembership>();
 
         // ACCCOUNT INFO
@@ -87,12 +92,14 @@
         /// <summary>
         /// Gets or sets the passwordHash.
         /// </summary>
+        [JsonIgnore]
         public string PasswordHash { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the user email.
         /// </summary>
         [EmailAddress]
+        [JsonIgnore]
         public string? Email { get; set; }
     }
 }
