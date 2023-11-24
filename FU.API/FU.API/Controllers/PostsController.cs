@@ -36,7 +36,7 @@ public class PostsController : ControllerBase
 
         var newPost = await _postService.CreatePost(post);
 
-        return await GetPost(newPost.Id);
+        return CreatedAtRoute(string.Empty, new { postId = newPost.Id }, newPost.ToDto());
     }
 
     [HttpGet]
