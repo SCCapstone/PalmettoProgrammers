@@ -6,6 +6,8 @@ using FU.API.DTOs.Game;
 using FU.API.DTOs.Post;
 using FU.API.DTOs.Tag;
 using FU.API.Models;
+using FU.API.DTOs.Group;
+using FU.API.DTOs.User;
 
 public static class Mapper
 {
@@ -150,4 +152,32 @@ public static class Mapper
             Tags = tagIds.Select(tagId => new TagRelation() { TagId = tagId }).ToList(),
         };
     }
+
+    public static GroupCardDTO ToCardDto(this Group group)
+    {
+        return new GroupCardDTO()
+        {
+            Id = group.Id,
+            Name = group.Name,
+            Description = group.Description,
+            ChatId = group.ChatId,
+            Tags = group.Tags.Select(t => t.Tag.Name).ToList(),
+        };
+    }
+
+    public static IEnumerable<GroupCardDTO> ToCardDtos(this IEnumerable<Group> groups) =>
+        groups.Select(group => group.ToCardDto());
+
+    public static UserCardDTO ToCardDto(this ApplicationUser user)
+    {
+        return new UserCardDTO()
+        {
+            Id = user.UserId,
+            Name = user.Username,
+            Bio = user.Bio,
+        };
+    }
+
+    public static IEnumerable<UserCardDTO> ToCardDtos(this IEnumerable<ApplicationUser> users) =>
+        users.Select(user => user.ToCardDto());
 }
