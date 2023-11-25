@@ -21,7 +21,6 @@
                 Name = tagName
             };
 
-
             try
             {
                 _dbContext.Tags.Add(newTag);
@@ -82,6 +81,17 @@
             var normalizedTagName = tagName.ToLower();
             return await _dbContext.Tags
                 .FirstOrDefaultAsync(t => t.Name == normalizedTagName);
+        }
+
+        public async Task<IEnumerable<Tag>?> GetTags(List<int> tagIds)
+        {
+            var tags = await _dbContext.Tags
+                .Where(t => tagIds.Contains(t.Id))
+                .ToListAsync();
+
+            return tags.Count == tagIds.Count
+                ? tags
+                : null;
         }
     }
 }
