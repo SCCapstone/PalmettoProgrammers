@@ -20,11 +20,11 @@ public class SocialController : ControllerBase
 
     [HttpGet]
     [Route("posts")]
-    public async Task<IActionResult> GetUsersAssociatedPosts()
+    public async Task<IActionResult> GetUsersAssociatedPosts(int limit = 20, int offset = 1)
     {
         var user = await _socialService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        var posts = await _socialService.GetUsersAssociatedPosts(user.UserId);
+        var posts = await _socialService.GetUsersAssociatedPosts(user.UserId, limit, offset);
 
         var response = posts.ToDtos();
 
@@ -33,11 +33,11 @@ public class SocialController : ControllerBase
 
     [HttpGet]
     [Route("groups")]
-    public async Task<IActionResult> GetUsersGroups()
+    public async Task<IActionResult> GetUsersGroups(int limit = 20, int offset = 1)
     {
         var user = await _socialService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        var groups = await _socialService.GetUsersGroups(user.UserId);
+        var groups = await _socialService.GetUsersGroups(user.UserId, limit, offset);
 
         var response = groups.ToCardDtos();
 
@@ -46,11 +46,11 @@ public class SocialController : ControllerBase
 
     [HttpGet]
     [Route("friends")]
-    public async Task<IActionResult> GetUsersFriends()
+    public async Task<IActionResult> GetUsersPlayers(int limit = 20, int offset = 1)
     {
         var user = await _socialService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        var friends = await _socialService.GetUsersPlayers(user.UserId);
+        var friends = await _socialService.GetUsersPlayers(user.UserId, limit, offset);
 
         var response = friends.ToCardDtos();
 

@@ -74,6 +74,7 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<SearchService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
+builder.Services.AddScoped<ISocialService, SocialService>();
 
 // Add SignalR
 builder.Services.AddSignalR(options =>
