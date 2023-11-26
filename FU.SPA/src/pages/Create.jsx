@@ -3,6 +3,8 @@ import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avata
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
+import CreatePost from '../components/CreatePost';
+import CreateGroup from '../components/CreateGroup';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
