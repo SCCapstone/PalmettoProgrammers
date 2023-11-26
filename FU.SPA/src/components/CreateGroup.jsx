@@ -13,7 +13,7 @@ const defaultTheme = createTheme();
 //} or something similiar.
 //Design of the page.// TODO START OF PAGE CODE, WHICH I'M CHANGING TO CREATE GROUP, BEFORE MAKING IT A BUTTON FUNCTION (semi-completed)
 // need to add a group image and an upload button to the left under the buttons that will be placed there, as well.
-function createGroup() {
+function CreateGroup() {
     return (
       <ThemeProvider theme={createTheme}>
         <Container component="main" maxWidth="xs">

@@ -3,8 +3,8 @@ import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avata
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
-import CreatePost from '../components/CreatePost';
-import CreateGroup from '../components/CreateGroup';
+import {CreatePost} from '../components/CreatePost';
+import {CreateGroup} from '../components/CreateGroup';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -22,22 +22,6 @@ function CreateGroupButton() { //This should be a redirect/nav button or just be
   }
 };
 
-function RadioButtonsGroup() {
-  return (
-    <FormControl>
-      <FormLabel id="demo-radio-buttons-group-label">Communications</FormLabel>
-      <RadioGroup
-        aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue=""
-        name="radio-buttons-group"
-      >
-        <FormControlLabel value="Mic" control={<Radio />} label="Mic" />
-        <FormControlLabel value="No Mic" control={<Radio />} label="No Mic" />
-        <FormControlLabel value="Any" control={<Radio />} label="Any" />
-      </RadioGroup>
-    </FormControl>
-  );
-}
 
 function deselectCommunicationRadio() {};
 
@@ -50,5 +34,3 @@ function CheckboxLabels() { //Might change how the page is designed and use the 
     </FormGroup>
   );
 }
-
-//export default function <name of function> () {}
