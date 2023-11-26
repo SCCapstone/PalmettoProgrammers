@@ -3,8 +3,8 @@ import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avata
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
-import {CreatePost} from '../components/CreatePost';
-import {CreateGroup} from '../components/CreateGroup';
+//import {CreatePost} from '../components/CreatePost';
+//import {CreateGroup} from '../components/CreateGroup';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -32,5 +32,11 @@ function CheckboxLabels() { //Might change how the page is designed and use the 
       <FormControlLabel required control={<Checkbox />} label="Required" />
       <FormControlLabel disabled control={<Checkbox />} label="Disabled" />
     </FormGroup>
+  );
+}
+
+export default function Create() {
+  return (
+    <h1>Create</h1>
   );
 }

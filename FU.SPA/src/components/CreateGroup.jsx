@@ -6,7 +6,7 @@ import Radio from '@mui/material/Radio';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
+//const defaultTheme = createTheme();
 
 //Look at changing to const CreatePost = () => {
 //    CreatingPost();
