@@ -62,7 +62,7 @@ public class UnauthorizedException : ExceptionWithResponse
     }
 }
 
-public class NonexistentGame : ExceptionWithResponse
+public class NonexistentGameException : ExceptionWithResponse
 {
     public override string Description { get; } = "The game does not exist";
 
@@ -70,11 +70,11 @@ public class NonexistentGame : ExceptionWithResponse
 
     public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
 
-    public NonexistentGame()
+    public NonexistentGameException()
     {
     }
 
-    public NonexistentGame(string title, string description, HttpStatusCode statusCode)
+    public NonexistentGameException(string title, string description, HttpStatusCode statusCode)
     {
         Title = title;
         Description = description;

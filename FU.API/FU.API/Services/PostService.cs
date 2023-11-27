@@ -22,7 +22,7 @@ public class PostService : CommonService, IPostService
     public async Task<Post> CreatePost(Post post)
     {
         var game = await _dbContext.Games
-            .FindAsync(post.GameId) ?? throw new NonexistentGame();
+            .FindAsync(post.GameId) ?? throw new NonexistentGameException();
 
         post.Game = game;
 
