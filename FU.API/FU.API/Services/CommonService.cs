@@ -19,13 +19,7 @@ public class CommonService : ICommonService
     {
         var stringId = claims.FindFirstValue(CustomClaimTypes.UserId);
 
-        if (stringId is null)
-        {
-            throw new UnauthorizedAccessException();
-        }
-
-        // Try to parse the userId from the claims
-        if (!int.TryParse(stringId, out int userId))
+        if (stringId is null || !int.TryParse(stringId, out int userId))
         {
             throw new UnauthorizedAccessException();
         }
