@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace FU.API.Models
+﻿namespace FU.API.Models
 {
     /// <summary>
     /// User to user relations.
