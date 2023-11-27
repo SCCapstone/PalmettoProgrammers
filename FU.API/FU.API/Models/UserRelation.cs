@@ -37,11 +37,6 @@ namespace FU.API.Models
         /// Gets or sets the status of this relation.
         /// </summary>
         public UserRelationStatus Status { get; set; }
-
-        /// <summary>
-        /// Gets or sets the chat id.
-        /// </summary>
-        public int ChatId { get; set; }
     }
 
     /// <summary>
