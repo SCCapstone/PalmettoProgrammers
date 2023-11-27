@@ -37,6 +37,41 @@ function CheckboxLabels() { //Might change how the page is designed and use the 
 
 export default function Create() {
   return (
-    <h1>Create</h1>
+    //<h1>Create</h1>
+    <ThemeProvider theme={createTheme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'left',
+          }}
+          >
+          </Box>
+          <Grid item xs={12} sm={5} marginTop={2}>
+              <h1>Create</h1>
+              <Button
+              alignItems="left"
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, mb: 0 }}
+            >
+              Create Post
+            </Button>
+            <Button
+              alignItems="left"
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 0, mb: 2 }}
+            >
+              Create Group
+            </Button>
+          </Grid>
+        </Container>
+      </ThemeProvider>
   );
 }
