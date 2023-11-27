@@ -24,7 +24,7 @@ public class SocialService : CommonService, ISocialService
             .Include(p => p.Creator)
             .Include(p => p.Game)
             .Include(p => p.Tags).ThenInclude(t => t.Tag)
-            .Skip((offset - 1) * limit)
+            .Skip(offset * limit)
             .Take(limit)
             .ToListAsync();
     }
@@ -35,7 +35,7 @@ public class SocialService : CommonService, ISocialService
             .Where(g => g.Memberships.Any(m => m.User.UserId == userId))
             .Include(g => g.Creator)
             .Include(g => g.Memberships).ThenInclude(m => m.User)
-            .Skip((offset - 1) * limit)
+            .Skip(offset * limit)
             .Take(limit)
             .ToListAsync();
     }
@@ -59,7 +59,7 @@ public class SocialService : CommonService, ISocialService
         var allPlayers = players.Union(directMessages);
 
         return allPlayers
-            .Skip((offset - 1) * limit)
+            .Skip(offset * limit)
             .Take(limit);
     }
 }

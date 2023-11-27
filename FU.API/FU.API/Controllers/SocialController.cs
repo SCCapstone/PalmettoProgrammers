@@ -20,7 +20,7 @@ public class SocialController : ControllerBase
 
     [HttpGet]
     [Route("posts")]
-    public async Task<IActionResult> GetUsersAssociatedPosts(int limit = 20, int offset = 1)
+    public async Task<IActionResult> GetUsersAssociatedPosts(int limit = 20, int offset = 0)
     {
         var user = await _socialService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
@@ -33,7 +33,7 @@ public class SocialController : ControllerBase
 
     [HttpGet]
     [Route("groups")]
-    public async Task<IActionResult> GetUsersGroups(int limit = 20, int offset = 1)
+    public async Task<IActionResult> GetUsersGroups(int limit = 20, int offset = 0)
     {
         var user = await _socialService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
@@ -46,7 +46,7 @@ public class SocialController : ControllerBase
 
     [HttpGet]
     [Route("friends")]
-    public async Task<IActionResult> GetUsersPlayers(int limit = 20, int offset = 1)
+    public async Task<IActionResult> GetUsersPlayers(int limit = 20, int offset = 0)
     {
         var user = await _socialService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
