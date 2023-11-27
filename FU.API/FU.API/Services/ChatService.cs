@@ -5,11 +5,12 @@
     using FU.API.Models;
     using Microsoft.EntityFrameworkCore;
 
-    public class ChatService : IChatService
+    public class ChatService : CommonService, IChatService
     {
         private readonly AppDbContext _dbContext;
 
         public ChatService(AppDbContext dbContext)
+            : base(dbContext)
         {
             _dbContext = dbContext;
         }

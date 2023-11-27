@@ -1,9 +1,9 @@
 ﻿namespace FU.API.Controllers
 {
     using FU.API.DTOs.Tag;
+    using FU.API.Exceptions;
     using FU.API.Helpers;
     using FU.API.Interfaces;
-    using FU.API.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -13,23 +13,16 @@
     public class TagsController : ControllerBase
     {
         private readonly ITagService _tagService;
-        private readonly AccountsService _accountsService;
 
-        public TagsController(ITagService tagService, AccountsService accountsService)
+        public TagsController(ITagService tagService)
         {
             _tagService = tagService;
-            _accountsService = accountsService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateTag([FromBody] TagRequestDTO dto)
         {
-            var user = await _accountsService.GetCurrentUser(User);
-
-            if (user is null)
-            {
-                return Unauthorized("User is not signed in");
-            }
+            var user = await _tagService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
             var tagName = dto.Name;
             var tag = await _tagService.GetTag(tagName);
@@ -76,9 +69,9 @@
         [Route("{tagId}")]
         public async Task<IActionResult> UpdateTag(int tagId, [FromBody] TagRequestDTO dto)
         {
-            var user = await _accountsService.GetCurrentUser(User);
+            var user = await _tagService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-            if (user is null || !user.IsAdmin)
+            if (!user.IsAdmin)
             {
                 return Unauthorized("User is not authorized");
             }
@@ -103,9 +96,9 @@
         [Route("{tagId}")]
         public async Task<IActionResult> DeleteTag(int tagId)
         {
-            var user = await _accountsService.GetCurrentUser(User);
+            var user = await _tagService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-            if (user is null || !user.IsAdmin)
+            if (!user.IsAdmin)
             {
                 return Unauthorized("User is not authorized");
             }

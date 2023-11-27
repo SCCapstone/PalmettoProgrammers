@@ -2,7 +2,7 @@
 {
     using FU.API.Models;
 
-    public interface ITagService
+    public interface ITagService : ICommonService
     {
         Task<Tag?> GetTag(int tagId);
 

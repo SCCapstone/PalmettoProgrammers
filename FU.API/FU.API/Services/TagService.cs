@@ -1,15 +1,16 @@
-﻿namespace FU.API.Services
+namespace FU.API.Services
 {
     using FU.API.Data;
     using FU.API.Interfaces;
     using FU.API.Models;
     using Microsoft.EntityFrameworkCore;
 
-    public class TagService : ITagService
+    public class TagService : CommonService, ITagService
     {
         private readonly AppDbContext _dbContext;
 
         public TagService(AppDbContext dbContext)
+            : base(dbContext)
         {
             _dbContext = dbContext;
         }

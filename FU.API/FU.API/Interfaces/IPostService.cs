@@ -2,7 +2,7 @@
 {
     using FU.API.Models;
 
-    public interface IPostService
+    public interface IPostService : ICommonService
     {
         Task<Post> CreatePost(Post post);
 

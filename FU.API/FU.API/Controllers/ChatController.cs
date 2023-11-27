@@ -1,11 +1,10 @@
 ﻿namespace FU.API.Controllers
 {
     using FU.API.DTOs.Chat;
+    using FU.API.Exceptions;
     using FU.API.Helpers;
     using FU.API.Hubs;
     using FU.API.Interfaces;
-    using FU.API.Models;
-    using FU.API.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
@@ -17,13 +16,11 @@
     {
         private readonly IChatService _chatService;
         private readonly IHubContext<ChatHub> _hubContext;
-        private readonly AccountsService _accountsService;
 
-        public ChatController(IChatService chatService, IHubContext<ChatHub> hubContext, AccountsService accountsService)
+        public ChatController(IChatService chatService, IHubContext<ChatHub> hubContext)
         {
             _chatService = chatService;
             _hubContext = hubContext;
-            _accountsService = accountsService;
         }
 
         /// <summary>
@@ -36,12 +33,7 @@
         [Route("{chatId}/messages")]
         public async Task<IActionResult> SaveMessage(int chatId, [FromBody] string message)
         {
-            var user = await _accountsService.GetCurrentUser(User);
-
-            if (user is null)
-            {
-                return Unauthorized("User is not signed in");
-            }
+            var user = await _chatService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
             var chat = await _chatService.GetChat(chatId);
 
@@ -81,12 +73,7 @@
         [Route("{chatId}/messages")]
         public async Task<IActionResult> GetMessages(int chatId, [FromQuery] int offset = 1, [FromQuery] int limit = 10)
         {
-            var user = await _accountsService.GetCurrentUser(User);
-
-            if (user is null)
-            {
-                return Unauthorized("User is not signed in");
-            }
+            var user = await _chatService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
             var chat = await _chatService.GetChat(chatId);
 
@@ -124,12 +111,7 @@
         [Route("{chatId}")]
         public async Task<IActionResult> GetChat(int chatId)
         {
-            var user = await _accountsService.GetCurrentUser(User);
-
-            if (user is null)
-            {
-                return Unauthorized("User is not signed in");
-            }
+            var user = await _chatService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
             var chat = await _chatService.GetChat(chatId);
             if (chat is null)
@@ -159,14 +141,9 @@
         [Route("direct/{otherUserId}")]
         public async Task<IActionResult> GetDirectChat(int otherUserId)
         {
-            var user = await _accountsService.GetCurrentUser(User);
+            var user = await _chatService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-            if (user is null)
-            {
-                return Unauthorized("User is not signed in");
-            }
-
-            var otherUser = await _accountsService.GetUser(otherUserId);
+            var otherUser = await _chatService.GetUser(otherUserId);
 
             if (otherUser is null)
             {

@@ -2,7 +2,7 @@
 {
     using FU.API.Models;
 
-    public interface IChatService
+    public interface IChatService : ICommonService
     {
         Task<Chat?> GetChat(int chatId);
 

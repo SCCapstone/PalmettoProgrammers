@@ -5,11 +5,12 @@
     using FU.API.Models;
     using Microsoft.EntityFrameworkCore;
 
-    public class GameService : IGameService
+    public class GameService : CommonService, IGameService
     {
         private readonly AppDbContext _dbContext;
 
         public GameService(AppDbContext dbContext)
+            : base(dbContext)
         {
             _dbContext = dbContext;
         }
