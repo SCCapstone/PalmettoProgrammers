@@ -7,5 +7,9 @@
         Task<Post> CreatePost(Post post);
 
         Task<Post?> GetPost(int postId);
+
+        Task JoinPost(int postId, ApplicationUser user);
+
+        Task LeavePost(int postId, ApplicationUser user);
     }
 }

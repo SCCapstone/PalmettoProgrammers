@@ -67,4 +67,71 @@ public class PostService : CommonService, IPostService
             .Include(p => p.Game)
             .FirstOrDefaultAsync();
     }
+
+    public async Task JoinPost(int postId, ApplicationUser user)
+    {
+        var post = await _dbContext.Posts
+            .Where(p => p.Id == postId)
+            .Include(p => p.Chat)
+            .FirstOrDefaultAsync() ?? throw new PostException("Post does not exist");
+        var chat = post.Chat;
+        var userId = user.UserId;
+
+        // Check that the post is not full
+        if (post.MaxPlayers >= chat.Members.Count)
+        {
+            throw new PostException("Post is full");
+        }
+
+        // Check that the user is not already in the chat
+        if (chat.Members.Any(m => m.UserId == userId))
+        {
+            throw new PostException("User is already in the post");
+        }
+
+        // Make the new chat member relation
+        var chatMember = new ChatMembership
+        {
+            Chat = chat,
+            User = user,
+        };
+
+        try
+        {
+            chat.Members.Add(chatMember);
+            _dbContext.Update(chat);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw new DbUpdateException();
+        }
+
+        return;
+    }
+
+    public async Task LeavePost(int postId, ApplicationUser user)
+    {
+        // Find the chat membership
+        var post = await _dbContext.Posts
+            .Where(p => p.Id == postId)
+            .FirstOrDefaultAsync() ?? throw new PostException("Post does not exist");
+        var chatId = post.ChatId;
+        var userId = user.UserId;
+        var toRemove = await _dbContext.ChatMemberships
+            .Where(cm => cm.ChatId == chatId && cm.UserId == userId)
+            .FirstOrDefaultAsync() ?? throw new PostException("User is not in the post");
+
+        try
+        {
+            _dbContext.ChatMemberships.Remove(toRemove);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw new DbUpdateException();
+        }
+
+        return;
+    }
 }

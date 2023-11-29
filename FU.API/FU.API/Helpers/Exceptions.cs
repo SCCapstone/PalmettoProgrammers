@@ -81,3 +81,21 @@ public class NonexistentGameException : ExceptionWithResponse
         StatusCode = statusCode;
     }
 }
+
+public class PostException : ExceptionWithResponse
+{
+    public override string Description { get; } = "Error with the post";
+
+    public override string Title { get; } = "Post Exception";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
+
+    public PostException()
+    {
+    }
+
+    public PostException(string description)
+    {
+        Description = description;
+    }
+}
