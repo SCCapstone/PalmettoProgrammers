@@ -73,7 +73,7 @@ public class UsersController : ControllerBase
 
     [HttpGet]
     [Route("current/connected/posts")]
-    public async Task<IActionResult> GetUsersAssociatedPosts(string userIdString, [FromQuery] int limit = 10, [FromQuery] int offset = 0)
+    public async Task<IActionResult> GetUsersAssociatedPosts([FromQuery] int limit = 10, [FromQuery] int offset = 0)
     {
         var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
@@ -86,7 +86,7 @@ public class UsersController : ControllerBase
 
     [HttpGet]
     [Route("current/connected/groups")]
-    public async Task<IActionResult> GetUsersGroups(string userIdString, [FromQuery] int limit = 10, [FromQuery] int offset = 0)
+    public async Task<IActionResult> GetUsersGroups([FromQuery] int limit = 10, [FromQuery] int offset = 0)
     {
         var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
@@ -99,7 +99,7 @@ public class UsersController : ControllerBase
 
     [HttpGet]
     [Route("current/connected/players")]
-    public async Task<IActionResult> GetUsersPlayers(string userIdString, [FromQuery] int limit = 10, [FromQuery] int offset = 0)
+    public async Task<IActionResult> GetUsersPlayers([FromQuery] int limit = 10, [FromQuery] int offset = 0)
     {
         var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
