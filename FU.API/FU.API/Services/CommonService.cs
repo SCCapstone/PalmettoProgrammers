@@ -1,6 +1,7 @@
 ﻿namespace FU.API.Services;
 
 using FU.API.Data;
+using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using FU.API.Models;
@@ -21,7 +22,7 @@ public class CommonService : ICommonService
 
         if (stringId is null || !int.TryParse(stringId, out int userId))
         {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedException();
         }
 
         // Get the user from the database

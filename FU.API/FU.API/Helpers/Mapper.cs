@@ -7,7 +7,6 @@ using FU.API.DTOs.Post;
 using FU.API.DTOs.Tag;
 using FU.API.Models;
 using FU.API.DTOs.Group;
-using FU.API.DTOs.User;
 
 public static class Mapper
 {
@@ -21,8 +20,8 @@ public static class Mapper
             DOB = appUser.DOB,
             PfpUrl = appUser.PfpUrl,
             IsOnline = appUser.IsOnline,
-            FavoriteGames = appUser.FavoriteGames,
-            FavoriteTags = appUser.FavoriteTags,
+            FavoriteGames = appUser.FavoriteGames.Select(g => g.Game).ToList(),
+            FavoriteTags = appUser.FavoriteTags.Select(t => t.Tag).ToList(),
         };
     }
 
@@ -153,9 +152,9 @@ public static class Mapper
         };
     }
 
-    public static GroupCardDTO ToCardDto(this Group group)
+    public static GroupSimpleDTO ToSimpleDto(this Group group)
     {
-        return new GroupCardDTO()
+        return new GroupSimpleDTO()
         {
             Id = group.Id,
             Name = group.Name,
@@ -165,19 +164,6 @@ public static class Mapper
         };
     }
 
-    public static IEnumerable<GroupCardDTO> ToCardDtos(this IEnumerable<Group> groups) =>
-        groups.Select(group => group.ToCardDto());
-
-    public static UserCardDTO ToCardDto(this ApplicationUser user)
-    {
-        return new UserCardDTO()
-        {
-            Id = user.UserId,
-            Name = user.Username,
-            Bio = user.Bio,
-        };
-    }
-
-    public static IEnumerable<UserCardDTO> ToCardDtos(this IEnumerable<ApplicationUser> users) =>
-        users.Select(user => user.ToCardDto());
+    public static IEnumerable<GroupSimpleDTO> ToSimpleDtos(this IEnumerable<Group> groups) =>
+        groups.Select(group => group.ToSimpleDto());
 }

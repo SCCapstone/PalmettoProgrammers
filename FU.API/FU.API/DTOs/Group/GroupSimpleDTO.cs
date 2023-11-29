@@ -1,6 +1,6 @@
 ﻿namespace FU.API.DTOs.Group;
 
-public class GroupCardDTO
+public class GroupSimpleDTO
 {
     public int Id { get; set; }
 
