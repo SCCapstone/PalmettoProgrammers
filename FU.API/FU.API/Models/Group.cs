@@ -66,5 +66,7 @@
         /// Gets or sets the members of the group.
         /// </summary>
         public ICollection<GroupMembership> Memberships { get; set; } = new HashSet<GroupMembership>();
+
+        public ICollection<TagRelation> Tags { get; set; } = new HashSet<TagRelation>();
     }
 }

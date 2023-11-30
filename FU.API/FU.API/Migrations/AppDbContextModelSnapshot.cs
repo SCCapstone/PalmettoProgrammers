@@ -359,6 +359,9 @@ namespace FU.API.Migrations
                     b.Property<int?>("ApplicationUserUserId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("PostId")
                         .HasColumnType("integer");
 
@@ -368,6 +371,8 @@ namespace FU.API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserUserId");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("PostId");
 
@@ -539,6 +544,10 @@ namespace FU.API.Migrations
                         .WithMany("FavoriteTags")
                         .HasForeignKey("ApplicationUserUserId");
 
+                    b.HasOne("FU.API.Models.Group", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("GroupId");
+
                     b.HasOne("FU.API.Models.Post", null)
                         .WithMany("Tags")
                         .HasForeignKey("PostId");
@@ -592,6 +601,8 @@ namespace FU.API.Migrations
             modelBuilder.Entity("FU.API.Models.Group", b =>
                 {
                     b.Navigation("Memberships");
+
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("FU.API.Models.Post", b =>

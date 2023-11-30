@@ -6,6 +6,7 @@ using FU.API.DTOs.Game;
 using FU.API.DTOs.Post;
 using FU.API.DTOs.Tag;
 using FU.API.Models;
+using FU.API.DTOs.Group;
 
 public static class Mapper
 {
@@ -19,8 +20,8 @@ public static class Mapper
             DOB = appUser.DOB,
             PfpUrl = appUser.PfpUrl,
             IsOnline = appUser.IsOnline,
-            FavoriteGames = appUser.FavoriteGames,
-            FavoriteTags = appUser.FavoriteTags,
+            FavoriteGames = appUser.FavoriteGames.Select(g => g.Game).ToList(),
+            FavoriteTags = appUser.FavoriteTags.Select(t => t.Tag).ToList(),
         };
     }
 
@@ -150,4 +151,19 @@ public static class Mapper
             Tags = tagIds.Select(tagId => new TagRelation() { TagId = tagId }).ToList(),
         };
     }
+
+    public static GroupSimpleDTO ToSimpleDto(this Group group)
+    {
+        return new GroupSimpleDTO()
+        {
+            Id = group.Id,
+            Name = group.Name,
+            Description = group.Description,
+            ChatId = group.ChatId,
+            Tags = group.Tags.Select(t => t.Tag.Name).ToList(),
+        };
+    }
+
+    public static IEnumerable<GroupSimpleDTO> ToSimpleDtos(this IEnumerable<Group> groups) =>
+        groups.Select(group => group.ToSimpleDto());
 }
