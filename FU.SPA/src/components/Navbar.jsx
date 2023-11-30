@@ -3,7 +3,7 @@ import { Link, useMatch, useResolvedPath } from 'react-router-dom'
 export default function Navbar() {
   return (
     <nav className="nav">
-      <Link href="/" className="site-title"> 
+      <Link href="/" className="site-title">
       Forces Unite
       </Link>
       <ul>
@@ -29,4 +29,3 @@ function CustomLink({to, children, ...props }) {
       </li>
     )
 }
-

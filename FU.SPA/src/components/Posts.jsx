@@ -1,5 +1,5 @@
 import React  from 'react';
-import { Button, Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material'; 
+import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 
 
 const Posts = ({posts}) => {

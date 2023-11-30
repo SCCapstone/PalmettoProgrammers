@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avatar, FormControlLabel, Icon, Grid, Checkbox } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
-import { createTheme, ThemeProvider } from '@mui/material/styles'; 
-import { signUp } from '../services/auth-service';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { signUp } from '../../services/auth-service';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -95,7 +95,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs ={12} sm = {4}>
-                <TextField 
+                <TextField
                   required
                   fullWidth
                   name="ageDay"
@@ -105,7 +105,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs ={12} sm = {4}>
-                <TextField 
+                <TextField
                   required
                   fullWidth
                   name="ageMonth"
@@ -115,7 +115,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs ={12} sm = {4}>
-                <TextField 
+                <TextField
                   required
                   fullWidth
                   name="ageYear"
@@ -143,7 +143,7 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        
+
       </Container>
     </ThemeProvider>
   );

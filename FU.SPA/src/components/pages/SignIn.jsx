@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
-import { signIn } from '../services/auth-service';
+import { signIn } from '../../services/auth-service';
 
 export default function SignIn() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
- 
+
         var creds = { username: data.get('username'), password: data.get('password') };
         // Calls sign in and saves token in local storage
         signIn(creds).then(response => {
