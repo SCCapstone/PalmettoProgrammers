@@ -1,0 +1,6 @@
+#search-bar {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    margin-bottom: 20pt;
+}
