@@ -71,7 +71,7 @@ export default function Discover() {
   );
 }
 
-function SearchBar({ onSearchText, onSearchChange, onSearchSubmit, onSortChange }) {
+function SearchBar({ onSearchText, onSearchChange, onSearchSubmit }) {
   function onKeyDown(event) {
     if (event.key === "Enter") {
       onSearchSubmit()
