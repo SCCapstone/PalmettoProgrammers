@@ -1,4 +1,4 @@
-﻿namespace FU.API.Controllers
+namespace FU.API.Controllers
 {
     using FU.API.DTOs.Game;
     using FU.API.Exceptions;
@@ -39,8 +39,10 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetGames([FromQuery] string gameName)
+        public async Task<IActionResult> GetGames([FromQuery(Name = "keyword")] string? gameName)
         {
+            gameName ??= string.Empty;
+
             var games = await _gameService.GetGames(gameName);
 
             var response = games.ToDtos();
