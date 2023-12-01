@@ -1,4 +1,4 @@
-﻿namespace FU.API.Controllers
+namespace FU.API.Controllers
 {
     using FU.API.DTOs.Tag;
     using FU.API.Exceptions;
@@ -39,8 +39,10 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetTags([FromQuery] string tagName)
+        public async Task<IActionResult> GetTags([FromQuery(Name = "keyword")] string? tagName)
         {
+            tagName ??= string.Empty;
+
             var tags = await _tagService.GetTags(tagName);
 
             var response = tags.ToDtos();
