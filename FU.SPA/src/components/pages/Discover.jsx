@@ -4,6 +4,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useEffect, useState } from "react";
 import SearchService from "../../services/searchService";
 import GameService from "../../services/gameService";
+import TagService from "../../services/tagService";
 import Posts from "../Posts";
 import "./Discover.css"
 
@@ -14,15 +15,17 @@ export default function Discover() {
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [games, setGames] = useState([]);
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     submitSearch();
-  }, [games, searchText]);
+  }, [games, tags, searchText]);
 
   const submitSearch = async () => {
     const query = {
       keywords: searchText,
       games: games,
+      tags: tags,
     };
 
     const response = await SearchService.searchPosts(query);
@@ -36,6 +39,7 @@ export default function Discover() {
           Filters
         </Typography>
         <GamesSelector onChange={(e, v) => setGames(v)} />
+        <TagsSelector onChange={(e, v) => setTags(v)} />
       </div>
       <div>
         <SearchBar onSearchSubmit={setSearchText} />
@@ -43,6 +47,38 @@ export default function Discover() {
       </div>
     </div >
   );
+}
+
+function TagsSelector({ onChange }) {
+  const [tagOptions, setTagOptions] = useState([]);
+
+  useEffect(() => {
+    TagService.searchTags("").then(tags => setTagOptions(tags));
+  }, []);
+
+  return (
+    <Autocomplete
+      multiple
+      onChange={onChange}
+      options={tagOptions}
+      disableCloseOnSelect
+      getOptionLabel={option => option.name}
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          <Checkbox
+            icon={checkboxIconBlank}
+            checkedIcon={checkboxIconChecked}
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {option.name}
+        </li>
+      )}
+      renderInput={(params) => (
+        <TextField {...params} label="Tags" placeholder="" />
+      )}
+    />
+  )
 }
 
 function GamesSelector({ onChange }) {

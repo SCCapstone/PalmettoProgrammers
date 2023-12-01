@@ -12,6 +12,9 @@ const searchPosts = async (query) => {
   if (query.games.length > 0) {
     queryString += "&games=" + query.games.map(g => String(g.id)).join(",")
   }
+  if (query.tags.length > 0) {
+    queryString += "&tags=" + query.tags.map(g => String(g.id)).join(",")
+  }
   const response = await fetch(`${API_BASE_URL}/search/posts?${queryString}`);
 
   return await response.json();
