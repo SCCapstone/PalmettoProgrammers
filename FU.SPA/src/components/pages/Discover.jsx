@@ -14,17 +14,20 @@ export default function Discover() {
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [gameOptions, setGameOptions] = useState([]);
+  const [games, setGames] = useState([]);
 
   useEffect(() => {
-    submitSearch();
     GameService.searchGames("").then(games => setGameOptions(games));
   }, []);
 
-  const submitSearch = async () => {
-    console.log("Searching");
+  useEffect(() => {
+    submitSearch();
+  }, [games]);
 
+  const submitSearch = async () => {
     const query = {
-      keywords: searchText
+      keywords: searchText,
+      games: games,
     };
 
     const response = await SearchService.searchPosts(query);
@@ -33,12 +36,14 @@ export default function Discover() {
 
   return (
     <div className="page-content">
-      <div className="sidebar" style={{ textAlign: "left", minWidth: "200pt"}}>
+      <div className="sidebar" style={{ textAlign: "left", minWidth: "200pt" }}>
         <Typography variant="h5">
           Filters
         </Typography>
         <Autocomplete
           multiple
+          value={games}
+          onChange={(e, v) => setGames(v)}
           options={gameOptions}
           disableCloseOnSelect
           getOptionLabel={option => option.name}
@@ -85,17 +90,4 @@ function SearchBar({ onSearchText, onSearchChange, onSearchSubmit, onSortChange 
       />
     </div>
   )
-}
-
-function FilterSidebar() {
-  const [filters, setFilters] = useState({
-    tags: [],
-    games: [],
-    afterDateTime: "",
-    keywords: "",
-    sort: "",
-    limit: 20,
-    offset: 0,
-    minPlayers: 0,
-  });
 }
