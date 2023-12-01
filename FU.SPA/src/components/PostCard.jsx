@@ -22,7 +22,7 @@ const PostCard = ({ post }) => {
                 </Typography>
                 <br />
                 <div>
-                    {post.tags.map(t => <Chip label={t} variant="outlined" />)}
+                    {post.tags.map(t => <Chip key={t} label={t} variant="outlined" />)}
                 </div>
             </CardContent>
             <CardActions>
