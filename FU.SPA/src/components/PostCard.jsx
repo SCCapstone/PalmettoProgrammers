@@ -5,8 +5,8 @@ const PostCard = ({ post }) => {
         .toLocaleString("en-US", { dateStyle: "medium", timeStyle: 'short' })
 
     return (
-        <Card sx="text-align: left;" key={post.id}>
-            <CardContent sx="width: 200pt; height: 250pt">
+        <Card style={{ textAlign: "left" }} >
+            <CardContent style={{ width: "200pt", height: "250pt" }}>
                 <Typography variant="body2" color="text.secondary">
                     by {post.creator}
                 </Typography>
