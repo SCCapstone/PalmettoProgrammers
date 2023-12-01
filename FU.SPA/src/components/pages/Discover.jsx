@@ -1,15 +1,23 @@
-import { TextField } from "@mui/material";
+import { Autocomplete, Checkbox, TextField, Typography } from "@mui/material";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useEffect, useState } from "react";
 import SearchService from "../../services/searchService";
+import GameService from "../../services/gameService";
 import Posts from "../Posts";
 import "./Discover.css"
+
+const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
 export default function Discover() {
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
     submitSearch();
+    GameService.searchGames("").then(games => setGameOptions(games));
   }, []);
 
   const submitSearch = async () => {
@@ -24,10 +32,37 @@ export default function Discover() {
   };
 
   return (
-    <div>
-      <SearchBar onSearchText={searchText} onSearchChange={t => setSearchText(t)} onSearchSubmit={submitSearch} />
-      <Posts posts={posts} />
-    </div>
+    <div className="page-content">
+      <div className="sidebar" style={{ textAlign: "left", minWidth: "200pt"}}>
+        <Typography variant="h5">
+          Filters
+        </Typography>
+        <Autocomplete
+          multiple
+          options={gameOptions}
+          disableCloseOnSelect
+          getOptionLabel={option => option.name}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                icon={checkboxIconBlank}
+                checkedIcon={checkboxIconChecked}
+                style={{ marginRight: 8 }}
+                checked={selected}
+              />
+              {option.name}
+            </li>
+          )}
+          renderInput={(params) => (
+            <TextField {...params} label="Games" placeholder="" />
+          )}
+        />
+      </div>
+      <div>
+        <SearchBar onSearchText={searchText} onSearchChange={t => setSearchText(t)} onSearchSubmit={submitSearch} />
+        <Posts posts={posts} />
+      </div>
+    </div >
   );
 }
 
