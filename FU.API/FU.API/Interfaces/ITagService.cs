@@ -1,19 +1,18 @@
-﻿namespace FU.API.Interfaces
+﻿namespace FU.API.Interfaces;
+
+using FU.API.Models;
+
+public interface ITagService : ICommonService
 {
-    using FU.API.Models;
+    Task<Tag?> GetTag(int tagId);
 
-    public interface ITagService : ICommonService
-    {
-        Task<Tag?> GetTag(int tagId);
+    Task<Tag?> GetTag(string tagName);
 
-        Task<Tag?> GetTag(string tagName);
+    Task<IEnumerable<Tag>> GetTags(string tagName);
 
-        Task<IEnumerable<Tag>> GetTags(string tagName);
+    Task<Tag> CreateTag(string tagName);
 
-        Task<Tag> CreateTag(string tagName);
+    Task<Tag> UpdateTag(Tag tag);
 
-        Task<Tag> UpdateTag(Tag tag);
-
-        Task DeleteTag(Tag tag);
-    }
+    Task DeleteTag(Tag tag);
 }

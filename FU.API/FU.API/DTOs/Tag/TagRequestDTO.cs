@@ -1,10 +1,9 @@
-﻿namespace FU.API.DTOs.Tag
-{
-    using FU.API.Validation;
+﻿namespace FU.API.DTOs.Tag;
 
-    public class TagRequestDTO
-    {
-        [NoSpaces]
-        public string Name { get; set; } = string.Empty;
-    }
+using FU.API.Validation;
+
+public class TagRequestDTO
+{
+    [NoSpaces]
+    public string Name { get; set; } = string.Empty;
 }
