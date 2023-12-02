@@ -143,7 +143,7 @@ public static class Mapper
         return new Post()
         {
             Title = postRequestDTO.Title,
-            Description = postRequestDTO.Description,
+            Description = postRequestDTO.Description ?? string.Empty,
             StartTime = postRequestDTO.StartTime,
             EndTime = postRequestDTO.EndTime,
             MaxPlayers = postRequestDTO.MaxPlayers,
