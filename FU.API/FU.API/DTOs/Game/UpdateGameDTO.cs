@@ -1,9 +1,8 @@
-﻿namespace FU.API.DTOs.Game
-{
-    public class UpdateGameDTO
-    {
-        public string? Name { get; set; }
+﻿namespace FU.API.DTOs.Game;
 
-        public string? ImageUrl { get; set; }
-    }
+public class UpdateGameDTO
+{
+    public string? Name { get; set; }
+
+    public string? ImageUrl { get; set; }
 }
