@@ -9,7 +9,7 @@ import {
   Avatar,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
-import { signIn } from '../services/auth-service';
+import { signIn } from '../../services/auth-service';
 
 export default function SignIn() {
   const handleSubmit = (event) => {
