@@ -1,38 +1,37 @@
-﻿namespace FU.API.Models
+﻿namespace FU.API.Models;
+
+using System.ComponentModel.DataAnnotations.Schema;
+
+/// <summary>
+/// The game class.
+/// </summary>
+public class Game
 {
-    using System.ComponentModel.DataAnnotations.Schema;
+    /// <summary>
+    /// Gets or sets the id of the game.
+    /// </summary>
+    public int Id { get; set; }
 
     /// <summary>
-    /// The game class.
+    /// Gets or sets the name of the game.
     /// </summary>
-    public class Game
+    public string Name
     {
-        /// <summary>
-        /// Gets or sets the id of the game.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the game.
-        /// </summary>
-        public string Name
+        get => _name;
+        set
         {
-            get => _name;
-            set
-            {
-                _name = value;
-                NormalizedName = value.ToUpper();
-            }
+            _name = value;
+            NormalizedName = value.ToUpper();
         }
-
-        public string NormalizedName { get; set; } = string.Empty;
-
-        [NotMapped]
-        private string _name = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the url of the image for the game.
-        /// </summary>
-        public string? ImageUrl { get; set; }
     }
+
+    public string NormalizedName { get; set; } = string.Empty;
+
+    [NotMapped]
+    private string _name = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the url of the image for the game.
+    /// </summary>
+    public string? ImageUrl { get; set; }
 }
