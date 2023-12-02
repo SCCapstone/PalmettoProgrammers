@@ -1,9 +1,8 @@
-﻿namespace FU.API.DTOs.Tag
-{
-    public class TagResponseDTO
-    {
-        public int Id { get; set; }
+﻿namespace FU.API.DTOs.Tag;
 
-        public string Name { get; set; } = string.Empty;
-    }
+public class TagResponseDTO
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
 }
