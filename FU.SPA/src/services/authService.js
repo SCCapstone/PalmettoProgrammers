@@ -13,7 +13,7 @@ const signIn = async (credentials) => {
     throw new Error('Error in sign in');
   }
 
-  const jsonResponse = await response.json()
+  const jsonResponse = await response.json();
 
   // Store token in local storage
   localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, jsonResponse.token);
@@ -44,12 +44,12 @@ const getToken = () => {
   }
 
   return token;
-}
+};
 
 const getAuthHeader = () => {
   const token = getToken();
-  return { Authorization: `Bearer ${token}` }
-}
+  return { Authorization: `Bearer ${token}` };
+};
 
 const AuthService = { signIn, signUp, getAuthHeader };
 export default AuthService;
