@@ -88,7 +88,7 @@ public class PostException : ExceptionWithResponse
 
     public override string Title { get; } = "Post Exception";
 
-    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
 
     public PostException()
     {

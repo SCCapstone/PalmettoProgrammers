@@ -50,12 +50,12 @@ public class PostsController : ControllerBase
     }
 
     [HttpPost]
-    [Route("users/{id}")]
-    public async Task<IActionResult> JoinPost(int id)
+    [Route("{postId}/users/current")]
+    public async Task<IActionResult> JoinPost(int postId)
     {
         var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        var post = await _postService.GetPost(id);
+        var post = await _postService.GetPost(postId);
 
         if (post is null)
         {
@@ -68,12 +68,12 @@ public class PostsController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("users/{id}")]
-    public async Task<IActionResult> LeavePost(int id)
+    [Route("{postId}/users/current")]
+    public async Task<IActionResult> LeavePost(int postId)
     {
         var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        var post = await _postService.GetPost(id);
+        var post = await _postService.GetPost(postId);
 
         if (post is null)
         {
