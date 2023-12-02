@@ -1,23 +1,37 @@
 import * as React from 'react';
-import { Button, TextField, Link, Box, Container, Typography, CssBaseline, Avatar, FormControlLabel, Icon, Grid, Checkbox } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Link,
+  Box,
+  Container,
+  Typography,
+  CssBaseline,
+  Avatar,
+  FormControlLabel,
+  Icon,
+  Grid,
+  Checkbox,
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
-import { createTheme, ThemeProvider } from '@mui/material/styles'; 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { signUp } from '../services/auth-service';
-
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const creds = { username: data.get('username'), password: data.get('password') };
+    const creds = {
+      username: data.get('username'),
+      password: data.get('password'),
+    };
     // Passing sign up info to API
-    signUp(creds).then(response => {
+    signUp(creds).then((response) => {
       // console.log(response);
     });
   };
@@ -40,9 +54,14 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
-              <Grid item xs = {12}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -94,8 +113,8 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs ={12} sm = {4}>
-                <TextField 
+              <Grid item xs={12} sm={4}>
+                <TextField
                   required
                   fullWidth
                   name="ageDay"
@@ -104,8 +123,8 @@ export default function SignUp() {
                   id="ageDay"
                 />
               </Grid>
-              <Grid item xs ={12} sm = {4}>
-                <TextField 
+              <Grid item xs={12} sm={4}>
+                <TextField
                   required
                   fullWidth
                   name="ageMonth"
@@ -114,8 +133,8 @@ export default function SignUp() {
                   id="ageMonth"
                 />
               </Grid>
-              <Grid item xs ={12} sm = {4}>
-                <TextField 
+              <Grid item xs={12} sm={4}>
+                <TextField
                   required
                   fullWidth
                   name="ageYear"
@@ -124,7 +143,6 @@ export default function SignUp() {
                   id="ageYear"
                 />
               </Grid>
-
             </Grid>
             <Button
               type="submit"
@@ -143,7 +161,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        
       </Container>
     </ThemeProvider>
   );
