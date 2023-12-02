@@ -14,7 +14,9 @@
     "sourceType": "module"
   },
   "plugins": ["react", "react-refresh"],
-  "rules": {},
+  "rules": {
+    "func-style": [2, "declaration"]
+  },
   "settings": {
     "react": {
       "version": "detect"
