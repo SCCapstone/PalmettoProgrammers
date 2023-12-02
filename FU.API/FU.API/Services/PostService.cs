@@ -5,7 +5,6 @@ using FU.API.Exceptions;
 using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 public class PostService : CommonService, IPostService
 {
