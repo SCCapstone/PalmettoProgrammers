@@ -1,20 +1,20 @@
 .page-content {
-    display: flex;
-    flex-direction: row;
-    column-gap: 20pt;
+  display: flex;
+  flex-direction: row;
+  column-gap: 20pt;
 }
 
 .page-content > div:nth-child(2) {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 #search-bar {
-    display: flex;
-    align-items: stretch;
-    flex-direction: row;
-    margin-bottom: 20pt;
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+  margin-bottom: 20pt;
 }
 
 #search-bar > div {
-    flex-grow: 1;
+  flex-grow: 1;
 }
