@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { signUp } from '../../services/auth-service';
+import AuthService from '../../services/authService';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -26,10 +26,8 @@ export default function SignUp() {
       username: data.get('username'),
       password: data.get('password'),
     };
-    // Passing sign up info to API
-    signUp(creds).then((response) => {
-      // console.log(response);
-    });
+
+    AuthService.signUp(creds);
   };
 
   return (

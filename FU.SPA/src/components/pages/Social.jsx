@@ -1,3 +1,18 @@
+import { useEffect, useState } from 'react';
+import UserService from '../../services/userService';
+import Posts from '../Posts';
+
 export default function Social() {
-  return <h1>Social</h1>;
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    UserService.getConnectedPosts().then(setPosts);
+  }, []);
+
+  return (
+    <>
+      <h1 style={{ textAlign: 'left' }}>Posts</h1>
+      <Posts posts={posts} />
+    </>
+  );
 }
