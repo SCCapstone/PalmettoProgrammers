@@ -96,6 +96,30 @@ public static class Mapper
             query.DescriptionContains = dto.Keywords.Split(" ").ToList();
         }
 
+        if (dto.Games is not null)
+        {
+            // loop through comma string, adding each parsable value to gameIds
+            foreach (string value in dto.Games.Split(","))
+            {
+                if (int.TryParse(value, out int id))
+                {
+                    query.GameIds.Add(id);
+                }
+            }
+        }
+
+        if (dto.Tags is not null)
+        {
+            // loop through comma string, adding each parsable value to tagIds
+            foreach (string value in dto.Tags.Split(","))
+            {
+                if (int.TryParse(value, out int id))
+                {
+                    query.TagIds.Add(id);
+                }
+            }
+        }
+
         // defaults if unset
         dto.Sort ??= "newest:desc";
 
@@ -119,8 +143,6 @@ public static class Mapper
             query.SortBy.Direction = SortDirection.Ascending;
         }
 
-        // TODO tags
-        // TODO games
         return query;
     }
 
