@@ -85,12 +85,19 @@ public static class Mapper
         var query = new PostQuery()
         {
             After = dto.After,
-            MinimumRequiredPlayers = dto.MinPlayers,
-            DescriptionContains = dto.Keywords.Split(" ").ToList(),
-            Limit = dto.Limit,
-            Offset = dto.Offset,
+            MinimumRequiredPlayers = dto.MinPlayers ?? 0,
+            Limit = dto.Limit ?? 20,
+            Offset = dto.Offset ?? 0,
             SortBy = new ()
         };
+
+        if (dto.Keywords is not null)
+        {
+            query.DescriptionContains = dto.Keywords.Split(" ").ToList();
+        }
+
+        // defaults if unset
+        dto.Sort ??= "newest:desc";
 
         // E.g. dto.Sort = "title:asc" or just "title"
         var arr = dto.Sort.ToLower().Split(":");

@@ -5,26 +5,26 @@ using Microsoft.AspNetCore.Mvc;
 public record PostSearchRequestDTO
 {
     [FromQuery]
-    public string Tags { get; set; } = string.Empty;
+    public string? Tags { get; set; }
 
     [FromQuery]
-    public string Games { get; set; } = string.Empty;
+    public string? Games { get; set; }
 
     [FromQuery]
-    public DateTime? After { get; set; } = null;
+    public DateTime? After { get; set; }
 
     [FromQuery]
-    public string Keywords { get; set; } = string.Empty;
+    public string? Keywords { get; set; }
 
     [FromQuery]
-    public string Sort { get; set; } = string.Empty;
+    public string? Sort { get; set; }
 
     [FromQuery]
-    public int Limit { get; set; } = 20;
+    public int? Limit { get; set; }
 
     [FromQuery]
-    public int Offset { get; set; } = 0;
+    public int? Offset { get; set; }
 
     [FromQuery]
-    public int MinPlayers { get; set; } = 0;
+    public int? MinPlayers { get; set; }
 }
