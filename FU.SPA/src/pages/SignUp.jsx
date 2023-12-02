@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   Button,
   TextField,
@@ -8,10 +7,7 @@ import {
   Typography,
   CssBaseline,
   Avatar,
-  FormControlLabel,
-  Icon,
   Grid,
-  Checkbox,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { createTheme, ThemeProvider } from '@mui/material/styles';
