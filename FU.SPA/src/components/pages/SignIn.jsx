@@ -9,7 +9,7 @@ import {
   Avatar,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
-import { signIn } from '../../services/auth-service';
+import AuthService from '../../services/authService';
 
 export default function SignIn() {
   const handleSubmit = (event) => {
@@ -20,11 +20,8 @@ export default function SignIn() {
       username: data.get('username'),
       password: data.get('password'),
     };
-    // Calls sign in and saves token in local storage
-    signIn(creds).then((response) => {
-      // console.log('Sign in response', response);
-      localStorage.setItem('token', response['token']);
-    });
+
+    AuthService.signIn(creds);
   };
 
   // Creates and returns signin form

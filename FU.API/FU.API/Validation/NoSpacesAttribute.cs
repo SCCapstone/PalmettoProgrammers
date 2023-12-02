@@ -1,28 +1,27 @@
-﻿namespace FU.API.Validation
+﻿namespace FU.API.Validation;
+
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
+
+public class NoSpacesAttribute : ValidationAttribute
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.Runtime.CompilerServices;
+    private readonly string? propertyName;
 
-    public class NoSpacesAttribute : ValidationAttribute
+    public NoSpacesAttribute([CallerMemberName] string? propertyName = null)
     {
-        private readonly string? propertyName;
+        this.propertyName = propertyName;
+    }
 
-        public NoSpacesAttribute([CallerMemberName] string? propertyName = null)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    {
+        if (value is string stringValue)
         {
-            this.propertyName = propertyName;
-        }
-
-        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
-        {
-            if (value is string stringValue)
+            if (stringValue.Contains(' '))
             {
-                if (stringValue.Contains(' '))
-                {
-                    return new ValidationResult($"{propertyName} cannot contain spaces.");
-                }
+                return new ValidationResult($"{propertyName} cannot contain spaces.");
             }
-
-            return ValidationResult.Success;
         }
+
+        return ValidationResult.Success;
     }
 }

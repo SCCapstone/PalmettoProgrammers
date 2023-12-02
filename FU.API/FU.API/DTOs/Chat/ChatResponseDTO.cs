@@ -1,15 +1,14 @@
-﻿namespace FU.API.DTOs.Chat
+﻿namespace FU.API.DTOs.Chat;
+
+public class ChatResponseDTO
 {
-    public class ChatResponseDTO
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string? ChatName { get; set; }
+    public string? ChatName { get; set; }
 
-        public string? LastMessage { get; set; }
+    public string? LastMessage { get; set; }
 
-        public string ChatType { get; set; } = string.Empty;
+    public string ChatType { get; set; } = string.Empty;
 
-        public ICollection<string> Members { get; set; } = new HashSet<string>();
-    }
+    public ICollection<string> Members { get; set; } = new HashSet<string>();
 }
