@@ -24,7 +24,13 @@ export default function SignUp() {
 
     const creds = {
       username: data.get('username'),
+      firstname: data.get('firstname'),
+      lastname: data.get('lastname'),
+      email: data.get('email'),
       password: data.get('password'),
+      birthDay: data.get('birthDay'),
+      birthMonth: data.get('birthMonth'),
+      birthYear: data.get('birthYear')
     };
 
     AuthService.signUp(creds);
@@ -105,6 +111,16 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="confirmPassword"
+                  id="confirmPassword"
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
