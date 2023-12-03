@@ -1,4 +1,4 @@
-import config from "../config";
+import config from '../config';
 const API_BASE_URL = config.API_URL;
 const LOCAL_STORAGE_TOKEN_KEY = 'token';
 

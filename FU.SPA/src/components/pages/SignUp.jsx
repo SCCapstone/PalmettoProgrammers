@@ -30,7 +30,7 @@ export default function SignUp() {
       password: data.get('password'),
       birthDay: data.get('birthDay'),
       birthMonth: data.get('birthMonth'),
-      birthYear: data.get('birthYear')
+      birthYear: data.get('birthYear'),
     };
 
     AuthService.signUp(creds);

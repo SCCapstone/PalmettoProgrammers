@@ -16,8 +16,8 @@ export default function Navbar() {
       </div>
       <div className="right-content">
         <ul>
-        <CustomLink to="/SignIn">Sign In</CustomLink>
-        <CustomLink to="/SignUp">Sign Up</CustomLink>
+          <CustomLink to="/SignIn">Sign In</CustomLink>
+          <CustomLink to="/SignUp">Sign Up</CustomLink>
         </ul>
       </div>
     </nav>
