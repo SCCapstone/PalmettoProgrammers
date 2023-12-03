@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = () => {
-  let auth = {'token': false}
+export const ProtectedRoute = () => {
+  let auth = {'token': true}
   return (
     auth.token ? <Outlet /> : <Navigate to='/sigin'/>
  )

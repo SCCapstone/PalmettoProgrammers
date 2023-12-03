@@ -8,16 +8,30 @@ import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 
 import { Route, Routes } from 'react-router-dom';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { useState } from 'react';
+
 function App() {
+  const [user, signIn] = useState(null);
+
   return (
     <>
       <Navbar />
       <div className="container">
         <Routes>
           <Route index element={<Home />} />
+          <Route path="/" element={<Home />} /> 
           <Route path="/discover" element={<Discover />} />
-          <Route path="/social" element={<Social />} />
-          <Route path="/create" element={<Create />} />
+          <Route path="/social" element={
+            <ProtectedRoute>
+              <Social />
+            </ProtectedRoute>
+          } />
+          <Route path="/create" element={
+            <ProtectedRoute>
+              <Create />
+            </ProtectedRoute>
+          } />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="*" element={<NoPage />} />
