@@ -28,7 +28,7 @@ public class Post
     /// <summary>
     /// Gets or sets the description of the post.
     /// </summary>
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the start time.
