@@ -21,16 +21,16 @@ public class SearchService
         // Filters are addded one at a time, generally by the amount of posts they filter out
 
         // Filter by games
-        if (query.Games.Count > 0)
+        if (query.GameIds.Count > 0)
         {
-            dbQuery = dbQuery.Where(p => query.Games.Contains(p.Game));
+            dbQuery = dbQuery.Where(p => query.GameIds.Contains(p.Game.Id));
         }
 
         // Filter by tags
         // A post must have every tag in the filter
-        foreach (var tag in query.Tags)
+        foreach (var tagId in query.TagIds)
         {
-            // TODO
+            dbQuery = dbQuery.Where(p => p.Tags.Any(tag => tag.Id == tagId));
         }
 
         // Filter by posts after a time
@@ -62,7 +62,13 @@ public class SearchService
         // Always end ordering by Id to ensure order is unique. This ensures order is consistent across calls.
         orderedDbQuery = orderedDbQuery.ThenBy(p => p.Id);
 
-        return await orderedDbQuery.Skip(query.Offset).Take(query.Limit).ToListAsync();
+        return await orderedDbQuery
+                .Skip(query.Offset)
+                .Take(query.Limit)
+                .Include(p => p.Creator)
+                .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
+                .Include(p => p.Game)
+                .ToListAsync();
     }
 
     private static Expression<Func<Post, object>> SelectPostProperty(SortType? sortType)

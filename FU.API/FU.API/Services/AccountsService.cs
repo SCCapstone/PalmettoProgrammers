@@ -101,34 +101,6 @@ public class AccountsService
         };
     }
 
-    /// <summary>
-    /// Gets the current user.
-    /// </summary>
-    /// <param name="claims">The users claims.</param>
-    /// <returns>The current signed in user.</returns>
-    public async Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims)
-    {
-        var stringId = claims.FindFirstValue(CustomClaimTypes.UserId);
-        if (stringId is null)
-        {
-            return null;
-        }
-
-        // Try to parse the userId from the claims
-        if (!int.TryParse(stringId, out int userId))
-        {
-            return null;
-        }
-
-        // Get the user from the database
-        return await _dbContext.Users.FindAsync(userId);
-    }
-
-    public async Task<ApplicationUser?> GetUser(int userId)
-    {
-        return await _dbContext.Users.FindAsync(userId);
-    }
-
     private static string HashPassword(string password)
     {
         // based on https://gist.github.com/sixpeteunder/235f93ba0b059035abf140beb2ea4e44

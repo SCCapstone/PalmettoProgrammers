@@ -9,6 +9,6 @@ public record UserProfile
     public string? Bio { get; set; }
     public DateOnly? DOB { get; set; }
     public string? Username { get; set; } = string.Empty;
-    public ICollection<GameRelation> FavoriteGames { get; set; } = new HashSet<GameRelation>();
-    public ICollection<TagRelation> FavoriteTags { get; set; } = new HashSet<TagRelation>();
+    public ICollection<Game> FavoriteGames { get; set; } = new HashSet<Game>();
+    public ICollection<Tag> FavoriteTags { get; set; } = new HashSet<Tag>();
 }

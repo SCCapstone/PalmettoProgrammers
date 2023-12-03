@@ -21,6 +21,6 @@ public class SearchController : ControllerBase
     public async Task<IActionResult> SearchPosts([FromQuery] PostSearchRequestDTO request)
     {
         var posts = await _searchService.SearchPosts(request.ToPostQuery());
-        return Ok(posts);
+        return Ok(posts.ToDtos());
     }
 }
