@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import config from "../config";
+const API_BASE_URL = config.API_URL;
 
 /*
   params = {
