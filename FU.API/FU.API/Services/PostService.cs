@@ -85,7 +85,7 @@ public class PostService : CommonService, IPostService
         // Check that the user is not already in the chat
         if (chat.Members.Any(m => m.UserId == userId))
         {
-            throw new PostException("User is already in the post");
+            throw new ConflictException("User is already in the post");
         }
 
         // Make the new chat member relation

@@ -99,3 +99,21 @@ public class PostException : ExceptionWithResponse
         Description = description;
     }
 }
+
+public class ConflictException : ExceptionWithResponse
+{
+    public override string Description { get; } = "Conflict exception";
+
+    public override string Title { get; } = "Conflict exception";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
+
+    public ConflictException()
+    {
+    }
+
+    public ConflictException(string description)
+    {
+        Description = description;
+    }
+}
