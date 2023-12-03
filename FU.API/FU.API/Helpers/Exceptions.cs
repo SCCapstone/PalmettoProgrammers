@@ -41,3 +41,43 @@ public class DuplicateUserException : ExceptionWithResponse
         StatusCode = statusCode;
     }
 }
+
+public class UnauthorizedException : ExceptionWithResponse
+{
+    public override string Description { get; } = "The user is not authorized";
+
+    public override string Title { get; } = "Unauthorized User";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Unauthorized;
+
+    public UnauthorizedException()
+    {
+    }
+
+    public UnauthorizedException(string title, string description, HttpStatusCode statusCode)
+    {
+        Title = title;
+        Description = description;
+        StatusCode = statusCode;
+    }
+}
+
+public class NonexistentGameException : ExceptionWithResponse
+{
+    public override string Description { get; } = "The game does not exist";
+
+    public override string Title { get; } = "Nonexistent Game";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
+
+    public NonexistentGameException()
+    {
+    }
+
+    public NonexistentGameException(string title, string description, HttpStatusCode statusCode)
+    {
+        Title = title;
+        Description = description;
+        StatusCode = statusCode;
+    }
+}
