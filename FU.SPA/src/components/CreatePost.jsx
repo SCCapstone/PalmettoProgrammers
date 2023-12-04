@@ -26,7 +26,7 @@ import Radio from '@mui/material/Radio';
 //} or something similiar.
 //Design of the page.
 
-function CreatePost() {
+export default function CreatePost() {
   // going to use in another function for clicking
   return (
     <ThemeProvider theme={createTheme}>

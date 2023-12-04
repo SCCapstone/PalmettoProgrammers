@@ -16,24 +16,28 @@ import {
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
-//import {CreatePost} from '../components/CreatePost';
-//import {CreateGroup} from '../components/CreateGroup';
+import CreatePost from '../CreatePost.jsx';
+//import {CreateGroupButton} from '../CreateGroup';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
-function CreateGroupButton() {
-  //This should be a redirect/nav button or just be a label, so as not to reset values in textfields.
-  const handleCreatePost = (event) => {
-    event.preventDefault();
-    CreateGroup();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      //data to be collected from user
-    });
-  };
-}
+// function CreateGroupButton() {
+//   //This should be a redirect/nav button or just be a label, so as not to reset values in textfields.
+//   const handleCreateGroup = (event) => {
+//     event.preventDefault();
+//     CreateGroup();
+//     const data = new FormData(event.currentTarget);
+//     console.log({
+//       //data to be collected from user
+//     });
+//   };
+// }
+
+// function CreatePostButton() {
+
+// }
 
 function deselectCommunicationRadio() {}
 
@@ -49,6 +53,10 @@ function CheckboxLabels() {
 }
 
 export default function Create() {
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  //   <CreatePost />
+  // }
   return (
     //<h1>Create</h1>
     <ThemeProvider theme={createTheme}>
@@ -64,7 +72,14 @@ export default function Create() {
         ></Box>
         <Grid item xs={12} sm={5} marginTop={2}>
           <h1>Create</h1>
+          {/* <CreatePost /> */}
+          {/*CreatePost()*/}
           <Button
+            onClick={() => {
+              alert("This is a test")
+              //CreatePost();
+              //<CreatePost />
+            }}
             alignItems="left"
             type="submit"
             fullWidth
