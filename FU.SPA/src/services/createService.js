@@ -23,7 +23,7 @@ const createPost = async (params) => {
 
 // Create game request
 const createGame = async (params) => {
-  const response = await fetch(`${API_BASE_URL}/Posts`, {
+  const response = await fetch(`${API_BASE_URL}/Games`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -42,7 +42,7 @@ const createGame = async (params) => {
 
 // Create tag request
 const createTag = async (params) => {
-  const response = await fetch(`${API_BASE_URL}/Posts`, {
+  const response = await fetch(`${API_BASE_URL}/Tags`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
