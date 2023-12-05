@@ -21,7 +21,7 @@ function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/posts" element={<PostPage />} />
+          <Route path="/posts/:postId" element={<PostPage />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </div>

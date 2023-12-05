@@ -38,7 +38,7 @@ const PostCard = ({ post }) => {
       </CardContent>
       <CardActions>
         <Button size="large">
-          <Link to={'/posts'}>View</Link>
+          <Link to={`/posts/${post.Id}`}>View</Link>
         </Button>
       </CardActions>
     </Card>
