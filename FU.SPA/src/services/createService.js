@@ -21,5 +21,43 @@ const createPost = async (params) => {
   console.log(jsonResponse);
 }
 
-const CreateService = { createPost };
+// Create game request
+const createGame = async (params) => {
+  const response = await fetch(`${API_BASE_URL}/Posts`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+    },
+    body: JSON.stringify(params)
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in game creation');
+  }
+  const jsonResponse = await response.json();
+
+  console.log(jsonResponse);
+}
+
+// Create tag request
+const createTag = async (params) => {
+  const response = await fetch(`${API_BASE_URL}/Posts`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+    },
+    body: JSON.stringify(params)
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in tag creation');
+  }
+  const jsonResponse = await response.json();
+
+  console.log(jsonResponse);
+}
+
+const CreateService = { createPost, createGame, createTag };
 export default CreateService;
