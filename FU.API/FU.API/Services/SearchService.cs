@@ -21,16 +21,16 @@ public class SearchService
         // Filters are addded one at a time, generally by the amount of posts they filter out
 
         // Filter by games
-        if (query.Games.Count > 0)
+        if (query.GameIds.Count > 0)
         {
-            dbQuery = dbQuery.Where(p => query.Games.Contains(p.Game));
+            dbQuery = dbQuery.Where(p => query.GameIds.Contains(p.Game.Id));
         }
 
         // Filter by tags
         // A post must have every tag in the filter
-        foreach (var tag in query.Tags)
+        foreach (var tagId in query.TagIds)
         {
-            // TODO
+            dbQuery = dbQuery.Where(p => p.Tags.Any(tag => tag.Id == tagId));
         }
 
         // Filter by posts after a time

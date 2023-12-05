@@ -15,15 +15,21 @@ body {
   background-color: fuchsia;
   color: white;
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   align-items: stretch;
   gap: 2rem;
   padding: 0 1rem;
 }
 
+.left-content,
+.right-content {
+  display: flex;
+}
+
 .site-title {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-size: 2rem;
+  margin-right: 5px;
 }
 
 .nav ul {
