@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography, CssBaseline } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import PostService from '../services/PostService';
+import PostService from '../../services/PostService';
 const boxStyle = {
   maxWidth: 600,
   margin: 'auto',
