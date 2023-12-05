@@ -1,4 +1,4 @@
-import config from "../config";
+import config from '../config';
 const API_BASE_URL = config.API_URL;
 const LOCAL_STORAGE_TOKEN_KEY = 'token';
 
@@ -8,9 +8,9 @@ const createPost = async (params) => {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+      Authorization: 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
     },
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
   });
 
   if (!response.ok) {
@@ -19,7 +19,7 @@ const createPost = async (params) => {
   const jsonResponse = await response.json();
 
   console.log(jsonResponse);
-}
+};
 
 // Create game request
 const createGame = async (params) => {
@@ -27,9 +27,9 @@ const createGame = async (params) => {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+      Authorization: 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
     },
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
   });
 
   if (!response.ok) {
@@ -38,7 +38,7 @@ const createGame = async (params) => {
   const jsonResponse = await response.json();
 
   console.log(jsonResponse);
-}
+};
 
 // Create tag request
 const createTag = async (params) => {
@@ -46,9 +46,9 @@ const createTag = async (params) => {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+      Authorization: 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
     },
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
   });
 
   if (!response.ok) {
@@ -57,7 +57,7 @@ const createTag = async (params) => {
   const jsonResponse = await response.json();
 
   console.log(jsonResponse);
-}
+};
 
 const CreateService = { createPost, createGame, createTag };
 export default CreateService;

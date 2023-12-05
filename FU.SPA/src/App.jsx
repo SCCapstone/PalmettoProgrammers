@@ -20,18 +20,24 @@ function App() {
       <div className="container">
         <Routes>
           <Route index element={<Home />} />
-          <Route path="/" element={<Home />} /> 
+          <Route path="/" element={<Home />} />
           <Route path="/discover" element={<Discover />} />
-          <Route path="/social" element={
-            <ProtectedRoute>
-              <Social />
-            </ProtectedRoute>
-          } />
-          <Route path="/create" element={
-            <ProtectedRoute>
-              <Create />
-            </ProtectedRoute>
-          } />
+          <Route
+            path="/social"
+            element={
+              <ProtectedRoute>
+                <Social />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create"
+            element={
+              <ProtectedRoute>
+                <Create />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="*" element={<NoPage />} />
