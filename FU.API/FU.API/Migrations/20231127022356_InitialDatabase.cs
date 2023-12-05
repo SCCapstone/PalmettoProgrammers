@@ -1,13 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-
-#nullable disable
+﻿#nullable disable
 
 namespace FU.API.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+    using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
     /// <inheritdoc />
-    public partial class InitalDatabase : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -288,11 +288,17 @@ namespace FU.API.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TagId = table.Column<int>(type: "integer", nullable: false),
                     ApplicationUserUserId = table.Column<int>(type: "integer", nullable: true),
+                    GroupId = table.Column<int>(type: "integer", nullable: true),
                     PostId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TagRelations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TagRelations_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_TagRelations_Posts_PostId",
                         column: x => x.PostId,
@@ -403,6 +409,11 @@ namespace FU.API.Migrations
                 name: "IX_TagRelations_ApplicationUserUserId",
                 table: "TagRelations",
                 column: "ApplicationUserUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TagRelations_GroupId",
+                table: "TagRelations",
+                column: "GroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TagRelations_PostId",

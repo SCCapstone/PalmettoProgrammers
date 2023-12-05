@@ -6,6 +6,7 @@ using FU.API.DTOs.Game;
 using FU.API.DTOs.Post;
 using FU.API.DTOs.Tag;
 using FU.API.Models;
+using FU.API.DTOs.Group;
 
 public static class Mapper
 {
@@ -19,8 +20,8 @@ public static class Mapper
             DOB = appUser.DOB,
             PfpUrl = appUser.PfpUrl,
             IsOnline = appUser.IsOnline,
-            FavoriteGames = appUser.FavoriteGames,
-            FavoriteTags = appUser.FavoriteTags,
+            FavoriteGames = appUser.FavoriteGames.Select(g => g.Game).ToList(),
+            FavoriteTags = appUser.FavoriteTags.Select(t => t.Tag).ToList(),
         };
     }
 
@@ -84,12 +85,43 @@ public static class Mapper
         var query = new PostQuery()
         {
             After = dto.After,
-            MinimumRequiredPlayers = dto.MinPlayers,
-            DescriptionContains = dto.Keywords.Split(" ").ToList(),
-            Limit = dto.Limit,
-            Offset = dto.Offset,
+            MinimumRequiredPlayers = dto.MinPlayers ?? 0,
+            Limit = dto.Limit ?? 20,
+            Offset = dto.Offset ?? 0,
             SortBy = new ()
         };
+
+        if (dto.Keywords is not null)
+        {
+            query.DescriptionContains = dto.Keywords.Split(" ").ToList();
+        }
+
+        if (dto.Games is not null)
+        {
+            // loop through comma string, adding each parsable value to gameIds
+            foreach (string value in dto.Games.Split(","))
+            {
+                if (int.TryParse(value, out int id))
+                {
+                    query.GameIds.Add(id);
+                }
+            }
+        }
+
+        if (dto.Tags is not null)
+        {
+            // loop through comma string, adding each parsable value to tagIds
+            foreach (string value in dto.Tags.Split(","))
+            {
+                if (int.TryParse(value, out int id))
+                {
+                    query.TagIds.Add(id);
+                }
+            }
+        }
+
+        // defaults if unset
+        dto.Sort ??= "newest:desc";
 
         // E.g. dto.Sort = "title:asc" or just "title"
         var arr = dto.Sort.ToLower().Split(":");
@@ -111,8 +143,6 @@ public static class Mapper
             query.SortBy.Direction = SortDirection.Ascending;
         }
 
-        // TODO tags
-        // TODO games
         return query;
     }
 
@@ -142,7 +172,7 @@ public static class Mapper
         return new Post()
         {
             Title = postRequestDTO.Title,
-            Description = postRequestDTO.Description,
+            Description = postRequestDTO.Description ?? string.Empty,
             StartTime = postRequestDTO.StartTime,
             EndTime = postRequestDTO.EndTime,
             MaxPlayers = postRequestDTO.MaxPlayers,
@@ -150,4 +180,19 @@ public static class Mapper
             Tags = tagIds.Select(tagId => new TagRelation() { TagId = tagId }).ToList(),
         };
     }
+
+    public static GroupSimpleDTO ToSimpleDto(this Group group)
+    {
+        return new GroupSimpleDTO()
+        {
+            Id = group.Id,
+            Name = group.Name,
+            Description = group.Description,
+            ChatId = group.ChatId,
+            Tags = group.Tags.Select(t => t.Tag.Name).ToList(),
+        };
+    }
+
+    public static IEnumerable<GroupSimpleDTO> ToSimpleDtos(this IEnumerable<Group> groups) =>
+        groups.Select(group => group.ToSimpleDto());
 }
