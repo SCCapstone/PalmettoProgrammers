@@ -16,12 +16,17 @@ export default function Navbar( {auth} ) {
       </div>
       <div className="right-content">
         <ul>
+<<<<<<< HEAD
           { auth ? (<div>Sign Out</div>) : (
             <div>
               <CustomLink to="/SignIn">Sign In</CustomLink>
               <CustomLink to="/SignUp">Sign Up</CustomLink>
             </div>
           )}
+=======
+          <CustomLink to="/SignIn">Sign In</CustomLink>
+          <CustomLink to="/SignUp">Sign Up</CustomLink>
+>>>>>>> main
         </ul>
       </div>
     </nav>

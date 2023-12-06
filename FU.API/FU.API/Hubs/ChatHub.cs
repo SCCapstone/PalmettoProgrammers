@@ -2,6 +2,8 @@
 
 using System;
 using FU.API.Data;
+using FU.API.Helpers;
+using FU.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -36,7 +38,8 @@ public class ChatHub : Hub
     /// <returns>Task.</returns>
     public override Task OnConnectedAsync()
     {
-        var user = _context.Users.FirstOrDefault(u => u.Username == IdentityName);
+        var userId = UserId;
+        var user = _context.Users.Find(userId);
 
         if (user is null || user.Username is null)
         {
@@ -63,7 +66,8 @@ public class ChatHub : Hub
     /// <returns>Task.</returns>
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Username == IdentityName);
+        var userId = UserId;
+        var user = _context.Users.Find(userId);
 
         if (user is null || user.Username is null)
         {
@@ -104,7 +108,9 @@ public class ChatHub : Hub
     }
 
     /// <summary>
-    /// Gets the identity name from the context.
+    /// Gets the user id from the context.
     /// </summary>
-    private string? IdentityName => Context?.User?.Identity?.Name;
+    private int UserId => Context?.User?.Claims?.FirstOrDefault(c => c.Type == CustomClaimTypes.UserId)?.Value is not null
+        ? int.Parse(Context.User.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.UserId)?.Value ?? string.Empty)
+        : -1;
 }

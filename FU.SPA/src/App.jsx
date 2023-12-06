@@ -6,6 +6,7 @@ import Create from './components/pages/Create';
 import NoPage from './components/pages/NoPage';
 import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
+import Chat from './components/pages/Chat';
 
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -34,6 +35,7 @@ function App() {
           } />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/chat/:chatId" element={<Chat />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </div>

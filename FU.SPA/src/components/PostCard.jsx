@@ -6,6 +6,7 @@ import {
   Typography,
   Chip,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const PostCard = ({ post }) => {
   let dateTimeString = 'Unspecified time';
@@ -24,7 +25,9 @@ const PostCard = ({ post }) => {
           by {post.creator}
         </Typography>
         <Typography variant="h5">{post.title}</Typography>
-        <Typography variant="body1">{dateTimeString}</Typography>
+        {post.startTime && (
+          <Typography variant="body1">{dateTimeString}</Typography>
+        )}
         <br />
         <Typography variant="body2" color="text.primary">
           {post.description}
@@ -38,6 +41,11 @@ const PostCard = ({ post }) => {
       </CardContent>
       <CardActions>
         <Button size="large">View</Button>
+        {post.hasJoined && (
+          <Link to={`/chat/${post.chatId}`} style={{ textDecoration: 'none' }}>
+            <Button size="large">Chat</Button>
+          </Link>
+        )}
       </CardActions>
     </Card>
   );

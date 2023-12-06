@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import AuthService from '../../services/authService';
+import { startConnection } from '../../services/signalrService';
 
 export default function SignIn() {
   const handleSubmit = (event) => {
@@ -22,6 +23,7 @@ export default function SignIn() {
     };
 
     AuthService.signIn(creds);
+    startConnection();
   };
 
   // Creates and returns signin form
