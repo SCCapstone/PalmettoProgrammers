@@ -108,9 +108,16 @@ export default function Chat() {
       const chatContainer = chatContainerRef.current;
       const scrollDifference = chatContainer.scrollHeight - prevScrollHeight;
   
+      console.log('Scrolling effect triggered');
+  console.log('scrollDifference:', scrollDifference);
+  console.log('scrollTop:', chatContainer.scrollTop);
+  console.log('scrollHeight:', chatContainer.scrollHeight);
+
       if (scrollDifference > 0) {
         chatContainer.scrollTop += scrollDifference;
         setPrevScrollHeight(chatContainer.scrollHeight);
+        console.log('Scrolled to the bottom');
+
       }
     }, [messages, prevScrollHeight]);
   

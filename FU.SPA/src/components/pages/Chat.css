@@ -3,20 +3,18 @@
     flex-direction: column;
     overflow-y: scroll;
   }
-  
+
   .chat-wrapper {
     display: flex;
     width: auto;
     flex-direction: column;
-    justify-content: flex-start;
     gap: 13px;
-    flex-shrink: 0;
     bottom: 0px;
     position: absolute;
-    height: 94vh;
+    max-height: 95vh;
     width: 500px;
     background-color: #fff;
-    right: 35%;
+    right: 40%;
   }
 
   .bottom-bar {
