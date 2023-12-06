@@ -27,7 +27,6 @@ export default function Chat() {
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
-      console.log('entering use effect');
       initializeChat();
 
       hubConnection.on('ReceiveMessage', handleReceiveMessage);
@@ -35,23 +34,19 @@ export default function Chat() {
       chatContainerRef.current.addEventListener('scroll', handleScroll);
       
       return () => {
-        // ComponentWillUnmount - Leave the chat group
         hubConnection.off('ReceiveMessage', handleReceiveMessage);
-        //chatContainerRef.current.removeEventListener('scroll', handleScroll);
         leaveChatGroup(chatId);
       };
-    }, [chatId]);
+    }, []);
 
     async function initializeChat() {
       try {
         const chat = await getChat(chatId);
         setChat(chat);
         startConnection();
-        console.log('joining chat group')
         joinChatGroup(chatId);
         const messages = await getMessages(chatId, offset, limit);
         setMessages(messages);
-        // setOffset(prevOffset => prevOffset + 1);
       } catch (error) {
         console.error(error);
       }
@@ -73,14 +68,7 @@ export default function Chat() {
     const handleReceiveMessage = (receivedMessage) => {
       setMessages(prevMessages => [...prevMessages, receivedMessage]);
     };
-
-    useEffect(() => {
-      // Re-establish SignalR connection when messages are updated
-      startConnection();
-      joinChatGroup(chatId);
-    }, [messages]);
   
-
     const handleScroll = () => {
       const chatContainer = chatContainerRef.current;
     

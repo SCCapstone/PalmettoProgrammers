@@ -10,8 +10,6 @@ export const hubConnection = new signalR.HubConnectionBuilder()
 
 export const startConnection = async () => {
 try {
-    console.log('state')
-    console.log(hubConnection)
     // Only start if connection is not in the Connected state
     if (hubConnection.state !== signalR.HubConnectionState.Connected) {
         console.log(CHAT_HUB_URL);
