@@ -9,10 +9,14 @@ import {
 import { Link } from 'react-router-dom';
 
 const PostCard = ({ post }) => {
-  const dateTimeString = new Date(post.startTime).toLocaleString('en-US', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
+  let dateTimeString = 'Unspecified time';
+
+  if (post.startTime) {
+    dateTimeString = new Date(post.startTime).toLocaleString('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+  }
 
   return (
     <Card style={{ textAlign: 'left' }}>

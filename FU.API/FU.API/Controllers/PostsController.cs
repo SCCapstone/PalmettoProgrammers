@@ -56,4 +56,40 @@ public class PostsController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpPost]
+    [Route("{postId}/users/current")]
+    public async Task<IActionResult> JoinPost(int postId)
+    {
+        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+
+        var post = await _postService.GetPost(postId);
+
+        if (post is null)
+        {
+            return NotFound();
+        }
+
+        await _postService.JoinPost(post.Id, user);
+
+        return NoContent();
+    }
+
+    [HttpDelete]
+    [Route("{postId}/users/current")]
+    public async Task<IActionResult> LeavePost(int postId)
+    {
+        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+
+        var post = await _postService.GetPost(postId);
+
+        if (post is null)
+        {
+            return NotFound();
+        }
+
+        await _postService.LeavePost(post.Id, user);
+
+        return NoContent();
+    }
 }
