@@ -109,6 +109,7 @@ public class ChatService : CommonService, IChatService
             .OrderByDescending(m => m.CreatedAt)
             .Skip((offset - 1) * limit)
             .Take(limit)
+            .Reverse()
             .ToListAsync();
         return messages;
     }

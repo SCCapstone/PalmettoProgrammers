@@ -1,5 +1,6 @@
 namespace FU.API.Controllers;
 
+using FU.API.DTOs.Post;
 using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
@@ -79,7 +80,13 @@ public class UsersController : ControllerBase
 
         var posts = await _userService.GetUsersAssociatedPosts(user.UserId, limit, offset);
 
-        var response = posts.ToDtos();
+        var response = new List<PostResponseDTO>(posts.Count());
+
+        // for each resonse set has joined to true
+        foreach (var post in posts)
+        {
+            response.Add(post.ToDto(hasJoined: true));
+        }
 
         return Ok(response);
     }
