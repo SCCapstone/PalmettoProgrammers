@@ -26,37 +26,26 @@ import Radio from '@mui/material/Radio';
 //} or something similiar.
 //Design of the page.// TODO START OF PAGE CODE, WHICH I'M CHANGING TO CREATE GROUP, BEFORE MAKING IT A BUTTON FUNCTION (semi-completed)
 // need to add a group image and an upload button to the left under the buttons that will be placed there, as well.
-function CreateGroupButton() {
+export default function CreateGroup() {
   return (
     <ThemeProvider theme={createTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'left',
-          }}
-        ></Box>
-        <Box
-          sx={{
-            marginTop: 8,
+            marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            {/* <LockOutlinedIcon /> */}
-          </Avatar>
           <Typography component="h1" variant="h5">
-            Create
+            Create Group
           </Typography>
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            //onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>

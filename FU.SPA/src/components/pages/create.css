@@ -1,0 +1,12 @@
+.container{
+    display: flex;
+}
+
+.leftContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.rightContent {
+    display: flex;
+}

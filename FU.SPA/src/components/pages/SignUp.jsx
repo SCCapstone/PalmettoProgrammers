@@ -24,13 +24,7 @@ export default function SignUp() {
 
     const creds = {
       username: data.get('username'),
-      firstname: data.get('firstname'),
-      lastname: data.get('lastname'),
-      email: data.get('email'),
-      password: data.get('password'),
-      birthDay: data.get('birthDay'),
-      birthMonth: data.get('birthMonth'),
-      birthYear: data.get('birthYear'),
+      password: data.get('password')
     };
 
     AuthService.signUp(creds);

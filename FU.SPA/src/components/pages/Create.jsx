@@ -18,14 +18,92 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
 import CreatePost from '../CreatePost.jsx';
 import { useEffect, useState } from 'react';
-//import {CreateGroupButton} from '../CreateGroup';
+import CreateGroup from '../CreateGroup.jsx';
+import "./create.css";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
+//const defaultTheme = createTheme();
+
+
+
+export default function Create() {
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  //   <CreatePost />
+  // }
+  const [currentTab, setCurrentTab] = useState('posts'); // posts && groups for now and later maybe players, depending on how we 
+  const [posts, setPost] = useState([]);
+  const [groups, setGroups] = useState([]);
+
+  // useEffect(() => {
+  //   if(currentTab === 'posts') {
+  //     //CreatePost();
+  //     <CreatePost />
+  //   } else if (currentTab === 'groups') {
+  //     //CreateGroup();
+  //     <CreateGroup />
+  //   } else {
+  //     alert('Something went wrong with the state effect');
+  //   }
+  // }, [currentTab]);
+
+const renderTabContent = () => {
+  if (currentTab === 'posts') {
+    return <CreatePost />;
+  } else if (currentTab === 'groups') {
+    return <CreateGroup />;
+  } else {
+    return <p><b>Players hasn't been set up yet</b></p>;
+  }
+}
+
+  return (<>
+  <div className='container'>
+    <div className='leftContent'>
+              <Button
+                onClick={() => 
+                  //alert("This is a test")
+                  setCurrentTab('posts')
+                  //CreatePost();
+                  //<CreatePost />
+                }
+                //alignItems="left"
+                type="submit"
+                variant="contained"
+                //sx={{ mt: 2, mb: 0 }}
+              >
+                Create Post
+              </Button>
+              <Button
+                onClick={() => 
+                  setCurrentTab('groups')
+                }
+                //alignItems="left"
+                type="submit"
+                variant="contained"
+                //sx={{ mt: 0, mb: 2 }}
+              >
+                Create Group
+              </Button>
+              </div> 
+    <div className='rightContent'>
+    <ThemeProvider theme={createTheme}>
+      <Container component="main" maxWidth="xs" className='main'>
+        <CssBaseline />          
+          {renderTabContent()}
+      </Container>
+    </ThemeProvider>
+    </div>
+    </div>
+    </>
+  );
+}
+
 
 // function CreateGroupButton() {
-//   //This should be a redirect/nav button or just be a label, so as not to reset values in textfields.
+//   //This should be a redirect/nav button or just be a label, 
+//   //so as not to reset values in textfields.
 //   const handleCreateGroup = (event) => {
 //     event.preventDefault();
 //     CreateGroup();
@@ -40,66 +118,15 @@ const defaultTheme = createTheme();
 
 // }
 
-function deselectCommunicationRadio() {}
+// function deselectCommunicationRadio() {}
 
-function CheckboxLabels() {
-  //Might change how the page is designed and use the function to show checkboxes
-  return (
-    <FormGroup>
-      <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
-      <FormControlLabel required control={<Checkbox />} label="Required" />
-      <FormControlLabel disabled control={<Checkbox />} label="Disabled" />
-    </FormGroup>
-  );
-}
-
-export default function Create() {
-  // function handleSubmit(event) {
-  //   event.preventDefault();
-  //   <CreatePost />
-  // }
-  return (
-    //<h1>Create</h1>
-    <ThemeProvider theme={createTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'left',
-          }}
-        ></Box>
-        <Grid item xs={12} sm={5} marginTop={2}>
-          <h1>Create</h1>
-          {/* <CreatePost /> */}
-          {/*CreatePost()*/}
-          <Button
-            onClick={() => {
-              alert("This is a test")
-              //CreatePost();
-              //<CreatePost />
-            }}
-            alignItems="left"
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2, mb: 0 }}
-          >
-            Create Post
-          </Button>
-          <Button
-            alignItems="left"
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 0, mb: 2 }}
-          >
-            Create Group
-          </Button>
-        </Grid>
-      </Container>
-    </ThemeProvider>
-  );
-}
+// function CheckboxLabels() {
+//   //Might change how the page is designed and use the function to show checkboxes
+//   return (
+//     <FormGroup>
+//       <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
+//       <FormControlLabel required control={<Checkbox />} label="Required" />
+//       <FormControlLabel disabled control={<Checkbox />} label="Disabled" />
+//     </FormGroup>
+//   );
+// }

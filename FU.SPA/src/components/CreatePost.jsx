@@ -34,30 +34,19 @@ export default function CreatePost() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'left',
-          }}
-        ></Box>
-        <Box
-          sx={{
-            marginTop: 8,
+            marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            {/* <LockOutlinedIcon /> */}
-          </Avatar>
           <Typography component="h1" variant="h5">
-            Create
+            Create Post
           </Typography>
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            //onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -86,8 +75,7 @@ export default function CreatePost() {
                 sx={{
                   marginTop: 3,
                   display: 'flex',
-                  marginLeft: 2,
-                  marginRight: 2.5,
+                  marginLeft: 2
                 }}
               >
                 <Typography component="h1" variant="h6">
@@ -97,7 +85,6 @@ export default function CreatePost() {
               <Grid item xs={12} sm={4}>
                 <TextField
                   name="startTime"
-                  fullWidth
                   id="startTime"
                   label="Start Time"
                 />
