@@ -1,0 +1,40 @@
+/* Chat.css */
+
+/* body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  } */
+  
+  .chat-wrapper {
+    /* display: flex; */
+    /* flex-direction: column-reverse; */
+    /* height: auto; */
+  }
+  
+  /* Styles for the chat container */
+  .chat-container {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: scroll;
+    /* flex-direction: column-reverse; */
+    max-height: 85vh;
+  }
+  
+  .bottom-bar {
+    display: flex;
+    padding: 1rem;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+    position: absolute;
+    bottom: 0px;
+    width: 98%;
+  }
+  
+  /* Style for the TextField in bottom-bar */
+  .message-input {
+    flex: 1; /* Take remaining space */
+    margin-right: 1rem; /* Add some space between TextField and Button */
+  }
+  

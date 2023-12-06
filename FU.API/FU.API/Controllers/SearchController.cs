@@ -5,6 +5,7 @@ using FU.API.DTOs.Search;
 using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
