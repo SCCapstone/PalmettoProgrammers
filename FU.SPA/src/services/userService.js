@@ -1,6 +1,6 @@
 import AuthService from './authService';
 
-import config from "../config";
+import config from '../config';
 const API_BASE_URL = config.API_URL;
 
 const getConnectedPosts = async () => {
@@ -42,5 +42,9 @@ const getConnectedPlayers = async () => {
   return await response.json();
 };
 
-const UserService = { getConnectedPosts, getConnectedGroups, getConnectedPlayers };
+const UserService = {
+  getConnectedPosts,
+  getConnectedGroups,
+  getConnectedPlayers,
+};
 export default UserService;
