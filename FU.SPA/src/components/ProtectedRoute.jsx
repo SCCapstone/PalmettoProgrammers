@@ -1,8 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-export const ProtectedRoute = () => {
-  let auth = {'token': true}
+export const ProtectedRoute = ( { auth, children} ) => {
   return (
-    auth.token ? <Outlet /> : <Navigate to='/sigin'/>
+    auth ? children : <Navigate to='/signin'/>
  )
 }

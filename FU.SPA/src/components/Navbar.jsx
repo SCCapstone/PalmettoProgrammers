@@ -1,6 +1,6 @@
 import { Link, useMatch, useResolvedPath } from 'react-router-dom';
 
-export default function Navbar() {
+export default function Navbar( {auth} ) {
   return (
     <nav className="nav">
       <div className="left-content">
@@ -16,8 +16,12 @@ export default function Navbar() {
       </div>
       <div className="right-content">
         <ul>
-        <CustomLink to="/SignIn">Sign In</CustomLink>
-        <CustomLink to="/SignUp">Sign Up</CustomLink>
+          { auth ? (<div>Sign Out</div>) : (
+            <div>
+              <CustomLink to="/SignIn">Sign In</CustomLink>
+              <CustomLink to="/SignUp">Sign Up</CustomLink>
+            </div>
+          )}
         </ul>
       </div>
     </nav>

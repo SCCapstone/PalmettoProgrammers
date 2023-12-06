@@ -12,23 +12,23 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { useState } from 'react';
 
 function App() {
-  const [user, signIn] = useState(null);
+  const user = false;
 
   return (
     <>
-      <Navbar />
+      <Navbar auth={user} />
       <div className="container">
         <Routes>
           <Route index element={<Home />} />
           <Route path="/" element={<Home />} /> 
           <Route path="/discover" element={<Discover />} />
           <Route path="/social" element={
-            <ProtectedRoute>
+            <ProtectedRoute auth={user} >
               <Social />
             </ProtectedRoute>
           } />
           <Route path="/create" element={
-            <ProtectedRoute>
+            <ProtectedRoute auth={user} >
               <Create />
             </ProtectedRoute>
           } />
