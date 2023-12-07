@@ -12,12 +12,15 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthService from '../../services/authService';
+import { useNavigate } from 'react-router-dom';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -28,6 +31,7 @@ export default function SignUp() {
     };
 
     AuthService.signUp(creds);
+    navigate('/SignIn');
   };
 
   return (

@@ -146,7 +146,7 @@ public static class Mapper
         return query;
     }
 
-    public static PostResponseDTO ToDto(this Post post)
+    public static PostResponseDTO ToDto(this Post post, bool hasJoined = false)
     {
         return new PostResponseDTO()
         {
@@ -160,6 +160,7 @@ public static class Mapper
             ChatId = post.ChatId,
             Creator = post.Creator.Username,
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
+            HasJoined = hasJoined,
         };
     }
 
