@@ -2,32 +2,17 @@ import * as React from 'react';
 import {
   Button,
   TextField,
-  Link,
   Box,
   Container,
   Typography,
   CssBaseline,
-  Avatar,
-  FormControlLabel,
-  Icon,
   Grid,
-  Checkbox,
 } from '@mui/material';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-//const defaultTheme = createTheme();
-
-//Look at changing to const CreatePost = () => {
-//    CreatingPost();
-//} or something similiar.
-//Design of the page.
-
 export default function CreatePost() {
-  // going to use in another function for clicking
   return (
     <ThemeProvider theme={createTheme}>
       <Container component="main" maxWidth="xs">
@@ -113,27 +98,6 @@ export default function CreatePost() {
                 }}
               >
                 <Typography component="h1" variant="h6">
-                  Communication
-                </Typography>
-              </Box>{' '}
-              {/* Need to place radius buttons under the Communication */}
-              <Grid item xs={12} sm={9} marginTop={2}>
-                <label>Any</label>
-                <Radio>Any</Radio>
-                <label>Mic</label>
-                <Radio>Mic</Radio>
-                <label>No Mic</label>
-                <Radio>No Mic</Radio>
-              </Grid>
-              <Box
-                sx={{
-                  marginTop: 3,
-                  display: 'flex',
-                  marginLeft: 2,
-                  marginRight: 2.5,
-                }}
-              >
-                <Typography component="h1" variant="h6">
                   Hashtags
                 </Typography>
               </Box>
@@ -146,49 +110,6 @@ export default function CreatePost() {
                   autoComplete="searchHashtags"
                 />{' '}
                 {/* Need to put checkboxes under the hashtag section, which will display*/}
-              </Grid>
-              <Box
-                sx={{
-                  marginTop: 3,
-                  display: 'flex',
-                  marginLeft: 2,
-                  marginRight: 2.5,
-                }}
-              >
-                <Typography component="h1" variant="h6">
-                  {' '}
-                  {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
-                  Number of Players Needed
-                </Typography>
-              </Box>
-              <Grid item xs={12} sm={4}>
-                {/* Might set default value to 1*/}
-                <TextField
-                  name="minNum"
-                  fullWidth
-                  id="minNum"
-                  label="Min Number"
-                />
-              </Grid>
-              <Box
-                sx={{
-                  marginLeft: 2,
-                  marginTop: 3,
-                  display: 'flex',
-                }}
-              >
-                <Typography component="h1" variant="h6">
-                  and
-                </Typography>
-              </Box>
-              <Grid item xs={12} sm={4}>
-                {/* Might set default value to 3*/}
-                <TextField
-                  fullWidth
-                  id="maxNum"
-                  label="Max Number"
-                  name="maxNum"
-                />
               </Grid>
               <Box
                 sx={{
