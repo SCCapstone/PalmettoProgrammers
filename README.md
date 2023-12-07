@@ -75,9 +75,9 @@ Follow Prettier's HTML, CSS, JavaScript/JSX [style formatting](https://prettier.
 Not yet deployed. Will deploy to Azure using publish profile.
 
 # Authors
-Ethan Adams - epadams@email.sc.edu
-
 Aaron Keys - alkeys@email.sc.edu
+
+Ethan Adams - epadams@email.sc.edu
 
 Evan Scales - escales@email.sc.edu
 
