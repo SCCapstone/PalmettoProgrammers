@@ -72,7 +72,7 @@ Follow Google's C# [style guide](https://google.github.io/styleguide/csharp-styl
 Follow Prettier's HTML, CSS, JavaScript/JSX [style formatting](https://prettier.io/docs/en/)
 
 # Deployment
-Not yet deployed. Will deploy to Azure using publish profile.
+Deployed to Azure using GitHub Actions.
 
 # Authors
 Aaron Keys - alkeys@email.sc.edu
