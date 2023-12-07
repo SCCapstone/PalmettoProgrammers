@@ -18,17 +18,19 @@ A random string of 32+ characters is required in the `JWT_SECRET` environment va
 JWT_SECRET="my-32-character-ultra-secure-and-ultra-long-secret"
 ```
 ### Starting Postgres
-Install and start the DB by installing Docker and running the following command.
+Install and start the database by installing Docker and running the following command.
 ```
 docker run --name postgres-490 -e POSTGRES_DB=fu_dev -e POSTGRES_PASSWORD=dev -e POSTGRES_USER=dev -p 5432:5432 postgres:alpine
 ```
 To run the container at a later time, run:
-```docker container start postgres-490```
+```
+docker container start postgres-490
+```
 
 Alternatively, install and start a PostgreSQL database manually.
 
 ### Setup Postgres
-Run the following command to apply the latest db changes.
+Run the following command to apply the latest database changes.
 Make sure you have the Entity Framework tool installed.
 ```
 dotnet tool install --global dotnet-ef
@@ -67,9 +69,8 @@ npm run dev
 ## FU.API
 Follow Google's C# [style guide](https://google.github.io/styleguide/csharp-style.html)
 ## FU.SPA
-Follow Google's JavaScript [style guide](https://google.github.io/styleguide/jsguide.html)
+Follow Prettier's HTML, CSS, JavaScript/JSX [style formatting](https://prettier.io/docs/en/)
 
-Follow Google's HTML/CSS [style guide](https://google.github.io/styleguide/htmlcssguide.html)
 # Deployment
 Not yet deployed. Will deploy to Azure using publish profile.
 
