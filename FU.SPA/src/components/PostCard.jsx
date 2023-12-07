@@ -40,7 +40,9 @@ const PostCard = ({ post }) => {
         </div>
       </CardContent>
       <CardActions>
-        <Button size="large">View</Button>
+        <Button size="large">
+          <Link to={`/posts/${post.Id}`}>View</Link>
+        </Button>
         {post.hasJoined && (
           <Link to={`/chat/${post.chatId}`} style={{ textDecoration: 'none' }}>
             <Button size="large">Chat</Button>
