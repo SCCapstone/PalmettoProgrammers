@@ -14,13 +14,14 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PostService from '../services/postService';
 import TagService from '../services/tagService';
+import GameService from '../services/gameService';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
 export default function CreatePost() {
-  const [game, setGame] = useState('');
+  const [gameName, setGameName] = useState('');
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs());
   const [endTime, setEndTime] = useState(dayjs());
@@ -29,13 +30,15 @@ export default function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let game = await GameService.findOrCreateGameByTitle(gameName);
+
     const post = {
       title: title,
       description: description,
       startTime: startTime.toISOString(),
       endTime: endTime.toISOString(),
       tagIds: [],
-      gameId: 1,
+      gameId: game.id,
     };
 
     await PostService.createPost(post);
@@ -72,8 +75,8 @@ export default function CreatePost() {
               label="Game" //might want to put a Search icon in front, if we can figure it out.
               type="searchGames"
               name="searchGames"
-              value={game}
-              onChange={(e) => setGame(e.target.value)}
+              value={gameName}
+              onChange={(e) => setGameName(e.target.value)}
             />
             <br />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
