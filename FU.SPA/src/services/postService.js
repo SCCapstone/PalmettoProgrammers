@@ -1,6 +1,6 @@
 import config from '../config';
 const API_BASE_URL = config.API_URL;
-const LOCAL_STORAGE_TOKEN_KEY = 'token';
+import { authService } from './authService'
 
 // Create post request
 const createPost = async (params) => {
@@ -8,7 +8,7 @@ const createPost = async (params) => {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
+      ...authService.getAuthHeader()
     },
     body: JSON.stringify(params),
   });
