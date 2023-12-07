@@ -8,7 +8,7 @@ const createPost = async (params) => {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      ...AuthService.getAuthHeader()
+      ...AuthService.getAuthHeader(),
     },
     body: JSON.stringify(params),
   });
