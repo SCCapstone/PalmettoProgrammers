@@ -7,6 +7,7 @@ import {
   Grid,
   Autocomplete,
   Checkbox,
+  createFilterOptions,
 } from '@mui/material';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { useEffect, useState } from 'react';
@@ -26,9 +27,17 @@ export default function CreatePost() {
   const [startTime, setStartTime] = useState(dayjs());
   const [endTime, setEndTime] = useState(dayjs());
   const [description, setDescription] = useState('');
+  const [tags, setTags] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let tagIds = [];
+
+    for (const tag of tags) {
+      const newTag = await TagService.findOrCreateTagByName(tag.name);
+      tagIds.push(newTag.id);
+    }
 
     let game = await GameService.findOrCreateGameByTitle(gameName);
 
@@ -37,7 +46,7 @@ export default function CreatePost() {
       description: description,
       startTime: startTime.toISOString(),
       endTime: endTime.toISOString(),
-      tagIds: [],
+      tagIds: tagIds,
       gameId: game.id,
     };
 
@@ -92,7 +101,7 @@ export default function CreatePost() {
               />
             </LocalizationProvider>
             <Grid item xs={12}>
-              <TagsSelector />
+              <TagsSelector onChange={setTags} />
             </Grid>
             <Box
               sx={{
@@ -133,36 +142,59 @@ export default function CreatePost() {
 
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
+const filter = createFilterOptions();
 
 const TagsSelector = ({ onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
+  const [value, setValue] = useState([]);
 
   useEffect(() => {
     TagService.searchTags('').then((tags) => setTagOptions(tags));
   }, []);
 
-  const onInputChange = (event, newValue) => {
-    if (typeof newValue === 'string') {
-      setValue({
-        title: newValue,
-      });
-    } else if (newValue && newValue.inputValue) {
-      // Create a new value from the user input
-      setValue({
-        title: newValue.inputValue,
-      });
-    } else {
-      setValue(newValue);
+  const onInputChange = (event, newValues) => {
+    for (const newValue of newValues) {
+      if (newValue.id === null) {
+        // if not in options add to options
+        if (!tagOptions.some((o) => o.name === newValue.name)) {
+          const newOptions = tagOptions.concat([newValue]);
+          setTagOptions(newOptions);
+        }
+      }
     }
+
+    setValue(newValues);
+    onChange(newValues);
+  };
+
+  const onFilterOptions = (options, params) => {
+    const filtered = filter(options, params);
+
+    const { inputValue } = params;
+    // Suggest the creation of a new value
+    const isExisting = options.some((option) => inputValue === option.name);
+    if (inputValue !== '' && !isExisting) {
+      filtered.push({
+        // inputValue,
+        id: null,
+        name: inputValue,
+      });
+    }
+
+    return filtered;
   };
 
   return (
     <Autocomplete
       multiple
-      onChange={onChange}
+      clearOnBlur
+      value={value}
+      onChange={onInputChange}
       options={tagOptions}
       disableCloseOnSelect
-      getOptionLabel={(option) => option.name}
+      filterOptions={onFilterOptions}
+      getOptionLabel={(o) => o.name}
+      isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
