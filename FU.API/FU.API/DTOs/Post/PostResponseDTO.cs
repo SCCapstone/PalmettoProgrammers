@@ -21,4 +21,6 @@ public class PostResponseDTO
     public string Creator { get; set; } = string.Empty;
 
     public ICollection<string> Tags { get; set; } = new HashSet<string>();
+
+    public bool HasJoined { get; set; } = false;
 }

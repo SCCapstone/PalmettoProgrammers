@@ -1,17 +1,20 @@
 namespace FU.API.Controllers;
 
+using FU.API.DTOs.Post;
 using FU.API.DTOs.Search;
+using FU.API.Exceptions;
 using FU.API.Helpers;
-using FU.API.Services;
+using FU.API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
 public class SearchController : ControllerBase
 {
-    private readonly SearchService _searchService;
+    private readonly ISearchService _searchService;
 
-    public SearchController(SearchService searchService)
+    public SearchController(ISearchService searchService)
     {
         _searchService = searchService;
     }
@@ -21,6 +24,24 @@ public class SearchController : ControllerBase
     public async Task<IActionResult> SearchPosts([FromQuery] PostSearchRequestDTO request)
     {
         var posts = await _searchService.SearchPosts(request.ToPostQuery());
-        return Ok(posts.ToDtos());
+        var response = new List<PostResponseDTO>(posts.Count());
+
+        // Go through each post and check if the user has joined the post
+        var user = await _searchService.GetCurrentUser(User);
+
+        if (user is not null)
+        {
+            foreach (var post in posts)
+            {
+                var joined = await _searchService.HasJoinedPost(user.UserId, post.Id);
+                response.Add(post.ToDto(hasJoined: joined));
+            }
+        }
+        else
+        {
+            response = posts.ToDtos().ToList();
+        }
+
+        return Ok(response);
     }
 }
