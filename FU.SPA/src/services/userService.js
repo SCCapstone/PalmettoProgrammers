@@ -43,10 +43,9 @@ const getConnectedPlayers = async () => {
 };
 
 const getUserprofile = async (userString) => {
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userString}`,
-    { headers: { ...AuthService.getAuthHeader() } },
-  );
+  const response = await fetch(`${API_BASE_URL}/users/${userString}`, {
+    headers: { ...AuthService.getAuthHeader() },
+  });
 
   if (!response.ok) {
     throw new Error('Error getting groups');

@@ -28,12 +28,11 @@ export default function SignIn() {
       password: data.get('password'),
     };
 
-    AuthService.signIn(creds).then(response => {
+    AuthService.signIn(creds).then((response) => {
       login(response.token);
     });
 
     navigate('/');
-
   };
 
   // Creates and returns signin form
