@@ -12,7 +12,7 @@ export default function Navbar() {
     if (user) {
       return (
         <>
-          <p>{user.name}</p>
+          <p>{user.username}</p>
           <button onClick={logout}>Logout</button>
         </>
       );  
@@ -27,6 +27,7 @@ export default function Navbar() {
   };
 
   return (
+    <>
     <nav className="nav">
       <div className="left-content">
         <Link href="/" className="site-title">
@@ -45,6 +46,7 @@ export default function Navbar() {
         </ul>
       </div>
     </nav>
+    </>
   );
 }
 
