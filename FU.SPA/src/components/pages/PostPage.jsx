@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography, CssBaseline } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import PostService from '../../services/PostService';
-import { joinChatGroup, leaveChatGroup } from '../../services/signalrService';
+import PostService from '../../services/postService';
 const boxStyle = {
   maxWidth: 600,
   margin: 'auto',
@@ -11,12 +10,22 @@ const boxStyle = {
   marginLeft: 0,
 };
 
-const handleJoinPost = () => {
-  joinChatGroup(chatId);
+const handleJoinPost = async () => {
+  try {
+    await PostService.joinPost(postId);
+  
+  } catch (error) {
+    console.error('Error joining post:', error);
+  }
 };
 
-const handleLeavePost = () => {
-  leaveChatGroup(chatId);
+const handleLeavePost = async () => {
+  try {
+    await PostService.leavePost(postId);
+  
+  } catch (error) {
+    console.error('Error leaving post:', error);
+  }
 };
 
 const defaultTheme = createTheme();
@@ -75,13 +84,19 @@ const PostPage = () => {
             </Typography>
           </div>
           {!post.hasJoined && (
-            <Button variant="contained" color="primary" onClick={handleJoinPost}>
-          Join
+            <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleJoinPost}>
+            Join
             </Button>
         )}
           {post.hasJoined && (
-            <Button variant="contained" color="secondary" onClick={handleLeavePost}>
-          Leave
+            <Button 
+            variant="contained" 
+            color="secondary" 
+            onClick={handleLeavePost}>
+            Leave
             </Button>
         )}
           {post.hasJoined && (
