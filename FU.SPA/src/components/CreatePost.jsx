@@ -34,7 +34,7 @@ export default function CreatePost() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 1,
+            marginTop: 1 ,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -57,7 +57,7 @@ export default function CreatePost() {
                 }}
               >
                 <Typography component="h1" variant="h6">
-                  Game (Post Title)
+                  Post Title
                 </Typography>
               </Box>
               <Grid item xs={12}>
@@ -121,7 +121,7 @@ export default function CreatePost() {
                 </Typography>
               </Box>{' '}
               {/* Need to place radius buttons under the Communication */}
-              <Grid item xs={12} sm={5} marginTop={2}>
+              <Grid item xs={12} sm={9} marginTop={2}>
                 <label>Any</label>
                 <Radio>Any</Radio>
                 <label>Mic</label>
@@ -209,7 +209,7 @@ export default function CreatePost() {
                 </Typography>
               </Box>
               <Grid item xs={12} sm={6} marginTop={2}>
-                <TextareaAutosize aria-setsize={300}></TextareaAutosize>
+                <TextareaAutosize aria-setsize={300} size={500}></TextareaAutosize>
               </Grid>
             </Grid>
             <Button

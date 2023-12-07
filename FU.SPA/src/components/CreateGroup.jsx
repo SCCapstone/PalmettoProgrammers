@@ -75,7 +75,6 @@ export default function CreateGroup() {
                   marginTop: 3,
                   display: 'flex',
                   marginLeft: 2,
-                  marginRight: 2.5,
                 }}
               >
                 <Typography component="h1" variant="h6">
@@ -122,7 +121,7 @@ export default function CreateGroup() {
                 </Typography>
               </Box>{' '}
               {/* Need to place radius buttons under the Communication */}
-              <Grid item xs={12} sm={5} marginTop={2}>
+              <Grid item xs={12} sm={9} marginTop={2}>
                 <label>Any</label>
                 <Radio>Any</Radio>
                 <label>Mic</label>

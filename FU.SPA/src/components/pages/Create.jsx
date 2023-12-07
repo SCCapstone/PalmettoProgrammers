@@ -36,18 +36,6 @@ export default function Create() {
   const [posts, setPost] = useState([]);
   const [groups, setGroups] = useState([]);
 
-  // useEffect(() => {
-  //   if(currentTab === 'posts') {
-  //     //CreatePost();
-  //     <CreatePost />
-  //   } else if (currentTab === 'groups') {
-  //     //CreateGroup();
-  //     <CreateGroup />
-  //   } else {
-  //     alert('Something went wrong with the state effect');
-  //   }
-  // }, [currentTab]);
-
 const renderTabContent = () => {
   if (currentTab === 'posts') {
     return <CreatePost />;
