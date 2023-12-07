@@ -10,9 +10,15 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import AuthService from '../../services/authService';
+import UserContext from '../../context/userContext';
 import { startConnection } from '../../services/signalrService';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
+  const { login } = useContext(UserContext);
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -22,8 +28,12 @@ export default function SignIn() {
       password: data.get('password'),
     };
 
-    AuthService.signIn(creds);
-    startConnection();
+    AuthService.signIn(creds).then(response => {
+      login(response.token);
+    });
+
+    navigate('/');
+
   };
 
   // Creates and returns signin form
