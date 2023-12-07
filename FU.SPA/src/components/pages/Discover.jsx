@@ -1,15 +1,9 @@
-import { Autocomplete, Checkbox, TextField, Typography } from '@mui/material';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { TagsSelector, GamesSelector  } from '../Selectors';
 import SearchService from '../../services/searchService';
-import GameService from '../../services/gameService';
-import TagService from '../../services/tagService';
 import Posts from '../Posts';
 import './Discover.css';
-
-const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
 export default function Discover() {
   const [posts, setPosts] = useState([]);
@@ -44,70 +38,6 @@ export default function Discover() {
         <Posts posts={posts} />
       </div>
     </div>
-  );
-}
-
-function TagsSelector({ onChange }) {
-  const [tagOptions, setTagOptions] = useState([]);
-
-  useEffect(() => {
-    TagService.searchTags('').then((tags) => setTagOptions(tags));
-  }, []);
-
-  return (
-    <Autocomplete
-      multiple
-      onChange={onChange}
-      options={tagOptions}
-      disableCloseOnSelect
-      getOptionLabel={(option) => option.name}
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox
-            icon={checkboxIconBlank}
-            checkedIcon={checkboxIconChecked}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.name}
-        </li>
-      )}
-      renderInput={(params) => (
-        <TextField {...params} label="Tags" placeholder="" />
-      )}
-    />
-  );
-}
-
-function GamesSelector({ onChange }) {
-  const [gameOptions, setGameOptions] = useState([]);
-
-  useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
-  }, []);
-
-  return (
-    <Autocomplete
-      multiple
-      onChange={onChange}
-      options={gameOptions}
-      disableCloseOnSelect
-      getOptionLabel={(option) => option.name}
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox
-            icon={checkboxIconBlank}
-            checkedIcon={checkboxIconChecked}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.name}
-        </li>
-      )}
-      renderInput={(params) => (
-        <TextField {...params} label="Games" placeholder="" />
-      )}
-    />
   );
 }
 
