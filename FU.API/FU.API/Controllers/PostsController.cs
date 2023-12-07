@@ -44,7 +44,15 @@ public class PostsController : ControllerBase
             return NotFound();
         }
 
-        var response = post.ToDto();
+        var hasJoinedPost = false;
+        var user = await _postService.GetCurrentUser(User);
+
+        if (user is not null)
+        {
+            hasJoinedPost = await _postService.HasJoinedPost(user.UserId, postId);
+        }
+
+        var response = post.ToDto(hasJoined: hasJoinedPost);
 
         return Ok(response);
     }

@@ -2,14 +2,16 @@ namespace FU.API.Services;
 
 using System.Linq.Expressions;
 using FU.API.Data;
+using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
 
-public class SearchService
+public class SearchService : CommonService, ISearchService
 {
     private readonly AppDbContext _dbContext;
 
     public SearchService(AppDbContext dbContext)
+        : base(dbContext)
     {
         _dbContext = dbContext;
     }

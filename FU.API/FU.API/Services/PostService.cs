@@ -72,12 +72,13 @@ public class PostService : CommonService, IPostService
         var post = await _dbContext.Posts
             .Where(p => p.Id == postId)
             .Include(p => p.Chat)
+            .ThenInclude(c => c.Members)
             .FirstOrDefaultAsync() ?? throw new PostException("Post does not exist");
         var chat = post.Chat;
         var userId = user.UserId;
 
         // Check that the post is not full
-        if (post.MaxPlayers >= chat.Members.Count)
+        if (post.MaxPlayers <= chat.Members.Count)
         {
             throw new PostException("Post is full");
         }
