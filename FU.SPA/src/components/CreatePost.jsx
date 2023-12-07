@@ -34,7 +34,7 @@ export default function CreatePost() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 1 ,
+            marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -75,7 +75,7 @@ export default function CreatePost() {
                 sx={{
                   marginTop: 3,
                   display: 'flex',
-                  marginLeft: 2
+                  marginLeft: 2,
                 }}
               >
                 <Typography component="h1" variant="h6">
@@ -83,11 +83,7 @@ export default function CreatePost() {
                 </Typography>
               </Box>
               <Grid item xs={12} sm={4}>
-                <TextField
-                  name="startTime"
-                  id="startTime"
-                  label="Start Time"
-                />
+                <TextField name="startTime" id="startTime" label="Start Time" />
               </Grid>
               <Box
                 sx={{
@@ -209,7 +205,10 @@ export default function CreatePost() {
                 </Typography>
               </Box>
               <Grid item xs={12} sm={6} marginTop={2}>
-                <TextareaAutosize aria-setsize={300} size={500}></TextareaAutosize>
+                <TextareaAutosize
+                  aria-setsize={300}
+                  size={500}
+                ></TextareaAutosize>
               </Grid>
             </Grid>
             <Button

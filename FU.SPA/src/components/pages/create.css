@@ -1,13 +1,13 @@
-.container{
-    display: flex;
+.container {
+  display: flex;
 }
 
 .leftContent {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .rightContent {
-    display: flex;
-    margin-left: 575px;
+  display: flex;
+  margin-left: 575px;
 }

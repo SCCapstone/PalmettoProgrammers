@@ -1,4 +1,3 @@
-<<<<<<< .merge_file_3uOypY
 import * as React from 'react';
 import {
   Button,
@@ -20,80 +19,79 @@ import Radio from '@mui/material/Radio';
 import CreatePost from '../CreatePost.jsx';
 import { useEffect, useState } from 'react';
 import CreateGroup from '../CreateGroup.jsx';
-import "./create.css";
+import './create.css';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 //const defaultTheme = createTheme();
-
-
-=======
->>>>>>> .merge_file_WZ0VnC
 
 export default function Create() {
   // function handleSubmit(event) {
   //   event.preventDefault();
   //   <CreatePost />
   // }
-  const [currentTab, setCurrentTab] = useState('posts'); // posts && groups for now and later maybe players, depending on how we 
+  const [currentTab, setCurrentTab] = useState('posts'); // posts && groups for now and later maybe players, depending on how we
   const [posts, setPost] = useState([]);
   const [groups, setGroups] = useState([]);
 
-const renderTabContent = () => {
-  if (currentTab === 'posts') {
-    return <CreatePost />;
-  } else if (currentTab === 'groups') {
-    return <CreateGroup />;
-  } else {
-    return <p><b>Players hasn't been set up yet</b></p>;
-  }
-}
+  const renderTabContent = () => {
+    if (currentTab === 'posts') {
+      return <CreatePost />;
+    } else if (currentTab === 'groups') {
+      return <CreateGroup />;
+    } else {
+      return (
+        <p>
+          <b>Players hasn't been set up yet</b>
+        </p>
+      );
+    }
+  };
 
-  return (<>
-  <div className='container'>
-    <div className='leftContent'>
-              <Button
-                onClick={() => 
-                  //alert("This is a test")
-                  setCurrentTab('posts')
-                  //CreatePost();
-                  //<CreatePost />
-                }
-                //alignItems="left"
-                type="submit"
-                variant="contained"
-                //sx={{ mt: 2, mb: 0 }}
-              >
-                Create Post
-              </Button>
-              <Button
-                onClick={() => 
-                  setCurrentTab('groups')
-                }
-                //alignItems="left"
-                type="submit"
-                variant="contained"
-                //sx={{ mt: 0, mb: 2 }}
-              >
-                Create Group
-              </Button>
-              </div> 
-    <div className='rightContent'>
-    <ThemeProvider theme={createTheme}>
-      <Container component="main" maxWidth="xs" className='main'>
-        <CssBaseline />          
-          {renderTabContent()}
-      </Container>
-    </ThemeProvider>
-    </div>
-    </div>
+  return (
+    <>
+      <div className="container">
+        <div className="leftContent">
+          <Button
+            onClick={
+              () =>
+                //alert("This is a test")
+                setCurrentTab('posts')
+              //CreatePost();
+              //<CreatePost />
+            }
+            //alignItems="left"
+            type="submit"
+            variant="contained"
+            //sx={{ mt: 2, mb: 0 }}
+          >
+            Create Post
+          </Button>
+          <Button
+            onClick={() => setCurrentTab('groups')}
+            //alignItems="left"
+            type="submit"
+            variant="contained"
+            //sx={{ mt: 0, mb: 2 }}
+          >
+            Create Group
+          </Button>
+        </div>
+        <div className="rightContent">
+          <ThemeProvider theme={createTheme}>
+            <Container component="main" maxWidth="xs" className="main">
+              <CssBaseline />
+              {renderTabContent()}
+            </Container>
+          </ThemeProvider>
+        </div>
+      </div>
     </>
   );
 }
 
-
 // function CreateGroupButton() {
-//   //This should be a redirect/nav button or just be a label, 
+//   //This should be a redirect/nav button or just be a label,
 //   //so as not to reset values in textfields.
 //   const handleCreateGroup = (event) => {
 //     event.preventDefault();

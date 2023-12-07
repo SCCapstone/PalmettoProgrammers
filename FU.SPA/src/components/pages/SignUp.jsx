@@ -24,7 +24,7 @@ export default function SignUp() {
 
     const creds = {
       username: data.get('username'),
-      password: data.get('password')
+      password: data.get('password'),
     };
 
     AuthService.signUp(creds);
