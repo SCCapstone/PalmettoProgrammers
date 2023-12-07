@@ -3,11 +3,20 @@ import { Box, Container, Typography, CssBaseline } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PostService from '../../services/PostService';
+import { joinChatGroup, leaveChatGroup } from '../../services/signalrService';
 const boxStyle = {
   maxWidth: 600,
   margin: 'auto',
   marginTop: 16,
   marginLeft: 0,
+};
+
+const handleJoinPost = () => {
+  joinChatGroup(chatId);
+};
+
+const handleLeavePost = () => {
+  leaveChatGroup(chatId);
 };
 
 const defaultTheme = createTheme();
@@ -65,6 +74,16 @@ const PostPage = () => {
               {post.description}
             </Typography>
           </div>
+          {!post.hasJoined && (
+            <Button variant="contained" color="primary" onClick={handleJoinPost}>
+          Join
+            </Button>
+        )}
+          {post.hasJoined && (
+            <Button variant="contained" color="secondary" onClick={handleLeavePost}>
+          Leave
+            </Button>
+        )}
           {post.hasJoined && (
           <Link to={`/chat/${post.chatId}`} style={{ textDecoration: 'none' }}>
             <Button size="large">Chat</Button>
