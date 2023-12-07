@@ -42,9 +42,23 @@ const getConnectedPlayers = async () => {
   return await response.json();
 };
 
+const getUserprofile = async (userString) => {
+  const response = await fetch(
+    `${API_BASE_URL}/users/${userString}`,
+    { headers: { ...AuthService.getAuthHeader() } },
+  );
+
+  if (!response.ok) {
+    throw new Error('Error getting groups');
+  }
+
+  return await response.json();
+};
+
 const UserService = {
   getConnectedPosts,
   getConnectedGroups,
   getConnectedPlayers,
+  getUserprofile,
 };
 export default UserService;

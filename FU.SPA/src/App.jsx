@@ -10,26 +10,27 @@ import Chat from './components/pages/Chat';
 
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import { useState } from 'react';
+import UserProvider from './context/userProvider';
+
 
 function App() {
-  const user = false;
 
   return (
     <>
-      <Navbar auth={user} />
+      <UserProvider>
+      <Navbar />
       <div className="container">
         <Routes>
           <Route index element={<Home />} />
           <Route path="/" element={<Home />} /> 
           <Route path="/discover" element={<Discover />} />
           <Route path="/social" element={
-            <ProtectedRoute auth={user} >
+            <ProtectedRoute >
               <Social />
             </ProtectedRoute>
           } />
           <Route path="/create" element={
-            <ProtectedRoute auth={user} >
+            <ProtectedRoute >
               <Create />
             </ProtectedRoute>
           } />
@@ -39,6 +40,7 @@ function App() {
           <Route path="*" element={<NoPage />} />
         </Routes>
       </div>
+      </UserProvider>
     </>
   );
 }
