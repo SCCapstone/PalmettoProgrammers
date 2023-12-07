@@ -3,7 +3,6 @@ import UserContext from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
-
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
   const navigate = useNavigate();
@@ -12,10 +11,10 @@ export default function Navbar() {
     if (user) {
       return (
         <>
-          <p>{user.name}</p>
+          <p>{user.username}</p>
           <button onClick={logout}>Logout</button>
         </>
-      );  
+      );
     } else {
       return (
         <>
@@ -40,16 +39,11 @@ export default function Navbar() {
         </ul>
       </div>
       <div className="right-content">
-        <ul>
-        {renderTabContent()}
-        </ul>
+        <ul>{renderTabContent()}</ul>
       </div>
     </nav>
   );
 }
-
-
-
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
