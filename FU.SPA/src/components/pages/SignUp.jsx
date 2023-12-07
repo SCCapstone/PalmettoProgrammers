@@ -111,7 +111,7 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -120,7 +120,7 @@ export default function SignUp() {
                   type="confirmPassword"
                   id="confirmPassword"
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={4}>
                 <TextField
                   required

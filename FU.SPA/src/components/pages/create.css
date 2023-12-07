@@ -9,5 +9,6 @@
 
 .rightContent {
   display: flex;
-  margin-left: 575px;
+  /* margin-left: 575px; */ /* This is for when the buttons are displaying */
+  margin-left: 650px; /* This is for when the buttons are not displaying */
 }
