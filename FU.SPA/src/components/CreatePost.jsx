@@ -66,7 +66,15 @@ export default function CreatePost() {
         <Typography component="h1" variant="h5">
           Create Post
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.preventDefault();
+          }}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
             <TextField
               required //may want to get rid of this and just check if it's empty when clicking create button.
