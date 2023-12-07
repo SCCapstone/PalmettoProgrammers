@@ -24,24 +24,6 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/" element={<Home />} />
           <Route path="/discover" element={<Discover />} />
-<<<<<<< HEAD
-          <Route
-            path="/social"
-            element={
-              <ProtectedRoute>
-                <Social />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/create"
-            element={
-              <ProtectedRoute>
-                <Create />
-              </ProtectedRoute>
-            }
-          />
-=======
           <Route path="/social" element={
             <ProtectedRoute >
               <Social />
@@ -52,7 +34,6 @@ function App() {
               <Create />
             </ProtectedRoute>
           } />
->>>>>>> main
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/chat/:chatId" element={<Chat />} />
