@@ -51,7 +51,7 @@ export default function Create() {
   return (
     <>
       <div className="container">
-        <div className="leftContent">
+        {/* <div className="leftContent">
           <Button
             onClick={
               () =>
@@ -76,7 +76,7 @@ export default function Create() {
           >
             Create Group
           </Button>
-        </div>
+        </div> */}
         <div className="rightContent">
           <ThemeProvider theme={createTheme}>
             <Container component="main" maxWidth="xs" className="main">
