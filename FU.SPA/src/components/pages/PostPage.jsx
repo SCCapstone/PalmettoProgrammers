@@ -65,6 +65,11 @@ const PostPage = () => {
               {post.description}
             </Typography>
           </div>
+          {post.hasJoined && (
+          <Link to={`/chat/${post.chatId}`} style={{ textDecoration: 'none' }}>
+            <Button size="large">Chat</Button>
+          </Link>
+        )}
         </Box>
       </Container>
     </ThemeProvider>
