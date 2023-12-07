@@ -17,7 +17,12 @@ const searchPosts = async (query) => {
     queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
   }
 
-  const authHeader = AuthService.getAuthHeader();
+  let authHeader = null
+  try {
+    authHeader = AuthService.getAuthHeader();
+  } catch {
+    // Nothing
+  }
 
   const response = await fetch(`${API_BASE_URL}/search/posts?${queryString}`, {
     headers: {
