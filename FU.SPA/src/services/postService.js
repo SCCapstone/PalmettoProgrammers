@@ -1,6 +1,6 @@
 import config from '../config';
 const API_BASE_URL = config.API_URL;
-import { authService } from './authService'
+import AuthService from './authService';
 
 // Create post request
 const createPost = async (params) => {
@@ -8,7 +8,7 @@ const createPost = async (params) => {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      ...authService.getAuthHeader()
+      ...AuthService.getAuthHeader()
     },
     body: JSON.stringify(params),
   });
