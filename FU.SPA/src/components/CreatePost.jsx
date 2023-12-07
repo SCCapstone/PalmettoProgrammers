@@ -20,6 +20,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreatePost() {
   const [gameName, setGameName] = useState('');
@@ -28,6 +29,7 @@ export default function CreatePost() {
   const [endTime, setEndTime] = useState(dayjs());
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +52,13 @@ export default function CreatePost() {
       gameId: game.id,
     };
 
-    await PostService.createPost(post);
+    try {
+      const newPost = await PostService.createPost(post);
+      navigate(`/posts/${newPost.id}`);
+    } catch (e) {
+      window.alert('Error creating post');
+      console.log(e);
+    }
   };
 
   return (
