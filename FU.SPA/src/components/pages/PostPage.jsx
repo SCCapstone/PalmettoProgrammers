@@ -30,10 +30,6 @@ const handleLeavePost = async () => {
 
 const defaultTheme = createTheme();
 const PostPage = () => {
-  const dateTimeString = new Date(post.startTime).toLocaleString('en-US', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
 
   const { postId } = useParams();
   const [post, setPost] = useState(null);
@@ -50,6 +46,16 @@ const PostPage = () => {
 
     fetchPostDetails();
   }, [postId]);
+
+  let dateTimeString = 'Unspecified time';
+
+  if (post.startTime) {
+    dateTimeString = new Date(post.startTime).toLocaleString('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+  }
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
