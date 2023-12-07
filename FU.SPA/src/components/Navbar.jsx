@@ -11,7 +11,7 @@ export default function Navbar() {
     if (user) {
       return (
         <>
-          <p>{user.name}</p>
+          <p>{user.username}</p>
           <button onClick={logout}>Logout</button>
         </>
       );
@@ -34,8 +34,12 @@ export default function Navbar() {
         <ul>
           <CustomLink to="/">Home</CustomLink>
           <CustomLink to="/discover">Discover</CustomLink>
-          <CustomLink to="/social">Social</CustomLink>
-          <CustomLink to="/create">Create</CustomLink>
+          {user && (
+            <>
+              <CustomLink to="/social">Social</CustomLink>
+              <CustomLink to="/create">Create</CustomLink>
+            </>
+          )}
         </ul>
       </div>
       <div className="right-content">
