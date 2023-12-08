@@ -6,9 +6,10 @@ import {
   Typography,
   Chip,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const PostCard = ({ post }) => {
+  const navigate = useNavigate();
   let dateTimeString = 'Unspecified time';
 
   if (post.startTime) {
@@ -40,14 +41,9 @@ const PostCard = ({ post }) => {
         </div>
       </CardContent>
       <CardActions>
-        <Button size="large">
-          <Link to={`/posts/${post.Id}`}>View</Link>
+        <Button size="large" onClick={(e) => navigate(`/posts/${post.id}`)}>
+          View
         </Button>
-        {post.hasJoined && (
-          <Link to={`/chat/${post.chatId}`} style={{ textDecoration: 'none' }}>
-            <Button size="large">Chat</Button>
-          </Link>
-        )}
       </CardActions>
     </Card>
   );
