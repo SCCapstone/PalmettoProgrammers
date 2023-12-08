@@ -28,10 +28,9 @@ export default function SignUp() {
     const creds = {
       username: data.get('username'),
       password: data.get('password'),
-      confirmPassword: data.get('confirmPassword')
     };
 
-    if (creds.password !== creds.confirmPassword) {
+    if (creds.password !== data.get('confirmPassword')) {
       alert("Passwords do not match");
       return;
     }
