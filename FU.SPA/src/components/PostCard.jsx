@@ -26,6 +26,7 @@ const PostCard = ({ post }) => {
           by {post.creator}
         </Typography>
         <Typography variant="h5">{post.title}</Typography>
+        <Typography variant="h6">{post.game}</Typography>
         {post.startTime && (
           <Typography variant="body1">{dateTimeString}</Typography>
         )}
