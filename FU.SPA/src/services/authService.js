@@ -39,11 +39,6 @@ const signUp = async (credentials) => {
 
 const getToken = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
-
-  if (!token) {
-    throw new Error('No token in local storage');
-  }
-
   return token;
 };
 
