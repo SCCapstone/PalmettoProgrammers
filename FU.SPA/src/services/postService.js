@@ -24,15 +24,24 @@ const createPost = async (params) => {
 };
 
 const getPostDetails = async (postId) => {
-  const response = await fetch(`${API_BASE_URL}/posts/${postId}`);
+  const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
 
-  if (!response.ok) {
+if (!response.ok) {
 
-    throw new Error('Error getting post details');
+  throw new Error('Error getting post details');
 
-  }
+}
 
-  return await response.json();
+const jsonResponse = await response.json();
+
+console.log(jsonResponse);
+
+return jsonResponse;
 };
 
 const joinPost = async (postId) => {
