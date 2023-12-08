@@ -28,7 +28,13 @@ export default function SignUp() {
     const creds = {
       username: data.get('username'),
       password: data.get('password'),
+      confirmPassword: data.get('confirmPassword')
     };
+
+    if (creds.password !== creds.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
 
     AuthService.signUp(creds);
     navigate('/SignIn');
@@ -70,26 +76,6 @@ export default function SignUp() {
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -111,44 +97,15 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              {/* <Grid item xs={12}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
                   name="confirmPassword"
                   label="Confirm Password"
-                  type="confirmPassword"
+                  type="password"
                   id="confirmPassword"
-                />
-              </Grid> */}
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  required
-                  fullWidth
-                  name="ageDay"
-                  label="Day"
-                  type="ageDay"
-                  id="ageDay"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  required
-                  fullWidth
-                  name="ageMonth"
-                  label="Month"
-                  type="ageMonth"
-                  id="ageMonth"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  required
-                  fullWidth
-                  name="ageYear"
-                  label="Year"
-                  type="ageYear"
-                  id="ageYear"
+                  autoComplete="new-password"
                 />
               </Grid>
             </Grid>
