@@ -24,24 +24,12 @@ const createPost = async (params) => {
 };
 
 const getPostDetails = async (postId) => {
-  const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  });
+  const response = await fetch(`${API_BASE_URL}/posts/${postId}`, { method: 'GET', });
+  const jsonResponse = await response.json();
 
-if (!response.ok) {
+  console.log(jsonResponse);
 
-  throw new Error('Error getting post details');
-
-}
-
-const jsonResponse = await response.json();
-
-console.log(jsonResponse);
-
-return jsonResponse;
+  return jsonResponse;
 };
 
 const joinPost = async (postId) => {
@@ -73,10 +61,11 @@ const leavePost = async (postId) => {
 
   return await response.json();
 };
-const PostService = { 
-  createPost, 
-  getPostDetails, 
-  joinPost, 
-  leavePost 
+
+const PostService = {
+  createPost,
+  getPostDetails,
+  joinPost,
+  leavePost
 };
 export default PostService;
