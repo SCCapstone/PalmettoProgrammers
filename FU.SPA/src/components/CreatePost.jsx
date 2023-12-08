@@ -46,8 +46,8 @@ export default function CreatePost() {
     const post = {
       title: title,
       description: description,
-      startTime: startTime.toISOString(),
-      endTime: endTime.toISOString(),
+      startTime: startTime !== null ? startTime.toISOString() : null,
+      endTime: endTime !== null ? endTime.toISOString() : null,
       tagIds: tagIds,
       gameId: game.id,
     };

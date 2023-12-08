@@ -44,6 +44,11 @@ const PostCard = ({ post }) => {
         <Button size="large" onClick={(e) => navigate(`/posts/${post.id}`)}>
           View
         </Button>
+        {post.hasJoined && (
+        <Button size="large" onClick={(e) => navigate(`/chat/${post.chatId}`)}>
+          Chat
+        </Button>
+        )}
       </CardActions>
     </Card>
   );
