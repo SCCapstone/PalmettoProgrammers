@@ -30,12 +30,7 @@ export default function Social() {
 
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <button onClick={() => setCurrentTab('posts')}>Posts</button>
-        <button onClick={() => setCurrentTab('groups')}>Groups</button>
-        <button onClick={() => setCurrentTab('players')}>Players</button>
-      </div>
-      <h1 style={{ textAlign: 'left' }}>{currentTab}</h1>
+      <h1 style={{ textAlign: 'left' }}>Associated Posts</h1>
       {renderTabContent()}
     </>
   );
