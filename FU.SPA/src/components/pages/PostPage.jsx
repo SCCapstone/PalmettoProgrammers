@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography, CssBaseline } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PostService from '../../services/postService';
 const boxStyle = {
@@ -49,7 +49,7 @@ const PostPage = () => {
 
   let dateTimeString = 'Unspecified time';
 
-  if (post.startTime) {
+  if (post && post.startTime) {
     dateTimeString = new Date(post.startTime).toLocaleString('en-US', {
       dateStyle: 'medium',
       timeStyle: 'short',
