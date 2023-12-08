@@ -38,33 +38,21 @@ const getPostDetails = async (postId) => {
 };
 
 const joinPost = async (postId) => {
-  const response = await fetch(`${API_BASE_URL}/Posts/${postId}/users/current`, {
+  await fetch(`${API_BASE_URL}/Posts/${postId}/users/current`, {
     method: 'POST',
     headers: {
       ...AuthService.getAuthHeader(),
     },
   });
-
-  if (!response.ok) {
-    throw new Error('Error joining post');
-  }
-
-  return await response.json();
 };
 
 const leavePost = async (postId) => {
-  const response = await fetch(`${API_BASE_URL}/Posts/${postId}/users/current`, {
+  await fetch(`${API_BASE_URL}/Posts/${postId}/users/current`, {
     method: 'DELETE',
     headers: {
       ...AuthService.getAuthHeader(),
     },
   });
-
-  if (!response.ok) {
-    throw new Error('Error leaving post');
-  }
-
-  return await response.json();
 };
 
 const PostService = {
