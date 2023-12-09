@@ -26,6 +26,9 @@ const UserProvider = ({ children }) => {
     };
 
     fetchCurrentUser();
+    if (user) {
+      startConnection();
+    }
   }, [token]);
 
   const login = (newToken) => {
