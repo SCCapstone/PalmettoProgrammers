@@ -32,7 +32,7 @@ public class SearchService : CommonService, ISearchService
         // A post must have every tag in the filter
         foreach (var tagId in query.TagIds)
         {
-            dbQuery = dbQuery.Where(p => p.Tags.Any(tag => tag.Id == tagId));
+            dbQuery = dbQuery.Where(p => p.Tags.Any(tr => tr.TagId == tagId));
         }
 
         // Filter by posts after a time
