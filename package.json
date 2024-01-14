@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@microsoft/signalr": "^8.0.0",
+    "@mui/x-date-pickers": "^6.19.0",
+    "dayjs": "^1.11.10"
+  }
+}
