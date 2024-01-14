@@ -16,13 +16,6 @@ public class UserService : CommonService, IUserService
         _dbContext = dbContext;
     }
 
-    public Task<UserProfile?> GetUserProfile(int userId)
-    {
-        UserProfile? profile = _dbContext.Users.Find(userId)?.ToProfile();
-
-        return Task.FromResult(profile);
-    }
-
     public Task<UserProfile?> UpdateUserProfile(UserProfile profileChanges)
     {
         var user = _dbContext.Users.Find(profileChanges.Id);
@@ -101,5 +94,23 @@ public class UserService : CommonService, IUserService
         return allPlayers
             .Skip(offset)
             .Take(limit);
+    }
+
+    public async Task<ApplicationUser?> GetUserByName(string username)
+    {
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Username == username);
+    }
+
+    public async Task<ApplicationUser?> GetUserById(int userId)
+    {
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.UserId == userId);
+    }
+
+    public Task<bool> AreFriends(int user1Id, int user2Id)
+    {
+        return _dbContext.UserRelations
+            .AnyAsync(ur => (ur.User1Id == user1Id && ur.User2Id == user2Id) || (ur.User1Id == user2Id && ur.User2Id == user1Id));
     }
 }

@@ -12,6 +12,7 @@ import PostPage from './components/pages/PostPage'
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
+import './App.css';
 
 function App() {
   return (
