@@ -12,7 +12,9 @@ export default function Navbar() {
       return (
         <>
           <p>{user.username}</p>
+          <li>
           <button onClick={logout}>Logout</button>
+          </li>
         </>
       );
     } else {
