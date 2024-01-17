@@ -1,0 +1,38 @@
+.header {
+  background-color: #31084a;
+  height: 155px;
+  display: flex;
+  align-items: center;
+
+  .userImage {
+    width: 100px;
+    height: 100px;
+    margin-left: 75px;
+  }
+
+  .userInfo {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    text-align: left;
+    height: 100px;
+    justify-content: space-between;
+
+    p {
+      color: #fff;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      margin: 0%;
+    }
+
+    .userName {
+      font-size: 24px;
+      font-weight: 700;
+    }
+  }
+}
+
+.body {
+}
