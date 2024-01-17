@@ -43,14 +43,6 @@ body {
   gap: 1rem;
 }
 
-.nav p {
-  display: flex;
-  align-items: center;
-  margin: 0; 
-  padding: 0rem;
-}
-
-
 .nav button {
 color: white;
 background: none;
