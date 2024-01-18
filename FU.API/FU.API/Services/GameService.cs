@@ -32,7 +32,6 @@ public class GameService : CommonService, IGameService
             throw new DbUpdateException();
         }
 
-        newGame.Name = "FAKE NAME";
         return newGame;
     }
 
