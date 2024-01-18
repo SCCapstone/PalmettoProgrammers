@@ -4,28 +4,29 @@ name: Run tests
 
 on: push
 
-test:
-  runs-on: windows-latest
+jobs:
+  test:
+    runs-on: windows-latest
 
-  steps:
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '7.0.x'
-        include-prerelease: true
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.0.x'
+          include-prerelease: true
 
-    - name: Build with dotnet
-      run: |
-          pwd
-          cd FU.API
-          dotnet build
-      shell: pwsh
+      - name: Build with dotnet
+        run: |
+            pwd
+            cd FU.API
+            dotnet build
+        shell: pwsh
 
-    - name: Run tests with dotnet
-      run: |
-          pwd
-          cd FU.API
-          dotnet test
-      shell: pwsh
+      - name: Run tests with dotnet
+        run: |
+            pwd
+            cd FU.API
+            dotnet test
+        shell: pwsh
