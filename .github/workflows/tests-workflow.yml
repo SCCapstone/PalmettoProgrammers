@@ -17,12 +17,6 @@ jobs:
           dotnet-version: '7.0.x'
           include-prerelease: true
 
-      - name: Build with dotnet
-        run: |
-            cd FU.API
-            dotnet build
-        shell: pwsh
-
       - name: Run tests with dotnet
         run: |
             cd FU.API
