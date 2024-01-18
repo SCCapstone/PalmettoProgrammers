@@ -19,14 +19,12 @@ jobs:
 
       - name: Build with dotnet
         run: |
-            pwd
             cd FU.API
             dotnet build
         shell: pwsh
 
       - name: Run tests with dotnet
         run: |
-            pwd
             cd FU.API
             dotnet test
         shell: pwsh
