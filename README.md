@@ -40,7 +40,7 @@ dotnet ef database update
 ### Connect to Postgres
 Set the `CONNECTION_STRING` environment variable.
 ```
-CONNECTION_STRING="Host=localhost; Database=ForcesUnite; Username=dev; Password=dev"
+CONNECTION_STRING="Host=localhost; Database=fu_dev; Username=dev; Password=dev"
 ```
 
 ### SPA Environment Setup
