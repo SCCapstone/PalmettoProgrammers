@@ -34,7 +34,7 @@ jobs:
           name: .net-app
           path: D:\a\PalmettoProgrammers\PalmettoProgrammers\FU.API\FU.API\bin
 
-      - name: Run tests with dotnet
+      - name: Test
         run: |
             cd FU.API
             dotnet test
