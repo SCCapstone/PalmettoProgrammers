@@ -1,6 +1,6 @@
 import { TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { TagsSelector, GamesSelector  } from '../Selectors';
+import { TagsSelector, GamesSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import Posts from '../Posts';
 import './Discover.css';

@@ -7,13 +7,20 @@ import NoPage from './components/pages/NoPage';
 import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import Chat from './components/pages/Chat';
-import PostPage from './components/pages/PostPage'
+import PostPage from './components/pages/PostPage';
+import createPage from './components/CreatePost'; //using for behavioral testing
 
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
 
 function App() {
+  //creating to do behavioral test, which is connected to createPostBehavior.test.js and CreatPost.jsx
+  const CreatePosts = [
+    { id: 1, title: 'test CP', completed: false },
+    { id: 2, title: 'test CP', completed: true },
+  ];
+
   return (
     <>
       <UserProvider>
