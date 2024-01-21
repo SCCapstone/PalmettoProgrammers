@@ -11,18 +11,25 @@ export default function Navbar() {
   const renderTabContent = () => {
     if (user) {
       // if user has a custom pfp then use that, if not then use MUI instead of default pfp
-      const defaultPFP = user.pfpUrl.includes('https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png');
-      const pfpComponent = !defaultPFP
-      ? <Avatar src={user.pfpUrl} sx={{ width: 33, height: 33 }} />
-      : <Avatar {...stringAvatar(user.username)} sx={{ width: 33, height: 33, bgcolor: stringToColor(user.username) }} />;
+      const defaultPFP = user.pfpUrl.includes(
+        'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
+      );
+      const pfpComponent = !defaultPFP ? (
+        <Avatar src={user.pfpUrl} sx={{ width: 33, height: 33 }} />
+      ) : (
+        <Avatar
+          {...stringAvatar(user.username)}
+          sx={{ width: 33, height: 33, bgcolor: stringToColor(user.username) }}
+        />
+      );
       return (
         <>
-        <li style={{ display: 'flex', alignItems: 'center' }}>
-        {pfpComponent}
-        </li>
-        <li style={{ display: 'flex', alignItems: 'center' }}>
-          <button onClick={logout}>Logout</button>
-        </li>
+          <li style={{ display: 'flex', alignItems: 'center' }}>
+            {pfpComponent}
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center' }}>
+            <button onClick={logout}>Logout</button>
+          </li>
         </>
       );
     } else {

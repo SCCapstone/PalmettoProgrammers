@@ -18,7 +18,11 @@ export default function UserProfile() {
     try {
       const profile = await UserService.getUserprofile(username);
       setUserProfile(profile);
-      setDefaultPFP(profile.pfpUrl.includes('https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png'));
+      setDefaultPFP(
+        profile.pfpUrl.includes(
+          'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
+        ),
+      );
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
@@ -32,7 +36,7 @@ export default function UserProfile() {
   const dob = new Date(userProfile?.dob);
   const today = new Date();
   const age = Math.floor(
-    (today.getTime() - dob.getTime()) / (1000 * 3600 * 24 * 365)
+    (today.getTime() - dob.getTime()) / (1000 * 3600 * 24 * 365),
   );
 
   const stringToColor = (string) => {
@@ -47,7 +51,7 @@ export default function UserProfile() {
       color += `00${value.toString(16)}`.slice(-2);
     }
     return color;
-  }
+  };
 
   const initials = (name) => {
     // split  name by spaces and filter empty entries
@@ -58,16 +62,13 @@ export default function UserProfile() {
     if (nameParts.length > 1) {
       initials += nameParts[1][0];
     }
-    
+
     return initials;
-  }
+  };
 
   const renderPfp = () => {
     return !defaultPFP ? (
-      <img
-        src={userProfile.pfpUrl}
-        className="userImage"
-      />
+      <img src={userProfile.pfpUrl} className="userImage" />
     ) : (
       <div
         className="userImage"
@@ -84,7 +85,7 @@ export default function UserProfile() {
         {initials(userProfile.username)}
       </div>
     );
-  }
+  };
 
   const renderBio = () => {
     if (!userProfile.bio) {
@@ -103,10 +104,12 @@ export default function UserProfile() {
     if (!user || user.username === userProfile.username) {
       return;
     }
-    
+
     return (
       <div className="buttons">
-        <button className="messageButton" onClick={clickSendMessage}>Send Message</button>
+        <button className="messageButton" onClick={clickSendMessage}>
+          Send Message
+        </button>
         <button className="friendButton">Send Friend Request</button>
       </div>
     );
@@ -115,26 +118,22 @@ export default function UserProfile() {
   const clickSendMessage = async () => {
     const chat = await getDirectChat(userProfile.id);
     navigate(`/chat/${chat.id}`);
-  }
+  };
 
   if (userProfile) {
     return (
       <>
         <div className="header">
-          <div className='left-content'>
+          <div className="left-content">
             {renderPfp()}
             <div className="userInfo">
               <p className="userName">{userProfile.username}</p>
               {userProfile.dob && <p>Age: {age} years old</p>}
             </div>
           </div>
-          <div className='right-content'>
-            {renderHeaderButtons()}
-          </div>
+          <div className="right-content">{renderHeaderButtons()}</div>
         </div>
-        <div className="body">
-          {renderBio()}
-        </div>
+        <div className="body">{renderBio()}</div>
       </>
     );
   } else {
