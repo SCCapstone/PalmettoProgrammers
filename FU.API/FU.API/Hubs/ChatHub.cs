@@ -16,7 +16,7 @@ public class ChatHub : Hub
     /// <summary>
     /// List of the connected users names.
     /// </summary>
-    private static List<string> connectedUsers;
+    public static readonly List<string> ConnectedUsers = new();
 
     /// <summary>
     /// The app db context.
@@ -30,34 +30,33 @@ public class ChatHub : Hub
     public ChatHub(AppDbContext context)
     {
         _context = context;
-        connectedUsers = new List<string>();
     }
 
     /// <summary>
     /// Connect the user to the hub.
     /// </summary>
     /// <returns>Task.</returns>
-    public async override Task OnConnectedAsync()
+    public override Task OnConnectedAsync()
     {
         var userId = UserId;
         var user = _context.Users.Find(userId);
 
         if (user is null || user.Username is null)
         {
-            return;
+            return Task.CompletedTask;
         }
 
-        if (!connectedUsers.Contains(user.Username))
+        if (!ConnectedUsers.Contains(user.Username))
         {
-            connectedUsers.Add(user.Username);
+            ConnectedUsers.Add(user.Username);
         }
 
         // Update the online status of the user
         user.IsOnline = true;
         _context.Users.Update(user);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
 
-        await base.OnConnectedAsync();
+        return base.OnConnectedAsync();
     }
 
     /// <summary>
@@ -65,27 +64,27 @@ public class ChatHub : Hub
     /// </summary>
     /// <param name="exception">Exception.</param>
     /// <returns>Task.</returns>
-    public override async Task OnDisconnectedAsync(Exception? exception)
+    public override Task OnDisconnectedAsync(Exception? exception)
     {
         var userId = UserId;
         var user = _context.Users.Find(userId);
 
         if (user is null || user.Username is null)
         {
-            return;
+            return Task.CompletedTask;
         }
 
-        if (connectedUsers.Contains(user.Username))
+        if (ConnectedUsers.Contains(user.Username))
         {
-            connectedUsers.Remove(user.Username);
+            ConnectedUsers.Remove(user.Username);
         }
 
         // Update the online status of the user
         user.IsOnline = false;
         _context.Users.Update(user);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
 
-        base.OnDisconnectedAsync(exception);
+        return base.OnDisconnectedAsync(exception);
     }
 
     /// <summary>
