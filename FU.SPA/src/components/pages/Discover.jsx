@@ -12,19 +12,19 @@ export default function Discover() {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
+    const submitSearch = async () => {
+      const query = {
+        keywords: searchText,
+        games: games,
+        tags: tags,
+      };
+  
+      const response = await SearchService.searchPosts(query);
+      setPosts(response);
+    };
+    
     submitSearch();
   }, [games, tags, searchText]);
-
-  const submitSearch = async () => {
-    const query = {
-      keywords: searchText,
-      games: games,
-      tags: tags,
-    };
-
-    const response = await SearchService.searchPosts(query);
-    setPosts(response);
-  };
 
   return (
     <div className="page-content">
