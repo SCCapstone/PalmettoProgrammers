@@ -88,3 +88,16 @@ jobs:
           action: "upload"
           app_location: "/FU.SPA" # App source code path
           output_location: "dist"
+  
+  comment:
+      name: Comment on Merge Request
+      runs-on: ubuntu-latest
+      needs: [deploy-api, build-and-deploy-spa]
+
+      steps:
+        - name: Comment on Merge Request
+          run: |
+            gh pr comment ${{ github.event.before }} -b "Deployed to https://jolly-glacier-0ae92c40f.4.azurestaticapps.net/"
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
