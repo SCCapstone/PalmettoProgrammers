@@ -13,16 +13,22 @@ import createPage from './components/CreatePost'; //using for behavioral testing
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
+import CreatePost from './components/CreatePost';
 
 function App() {
   //creating to do behavioral test, which is connected to createPostBehavior.test.js and CreatPost.jsx
-  const CreatePosts = [
-    { id: 1, title: 'test CP', completed: false },
-    { id: 2, title: 'test CP', completed: true },
+  const CreatePosts = [ 
+    { id: 1, name: 'test CP', completed: false,},
+    { id: 2, name: 'test CP2', completed: true,},
   ];
 
   return (
     <>
+    <div className='CPBTest'>
+      { CreatePosts.map((CreatePost) => {
+        return (<CreatePost CreatePost={CreatePost}/>)
+      })}
+    </div>
       <UserProvider>
         <Navbar />
         <div className="container">
