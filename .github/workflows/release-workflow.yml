@@ -2,7 +2,10 @@
 
 name: Release
 
-on: push
+on:
+  push:
+    branches:
+      - prod
 
 jobs:
   build-api:
