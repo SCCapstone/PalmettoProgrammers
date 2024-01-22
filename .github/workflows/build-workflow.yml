@@ -68,6 +68,8 @@ jobs:
     needs: [build-api, build-spa]
 
     steps:
+      - uses: actions/checkout@v4
+      
       - name: Comment on Merge Request
         run: |
           gh pr comment ${{ github.event.before }} -b "Tests ran successfully!"
