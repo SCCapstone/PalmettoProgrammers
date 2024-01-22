@@ -62,4 +62,14 @@ jobs:
           cd FU.SPA
           npm run lint
 
-  
+  comment:
+    name: Comment on Merge Request
+    runs-on: ubuntu-latest
+    needs: [build-api, build-spa]
+
+    steps:
+      - name: Comment on Merge Request
+        run: |
+          gh pr comment ${{ github.event.before }} -b "Tests ran successfully!"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
