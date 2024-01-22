@@ -66,6 +66,7 @@ export default function CreatePost() {
       <Box
         sx={{
           marginTop: 1,
+          m: 4,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -81,9 +82,13 @@ export default function CreatePost() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
-          sx={{ mt: 3 }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 3,
+            gap: 2
+          }}
         >
-          <Grid container spacing={2}>
             <TextField
               required //may want to get rid of this and just check if it's empty when clicking create button.
               fullWidth
@@ -116,15 +121,10 @@ export default function CreatePost() {
                 onChange={(newValue) => setEndTime(newValue)}
               />
             </LocalizationProvider>
-            <Grid item xs={12}>
               <TagsSelector onChange={setTags} />
-            </Grid>
             <Box
               sx={{
-                marginTop: 3,
                 display: 'flex',
-                marginLeft: 2,
-                marginRight: 2.5,
               }}
             >
               <Typography component="h1" variant="h6">
@@ -133,15 +133,12 @@ export default function CreatePost() {
                 Description
               </Typography>
             </Box>
-            <Grid item xs={12} sm={6} marginTop={2}>
               <TextareaAutosize
                 aria-setsize={300}
-                size={500}
+                size={1000}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></TextareaAutosize>
-            </Grid>
-          </Grid>
           <Button
             type="submit"
             fullWidth
