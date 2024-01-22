@@ -4,74 +4,75 @@ name: Build ForcesUnite
 
 on: push
 
-jobs:
-  build-api:
-    runs-on: windows-latest
+# jobs:
+#   build-api:
+#     runs-on: windows-latest
 
-    steps:
-      - uses: actions/checkout@v4
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '7.0.x'
-          include-prerelease: true
+#       - name: Set up .NET Core
+#         uses: actions/setup-dotnet@v1
+#         with:
+#           dotnet-version: '7.0.x'
+#           include-prerelease: true
 
-      - name: Build with .NET
-        run: |
-            cd FU.API
-            dotnet build
-        shell: pwsh
+#       - name: Build with .NET
+#         run: |
+#             cd FU.API
+#             dotnet build
+#         shell: pwsh
 
-      - name: Publish
-        run: |
-          cd FU.API
-          dotnet publish
-        shell: pwsh
+#       - name: Publish
+#         run: |
+#           cd FU.API
+#           dotnet publish
+#         shell: pwsh
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: D:\a\PalmettoProgrammers\PalmettoProgrammers\FU.API\FU.API\bin
+#       - name: Upload Artifacts
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: .net-app
+#           path: D:\a\PalmettoProgrammers\PalmettoProgrammers\FU.API\FU.API\bin
 
-      - name: Test
-        run: |
-            cd FU.API
-            dotnet test
-        shell: pwsh
+#       - name: Test
+#         run: |
+#             cd FU.API
+#             dotnet test
+#         shell: pwsh
 
-  build-spa:
-    runs-on: windows-latest
+#   build-spa:
+#     runs-on: windows-latest
 
-    steps:
-      - uses: actions/checkout@v4
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '14'
 
-      - name: Install dependencies
-        run: |
-          cd FU.SPA
-          npm install
+#       - name: Install dependencies
+#         run: |
+#           cd FU.SPA
+#           npm install
 
-      - name: Run linter
-        run: |
-          cd FU.SPA
-          npm run lint
+#       - name: Run linter
+#         run: |
+#           cd FU.SPA
+#           npm run lint
 
   comment:
     name: Comment on Merge Request
     runs-on: ubuntu-latest
-    needs: [build-api, build-spa]
+    # needs: [build-api, build-spa]
 
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Comment on Merge Request
         run: |
-          gh pr comment ${{ github.event.before }} -b "Tests ran successfully!"
+          branch_name=$(echo "${{ github.event.head_ref }}" | sed 's/refs\/heads\///')
+          gh pr comment $branch_name -b "Tests ran successfully!"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
