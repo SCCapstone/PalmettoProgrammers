@@ -60,7 +60,8 @@ jobs:
       - name: Run linter
         run: |
           cd FU.SPA
-          npm run lint && echo "Linting failed but continuing"
+          npm run lint
+        continue-on-error: true
 
       - name: Check formatting
         run: |
