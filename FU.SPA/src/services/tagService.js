@@ -8,7 +8,7 @@ import AuthService from './authService';
   }
 */
 const searchTags = async (keyword) => {
-  keyword = encodeURIComponent(keyword);
+  keyword = encodeURIComponent(keyword)
   const response = await fetch(`${API_BASE_URL}/tags?$keyword=${keyword}`);
 
   return await response.json();
@@ -21,21 +21,21 @@ const findTagByName = async (name) => {
   let tag = null;
 
   for (const t of tags) {
-    if (t.name == name) tag = t;
+    if (t.name == name) tag = t
   }
 
   return tag;
-};
+}
 
 const findOrCreateTagByName = async (name) => {
-  let tag = await findTagByName(name);
+  let tag = await findTagByName(name)
 
   if (!tag) {
-    tag = await createTag({ Name: name });
+    tag = await createTag({ Name: name })
   }
 
-  return tag;
-};
+  return tag
+}
 
 // Create tag request
 const createTag = async (params) => {
@@ -58,10 +58,5 @@ const createTag = async (params) => {
   return jsonResponse;
 };
 
-const TagService = {
-  searchTags,
-  createTag,
-  findTagByName,
-  findOrCreateTagByName,
-};
+const TagService = { searchTags, createTag, findTagByName, findOrCreateTagByName };
 export default TagService;

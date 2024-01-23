@@ -17,7 +17,7 @@ const searchPosts = async (query) => {
     queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
   }
 
-  let authHeader = null;
+  let authHeader = null
   try {
     authHeader = AuthService.getAuthHeader();
   } catch {
