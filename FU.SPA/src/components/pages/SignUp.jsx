@@ -31,7 +31,7 @@ export default function SignUp() {
     };
 
     if (creds.password !== data.get('confirmPassword')) {
-      alert("Passwords do not match");
+      alert('Passwords do not match');
       return;
     }
 

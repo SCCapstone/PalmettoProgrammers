@@ -34,11 +34,11 @@ export default function Chat() {
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     const handleScroll = () => {
       const chatContainer = chatContainerRef.current;
-  
+
       // Check if the user has reached the top of the chat with a tolerance of 10 pixels
       if (chatContainer.scrollTop <= 10) {
         // Load more messages when reaching the top
@@ -60,7 +60,6 @@ export default function Chat() {
     };
   }, [chatId, hasMoreMessages]);
 
-
   async function handleSendMessage() {
     try {
       if (message === '') {
@@ -78,12 +77,11 @@ export default function Chat() {
     setMessages((prevMessages) => [...prevMessages, receivedMessage]);
   };
 
-
   useEffect(() => {
     const loadMoreMessages = async () => {
       try {
         const newMessages = await getMessages(chat.id, offset, limit);
-  
+
         // Check if there are more messages
         if (newMessages.length > 0) {
           setMessages((prevMessages) => [...newMessages, ...prevMessages]);
