@@ -5,6 +5,7 @@ using FU.API.Data;
 using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
+using LinqKit;
 
 public class SearchService : CommonService, ISearchService
 {
@@ -47,12 +48,8 @@ public class SearchService : CommonService, ISearchService
             // TODO
         }
 
-        // Filter by description keywords
-        foreach (string keyword in query.DescriptionContains)
-        {
-            // TODO don't require every keyword to match
-            dbQuery = dbQuery.Where(p => p.Description.Contains(keyword));
-        }
+        // Filter by search keywords
+        dbQuery = dbQuery.Where(DescriptionContains(query.DescriptionContains));
 
         // Sort results
         IOrderedQueryable<Post> orderedDbQuery = query.SortBy?.Direction == SortDirection.Ascending
@@ -71,6 +68,18 @@ public class SearchService : CommonService, ISearchService
                 .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
                 .Include(p => p.Game)
                 .ToListAsync();
+    }
+
+    private static Expression<Func<Post, bool>> DescriptionContains(List<String> keywords)
+    {
+        if (keywords.Count == 0) return PredicateBuilder.New<Post>(true); // nothing to do so return a true predicate
+
+        var predicate = PredicateBuilder.New<Post>(false); // create a predicate that's false by default
+        foreach (string keyword in keywords)
+        {
+            predicate = predicate.Or(p => p.Description.Contains(keyword));
+        }
+        return predicate;
     }
 
     private static Expression<Func<Post, object>> SelectPostProperty(SortType? sortType)
