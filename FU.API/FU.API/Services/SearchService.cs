@@ -77,7 +77,7 @@ public class SearchService : CommonService, ISearchService
         var predicate = PredicateBuilder.New<Post>(false); // create a predicate that's false by default
         foreach (string keyword in keywords)
         {
-            predicate = predicate.Or(p => p.Description.Contains(keyword) || p.Title.Contains(keyword));
+            predicate = predicate.Or(p => p.NormalizedDescription.Contains(keyword.ToUpper()) || p.NormalizedTitle.Contains(keyword.ToUpper()));
         }
         return predicate;
     }
