@@ -31,7 +31,7 @@ public class SearchService : CommonService, ISearchService
 
         // Filter by tags
         // A post must have every tag in the filter
-        foreach (var tagId in query.TagIds)
+        foreach (int tagId in query.TagIds)
         {
             dbQuery = dbQuery.Where(p => p.Tags.Any(tr => tr.TagId == tagId));
         }
@@ -70,15 +70,19 @@ public class SearchService : CommonService, ISearchService
                 .ToListAsync();
     }
 
-    private static Expression<Func<Post, bool>> ContainsKeywords(List<String> keywords)
+    private static Expression<Func<Post, bool>> ContainsKeywords(List<string> keywords)
     {
-        if (keywords.Count == 0) return PredicateBuilder.New<Post>(true); // nothing to do so return a true predicate
+        if (keywords.Count == 0)
+        {
+            return PredicateBuilder.New<Post>(true); // nothing to do so return a true predicate
+        }
 
         var predicate = PredicateBuilder.New<Post>(false); // create a predicate that's false by default
         foreach (string keyword in keywords)
         {
             predicate = predicate.Or(p => p.NormalizedDescription.Contains(keyword.ToUpper()) || p.NormalizedTitle.Contains(keyword.ToUpper()));
         }
+
         return predicate;
     }
 

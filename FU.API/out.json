@@ -1,0 +1,254 @@
+[
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "e7df7996-0148-4d03-a920-e2aa53d87edf"
+    },
+    "FileName": "Exceptions.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Helpers/Exceptions.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "WHITESPACE",
+        "FormatDescription": "Fix whitespace formatting."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "18091396-6b90-495f-81b8-9e02572ba073"
+    },
+    "FileName": "Mapper.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Helpers/Mapper.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "WHITESPACE",
+        "FormatDescription": "Fix whitespace formatting."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "02d414a2-8e78-4417-84a6-a7e802e2fbde"
+    },
+    "FileName": "ChatHub.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Hubs/ChatHub.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "WHITESPACE",
+        "FormatDescription": "Fix whitespace formatting."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "c93c3f52-1d1e-43ef-b28d-fec4553e24b0"
+    },
+    "FileName": "PostQuery.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Models/PostQuery.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "WHITESPACE",
+        "FormatDescription": "Fix whitespace formatting."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "4df40c96-fad7-4b03-8d01-851e553d58bb"
+    },
+    "FileName": "Program.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Program.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "WHITESPACE",
+        "FormatDescription": "Fix whitespace formatting."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "a09f1031-3eb9-4cd7-8a16-7308051b03a6"
+    },
+    "FileName": "AccountsService.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Services/AccountsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "WHITESPACE",
+        "FormatDescription": "Fix whitespace formatting."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "e7df7996-0148-4d03-a920-e2aa53d87edf"
+    },
+    "FileName": "Exceptions.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Helpers/Exceptions.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 16,
+        "CharNumber": 16,
+        "DiagnosticId": "SA1000",
+        "FormatDescription": "warning SA1000: The keyword \u0027new\u0027 should be followed by a space."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "18091396-6b90-495f-81b8-9e02572ba073"
+    },
+    "FileName": "Mapper.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Helpers/Mapper.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 91,
+        "CharNumber": 22,
+        "DiagnosticId": "SA1000",
+        "FormatDescription": "warning SA1000: The keyword \u0027new\u0027 should be followed by a space."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "02d414a2-8e78-4417-84a6-a7e802e2fbde"
+    },
+    "FileName": "ChatHub.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Hubs/ChatHub.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 18,
+        "CharNumber": 58,
+        "DiagnosticId": "SA1000",
+        "FormatDescription": "warning SA1000: The keyword \u0027new\u0027 should be followed by a space."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "c93c3f52-1d1e-43ef-b28d-fec4553e24b0"
+    },
+    "FileName": "PostQuery.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Models/PostQuery.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 46,
+        "DiagnosticId": "SA1000",
+        "FormatDescription": "warning SA1000: The keyword \u0027new\u0027 should be followed by a space."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "c93c3f52-1d1e-43ef-b28d-fec4553e24b0"
+    },
+    "FileName": "PostQuery.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Models/PostQuery.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 45,
+        "DiagnosticId": "SA1000",
+        "FormatDescription": "warning SA1000: The keyword \u0027new\u0027 should be followed by a space."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "c93c3f52-1d1e-43ef-b28d-fec4553e24b0"
+    },
+    "FileName": "PostQuery.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Models/PostQuery.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 9,
+        "CharNumber": 50,
+        "DiagnosticId": "SA1000",
+        "FormatDescription": "warning SA1000: The keyword \u0027new\u0027 should be followed by a space."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "4df40c96-fad7-4b03-8d01-851e553d58bb"
+    },
+    "FileName": "Program.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Program.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 35,
+        "CharNumber": 41,
+        "DiagnosticId": "SA1000",
+        "FormatDescription": "warning SA1000: The keyword \u0027new\u0027 should be followed by a space."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "015f8422-b1a5-4402-9135-1f3afea97228"
+      },
+      "Id": "a09f1031-3eb9-4cd7-8a16-7308051b03a6"
+    },
+    "FileName": "AccountsService.cs",
+    "FilePath": "/home/james/Documents/SRC/PalmettoProgrammers/FU.API/FU.API/Services/AccountsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 71,
+        "CharNumber": 30,
+        "DiagnosticId": "SA1000",
+        "FormatDescription": "warning SA1000: The keyword \u0027new\u0027 should be followed by a space."
+      }
+    ]
+  }
+]

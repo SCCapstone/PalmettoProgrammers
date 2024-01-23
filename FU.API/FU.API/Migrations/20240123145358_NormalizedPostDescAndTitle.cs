@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
+﻿#nullable disable
 
 namespace FU.API.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     /// <inheritdoc />
     public partial class NormalizedPostDescAndTitle : Migration
     {
@@ -15,14 +15,14 @@ namespace FU.API.Migrations
                 table: "Posts",
                 type: "text",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
 
             migrationBuilder.AddColumn<string>(
                 name: "NormalizedTitle",
                 table: "Posts",
                 type: "text",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
         }
 
         /// <inheritdoc />
