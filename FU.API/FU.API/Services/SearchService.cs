@@ -49,7 +49,7 @@ public class SearchService : CommonService, ISearchService
         }
 
         // Filter by search keywords
-        dbQuery = dbQuery.Where(DescriptionContains(query.DescriptionContains));
+        dbQuery = dbQuery.Where(ContainsKeywords(query.Keywords));
 
         // Sort results
         IOrderedQueryable<Post> orderedDbQuery = query.SortBy?.Direction == SortDirection.Ascending
@@ -70,14 +70,14 @@ public class SearchService : CommonService, ISearchService
                 .ToListAsync();
     }
 
-    private static Expression<Func<Post, bool>> DescriptionContains(List<String> keywords)
+    private static Expression<Func<Post, bool>> ContainsKeywords(List<String> keywords)
     {
         if (keywords.Count == 0) return PredicateBuilder.New<Post>(true); // nothing to do so return a true predicate
 
         var predicate = PredicateBuilder.New<Post>(false); // create a predicate that's false by default
         foreach (string keyword in keywords)
         {
-            predicate = predicate.Or(p => p.Description.Contains(keyword));
+            predicate = predicate.Or(p => p.Description.Contains(keyword) || p.Title.Contains(keyword));
         }
         return predicate;
     }
