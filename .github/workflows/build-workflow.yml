@@ -57,12 +57,12 @@ jobs:
           cd FU.SPA
           npm install
 
-      - name: Check formatting
-        run: |
-          cd FU.SPA
-          npm run format-check
-
       - name: Run linter
         run: |
           cd FU.SPA
           npm run lint
+
+      - name: Check formatting
+        run: |
+          cd FU.SPA
+          npm run format-check
