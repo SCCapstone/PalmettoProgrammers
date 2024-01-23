@@ -3,12 +3,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// User of the application.
 /// </summary>
-[Index(nameof(Username))]
+[Microsoft.EntityFrameworkCore.Index(nameof(Username))]
 public class ApplicationUser
 {
     /// <summary>
