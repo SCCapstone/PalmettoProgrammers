@@ -92,4 +92,23 @@ public class PostsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet]
+    [Route("{postId}/users")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPostUsers(int postId)
+    {
+        var post = await _postService.GetPost(postId);
+
+        if (post is null)
+        {
+            return NotFound();
+        }
+
+        var users = await _postService.GetPostUsers(post.Id);
+
+        var response = users.ToProfiles();
+
+        return Ok(response);
+    }
 }

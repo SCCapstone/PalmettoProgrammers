@@ -25,6 +25,9 @@ public static class Mapper
         };
     }
 
+    public static IEnumerable<UserProfile> ToProfiles(this IEnumerable<ApplicationUser> appUsers) =>
+        appUsers.Select(appUser => appUser.ToProfile());
+
     public static MessageResponseDTO ToDto(this Message message)
     {
         return new MessageResponseDTO()
