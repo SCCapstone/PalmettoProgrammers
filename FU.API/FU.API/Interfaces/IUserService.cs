@@ -1,4 +1,4 @@
-﻿namespace FU.API.Interfaces;
+namespace FU.API.Interfaces;
 
 using FU.API.Models;
 

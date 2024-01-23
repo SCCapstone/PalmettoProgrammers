@@ -9,7 +9,7 @@ import AuthService from './authService';
 */
 const searchPosts = async (query) => {
   let queryString = '';
-  queryString += 'keywords=' + encodeURIComponent(query.keywords);
+  queryString += 'keywords=' + encodeURIComponent(query.keywords.trim());
   if (query.games.length > 0) {
     queryString += '&games=' + query.games.map((g) => String(g.id)).join(',');
   }

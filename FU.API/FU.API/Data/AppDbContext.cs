@@ -20,100 +20,100 @@ public class AppDbContext : DbContext
     /// <summary>
     /// Create new models.
     /// </summary>
-    /// <param name="builder">The builder.</param>
-    protected override void OnModelCreating(ModelBuilder builder)
+    /// <param name="modelBuilder">The builder.</param>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Give 1 foreign key to Chat for LastMessage
-        builder.Entity<Chat>()
+        modelBuilder.Entity<Chat>()
             .HasOne(c => c.LastMessage)
             .WithOne()
             .HasForeignKey<Chat>(c => c.LastMessageId);
 
         // Make sure the username is unique
-        builder.Entity<ApplicationUser>()
+        modelBuilder.Entity<ApplicationUser>()
             .HasIndex(u => u.Username)
             .IsUnique();
 
         // Make sure the email is unique
-        builder.Entity<ApplicationUser>()
+        modelBuilder.Entity<ApplicationUser>()
             .HasIndex(u => u.Email)
             .IsUnique();
 
         // Make sure the name of the tag is unique
-        builder.Entity<Tag>()
+        modelBuilder.Entity<Tag>()
             .HasIndex(t => t.Name)
             .IsUnique();
 
         // Make sure the name of the group is unique
-        builder.Entity<Group>()
+        modelBuilder.Entity<Group>()
             .HasIndex(g => g.Name)
             .IsUnique();
 
         // Make sure the name of the game is unique
-        builder.Entity<Game>()
+        modelBuilder.Entity<Game>()
             .HasIndex(g => g.Name)
             .IsUnique();
 
-        base.OnModelCreating(builder);
+        base.OnModelCreating(modelBuilder);
     }
 
     /// <summary>
     /// Gets or sets the users.
     /// </summary>
-    public DbSet<ApplicationUser> Users { get; set; }
+    public DbSet<ApplicationUser> Users { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets UserRelations.
     /// </summary>
-    public DbSet<UserRelation> UserRelations { get; set; }
+    public DbSet<UserRelation> UserRelations { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets chats.
     /// </summary>
-    public DbSet<Chat> Chats { get; set; }
+    public DbSet<Chat> Chats { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets ChatMemberships.
     /// </summary>
-    public DbSet<ChatMembership> ChatMemberships { get; set; }
+    public DbSet<ChatMembership> ChatMemberships { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets Messages.
     /// </summary>
-    public DbSet<Message> Messages { get; set; }
+    public DbSet<Message> Messages { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets Games.
     /// </summary>
-    public DbSet<Game> Games { get; set; }
+    public DbSet<Game> Games { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets GameRelations.
     /// </summary>
-    public DbSet<GameRelation> GameRelations { get; set; }
+    public DbSet<GameRelation> GameRelations { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets Groups.
     /// </summary>
-    public DbSet<Group> Groups { get; set; }
+    public DbSet<Group> Groups { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets GroupMemberships.
     /// </summary>
-    public DbSet<GroupMembership> GroupMemberships { get; set; }
+    public DbSet<GroupMembership> GroupMemberships { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets Posts.
     /// </summary>
-    public DbSet<Post> Posts { get; set; }
+    public DbSet<Post> Posts { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets Tags.
     /// </summary>
-    public DbSet<Tag> Tags { get; set; }
+    public DbSet<Tag> Tags { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets TagRelations.
     /// </summary>
-    public DbSet<TagRelation> TagRelations { get; set; }
+    public DbSet<TagRelation> TagRelations { get; set; } = null!;
 }

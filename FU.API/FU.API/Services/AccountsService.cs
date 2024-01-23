@@ -68,7 +68,7 @@ public class AccountsService
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-        List<Claim> claims = new ()
+        List<Claim> claims = new()
         {
             new (CustomClaimTypes.UserId, user.UserId.ToString())
         };
