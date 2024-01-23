@@ -5,7 +5,7 @@ import {
   startConnection,
   hubConnection,
 } from '../../services/signalrService';
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getChat, getMessages, saveMessage } from '../../services/chatService';
 import './Chat.css';
@@ -16,13 +16,38 @@ export default function Chat() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [offset, setOffset] = useState(1);
-  const [limit, setLimit] = useState(25);
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const [prevScrollHeight, setPrevScrollHeight] = useState(0);
+  const limit = 25;
 
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
+    const initializeChat = async () => {
+      try {
+        const chat = await getChat(chatId);
+        setChat(chat);
+        startConnection();
+        joinChatGroup(chatId);
+        const messages = await getMessages(chatId, 1, limit);
+        setMessages(messages);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const handleScroll = () => {
+      const chatContainer = chatContainerRef.current;
+
+      // Check if the user has reached the top of the chat with a tolerance of 10 pixels
+      if (chatContainer.scrollTop <= 10) {
+        // Load more messages when reaching the top
+        if (hasMoreMessages) {
+          setOffset((prevOffset) => prevOffset + 1);
+        }
+      }
+    };
+
     initializeChat();
 
     hubConnection.on('ReceiveMessage', handleReceiveMessage);
@@ -33,20 +58,7 @@ export default function Chat() {
       hubConnection.off('ReceiveMessage', handleReceiveMessage);
       leaveChatGroup(chatId);
     };
-  }, []);
-
-  async function initializeChat() {
-    try {
-      const chat = await getChat(chatId);
-      setChat(chat);
-      startConnection();
-      joinChatGroup(chatId);
-      const messages = await getMessages(chatId, offset, limit);
-      setMessages(messages);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  }, [chatId, hasMoreMessages]);
 
   async function handleSendMessage() {
     try {
@@ -65,39 +77,27 @@ export default function Chat() {
     setMessages((prevMessages) => [...prevMessages, receivedMessage]);
   };
 
-  const handleScroll = () => {
-    const chatContainer = chatContainerRef.current;
-
-    // Check if the user has reached the top of the chat with a tolerance of 10 pixels
-    if (chatContainer.scrollTop <= 10) {
-      // Load more messages when reaching the top
-      if (hasMoreMessages) {
-        setOffset((prevOffset) => prevOffset + 1);
-      }
-    }
-  };
-
-  const loadMoreMessages = async () => {
-    try {
-      const newMessages = await getMessages(chatId, offset, limit);
-
-      // Check if there are more messages
-      if (newMessages.length > 0) {
-        setMessages((prevMessages) => [...newMessages, ...prevMessages]);
-      } else {
-        setHasMoreMessages(false);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
+    const loadMoreMessages = async () => {
+      try {
+        const newMessages = await getMessages(chat.id, offset, limit);
+
+        // Check if there are more messages
+        if (newMessages.length > 0) {
+          setMessages((prevMessages) => [...newMessages, ...prevMessages]);
+        } else {
+          setHasMoreMessages(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     // Load more messages when offset changes
     if (offset > 1) {
       loadMoreMessages();
     }
-  }, [offset]);
+  }, [offset, chat]);
 
   useEffect(() => {
     // Scroll to the bottom when messages are updated
