@@ -61,3 +61,17 @@ jobs:
         run: |
           cd FU.SPA
           npm run lint
+
+      - name: Run formatter
+        run: |
+          cd FU.SPA
+          npm run format
+
+      - name: Commit changes
+        run: |
+          cd FU.SPA
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "GitHub Actions"
+          git add .
+          git commit -m "Auto-Format code"
+          git push
