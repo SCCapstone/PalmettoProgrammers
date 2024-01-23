@@ -4,9 +4,7 @@ using FU.API.Models;
 
 public interface IUserService : ICommonService
 {
-    Task<ApplicationUser?> GetUserByName(string username);
-
-    Task<ApplicationUser?> GetUserById(int userId);
+    Task<UserProfile?> GetUserProfile(int userId);
 
     Task<UserProfile?> UpdateUserProfile(UserProfile profileChanges);
 
@@ -15,6 +13,4 @@ public interface IUserService : ICommonService
     Task<IEnumerable<Group>> GetUsersGroups(int userId, int limit, int offset);
 
     Task<IEnumerable<ApplicationUser>> GetUsersPlayers(int userId, int limit, int offset);
-
-    Task<bool> AreFriends(int user1Id, int user2Id);
 }

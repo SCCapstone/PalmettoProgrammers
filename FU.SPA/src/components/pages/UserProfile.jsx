@@ -9,14 +9,14 @@ import { useNavigate } from 'react-router-dom';
 
 export default function UserProfile() {
   const navigate = useNavigate();
-  const { username } = useParams();
+  const { userId } = useParams();
   const { user } = useContext(UserContext);
   const [userProfile, setUserProfile] = useState(null);
   const [defaultPFP, setDefaultPFP] = useState(false);
 
   const update = useCallback(async () => {
     try {
-      const profile = await UserService.getUserprofile(username);
+      const profile = await UserService.getUserprofile(userId);
       setUserProfile(profile);
       setDefaultPFP(
         profile.pfpUrl.includes(
@@ -26,11 +26,11 @@ export default function UserProfile() {
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
-  }, [username]);
+  }, [userId]);
 
   useEffect(() => {
     update();
-  }, [username, update]);
+  }, [userId, update]);
 
   // convert dob to years old
   const dob = new Date(userProfile?.dob);
@@ -115,6 +115,14 @@ export default function UserProfile() {
     );
   };
 
+  const renderOnlineStatus = (isOnline) => {
+    const fillColor = isOnline ? '#4CD436' : '#FF0000';
+
+    return (<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M10 5C10 7.76142 7.76142 10 5 10C2.23858 10 0 7.76142 0 5C0 2.23858 2.23858 0 5 0C7.76142 0 10 2.23858 10 5Z" fill={fillColor}/>
+          </svg>);
+  };
+
   const clickSendMessage = async () => {
     const chat = await getDirectChat(userProfile.id);
     navigate(`/chat/${chat.id}`);
@@ -122,19 +130,20 @@ export default function UserProfile() {
 
   if (userProfile) {
     return (
-      <>
+      <div className='page-wrapper'>
         <div className="header">
           <div className="left-content">
             {renderPfp()}
             <div className="userInfo">
               <p className="userName">{userProfile.username}</p>
+              <p>Online Status: {renderOnlineStatus(userProfile.isOnline)}</p>
               {userProfile.dob && <p>Age: {age} years old</p>}
             </div>
           </div>
           <div className="right-content">{renderHeaderButtons()}</div>
         </div>
         <div className="body">{renderBio()}</div>
-      </>
+      </div>
     );
   } else {
     return <NoPage />;

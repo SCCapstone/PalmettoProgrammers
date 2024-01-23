@@ -20,39 +20,36 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{userString}")]
-    public async Task<IActionResult> GetUserProfile(string userString)
+    [Route("{userIdString}")]
+    public async Task<IActionResult> GetUserProfile(string userIdString)
     {
-        ApplicationUser? user;
-        if (int.TryParse(userString, out int userId))
+        // if the route is current, get userId from auth token, otherwise use the given id
+        int userId;
+        if (userIdString == "current")
         {
-            user = await _userService.GetUserById(userId);
-        }
-        else if (userString == "current")
-        {
-            user = await _userService.GetCurrentUser(User);
+            bool isParseSuccess = int.TryParse((string?)HttpContext.Items[CustomContextItems.UserId], out userId);
+            if (!isParseSuccess)
+            {
+                return Unauthorized();
+            }
         }
         else
         {
-            user = await _userService.GetUserByName(userString);
+            bool isParseSuccess = int.TryParse(userIdString, out userId);
+            if (!isParseSuccess)
+            {
+                return NotFound();
+            }
         }
 
-        if (user is null)
+        var profile = await _userService.GetUserProfile(userId);
+
+        if (profile is null)
         {
             return NotFound();
         }
 
-        var response = user.ToProfile();
-        var currentUser = await _userService.GetCurrentUser(User);
-
-        if (userString == "current" || currentUser is null)
-        {
-            return Ok(response);
-        }
-
-        response.FriendsWithCurrentUser = await _userService.AreFriends(user.UserId, currentUser.UserId);
-
-        return Ok(response);
+        return Ok(profile);
     }
 
     [Authorize]

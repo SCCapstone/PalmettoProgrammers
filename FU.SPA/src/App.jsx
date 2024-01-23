@@ -46,7 +46,7 @@ function App() {
             <Route path="/chat/:chatId" element={<Chat />} />
             <Route path="/posts/:postId" element={<PostPage />} />
             <Route path="*" element={<NoPage />} />
-            <Route path="/profile/:username" element={<UserProfile />} />
+            <Route path="/profile/:userId" element={<UserProfile />} />
           </Routes>
         </div>
       </UserProvider>

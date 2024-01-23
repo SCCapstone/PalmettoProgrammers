@@ -83,3 +83,8 @@
     }
   }
 }
+
+.page-wrapper {
+  background-color: #23194f;
+  height: 100vh;
+}
