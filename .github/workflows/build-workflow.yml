@@ -62,7 +62,7 @@ jobs:
           cd FU.SPA
           npm run lint
 
-      - name: Run formatter
+      - name: Check formatting
         run: |
           cd FU.SPA
           npm run format-check
