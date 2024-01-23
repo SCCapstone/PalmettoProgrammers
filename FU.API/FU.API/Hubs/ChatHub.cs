@@ -3,7 +3,6 @@
 using System;
 using FU.API.Data;
 using FU.API.Helpers;
-using FU.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -16,7 +15,7 @@ public class ChatHub : Hub
     /// <summary>
     /// List of the connected users names.
     /// </summary>
-    public static readonly List<string> ConnectedUsers = new ();
+    public static readonly List<string> ConnectedUsers = new();
 
     /// <summary>
     /// The app db context.
