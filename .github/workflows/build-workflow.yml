@@ -61,7 +61,6 @@ jobs:
         run: |
           cd FU.SPA
           npm run lint
-        continue-on-error: true
 
       - name: Check formatting
         run: |
