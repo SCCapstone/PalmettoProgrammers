@@ -81,7 +81,7 @@ export default function Chat() {
     const loadMoreMessages = async () => {
       try {
         const newMessages = await getMessages(chat.id, offset, limit);
-  
+
         // Check if there are more messages
         if (newMessages.length > 0) {
           setMessages((prevMessages) => [...newMessages, ...prevMessages]);
