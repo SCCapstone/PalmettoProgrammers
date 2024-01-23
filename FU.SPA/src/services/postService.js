@@ -27,8 +27,8 @@ const getPostDetails = async (postId) => {
   const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
     method: 'GET',
     headers: {
-      ...(AuthService.getAuthHeader() ?? {}),
-    },
+      ...AuthService.getAuthHeader() ?? {}
+    }
   });
   const jsonResponse = await response.json();
 
@@ -59,6 +59,6 @@ const PostService = {
   createPost,
   getPostDetails,
   joinPost,
-  leavePost,
+  leavePost
 };
 export default PostService;

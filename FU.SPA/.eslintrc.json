@@ -14,9 +14,7 @@
     "sourceType": "module"
   },
   "plugins": ["react", "react-refresh"],
-  "rules": {
-    "react/prop-types": "off"
-  },
+  "rules": {},
   "settings": {
     "react": {
       "version": "detect"

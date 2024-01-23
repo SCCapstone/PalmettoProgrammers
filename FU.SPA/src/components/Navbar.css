@@ -24,7 +24,7 @@ body {
 
 .left-content,
 .right-content {
-  display: flex;
+  display:flex;
 }
 
 .site-title {
@@ -42,17 +42,17 @@ body {
 }
 
 .nav button {
-  color: white;
-  background: none;
-  border: none;
-  outline: none;
-  font-family: inherit;
-  font-size: inherit;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 0.2rem;
-  height: 100%;
+color: white;
+background: none;
+border: none; 
+outline: none;
+font-family: inherit;
+font-size: inherit; 
+cursor: pointer; 
+display: flex; 
+align-items: center; 
+padding: 0.2rem; 
+height: 100%; 
 }
 
 .nav a {
@@ -60,8 +60,9 @@ body {
   text-decoration: none;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items:center;
   padding: 0.2rem;
+  
 }
 
 .nav li.active {
