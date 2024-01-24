@@ -7,7 +7,7 @@ public static class ExpiredPostsJob
 {
     private const int NoEndTimeOffset = 2;
 
-    public static void CheckExpiredPosts()
+    public static void Execute()
     {
         using (var context = ContextFactory.CreateDbContext())
         {
