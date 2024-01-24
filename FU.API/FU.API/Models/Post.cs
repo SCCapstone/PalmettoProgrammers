@@ -88,6 +88,8 @@ public class Post
     /// </summary>
     public ApplicationUser Creator { get; set; } = new ApplicationUser();
 
+    public PostStatus Status { get; set; } = PostStatus.Active;
+
     /// <summary>
     /// Gets or sets the id of the creator.
     /// </summary>
@@ -102,4 +104,27 @@ public class Post
     /// Gets or sets the tags of a post.
     /// </summary>
     public ICollection<TagRelation> Tags { get; set; } = new HashSet<TagRelation>();
+}
+
+public enum PostStatus
+{
+    /// <summary>
+    /// The post is active. This is the default status.
+    /// </summary>
+    Active,
+
+    /// <summary>
+    /// The post has expired. This status is set when the post has ended.
+    /// </summary>
+    Expired,
+
+    /// <summary>
+    /// The post has been deleted. This status is set when the post has been deleted.
+    /// </summary>
+    Deleted,
+
+    /// <summary>
+    /// The post is on going. This status is set when the post has started.
+    /// </summary>
+    OnGoing
 }

@@ -1,9 +1,11 @@
 #pragma warning disable SA1200 // Using directives should be placed correctly
 using System.Text;
+using FluentScheduler;
 using FU.API.Data;
 using FU.API.Helpers;
 using FU.API.Hubs;
 using FU.API.Interfaces;
+using FU.API.Jobs;
 using FU.API.Middleware;
 using FU.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -74,12 +76,19 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
+ContextFactory.SetConfiguration(builder.Configuration);
 
 // Add SignalR
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
 });
+
+// Setup jobs
+JobManager.Initialize();
+JobManager.AddJob(
+    () => ExpiredPostsJob.CheckExpiredPosts(),
+    s => s.ToRunEvery(12).Hours());
 
 builder.Services.AddAuthorization(options =>
 {
