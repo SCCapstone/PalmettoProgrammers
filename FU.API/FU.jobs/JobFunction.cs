@@ -9,10 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimerInfo = Microsoft.Azure.Functions.Worker.TimerInfo;
+using TimerTriggerAttribute = Microsoft.Azure.Functions.Worker.TimerTriggerAttribute;
 
 public class JobFunction
 {
-    [FunctionName("CheckExpiredPosts")]
+    [Function("CheckExpiredPosts")]
     public async Task CheckExpiredPosts([TimerTrigger("0 */1 * * * *")] TimerInfo timer)
     {
         var config = new ConfigurationBuilder()
