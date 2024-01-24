@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using FU.API.Data;
-using Microsoft.Azure.Functions.Worker;
 
 public static class Function1
 {
