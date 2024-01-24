@@ -25,5 +25,4 @@ public static class ExpiredPostsJob
             context.SaveChanges();
         }
     }
-
 }
