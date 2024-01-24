@@ -24,4 +24,17 @@ public class ContextFactory
 
         return new AppDbContext(optionsBuilder.Options);
     }
+
+    public static AppDbContext CreateDbContext(IConfiguration configuration)
+    {
+        if (configuration is null)
+        {
+            throw new InvalidOperationException("Configuration has not been set.");
+        }
+
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseNpgsql(configuration[ConfigKey.ConnectionString]);
+
+        return new AppDbContext(optionsBuilder.Options);
+    }
 }
