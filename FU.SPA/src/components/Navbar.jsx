@@ -1,12 +1,10 @@
 import { Link, useMatch, useResolvedPath } from 'react-router-dom';
 import UserContext from '../context/userContext';
-import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
-  const navigate = useNavigate();
 
   const renderTabContent = () => {
     if (user) {

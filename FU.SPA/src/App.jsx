@@ -8,7 +8,7 @@ import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import Chat from './components/pages/Chat';
 import PostPage from './components/pages/PostPage';
-import UserProfile from './components/pages/UserProfile';
+import UserProfile from './components/pages/UserProfile';;
 
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
