@@ -88,12 +88,12 @@ public static class Mapper
             MinimumRequiredPlayers = dto.MinPlayers ?? 0,
             Limit = dto.Limit ?? 20,
             Offset = dto.Offset ?? 0,
-            SortBy = new ()
+            SortBy = new()
         };
 
         if (dto.Keywords is not null)
         {
-            query.DescriptionContains = dto.Keywords.Split(" ").ToList();
+            query.Keywords = dto.Keywords.Split(" ").ToList();
         }
 
         if (dto.Games is not null)
