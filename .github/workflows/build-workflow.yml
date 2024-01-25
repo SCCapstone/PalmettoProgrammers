@@ -50,12 +50,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
 
       - name: Install dependencies
         run: |
           cd FU.SPA
-          npm install
+          npm ci
 
       - name: Run linter
         run: |
