@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
+﻿#nullable disable
 
 namespace FU.API.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     /// <inheritdoc />
     public partial class NonNullablePostDescription : Migration
     {
@@ -15,7 +15,7 @@ namespace FU.API.Migrations
                 table: "Posts",
                 type: "text",
                 nullable: false,
-                defaultValue: "",
+                defaultValue: string.Empty,
                 oldClrType: typeof(string),
                 oldType: "text",
                 oldNullable: true);
