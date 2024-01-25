@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import UserContext from '../../context/userContext';
 import UserService from '../../services/userService';
 import NoPage from './NoPage';
