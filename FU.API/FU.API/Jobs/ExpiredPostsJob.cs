@@ -15,7 +15,7 @@ public static class ExpiredPostsJob
 
             var expiredPosts = context.Posts
                 .Where(p =>
-                    (p.Status == PostStatus.Active &&
+                    ((p.Status == PostStatus.Active || p.Status == PostStatus.OnGoing) &&
                     (p.EndTime.HasValue && p.EndTime < currentTime)) ||
                     ((!p.EndTime.HasValue && p.StartTime.HasValue) && p.StartTime.Value.AddHours(NoEndTimeOffset) < currentTime))
                 .ToList();

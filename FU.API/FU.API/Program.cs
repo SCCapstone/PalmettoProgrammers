@@ -88,7 +88,10 @@ builder.Services.AddSignalR(options =>
 JobManager.Initialize();
 JobManager.AddJob(
     () => ExpiredPostsJob.Execute(),
-    s => s.ToRunEvery(12).Hours());
+    s => s.ToRunEvery(15).Minutes());
+JobManager.AddJob(
+    () => OngoingPostsJob.Execute(),
+    s => s.ToRunEvery(5).Minutes());
 
 builder.Services.AddAuthorization(options =>
 {
