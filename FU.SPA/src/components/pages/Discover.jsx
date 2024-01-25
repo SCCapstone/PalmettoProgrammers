@@ -1,6 +1,6 @@
 import { TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { TagsSelector, GamesSelector  } from '../Selectors';
+import { TagsSelector, GamesSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import Posts from '../Posts';
 import './Discover.css';
@@ -12,19 +12,18 @@ export default function Discover() {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
+    const submitSearch = async () => {
+      const query = {
+        keywords: searchText,
+        games: games,
+        tags: tags,
+      };
+
+      const response = await SearchService.searchPosts(query);
+      setPosts(response);
+    };
     submitSearch();
   }, [games, tags, searchText]);
-
-  const submitSearch = async () => {
-    const query = {
-      keywords: searchText,
-      games: games,
-      tags: tags,
-    };
-
-    const response = await SearchService.searchPosts(query);
-    setPosts(response);
-  };
 
   return (
     <div className="page-content">

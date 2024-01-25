@@ -8,7 +8,7 @@ import AuthService from './authService';
   }
 */
 const searchGames = async (keyword) => {
-  keyword = encodeURIComponent(keyword)
+  keyword = encodeURIComponent(keyword);
   const response = await fetch(`${API_BASE_URL}/games?keyword=${keyword}`);
 
   return await response.json();
@@ -20,21 +20,21 @@ const findGameByTitle = async (title) => {
   let game = null;
 
   for (const g of games) {
-    if (g.name == title) game = g
+    if (g.name == title) game = g;
   }
 
   return game;
-}
+};
 
 const findOrCreateGameByTitle = async (title) => {
-  let game = await findGameByTitle(title)
+  let game = await findGameByTitle(title);
 
   if (!game) {
-    game = await createGame({ Name: title })
+    game = await createGame({ Name: title });
   }
 
-  return game
-}
+  return game;
+};
 
 // Create game request
 const createGame = async (params) => {
@@ -53,5 +53,10 @@ const createGame = async (params) => {
   return await response.json();
 };
 
-const GameService = { searchGames, createGame, findOrCreateGameByTitle, findGameByTitle };
+const GameService = {
+  searchGames,
+  createGame,
+  findOrCreateGameByTitle,
+  findGameByTitle,
+};
 export default GameService;
