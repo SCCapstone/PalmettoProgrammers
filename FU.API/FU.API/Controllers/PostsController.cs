@@ -32,6 +32,27 @@ public class PostsController : ControllerBase
         return CreatedAtRoute(string.Empty, new { postId = newPost.Id }, newPost.ToDto());
     }
 
+    [HttpPut]
+    [Route("{postId}")]
+    public async Task<IActionResult> UpdatePost([FromRoute] int postId, [FromBody] PostRequestDTO dto)
+    {
+        var ogPost = await _postService.GetPost(postId) ?? throw new PostNotFoundException();
+        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+
+        if (ogPost.CreatorId != user.UserId)
+        {
+            return Forbid();
+        }
+
+        var post = dto.ToModel();
+        post.Creator = user;
+        post.Id = postId;
+
+        post = await _postService.UpdatePost(post);
+
+        return Ok(post.ToDto());
+    }
+
     [HttpGet]
     [Route("{postId}")]
     [AllowAnonymous]
