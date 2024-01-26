@@ -14,7 +14,7 @@ public static class OngoingPostsJob
             // Find ongoing posts
             // An ongoing post is one that is active, and the current time is after the start time
             var onGoingPosts = context.Posts
-                .Where(p => p.Status == PostStatus.Active &&
+                .Where(p => p.Status == PostStatus.Created &&
                         (p.StartTime.HasValue && p.StartTime < currentTime))
                 .ToList();
 
