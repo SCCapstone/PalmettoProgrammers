@@ -62,6 +62,26 @@ public class UnauthorizedException : ExceptionWithResponse
     }
 }
 
+public class PostNotFoundException : ExceptionWithResponse
+{
+    public override string Description { get; } = "Post Not Found";
+
+    public override string Title { get; } = "The post was not found";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
+
+    public PostNotFoundException()
+    {
+    }
+
+    public PostNotFoundException(string title, string description, HttpStatusCode statusCode)
+    {
+        Title = title;
+        Description = description;
+        StatusCode = statusCode;
+    }
+}
+
 public class NonexistentGameException : ExceptionWithResponse
 {
     public override string Description { get; } = "The game does not exist";

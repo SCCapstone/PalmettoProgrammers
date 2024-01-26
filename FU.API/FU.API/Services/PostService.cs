@@ -57,6 +57,36 @@ public class PostService : CommonService, IPostService
         return post;
     }
 
+    public async Task<Post> UpdatePost(Post post)
+    {
+        Post postEntity = _dbContext.Posts.Find(post.Id) ?? throw new PostNotFoundException();
+
+        var game = await _dbContext.Games
+            .FindAsync(post.GameId) ?? throw new NonexistentGameException();
+        postEntity.Game = game;
+        postEntity.Description = post.Description;
+        postEntity.MaxPlayers = post.MaxPlayers;
+        postEntity.StartTime = post.StartTime;
+        postEntity.EndTime = post.EndTime;
+
+        var postTagIds = post.Tags.Select(t => t.TagId);
+        var tags = await _dbContext.Tags
+            .Where(t => postTagIds.Contains(t.Id))
+            .ToListAsync();
+
+        // Update post tags
+        postEntity.Tags.Clear();
+        foreach (var tag in tags)
+        {
+            postEntity.Tags.Add(new TagRelation { Tag = tag });
+        }
+
+        _dbContext.Posts.Update(postEntity);
+        await _dbContext.SaveChangesAsync();
+
+        return postEntity;
+    }
+
     public async Task<Post?> GetPost(int postId)
     {
         return await _dbContext.Posts
