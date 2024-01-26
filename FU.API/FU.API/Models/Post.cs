@@ -109,22 +109,22 @@ public class Post
 public enum PostStatus
 {
     /// <summary>
-    /// The post is active. This is the default status.
+    /// The post is Created. This is the default status.
     /// </summary>
-    Active,
-
-    /// <summary>
-    /// The post has expired. This status is set when the post has ended.
-    /// </summary>
-    Expired,
-
-    /// <summary>
-    /// The post has been deleted. This status is set when the post has been deleted.
-    /// </summary>
-    Deleted,
+    Created = 0,
 
     /// <summary>
     /// The post is on going. This status is set when the post has started.
     /// </summary>
-    OnGoing
+    OnGoing = 1,
+
+    /// <summary>
+    /// The post has expired. This status is set when the post has ended.
+    /// </summary>
+    Expired = 2,
+
+    /// <summary>
+    /// The post is on Active. The post has been created or is on going.
+    /// </summary>
+    Active = Created | OnGoing | 3,
 }
