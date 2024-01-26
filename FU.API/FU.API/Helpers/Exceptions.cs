@@ -68,7 +68,7 @@ public class NonexistentGameException : ExceptionWithResponse
 
     public override string Title { get; } = "Nonexistent Game";
 
-    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
 
     public NonexistentGameException()
     {
