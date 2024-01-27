@@ -87,6 +87,84 @@ public class PostService : CommonService, IPostService
         return postEntity;
     }
 
+    public async Task<Post> UpdatePostTitle(int postId, string title)
+    {
+        var postEntity = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+
+        postEntity.Title = title;
+
+        _dbContext.Update(postEntity);
+        await _dbContext.SaveChangesAsync();
+        return postEntity;
+    }
+
+    public async Task<Post> UpdatePostGame(int postId, int gameId)
+    {
+        var postEntity = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+
+        var game = await _dbContext.Games
+            .FindAsync(gameId) ?? throw new NonexistentGameException();
+
+        postEntity.Game = game;
+
+        _dbContext.Update(postEntity);
+        await _dbContext.SaveChangesAsync();
+        return postEntity;
+    }
+
+    public async Task<Post> UpdatePostDescription(int postId, string description)
+    {
+        var postEntity = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+
+        postEntity.Description = description;
+
+        _dbContext.Update(postEntity);
+        await _dbContext.SaveChangesAsync();
+        return postEntity;
+    }
+
+    public async Task<Post> UpdatePostMaxPlayers(int postId, int maxPlayers)
+    {
+        var postEntity = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+
+        postEntity.MaxPlayers = maxPlayers;
+
+        _dbContext.Update(postEntity);
+        await _dbContext.SaveChangesAsync();
+        return postEntity;
+    }
+
+    public async Task<Post> UpdatePostStartTime(int postId, DateTime? startTime)
+    {
+        var postEntity = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+
+        postEntity.StartTime = startTime;
+
+        _dbContext.Update(postEntity);
+        await _dbContext.SaveChangesAsync();
+        return postEntity;
+    }
+
+    public async Task<Post> UpdatePostEndTime(int postId, DateTime? endTime)
+    {
+        var postEntity = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+
+        postEntity.StartTime = endTime;
+
+        _dbContext.Update(postEntity);
+        await _dbContext.SaveChangesAsync();
+        return postEntity;
+    }
+
+    // public async Task<Post> UpdatePostTags(int postId, ICollection<int> tagIds)
+    // {
+    //     var postEntity = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+    //
+    //     _dbContext.Update(postEntity);
+    //     await _dbContext.SaveChangesAsync();
+    //
+    //     return postEntity;
+    // }
     public async Task<Post?> GetPost(int postId)
     {
         return await _dbContext.Posts
@@ -103,14 +181,14 @@ public class PostService : CommonService, IPostService
             .Where(p => p.Id == postId)
             .Include(p => p.Chat)
             .ThenInclude(c => c.Members)
-            .FirstOrDefaultAsync() ?? throw new PostException("Post does not exist");
+            .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
         var chat = post.Chat;
         var userId = user.UserId;
 
         // Check that the post is not full
         if (post.MaxPlayers <= chat.Members.Count)
         {
-            throw new PostException("Post is full");
+            throw new PostException("Post is full", HttpStatusCode.Conflict);
         }
 
         // Check that the user is not already in the chat
@@ -145,12 +223,12 @@ public class PostService : CommonService, IPostService
         // Find the chat membership
         var post = await _dbContext.Posts
             .Where(p => p.Id == postId)
-            .FirstOrDefaultAsync() ?? throw new PostException("Post does not exist");
+            .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
         var chatId = post.ChatId;
         var userId = user.UserId;
         var toRemove = await _dbContext.ChatMemberships
             .Where(cm => cm.ChatId == chatId && cm.UserId == userId)
-            .FirstOrDefaultAsync() ?? throw new PostException("User is not in the post");
+            .FirstOrDefaultAsync() ?? throw new PostException("User is not in the post", HttpStatusCode.Forbidden);
 
         try
         {

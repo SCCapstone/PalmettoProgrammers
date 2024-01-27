@@ -62,24 +62,30 @@ public class UnauthorizedException : ExceptionWithResponse
     }
 }
 
-public class PostNotFoundException : ExceptionWithResponse
+public class NotFoundException : ExceptionWithResponse
+{
+    public override string Description { get; } = "Not Found";
+
+    public override string Title { get; } = "The resource was not found";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
+
+    public NotFoundException()
+    {
+    }
+
+    public NotFoundException(string title, string description)
+    {
+        Title = title;
+        Description = description;
+    }
+}
+
+public class PostNotFoundException : NotFoundException
 {
     public override string Description { get; } = "Post Not Found";
 
     public override string Title { get; } = "The post was not found";
-
-    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
-
-    public PostNotFoundException()
-    {
-    }
-
-    public PostNotFoundException(string title, string description, HttpStatusCode statusCode)
-    {
-        Title = title;
-        Description = description;
-        StatusCode = statusCode;
-    }
 }
 
 public class NonexistentGameException : ExceptionWithResponse
@@ -108,15 +114,16 @@ public class PostException : ExceptionWithResponse
 
     public override string Title { get; } = "Post Exception";
 
-    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
+    public override HttpStatusCode StatusCode { get; }
 
     public PostException()
     {
     }
 
-    public PostException(string description)
+    public PostException(string description, HttpStatusCode statusCode)
     {
         Description = description;
+        StatusCode = statusCode;
     }
 }
 
