@@ -13,14 +13,29 @@ public class PostServiceTests
     public PostServiceTests()
     {
         _contextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .UseInMemoryDatabase("PostServiceTests")
             .Options;
+
+        using var context = new AppDbContext(_contextOptions);
+
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+
+        context.SaveChanges();
     }
 
-    private AppDbContext CreateContext()
-    {
-        var context = new AppDbContext(_contextOptions);
+    AppDbContext CreateContext() => new(_contextOptions);
 
+    // Test for GetPostUsers method
+
+    [Theory]
+    [InlineData(1, 1, true)]
+    [InlineData(1, 2, true)]
+    [InlineData(1, 5, false)]
+    public async void GetPostUsers_WithValidPostId_CheckUserJoined(int postId, int checkUserId, bool expectedJoined)
+    {
+        // Arrange
+        var context = CreateContext();
         var testUsers = CreateTestUsers();
         var testChat = CreateTestChat(testUsers);
         context.Set<Chat>().Add(testChat);
@@ -40,19 +55,6 @@ public class PostServiceTests
         context.Set<Post>().Add(post);
         context.SaveChanges();
 
-        return context;
-    }
-
-    // Test for GetPostUsers method
-
-    [Theory]
-    [InlineData(1, 1, true)]
-    [InlineData(1, 2, true)]
-    [InlineData(1, 5, false)]
-    public async void GetPostUsers_WithValidPostId_CheckUserJoined(int postId, int checkUserId, bool expectedJoined)
-    {
-        // Arrange
-        var context = CreateContext();
         var chatService = new ChatService(context);
         var postService = new PostService(context, chatService);
 
