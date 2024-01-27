@@ -35,8 +35,7 @@ public static class Mapper
             Id = message.Id,
             CreatedAt = message.CreatedAt,
             Content = message.Content,
-            SenderId = message.SenderId,
-            SenderName = message.Sender.Username,
+            Sender = message.Sender.ToProfile(),
         };
     }
 
