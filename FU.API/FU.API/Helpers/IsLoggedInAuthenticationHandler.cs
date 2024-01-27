@@ -1,4 +1,5 @@
-using FU.API.Helpers;
+namespace FU.API.Helpers;
+
 using Microsoft.AspNetCore.Authorization;
 
 /// <summary>

@@ -13,7 +13,7 @@ public abstract class ExceptionWithResponse : Exception
 
     public ProblemDetails GetProblemDetails()
     {
-        return new ()
+        return new()
         {
             Title = Title,
             Detail = Description,

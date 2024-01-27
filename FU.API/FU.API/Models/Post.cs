@@ -1,5 +1,7 @@
 ﻿namespace FU.API.Models;
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 /// <summary>
 /// The post class.
 /// </summary>
@@ -10,10 +12,23 @@ public class Post
     /// </summary>
     public int Id { get; set; }
 
+    [NotMapped]
+    private string _title = string.Empty;
+
     /// <summary>
     /// Gets or sets the title of the post.
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string Title
+    {
+        get => _title;
+        set
+        {
+            _title = value;
+            NormalizedTitle = value.ToUpper();
+        }
+    }
+
+    public string NormalizedTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the game of the post.
@@ -28,7 +43,20 @@ public class Post
     /// <summary>
     /// Gets or sets the description of the post.
     /// </summary>
-    public string Description { get; set; } = string.Empty;
+    [NotMapped]
+    private string _description = string.Empty;
+
+    public string Description
+    {
+        get => _description;
+        set
+        {
+            _description = value;
+            NormalizedDescription = value.ToUpper();
+        }
+    }
+
+    public string NormalizedDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the start time.

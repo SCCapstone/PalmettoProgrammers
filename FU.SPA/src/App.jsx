@@ -7,11 +7,13 @@ import NoPage from './components/pages/NoPage';
 import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import Chat from './components/pages/Chat';
-import PostPage from './components/pages/PostPage'
+import PostPage from './components/pages/PostPage';
+import UserProfile from './components/pages/UserProfile';
 
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
+import './App.css';
 
 function App() {
   return (
@@ -44,6 +46,7 @@ function App() {
             <Route path="/chat/:chatId" element={<Chat />} />
             <Route path="/posts/:postId" element={<PostPage />} />
             <Route path="*" element={<NoPage />} />
+            <Route path="/profile/:userId" element={<UserProfile />} />
           </Routes>
         </div>
       </UserProvider>
