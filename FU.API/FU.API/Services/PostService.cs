@@ -77,6 +77,7 @@ public class PostService : CommonService, IPostService
         postEntity.MaxPlayers = post.MaxPlayers;
         postEntity.StartTime = post.StartTime;
         postEntity.EndTime = post.EndTime;
+        postEntity.Title = post.Title;
 
         var postTagIds = post.Tags.Select(t => t.TagId);
         var tags = await _dbContext.Tags
