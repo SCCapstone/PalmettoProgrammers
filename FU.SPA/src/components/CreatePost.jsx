@@ -66,7 +66,7 @@ export default function CreatePost({CreatePost}) { //may need to remove the {Cre
   return (
     <Container component="main" maxWidth="xs">
       {/*  may need to put the closing div at bottom so the test can find 'game' and 'title' in it */}
-      <div data-testid="cpTest-1">
+      {/* <div data-testid="cpTest-1"> */}
       <Box
         sx={{
           marginTop: 1,
@@ -156,7 +156,7 @@ export default function CreatePost({CreatePost}) { //may need to remove the {Cre
           </Button>
         </Box>
       </Box>
-      </div>
+      {/* </div> */}
     </Container>
   );
 }
