@@ -11,6 +11,7 @@ using FU.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -27,7 +28,22 @@ string jwtSecret = builder.Configuration[ConfigKey.JwtSecret]
     ?? throw new Exception("No jwt secret found from env var " + ConfigKey.JwtSecret);
 
 // Setup the database
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+// Set the db context options
+var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+builder.Services.AddDbContext<AppDbContext>(optionsBuilder => optionsBuilder.UseNpgsql(connectionString));
+ContextFactory.SetConfiguration(optionsBuilder.UseNpgsql(connectionString));
+
+// Setup jobs
+string? stringCronExpressionsMap = builder.Configuration[ConfigKey.JobExpressionsMap];
+if (stringCronExpressionsMap is not null)
+{
+    JobManager.Initialize();
+    var jobsMap = Mapper.StringJobsToMap(stringCronExpressionsMap);
+
+    JobManager.AddJob(
+        () => UpdatePostStatusJob.Execute(),
+        s => s.ToRunEvery(jobsMap[typeof(UpdatePostStatusJob).Name]).Minutes());
+}
 
 // Validates JWT Tokens
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -76,22 +92,12 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
-ContextFactory.SetConfiguration(builder.Configuration);
 
 // Add SignalR
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
 });
-
-// Setup jobs
-JobManager.Initialize();
-JobManager.AddJob(
-    () => ExpiredPostsJob.Execute(),
-    s => s.ToRunEvery(15).Minutes());
-JobManager.AddJob(
-    () => OngoingPostsJob.Execute(),
-    s => s.ToRunEvery(5).Minutes());
 
 builder.Services.AddAuthorization(options =>
 {

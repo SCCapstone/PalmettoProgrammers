@@ -88,7 +88,7 @@ public class Post
     /// </summary>
     public ApplicationUser Creator { get; set; } = new ApplicationUser();
 
-    public PostStatus Status { get; set; } = PostStatus.Created;
+    public PostStatus Status { get; set; } = PostStatus.Active;
 
     /// <summary>
     /// Gets or sets the id of the creator.
@@ -109,9 +109,9 @@ public class Post
 public enum PostStatus
 {
     /// <summary>
-    /// The post is Created. This is the default status.
+    /// The post is Active. This is the default status.
     /// </summary>
-    Created,
+    Active,
 
     /// <summary>
     /// The post has expired. This status is set when the post has ended.

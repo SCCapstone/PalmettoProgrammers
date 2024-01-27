@@ -196,4 +196,19 @@ public static class Mapper
 
     public static IEnumerable<GroupSimpleDTO> ToSimpleDtos(this IEnumerable<Group> groups) =>
         groups.Select(group => group.ToSimpleDto());
+
+    public static Dictionary<string, int> StringJobsToMap(string mapString)
+    {
+        var map = new Dictionary<string, int>();
+        foreach (string job in mapString.Split(";"))
+        {
+            var arr = job.Split(":");
+            if (arr.Length == 2 && int.TryParse(arr[1], out int value))
+            {
+                map.Add(arr[0], value);
+            }
+        }
+
+        return map;
+    }
 }

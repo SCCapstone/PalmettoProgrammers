@@ -5,36 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 public class ContextFactory
 {
-    private static IConfiguration? _configuration;
+    private static DbContextOptionsBuilder<AppDbContext>? _optionsBuilder;
 
-    public static void SetConfiguration(IConfiguration configuration)
+    public static void SetConfiguration(DbContextOptionsBuilder<AppDbContext> optionsBuilder)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _optionsBuilder = optionsBuilder;
     }
 
     public static AppDbContext CreateDbContext()
     {
-        if (_configuration is null)
+        if (_optionsBuilder is null)
         {
-            throw new InvalidOperationException("Configuration has not been set.");
+            throw new InvalidOperationException("Option builder is not set");
         }
 
-        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseNpgsql(_configuration[ConfigKey.ConnectionString]);
-
-        return new AppDbContext(optionsBuilder.Options);
-    }
-
-    public static AppDbContext CreateDbContext(IConfiguration configuration)
-    {
-        if (configuration is null)
-        {
-            throw new InvalidOperationException("Configuration has not been set.");
-        }
-
-        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseNpgsql(configuration[ConfigKey.ConnectionString]);
-
-        return new AppDbContext(optionsBuilder.Options);
+        return new AppDbContext(_optionsBuilder.Options);
     }
 }
