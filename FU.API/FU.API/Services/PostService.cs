@@ -1,5 +1,6 @@
 namespace FU.API.Services;
 
+using System.Net;
 using FU.API.Data;
 using FU.API.Exceptions;
 using FU.API.Interfaces;
@@ -22,6 +23,9 @@ public class PostService : CommonService, IPostService
     {
         var game = await _dbContext.Games
             .FindAsync(post.GameId) ?? throw new NonexistentGameException();
+
+        var user = await _dbContext.Users
+            .FindAsync(post.CreatorId) ?? throw new NotFoundException("Creator not found", "The creator was not found");
 
         post.Game = game;
 
@@ -60,6 +64,11 @@ public class PostService : CommonService, IPostService
     public async Task<Post> UpdatePost(Post post)
     {
         Post postEntity = _dbContext.Posts.Find(post.Id) ?? throw new PostNotFoundException();
+
+        if (postEntity.CreatorId != post.CreatorId)
+        {
+            throw new PostException("The updated post's user does not match the old post's user", HttpStatusCode.UnprocessableEntity);
+        }
 
         var game = await _dbContext.Games
             .FindAsync(post.GameId) ?? throw new NonexistentGameException();
