@@ -56,11 +56,6 @@ public class AccountsController : ControllerBase
     {
         var user = await _accountService.Register(credentials);
 
-        if (user is null)
-        {
-            return BadRequest();
-        }
-
         return Ok();
     }
 
