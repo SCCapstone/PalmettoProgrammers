@@ -81,6 +81,7 @@ cd FU.API
 dotnet test
 ```
 Tests are located in FU.API/FU.API.Tests
+The tests are ran on every commit made.
 
 # Authors
 Aaron Keys - alkeys@email.sc.edu
