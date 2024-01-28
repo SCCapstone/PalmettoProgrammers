@@ -20,7 +20,8 @@ const findGameByTitle = async (title) => {
   let game = null;
 
   for (const g of games) {
-    if (g.name == title) game = g;
+    // compare ignoring case
+    if (g.name.toLowerCase() === title.toLowerCase()) game = g;
   }
 
   return game;
@@ -28,6 +29,7 @@ const findGameByTitle = async (title) => {
 
 const findOrCreateGameByTitle = async (title) => {
   let game = await findGameByTitle(title);
+  console.log(game);
 
   if (!game) {
     game = await createGame({ Name: title });

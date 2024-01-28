@@ -6,15 +6,21 @@ import NoPage from './NoPage';
 import './UserProfile.css';
 import { getDirectChat } from '../../services/chatService';
 import { useNavigate } from 'react-router-dom';
+import Chat from '../Chat';
 
-export default function UserProfile() {
+const UserProfile = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
   const { user } = useContext(UserContext);
   const [userProfile, setUserProfile] = useState(null);
   const [defaultPFP, setDefaultPFP] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [chatId, setChatId] = useState(null);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [isChatCollapsed, setIsChatCollapsed] = useState(false);
 
   const update = useCallback(async () => {
+    setLoading(true);
     try {
       const profile = await UserService.getUserprofile(userId);
       setUserProfile(profile);
@@ -23,10 +29,20 @@ export default function UserProfile() {
           'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
         ),
       );
+      const chat = await getDirectChat(profile.id);
+      setChatId(chat.id);
+      if (user) {
+        setIsOwnProfile(user.id === profile.id);
+      } else {
+        setIsOwnProfile(false);
+      }
+      const chatCollapsedKey = `chat-${chat.id}-collapsed`;
+      setIsChatCollapsed(localStorage.getItem(chatCollapsedKey) === 'true');
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
-  }, [userId]);
+    setLoading(false);
+  }, [userId, user]);
 
   useEffect(() => {
     update();
@@ -107,9 +123,6 @@ export default function UserProfile() {
 
     return (
       <div className="buttons">
-        <button className="messageButton" onClick={clickSendMessage}>
-          Send Message
-        </button>
         <button className="friendButton">Send Friend Request</button>
       </div>
     );
@@ -134,15 +147,27 @@ export default function UserProfile() {
     );
   };
 
-  const clickSendMessage = async () => {
-    const chat = await getDirectChat(userProfile.id);
-    navigate(`/chat/${chat.id}`);
+  const handleChatCollapse = () => {
+    setIsChatCollapsed(!isChatCollapsed);
   };
 
-  if (userProfile) {
+  const renderChat = () => {
+    if ((isOwnProfile || !chatId) && !loading) {
+      return;
+    }
+    return <Chat chatId={chatId} onChatCollapse={handleChatCollapse} />;
+  };
+
+  if (userProfile && !loading) {
     return (
       <div className="page-wrapper">
-        <div className="header">
+        <div
+          className="header"
+          style={{
+            width: isChatCollapsed ? '100%' : '60%',
+            transition: 'width 0.3s ease',
+          }}
+        >
           <div className="left-content">
             {renderPfp()}
             <div className="userInfo">
@@ -154,9 +179,12 @@ export default function UserProfile() {
           <div className="right-content">{renderHeaderButtons()}</div>
         </div>
         <div className="body">{renderBio()}</div>
+        {renderChat()}
       </div>
     );
-  } else {
+  } else if (!userProfile && !loading) {
     return <NoPage />;
   }
-}
+};
+
+export default UserProfile;

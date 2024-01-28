@@ -11,7 +11,7 @@ export const hubConnection = new signalR.HubConnectionBuilder()
 export const startConnection = async () => {
   try {
     // Only start if connection is not in the Connected state
-    if (hubConnection.state !== signalR.HubConnectionState.Connected) {
+    if (hubConnection.state === signalR.HubConnectionState.Disconnected) {
       await hubConnection.start();
       console.log('SignalR connection started.');
     }
@@ -23,7 +23,7 @@ export const startConnection = async () => {
 export const stopConnection = async () => {
   try {
     // Only stop if connection is not in the Disconnected state
-    if (hubConnection.state !== signalR.HubConnectionState.Disconnected) {
+    if (hubConnection.state === signalR.HubConnectionState.Connected) {
       await hubConnection.stop();
       console.log('SignalR connection stopped.');
     }
@@ -35,6 +35,7 @@ export const stopConnection = async () => {
 export const joinChatGroup = async (chatId) => {
   try {
     // parse chatId to int
+    // await hubConnection.start();
     chatId = parseInt(chatId);
     await hubConnection.invoke('JoinChatGroup', chatId);
     console.log(`Joined chat group: ${chatId}`);
