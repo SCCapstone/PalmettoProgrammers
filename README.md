@@ -29,7 +29,7 @@ docker container start postgres-490
 
 Alternatively, install and start a PostgreSQL database manually.
 
-### Setup Postgres
+### Updating Postgres
 Run the following command to apply the latest database changes.
 Make sure you have the Entity Framework tool installed.
 ```
