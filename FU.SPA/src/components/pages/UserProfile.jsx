@@ -36,7 +36,7 @@ const UserProfile = () => {
       }
       const chatCollapsedKey = `chat-${chatId}-collapsed`;
       setIsChatCollapsed(
-        localStorage.getItem(chatCollapsedKey) === 'true' || user === null,
+        localStorage.getItem(chatCollapsedKey) === 'true' || user === null || isOwnProfile,
       );
       console.log('is chat collapsed:', isChatCollapsed);
     } catch (error) {
