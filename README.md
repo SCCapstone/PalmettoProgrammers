@@ -76,15 +76,16 @@ Deployed to Azure using GitHub Actions.
 
 # Testing
 ## Unit Tests
+To run unit tests on the backend:
 ```
 cd FU.API
 dotnet test
 ```
-Tests are located in FU.API/FU.API.Tests
+Tests are located in `FU.API/FU.API.Tests`.
 The tests are ran on every commit made.
 
 ## Behavioral Tests
-
+To run behavioral tests on the frontend:
 ```
 cd FU.SPA
 npm run selenium-test
@@ -93,10 +94,10 @@ Alternativly, you can use:
 ```
 selenium-side-runner tests/*.side -c browserName=firefox
 ```
-This does the same as above but directly calls the CLI command. You can also change the browser 
-name to chrome/chromium if you want to test that browser engine instead.
+This does the same as above but directly calls the CLI command. You can also change the browserName
+option to chrome/chromium if you want to test that browser engine instead.
 
-The test is located in FU.SPA/tests.
+Tests are located in `FU.SPA/tests`.
 
 # Authors
 Aaron Keys - alkeys@email.sc.edu
