@@ -45,12 +45,10 @@ const PostPage = () => {
     setLoading(true);
     try {
       const data = await PostService.getPostDetails(postId);
-      console.log(data);
       setPost(data);
     } catch (error) {
       console.error('Error fetching post details:', error);
     }
-    console.log('refreshed');
     setLoading(false);
   }, [postId]);
 

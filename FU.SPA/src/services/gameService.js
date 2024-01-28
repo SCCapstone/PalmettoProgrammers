@@ -29,7 +29,6 @@ const findGameByTitle = async (title) => {
 
 const findOrCreateGameByTitle = async (title) => {
   let game = await findGameByTitle(title);
-  console.log(game);
 
   if (!game) {
     game = await createGame({ Name: title });

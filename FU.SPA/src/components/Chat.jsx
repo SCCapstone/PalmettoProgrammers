@@ -76,13 +76,11 @@ export default function Chat({ chatId, onChatCollapse }) {
     const loadMoreMessages = async () => {
       try {
         const newMessages = await getMessages(chat.id, offset, limit);
-        console.log(newMessages);
 
         // Check if there are more messages
         if (newMessages.length > 0) {
           setMessages((prevMessages) => [...newMessages, ...prevMessages]);
         } else {
-          console.log('no more messages');
           setHasMoreMessages(false);
         }
       } catch (error) {
@@ -99,7 +97,6 @@ export default function Chat({ chatId, onChatCollapse }) {
   async function handleSendMessage() {
     try {
       if (message === '') {
-        console.log('empty message');
         return;
       }
       await saveMessage(message, chatId);
@@ -121,12 +118,7 @@ export default function Chat({ chatId, onChatCollapse }) {
     }
   };
 
-  /**
-   *
-   * @param {boolean} isCollapsed
-   * @param {string} chatCollapsedKey
-   * @param {number} scrollPosition
-   */
+  // Scrolls back to the previous scroll position when chat new messages are loaded
   useEffect(() => {
     localStorage.setItem(chatCollapsedKey, isChatCollapsed);
     if (isChatCollapsed) {
@@ -134,7 +126,7 @@ export default function Chat({ chatId, onChatCollapse }) {
     }
 
     const chatContainer = document.querySelector('.MuiCardContent-root');
-    // If scroll position is 0, scroll to the bottom
+
     if (scrollPosition === 0) {
       chatContainer.scrollTop = chatContainer.scrollHeight;
     } else {

@@ -12,7 +12,6 @@ const UserProvider = ({ children }) => {
       try {
         if (token) {
           const currentUser = await UserService.getUserprofile('current');
-          console.log(currentUser);
           setUser(currentUser);
           startConnection();
         } else {
@@ -28,8 +27,6 @@ const UserProvider = ({ children }) => {
   }, [token]);
 
   const login = (newToken) => {
-    console.log('token');
-    console.log(newToken);
     setToken(newToken);
     localStorage.setItem('token', newToken);
     startConnection();
