@@ -74,8 +74,8 @@ Follow Prettier's HTML, CSS, JavaScript/JSX [style formatting](https://prettier.
 # Deployment
 Deployed to Azure using GitHub Actions.
 
-## Testing
-### Unit Tests
+# Testing
+## Unit Tests
 ```
 cd FU.API
 dotnet test
