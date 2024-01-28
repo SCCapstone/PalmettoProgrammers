@@ -95,7 +95,8 @@ selenium-side-runner tests/*.side -c browserName=firefox
 ```
 This does the same as above but directly calls the CLI command. You can also change the browser 
 name to chrome/chromium if you want to test that browser engine instead.
-Test is located in FU.SPA/tests.
+
+The test is located in FU.SPA/tests.
 
 # Authors
 Aaron Keys - alkeys@email.sc.edu
