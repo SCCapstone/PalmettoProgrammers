@@ -19,10 +19,10 @@ export default function Discover() {
   const [games, setGames] = useState([]);
   const [tags, setTags] = useState([]);
   
-  useEffect(() => {
+  /*useEffect(() => {
     // update searchText when query changes
     setSearchText(searchParams.get('q') || '');
-  }, [location]); 
+  }, [location]); */
 
   useEffect(() => {
     const submitSearch = async () => {
@@ -49,8 +49,8 @@ export default function Discover() {
     // build query string
     const params = new URLSearchParams();
     if (searchText) params.append('q', searchText);
-    games.forEach(game => params.append('game', game));
-    tags.forEach(tag => params.append('tag', tag));
+    games.forEach(game => params.append('game', game.id));
+    tags.forEach(tag => params.append('tag', tag.id));
 
     // update URL
     navigate(`/discover?${params.toString()}`, { replace: true });
@@ -74,18 +74,17 @@ export default function Discover() {
 function SearchBar({ searchText, onSearchSubmit }) {
   const [localSearchText, setLocalSearchText] = useState(searchText);
 
-  useEffect(() => {
+ useEffect(() => {
     setLocalSearchText(searchText);
   }, [searchText]);
 
-  const onKeyDown = (event) => {
+  function onKeyDown(event) {
     if (event.key === 'Enter') {
-      //event.preventDefault();
       onSearchSubmit(localSearchText);
     }
-  };
+  }
 
-  const handleChange = (event) => {
+  function handleChange(event) {
     setLocalSearchText(event.target.value);
 
   };
