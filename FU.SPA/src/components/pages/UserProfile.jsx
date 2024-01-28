@@ -27,15 +27,18 @@ const UserProfile = () => {
           'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
         ),
       );
-      const chat = await getDirectChat(profile.id);
-      setChatId(chat.id);
       if (user) {
+        const chat = await getDirectChat(profile.id);
+        setChatId(chat.id);
         setIsOwnProfile(user.id === profile.id);
       } else {
         setIsOwnProfile(false);
       }
-      const chatCollapsedKey = `chat-${chat.id}-collapsed`;
-      setIsChatCollapsed(localStorage.getItem(chatCollapsedKey) === 'true');
+      const chatCollapsedKey = `chat-${chatId}-collapsed`;
+      setIsChatCollapsed(
+        localStorage.getItem(chatCollapsedKey) === 'true' || user === null,
+      );
+      console.log('is chat collapsed:', isChatCollapsed);
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
