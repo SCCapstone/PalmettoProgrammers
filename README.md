@@ -74,6 +74,14 @@ Follow Prettier's HTML, CSS, JavaScript/JSX [style formatting](https://prettier.
 # Deployment
 Deployed to Azure using GitHub Actions.
 
+## Testing
+### Unit Tests
+```
+cd FU.API
+dotnet test
+```
+Tests are locatied in FU.API/FU.API.Tests
+
 # Authors
 Aaron Keys - alkeys@email.sc.edu
 
