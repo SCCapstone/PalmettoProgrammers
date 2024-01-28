@@ -5,11 +5,9 @@ import UserService from '../../services/userService';
 import NoPage from './NoPage';
 import './UserProfile.css';
 import { getDirectChat } from '../../services/chatService';
-import { useNavigate } from 'react-router-dom';
 import Chat from '../Chat';
 
 const UserProfile = () => {
-  const navigate = useNavigate();
   const { userId } = useParams();
   const { user } = useContext(UserContext);
   const [userProfile, setUserProfile] = useState(null);

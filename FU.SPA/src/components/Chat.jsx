@@ -27,7 +27,7 @@ export default function Chat({ chatId, onChatCollapse }) {
   const { user } = useContext(UserContext);
   // Get is the chat collapsed from local storage
   const [isChatCollapsed, setIsChatCollapsed] = useState(
-    localStorage.getItem(chatCollapsedKey) === 'true'
+    localStorage.getItem(chatCollapsedKey) === 'true',
   );
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isNewMessageReceived, setIsNewMessageReceived] = useState(false);
@@ -50,12 +50,12 @@ export default function Chat({ chatId, onChatCollapse }) {
 
     const handleReceiveMessage = (receivedMessage) => {
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-  
+
       // Return if user is the sender
       if (receivedMessage.sender.username === user.username) {
         return;
       }
-  
+
       setIsNewMessageReceived(true);
       setTimeout(() => {
         setIsNewMessageReceived(false);
@@ -122,7 +122,7 @@ export default function Chat({ chatId, onChatCollapse }) {
   };
 
   /**
-   * 
+   *
    * @param {boolean} isCollapsed
    * @param {string} chatCollapsedKey
    * @param {number} scrollPosition
@@ -231,7 +231,7 @@ export default function Chat({ chatId, onChatCollapse }) {
         {isChatCollapsed ? 'Expand Chat' : 'Collapse Chat'}
       </Button>
       {renderChatBody()}
-      <style jsx>{`
+      <style>{`
         @keyframes sparkle {
           0%,
           100% {

@@ -41,17 +41,6 @@ const UserProvider = ({ children }) => {
     stopConnection();
   };
 
-  const wait = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 25));
-  };
-
-  // useEffect(() => {
-  //   // Redirect to home page if the user is not null
-  //   if (user) {
-  //     navigate('/home');
-  //   }
-  // }, [user, navigate]);
-
   return (
     <UserContext.Provider value={{ user, token, login, logout }}>
       {children}

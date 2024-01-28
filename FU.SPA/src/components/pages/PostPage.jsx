@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import { Box, Container, Typography, CssBaseline, Button } from '@mui/material';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PostService from '../../services/postService';
 import UserContext from '../../context/userContext';
