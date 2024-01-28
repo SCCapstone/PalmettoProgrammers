@@ -6,6 +6,7 @@ using FU.API.Exceptions;
 using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 public class PostService : CommonService, IPostService
 {
@@ -105,6 +106,18 @@ public class PostService : CommonService, IPostService
             .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
             .Include(p => p.Game)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<ApplicationUser>> GetPostUsers(int postId)
+    {
+        return await _dbContext.Posts
+            .Where(p => p.Id == postId)
+            .Include(p => p.Chat)
+            .ThenInclude(c => c.Members)
+            .ThenInclude(cm => cm.User)
+            .SelectMany(p => p.Chat.Members)
+            .Select(cm => cm.User)
+            .ToListAsync();
     }
 
     public async Task JoinPost(int postId, ApplicationUser user)

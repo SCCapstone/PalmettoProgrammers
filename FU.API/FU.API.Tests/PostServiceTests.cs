@@ -14,7 +14,7 @@ public class PostServiceTests
     public PostServiceTests()
     {
         _contextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase("GameServiceTest")
+            .UseInMemoryDatabase("PostServiceTestDb")
             .Options;
 
         using var context = new AppDbContext(_contextOptions);
@@ -25,7 +25,74 @@ public class PostServiceTests
         context.SaveChanges();
     }
 
+    [Theory]
+    [InlineData(1, 1, true)]
+    [InlineData(1, 2, true)]
+    [InlineData(1, 5, false)]
+    public async void GetPostUsers_WithValidPostId_CheckUserJoined(int postId, int checkUserId, bool expectedJoined)
+    {
+        // Arrange
+        var context = CreateContext();
+        var testUsers = CreateTestUsers();
+        var testChat = CreateTestChat(testUsers);
+        context.Set<Chat>().Add(testChat);
+        context.Set<ApplicationUser>().AddRange(testUsers);
+
+        var post = new Post()
+        {
+            Id = 1,
+            Title = "TestTitle",
+            GameId = 1,
+            CreatorId = testUsers[0].UserId,
+            Creator = testUsers[0],
+            ChatId = testChat.Id,
+            Chat = testChat,
+        };
+
+        context.Set<Post>().Add(post);
+        context.SaveChanges();
+
+        var chatService = new ChatService(context);
+        var postService = new PostService(context, chatService);
+
+        // Act
+        var postUsers = await postService.GetPostUsers(postId);
+
+        // Assert
+        var joined = postUsers.Any(u => u.UserId == checkUserId);
+        Assert.Equal(expectedJoined, joined);
+        Assert.Equal(4, postUsers.Count());
+    }
+
     AppDbContext CreateContext() => new(_contextOptions);
+
+    private List<ApplicationUser> CreateTestUsers()
+    {
+        return new List<ApplicationUser>()
+        {
+            new ApplicationUser()
+            {
+                UserId = 1,
+                Username = "User1",
+            },
+            new ApplicationUser()
+            {
+                UserId = 2,
+                Username = "User2",
+            },
+            new ApplicationUser()
+            {
+                UserId = 3,
+                Username = "User3",
+            },
+            new ApplicationUser()
+            {
+                UserId = 4,
+                Username = "User4",
+            },
+        };
+    }
+
     async Task<ApplicationUser> CreateUser(AppDbContext context)
     {
         var configPairs = new Dictionary<string, string?> { { "JWT_SECRET", "1234567890" } };
@@ -94,5 +161,22 @@ public class PostServiceTests
 
         // Assert
         Assert.Equal(createdPost.Description, updatedPost.Description);
+    }
+
+    private Chat CreateTestChat(List<ApplicationUser> users)
+    {
+        return new Chat()
+        {
+            Id = 1,
+            ChatType = ChatType.Post,
+            ChatName = "Title1",
+            CreatorId = 1,
+            Members = users.Select(u => new ChatMembership()
+            {
+                ChatId = 1,
+                UserId = u.UserId,
+                User = u,
+            }).ToList(),
+        };
     }
 }

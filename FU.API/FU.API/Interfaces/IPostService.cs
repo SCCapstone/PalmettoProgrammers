@@ -13,4 +13,6 @@ public interface IPostService : ICommonService
     Task JoinPost(int postId, ApplicationUser user);
 
     Task LeavePost(int postId, ApplicationUser user);
+
+    Task<IEnumerable<ApplicationUser>> GetPostUsers(int postId);
 }
