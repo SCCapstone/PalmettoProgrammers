@@ -34,7 +34,7 @@ public class AccountsService
     /// </summary>
     /// <param name="credentials">Credentials for the new user.</param>
     /// <returns>Returns the created user, or null if failed.</returns>
-    public Task<ApplicationUser?> Register(Credentials credentials)
+    public async Task<ApplicationUser> Register(Credentials credentials)
     {
         var queryUser = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper());
         if (queryUser.FirstOrDefault() is not null)
@@ -47,9 +47,9 @@ public class AccountsService
             Username = credentials.Username,
             PasswordHash = HashPassword(credentials.Password),
         });
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
-        return Task.FromResult<ApplicationUser?>(queryUser.First());
+        return queryUser.First();
     }
 
     /// <summary>
