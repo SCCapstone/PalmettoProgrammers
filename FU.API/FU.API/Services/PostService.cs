@@ -1,5 +1,6 @@
 namespace FU.API.Services;
 
+using System.Net;
 using FU.API.Data;
 using FU.API.Exceptions;
 using FU.API.Interfaces;
@@ -23,6 +24,9 @@ public class PostService : CommonService, IPostService
     {
         var game = await _dbContext.Games
             .FindAsync(post.GameId) ?? throw new NonexistentGameException();
+
+        var user = await _dbContext.Users
+            .FindAsync(post.CreatorId) ?? throw new NotFoundException("Creator not found", "The creator was not found");
 
         post.Game = game;
 
@@ -58,6 +62,42 @@ public class PostService : CommonService, IPostService
         return post;
     }
 
+    public async Task<Post> UpdatePost(Post post)
+    {
+        Post postEntity = _dbContext.Posts.Find(post.Id) ?? throw new PostNotFoundException();
+
+        if (postEntity.CreatorId != post.CreatorId)
+        {
+            throw new PostException("The updated post's user does not match the old post's user", HttpStatusCode.UnprocessableEntity);
+        }
+
+        var game = await _dbContext.Games
+            .FindAsync(post.GameId) ?? throw new NonexistentGameException();
+        postEntity.Game = game;
+        postEntity.Description = post.Description;
+        postEntity.MaxPlayers = post.MaxPlayers;
+        postEntity.StartTime = post.StartTime;
+        postEntity.EndTime = post.EndTime;
+        postEntity.Title = post.Title;
+
+        var postTagIds = post.Tags.Select(t => t.TagId);
+        var tags = await _dbContext.Tags
+            .Where(t => postTagIds.Contains(t.Id))
+            .ToListAsync();
+
+        // Update post tags
+        postEntity.Tags.Clear();
+        foreach (var tag in tags)
+        {
+            postEntity.Tags.Add(new TagRelation { Tag = tag });
+        }
+
+        _dbContext.Posts.Update(postEntity);
+        await _dbContext.SaveChangesAsync();
+
+        return postEntity;
+    }
+
     public async Task<Post?> GetPost(int postId)
     {
         return await _dbContext.Posts
@@ -86,14 +126,14 @@ public class PostService : CommonService, IPostService
             .Where(p => p.Id == postId)
             .Include(p => p.Chat)
             .ThenInclude(c => c.Members)
-            .FirstOrDefaultAsync() ?? throw new PostException("Post does not exist");
+            .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
         var chat = post.Chat;
         var userId = user.UserId;
 
         // Check that the post is not full
         if (post.MaxPlayers <= chat.Members.Count)
         {
-            throw new PostException("Post is full");
+            throw new PostException("Post is full", HttpStatusCode.Conflict);
         }
 
         // Check that the user is not already in the chat
@@ -128,12 +168,12 @@ public class PostService : CommonService, IPostService
         // Find the chat membership
         var post = await _dbContext.Posts
             .Where(p => p.Id == postId)
-            .FirstOrDefaultAsync() ?? throw new PostException("Post does not exist");
+            .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
         var chatId = post.ChatId;
         var userId = user.UserId;
         var toRemove = await _dbContext.ChatMemberships
             .Where(cm => cm.ChatId == chatId && cm.UserId == userId)
-            .FirstOrDefaultAsync() ?? throw new PostException("User is not in the post");
+            .FirstOrDefaultAsync() ?? throw new PostException("User is not in the post", HttpStatusCode.Forbidden);
 
         try
         {
