@@ -80,7 +80,7 @@ Deployed to Azure using GitHub Actions.
 cd FU.API
 dotnet test
 ```
-Tests are locatied in FU.API/FU.API.Tests
+Tests are located in FU.API/FU.API.Tests
 
 # Authors
 Aaron Keys - alkeys@email.sc.edu
