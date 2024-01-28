@@ -83,6 +83,20 @@ dotnet test
 Tests are located in FU.API/FU.API.Tests
 The tests are ran on every commit made.
 
+## Behavioral Tests
+
+```
+cd FU.SPA
+npm run selenium-test
+```
+Alternativly, you can use:
+```
+selenium-side-runner tests/*.side -c browserName=firefox
+```
+This does the same as above but directly calls the CLI command. You can also change the browser 
+name to chrome/chromium if you want to test that browser engine instead.
+Test is located in FU.SPA/tests.
+
 # Authors
 Aaron Keys - alkeys@email.sc.edu
 
