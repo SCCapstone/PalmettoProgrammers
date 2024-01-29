@@ -126,7 +126,7 @@ public class PostServiceTests
             Title = "Title Text",
             Description = "Description Text",
             GameId = game.Id,
-            CreatorId = user,
+            Creator = user,
         };
         var createdPost = await postService.CreatePost(post);
 
