@@ -12,18 +12,14 @@ export default function Discover() {
 
   const searchParams = new URLSearchParams(location.search);
   const initialSearchText = searchParams.get('q') || '';
-  const initialGames = searchParams.getAll('game');
-  const initialTags = searchParams.getAll('tag');
+  const initialGames = searchParams.getAll('game').map(gameId => ({ id: gameId }));
+  const initialTags = searchParams.getAll('tag').map(tagId => ({ id: tagId }));
+
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState(initialSearchText);
-  const [games, setGames] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [games, setGames] = useState(initialGames);
+  const [tags, setTags] = useState(initialTags);
   
-  /*useEffect(() => {
-    // update searchText when query changes
-    setSearchText(searchParams.get('q') || '');
-  }, [location]); */
-
   useEffect(() => {
     const submitSearch = async () => {
       const query = {
@@ -49,8 +45,8 @@ export default function Discover() {
     // build query string
     const params = new URLSearchParams();
     if (searchText) params.append('q', searchText);
-    games.forEach(game => params.append('game', game.id));
-    tags.forEach(tag => params.append('tag', tag.id));
+    games.forEach(game => game.id && params.append('game', game.id));
+    tags.forEach(tag => tag.id && params.append('tag', tag.id));
 
     // update URL
     navigate(`/discover?${params.toString()}`, { replace: true });
