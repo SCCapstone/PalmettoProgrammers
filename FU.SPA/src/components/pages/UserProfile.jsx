@@ -15,7 +15,6 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [chatId, setChatId] = useState(null);
   const [isOwnProfile, setIsOwnProfile] = useState(false);
-  const [isChatCollapsed, setIsChatCollapsed] = useState(false);
 
   const update = useCallback(async () => {
     setLoading(true);
@@ -34,13 +33,6 @@ const UserProfile = () => {
       } else {
         setIsOwnProfile(false);
       }
-      const chatCollapsedKey = `chat-${chatId}-collapsed`;
-      setIsChatCollapsed(
-        localStorage.getItem(chatCollapsedKey) === 'true' ||
-          user === null ||
-          isOwnProfile,
-      );
-      console.log('is chat collapsed:', isChatCollapsed);
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
@@ -150,15 +142,11 @@ const UserProfile = () => {
     );
   };
 
-  const handleChatCollapse = () => {
-    setIsChatCollapsed(!isChatCollapsed);
-  };
-
   const renderChat = () => {
     if ((isOwnProfile || !chatId) && !loading) {
       return;
     }
-    return <Chat chatId={chatId} onChatCollapse={handleChatCollapse} />;
+    return <Chat chatId={chatId} />;
   };
 
   if (userProfile && !loading) {
@@ -167,7 +155,7 @@ const UserProfile = () => {
         <div
           className="header"
           style={{
-            width: isChatCollapsed ? '100%' : '60%',
+            width: '55%',
             transition: 'width 0.3s ease',
           }}
         >

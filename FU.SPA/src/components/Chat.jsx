@@ -16,8 +16,7 @@ import './Chat.css';
 import ChatMessage from './ChatMessage';
 import UserContext from '../context/userContext';
 
-export default function Chat({ chatId, onChatCollapse }) {
-  const chatCollapsedKey = `chat-${chatId}-collapsed`;
+export default function Chat({ chatId }) {
   const [chat, setChat] = useState(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -25,11 +24,6 @@ export default function Chat({ chatId, onChatCollapse }) {
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const [prevScrollHeight, setPrevScrollHeight] = useState(0);
   const { user } = useContext(UserContext);
-  // Get is the chat collapsed from local storage
-  const [isChatCollapsed, setIsChatCollapsed] = useState(
-    localStorage.getItem(chatCollapsedKey) === 'true',
-  );
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [isNewMessageReceived, setIsNewMessageReceived] = useState(false);
   const limit = 25;
 
@@ -107,10 +101,6 @@ export default function Chat({ chatId, onChatCollapse }) {
   }
 
   const handleScroll = (event) => {
-    if (!isChatCollapsed) {
-      setScrollPosition(event.target.scrollTop);
-    }
-
     if (event.target.scrollTop === 0) {
       if (hasMoreMessages) {
         setOffset((prevOffset) => prevOffset + 1);
@@ -118,26 +108,7 @@ export default function Chat({ chatId, onChatCollapse }) {
     }
   };
 
-  // Scrolls back to the previous scroll position when chat new messages are loaded
   useEffect(() => {
-    localStorage.setItem(chatCollapsedKey, isChatCollapsed);
-    if (isChatCollapsed) {
-      return;
-    }
-
-    const chatContainer = document.querySelector('.MuiCardContent-root');
-
-    if (scrollPosition === 0) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    } else {
-      chatContainer.scrollTop = scrollPosition;
-    }
-  }, [isChatCollapsed, chatCollapsedKey]);
-
-  useEffect(() => {
-    if (isChatCollapsed) {
-      return;
-    }
     // Scroll to the bottom when messages are updated
     const chatContainer = document.querySelector('.MuiCardContent-root');
     const scrollDifference = chatContainer.scrollHeight - prevScrollHeight;
@@ -146,51 +117,7 @@ export default function Chat({ chatId, onChatCollapse }) {
       chatContainer.scrollTop += scrollDifference;
       setPrevScrollHeight(chatContainer.scrollHeight);
     }
-  }, [messages, prevScrollHeight, isChatCollapsed]);
-
-  const renderChatBody = () => {
-    if (isChatCollapsed) {
-      return;
-    }
-    return (
-      <>
-        <CardContent
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            overflowY: 'auto',
-          }}
-          onScroll={handleScroll}
-        >
-          {messages.map((msg, index) => (
-            <ChatMessage
-              key={index}
-              chatMessage={msg}
-              userIsSender={user.username === msg.sender.username}
-            />
-          ))}
-        </CardContent>
-        <CardActions className="chat-actions">
-          <TextField
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSendMessage();
-              }
-            }}
-          />
-          <Button onClick={handleSendMessage} className="send-button">
-            Send
-          </Button>
-        </CardActions>
-      </>
-    );
-  };
+  }, [messages, prevScrollHeight]);
 
   // Use MUi card for chat
 
@@ -199,30 +126,52 @@ export default function Chat({ chatId, onChatCollapse }) {
       style={{
         textAlign: 'left',
         backgroundColor: '#31084A',
-        width: isChatCollapsed ? '200px' : '600px',
-        height: isChatCollapsed ? '40px' : '800px',
+        width: '700px',
+        height: '90%',
         display: 'flex',
         flexDirection: 'column',
         position: 'fixed',
         bottom: '0',
         right: '5%',
-        transition: 'height 0.3s ease, width 0.3s ease',
         animation: isNewMessageReceived
           ? 'sparkle 1s ease-in-out infinite'
           : 'none',
       }}
     >
-      <Button
-        onClick={() => {
-          setIsChatCollapsed(!isChatCollapsed);
-          if (onChatCollapse) {
-            onChatCollapse(); // Call the onChatCollapse function from props
-          }
+      <CardContent
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          overflowY: 'auto',
         }}
+        onScroll={handleScroll}
       >
-        {isChatCollapsed ? 'Expand Chat' : 'Collapse Chat'}
-      </Button>
-      {renderChatBody()}
+        {messages.map((msg, index) => (
+          <ChatMessage
+            key={index}
+            chatMessage={msg}
+            userIsSender={user.username === msg.sender.username}
+          />
+        ))}
+      </CardContent>
+      <CardActions className="chat-actions">
+        <TextField
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type your message..."
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSendMessage();
+            }
+          }}
+        />
+        <Button onClick={handleSendMessage} className="send-button">
+          Send
+        </Button>
+      </CardActions>
       <style>{`
         @keyframes sparkle {
           0%,
