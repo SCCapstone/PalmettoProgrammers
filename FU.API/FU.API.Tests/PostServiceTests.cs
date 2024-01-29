@@ -126,7 +126,7 @@ public class PostServiceTests
             Title = "Title Text",
             Description = "Description Text",
             GameId = game.Id,
-            CreatorId = user.UserId,
+            CreatorId = user,
         };
         var createdPost = await postService.CreatePost(post);
 
@@ -151,7 +151,7 @@ public class PostServiceTests
             Title = "Title Text",
             Description = "Description Text",
             GameId = game.Id,
-            CreatorId = user.UserId,
+            Creator = user,
         };
         var createdPost = await postService.CreatePost(post);
 
