@@ -2,7 +2,7 @@
 
 name: Build ForcesUnite
 
-on: push
+on: workflow_dispatch
 
 jobs:
   build-api:

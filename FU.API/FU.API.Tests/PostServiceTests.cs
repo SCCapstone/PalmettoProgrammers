@@ -1,9 +1,10 @@
-﻿namespace FU.API.Tests;
+namespace FU.API.Tests;
 
 using FU.API.Data;
 using FU.API.Models;
 using FU.API.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 public class PostServiceTests
 {
@@ -13,7 +14,7 @@ public class PostServiceTests
     public PostServiceTests()
     {
         _contextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase("PostServiceTests")
+            .UseInMemoryDatabase("PostServiceTestDb")
             .Options;
 
         using var context = new AppDbContext(_contextOptions);
@@ -24,10 +25,6 @@ public class PostServiceTests
         context.SaveChanges();
     }
 
-    AppDbContext CreateContext() => new(_contextOptions);
-
-    // Test for GetPostUsers method
-
     [Theory]
     [InlineData(1, 1, true)]
     [InlineData(1, 2, true)]
@@ -36,6 +33,7 @@ public class PostServiceTests
     {
         // Arrange
         var context = CreateContext();
+
         var testUsers = CreateTestUsers();
         var testChat = CreateTestChat(testUsers);
         context.Set<Chat>().Add(testChat);
@@ -55,6 +53,7 @@ public class PostServiceTests
         context.Set<Post>().Add(post);
         context.SaveChanges();
 
+
         var chatService = new ChatService(context);
         var postService = new PostService(context, chatService);
 
@@ -66,6 +65,8 @@ public class PostServiceTests
         Assert.Equal(expectedJoined, joined);
         Assert.Equal(4, postUsers.Count());
     }
+
+    AppDbContext CreateContext() => new(_contextOptions);
 
     private List<ApplicationUser> CreateTestUsers()
     {
@@ -92,6 +93,78 @@ public class PostServiceTests
                 Username = "User4",
             },
         };
+    }
+
+    async Task<ApplicationUser> CreateUser(AppDbContext context)
+    {
+        var configPairs = new Dictionary<string, string?> { { "JWT_SECRET", "1234567890" } };
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(configPairs)
+            .Build();
+
+        var accountService = new AccountsService(configuration, context);
+
+        Credentials credentials = new() { Username = "Test", Password = "Test" };
+
+        ApplicationUser user = await accountService.Register(credentials);
+
+        return user;
+    }
+
+    [Fact]
+    public async void CreatePost_WithValidParams_ReturnsCreated()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var gameService = new GameService(context);
+        var chatService = new ChatService(context);
+        var postService = new PostService(context, chatService);
+        ApplicationUser user = await CreateUser(context);
+
+        // Act
+        Game game = await gameService.CreateGame("Game Title");
+        Post post = new()
+        {
+            Title = "Title Text",
+            Description = "Description Text",
+            GameId = game.Id,
+            Creator = user,
+            CreatorId = user.UserId,
+        };
+        var createdPost = await postService.CreatePost(post);
+
+        // Assert
+        Assert.Equal(post.Title, createdPost.Title);
+        Assert.Equal(post.Description, createdPost.Description);
+    }
+
+    [Fact]
+    public async void UpdatePost_WithValidParams_ReturnsUpdated()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var gameService = new GameService(context);
+        var chatService = new ChatService(context);
+        var postService = new PostService(context, chatService);
+        ApplicationUser user = await CreateUser(context);
+
+        Game game = await gameService.CreateGame("Game Title");
+        Post post = new()
+        {
+            Title = "Title Text",
+            Description = "Description Text",
+            GameId = game.Id,
+            Creator = user,
+            CreatorId = user.UserId,
+        };
+        var createdPost = await postService.CreatePost(post);
+
+        // Act
+        createdPost.Description = "Description Text 2";
+        var updatedPost = await postService.UpdatePost(createdPost);
+
+        // Assert
+        Assert.Equal(createdPost.Description, updatedPost.Description);
     }
 
     private Chat CreateTestChat(List<ApplicationUser> users)
