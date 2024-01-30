@@ -26,7 +26,7 @@ public class PostService : CommonService, IPostService
             .FindAsync(post.GameId) ?? throw new NonexistentGameException();
 
         var user = await _dbContext.Users
-            .FindAsync(post.Creator.UserId) ?? throw new NotFoundException("Creator not found", "The creator was not found");
+            .FindAsync(post.CreatorId) ?? throw new NotFoundException("Creator not found", "The creator was not found");
 
         post.Game = game;
 

@@ -25,6 +25,7 @@ public class PostsController : ControllerBase
         var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
         var post = dto.ToModel();
+        post.CreatorId = user.UserId;
         post.Creator = user;
 
         var newPost = await _postService.CreatePost(post);
