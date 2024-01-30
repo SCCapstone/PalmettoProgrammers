@@ -1,8 +1,4 @@
-import {
-  Card,
-  Button,
-  Typography,
-} from '@mui/material';
+import { Card, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 /**

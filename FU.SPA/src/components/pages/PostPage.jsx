@@ -47,7 +47,7 @@ const PostPage = () => {
     setLoading(true);
     try {
       const data = await PostService.getPostDetails(postId);
-      setIsOwner(user && (data.creator.id === user.id));
+      setIsOwner(user && data.creator.id === user.id);
       setPost(data);
     } catch (error) {
       console.error('Error fetching post details:', error);
