@@ -6,6 +6,7 @@ import NoPage from './NoPage';
 import './UserProfile.css';
 import { getDirectChat } from '../../services/chatService';
 import Chat from '../Chat';
+import ChatLocked from '../ChatLocked';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -26,12 +27,10 @@ const UserProfile = () => {
           'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
         ),
       );
-      if (user) {
+      setIsOwnProfile(user?.id === profile.id);
+      if (profile && user && !isOwnProfile) {
         const chat = await getDirectChat(profile.id);
         setChatId(chat.id);
-        setIsOwnProfile(user.id === profile.id);
-      } else {
-        setIsOwnProfile(false);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -143,10 +142,15 @@ const UserProfile = () => {
   };
 
   const renderChat = () => {
-    if ((isOwnProfile || !chatId) && !loading) {
+    if (isOwnProfile) {
+      // Maybe instead we can render profile/account settings
       return;
     }
-    return <Chat chatId={chatId} />;
+    if (user) {
+      return <Chat chatId={chatId} />;
+    } else {
+      return <ChatLocked chatType="direct" reason="no-user" />;
+    }
   };
 
   if (userProfile && !loading) {

@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PostService from '../../services/postService';
 import UserContext from '../../context/userContext';
 import Chat from '../Chat';
+import ChatLocked from '../ChatLocked';
 import NoPage from './NoPage';
 
 const boxStyle = {
@@ -65,6 +66,15 @@ const PostPage = () => {
     });
   }
 
+  const renderChat = () => {
+    if (post.hasJoined) {
+      return <Chat chatId={post.chatId} />;
+    } else {
+      var reason = user ? 'not-joined' : 'no-user';
+      return <ChatLocked chatType="post" reason={reason} />;
+    }
+  };
+
   if (post && !loading) {
     return (
       <ThemeProvider theme={defaultTheme}>
@@ -119,7 +129,7 @@ const PostPage = () => {
             )}
           </Box>
         </Container>
-        {post?.hasJoined && <Chat chatId={post.chatId} />}
+        {renderChat()}
       </ThemeProvider>
     );
   } else if (!post && !loading) {
