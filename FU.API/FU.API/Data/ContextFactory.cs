@@ -7,9 +7,17 @@ public class ContextFactory
 {
     private static DbContextOptionsBuilder<AppDbContext>? _optionsBuilder;
 
-    public static void SetConfiguration(DbContextOptionsBuilder<AppDbContext> optionsBuilder)
+    public static void SetOptions(Action<DbContextOptionsBuilder>? optionsAction = null)
     {
-        _optionsBuilder = optionsBuilder;
+        // Set the db context options
+        _optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsAction?.Invoke(_optionsBuilder);
+
+        // Validate the options
+        if (_optionsBuilder.IsConfigured is false)
+        {
+            throw new InvalidOperationException("No options are configured");
+        }
     }
 
     public static AppDbContext CreateDbContext()

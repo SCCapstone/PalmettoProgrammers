@@ -30,8 +30,9 @@ string jwtSecret = builder.Configuration[ConfigKey.JwtSecret]
 // Setup the database
 // Set the db context options
 var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-builder.Services.AddDbContext<AppDbContext>(optionsBuilder => optionsBuilder.UseNpgsql(connectionString));
-ContextFactory.SetConfiguration(optionsBuilder.UseNpgsql(connectionString));
+var optionsAction = new Action<DbContextOptionsBuilder>(optionsBuilder => optionsBuilder.UseNpgsql(connectionString));
+builder.Services.AddDbContext<AppDbContext>(optionsAction);
+ContextFactory.SetOptions(optionsAction);
 
 // Setup jobs
 string? stringCronExpressionsMap = builder.Configuration[ConfigKey.JobExpressionsMap];
