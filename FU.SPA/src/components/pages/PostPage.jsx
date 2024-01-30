@@ -21,6 +21,7 @@ const PostPage = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isOwner, setIsOwner] = useState(false);
 
   const { user } = useContext(UserContext);
 
@@ -46,12 +47,13 @@ const PostPage = () => {
     setLoading(true);
     try {
       const data = await PostService.getPostDetails(postId);
+      setIsOwner(user && (data.creator.id === user.id));
       setPost(data);
     } catch (error) {
       console.error('Error fetching post details:', error);
     }
     setLoading(false);
-  }, [postId]);
+  }, [postId, user]);
 
   useEffect(() => {
     update();
@@ -71,8 +73,27 @@ const PostPage = () => {
       return <Chat chatId={post.chatId} />;
     } else {
       var reason = user ? 'not-joined' : 'no-user';
-      return <ChatLocked chatType="post" reason={reason} />;
+      return (
+        <ChatLocked
+          chatType="post"
+          reason={reason}
+          onResolutionClick={handleJoinPost}
+        />
+      );
     }
+  };
+
+  const renderLeaveButton = () => {
+    if (!post.hasJoined || isOwner) {
+      return;
+    }
+
+    console.log('is own profile ad asd:', isOwner);
+    return (
+      <Button variant="contained" color="secondary" onClick={handleLeavePost}>
+        Leave
+      </Button>
+    );
   };
 
   if (post && !loading) {
@@ -95,7 +116,7 @@ const PostPage = () => {
                 {post?.game}
               </Typography>
               <Typography variant="subtitle1" color="textSecondary">
-                by {post?.creator}
+                by {post?.creator.username}
               </Typography>
               <Typography variant="subtitle1" color="textSecondary">
                 {dateTimeString}
@@ -109,24 +130,7 @@ const PostPage = () => {
                 {post?.description}
               </Typography>
             </div>
-            {!post?.hasJoined && user && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleJoinPost}
-              >
-                Join
-              </Button>
-            )}
-            {post?.hasJoined && (
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleLeavePost}
-              >
-                Leave
-              </Button>
-            )}
+            {renderLeaveButton()}
           </Box>
         </Container>
         {renderChat()}

@@ -1,12 +1,9 @@
-import { useEffect, useState, useContext } from 'react';
 import {
   Card,
-  CardActions,
   Button,
-  CardContent,
-  TextField,
+  Typography,
 } from '@mui/material';
-import UserContext from '../context/userContext';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * ChatLocked component
@@ -14,8 +11,46 @@ import UserContext from '../context/userContext';
  * @param {string} reason - the reason the chat is locked {no-user|not-joined}
  * @returns JSX
  */
-export default function ChatLocked({ chatType, reason }) {
-  const { user } = useContext(UserContext);
+export default function ChatLocked({ chatType, reason, onResolutionClick }) {
+  const navigate = useNavigate();
+
+  const renderMessage = () => {
+    let reasonMessage;
+
+    if (reason === 'no-user') {
+      reasonMessage = `You must be signed in to ${
+        chatType === 'post' ? 'view this chat' : 'message this user'
+      }`;
+    } else {
+      reasonMessage = `You must join this post to view the chat`;
+    }
+
+    return (
+      <Typography variant="h4" gutterBottom style={{ color: 'white' }}>
+        {reasonMessage}
+      </Typography>
+    );
+  };
+
+  const renderResolution = () => {
+    let resolutionMessage = reason === 'no-user' ? 'Sign In' : 'Join';
+    return (
+      <Button
+        style={{ backgroundColor: '#E340DC', color: '#FFF', width: '95%' }}
+        onClick={() => {
+          if (reason === 'no-user') {
+            navigate('/signin');
+          }
+
+          if (onResolutionClick) {
+            onResolutionClick();
+          }
+        }}
+      >
+        {resolutionMessage}
+      </Button>
+    );
+  };
 
   return (
     <Card
@@ -24,15 +59,19 @@ export default function ChatLocked({ chatType, reason }) {
         backgroundColor: '#31084A',
         width: '700px',
         height: '90%',
+        minHeight: '100px',
         display: 'flex',
         flexDirection: 'column',
         position: 'fixed',
         bottom: '0',
         right: '5%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: '40px',
       }}
     >
-        {reason}
-        {chatType}
+      {renderMessage()}
+      {renderResolution()}
     </Card>
   );
 }

@@ -88,6 +88,11 @@ public class PostsController : ControllerBase
             return NotFound();
         }
 
+        if (user.UserId == post.CreatorId)
+        {
+            return Forbid("Creator cannot leave post");
+        }
+
         await _postService.LeavePost(post.Id, user);
 
         return NoContent();

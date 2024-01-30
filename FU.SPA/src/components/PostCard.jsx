@@ -23,7 +23,7 @@ const PostCard = ({ post }) => {
     <Card style={{ textAlign: 'left' }}>
       <CardContent style={{ width: '200pt', height: '250pt' }}>
         <Typography variant="body2" color="text.secondary">
-          by {post.creator}
+          by {post.creator.username}
         </Typography>
         <Typography variant="h5">{post.title}</Typography>
         <Typography variant="h6">{post.game}</Typography>

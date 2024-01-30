@@ -27,8 +27,8 @@ const UserProfile = () => {
           'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
         ),
       );
-      setIsOwnProfile(user?.id === profile.id);
-      if (profile && user && !isOwnProfile) {
+      setIsOwnProfile(user && (user.id === profile.id));
+      if (profile && user && !(user.id === profile.id)) {
         const chat = await getDirectChat(profile.id);
         setChatId(chat.id);
       }

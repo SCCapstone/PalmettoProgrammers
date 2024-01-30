@@ -160,7 +160,7 @@ public static class Mapper
             EndTime = post.EndTime,
             MaxPlayers = post.MaxPlayers,
             ChatId = post.ChatId,
-            Creator = post.Creator.Username,
+            Creator = post.Creator.ToProfile(),
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
             HasJoined = hasJoined,
         };
