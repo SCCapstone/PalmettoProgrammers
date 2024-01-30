@@ -6,33 +6,9 @@ on:
   push:
     branches:
       - prod
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch name'
-        required: true
-      confirm:
-        description: 'Confirmation'
-        required: false
-        default: 'false'
 
 jobs:
-  confirmation:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Confirm 
-      run: |
-        if [ "${{ github.event.inputs.confirm == "true"}}" ]; then
-          echo "Workflow confirmed."
-        else
-          echo "Workflow not confirmed. Exiting"
-          exit 1
-        fi
-      shell: bash
-
   build-api:
-    needs: confirmation
     name: Build API Job
     runs-on: windows-latest
 
@@ -95,7 +71,6 @@ jobs:
   build-and-deploy-spa:
     name: Build & Deploy SPA Job
     runs-on: ubuntu-latest
-    needs: confirmation
 
     steps:
       - uses: actions/checkout@v3
