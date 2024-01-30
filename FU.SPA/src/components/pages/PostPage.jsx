@@ -88,7 +88,6 @@ const PostPage = () => {
       return;
     }
 
-    console.log('is own profile ad asd:', isOwner);
     return (
       <Button variant="contained" color="secondary" onClick={handleLeavePost}>
         Leave
