@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
  * ChatLocked component
  * @param {string} chatType - the type of chat to be locked {post|direct}
  * @param {string} reason - the reason the chat is locked {no-user|not-joined}
+ * @param {function} onResolutionClick - a function to be called when the resolution button is clicked
  * @returns JSX
  */
 export default function ChatLocked({ chatType, reason, onResolutionClick }) {
