@@ -3,7 +3,7 @@
 name: Build ForcesUnite
 
 on:
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   build-api:

@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - prod
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   build-api:
