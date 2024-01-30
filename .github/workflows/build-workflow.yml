@@ -2,11 +2,7 @@
 
 name: Build ForcesUnite
 
-on: 
-  workflow_dispatch:
-  pull_request:
-    types: [opened, ready_for_review]
-
+on: workflow_dispatch
 
 jobs:
   build-api:
