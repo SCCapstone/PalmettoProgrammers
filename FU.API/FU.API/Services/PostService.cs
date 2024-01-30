@@ -35,6 +35,10 @@ public class PostService : CommonService, IPostService
         {
             post.Status = PostStatus.Upcoming;
         }
+        else
+        {
+            post.Status = PostStatus.NoSchedule;
+        }
 
         // Make sure start and end times are valid
         if (post.StartTime is not null && post.EndTime is not null)

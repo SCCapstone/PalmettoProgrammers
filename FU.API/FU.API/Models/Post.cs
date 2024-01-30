@@ -88,7 +88,7 @@ public class Post
     /// </summary>
     public ApplicationUser Creator { get; set; } = new ApplicationUser();
 
-    public PostStatus? Status { get; set; }
+    public PostStatus Status { get; set; }
 
     /// <summary>
     /// Gets or sets the id of the creator.
@@ -109,9 +109,9 @@ public class Post
 public enum PostStatus
 {
     /// <summary>
-    /// The post is Upcoming. This is the default status for posts with a start time.
+    /// The post has no schedule. This is the default status for posts without a start time.
     /// </summary>
-    Upcoming,
+    NoSchedule,
 
     /// <summary>
     /// The post has expired. This status is set when the post has ended.
@@ -119,7 +119,12 @@ public enum PostStatus
     Expired,
 
     /// <summary>
+    /// The post is Upcoming. This is the default status for posts with a start time.
+    /// </summary>
+    Upcoming,
+
+    /// <summary>
     /// The post is on going. This status is set when the post has started.
     /// </summary>
-    OnGoing
+    OnGoing,
 }
