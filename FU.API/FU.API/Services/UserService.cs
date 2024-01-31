@@ -79,27 +79,4 @@ public class UserService : CommonService, IUserService
             .Take(limit)
             .ToListAsync();
     }
-
-    public async Task<IEnumerable<ApplicationUser>> GetUsersPlayers(int userId, int limit, int offset)
-    {
-        var players = await _dbContext.UserRelations
-            .Where(ur => ur.User1Id == userId || ur.User2Id == userId)
-            .Select(ur => ur.User1Id == userId ? ur.User2 : ur.User1)
-            .ToListAsync();
-
-        // Also get users that have sent a direct message to the user
-        var directMessages = await _dbContext.Chats
-            .Where(c => c.ChatType == ChatType.Direct)
-            .Where(c => c.Members.Any(m => m.UserId == userId))
-            .SelectMany(c => c.Members)
-            .Where(m => m.UserId != userId)
-            .Select(m => m.User)
-            .ToListAsync();
-
-        var allPlayers = players.Union(directMessages);
-
-        return allPlayers
-            .Skip(offset)
-            .Take(limit);
-    }
 }
