@@ -52,7 +52,7 @@ public class AccountsService
         return queryUser.First();
     }
 
-    public async Task UpdatePassord(int userId, string newPassword)
+    public async Task UpdatePassword(int userId, string newPassword)
     {
         ApplicationUser user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
 

@@ -78,7 +78,7 @@ public class AccountServiceTests : IDisposable
         var ogPasswordHash = user.PasswordHash;
 
         // Act
-        await _accountsService.UpdatePassord(user.UserId, newPassword);
+        await _accountsService.UpdatePassword(user.UserId, newPassword);
 
         // Assert
         Assert.NotEqual(user.PasswordHash, ogPasswordHash);
