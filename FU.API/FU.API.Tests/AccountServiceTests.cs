@@ -16,7 +16,7 @@ public class AccountServiceTests : IDisposable
     public AccountServiceTests()
     {
         _contextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase("PostServiceTestDb")
+            .UseInMemoryDatabase("AccountServiceTestsDb")
             .Options;
 
         _dbContext = new AppDbContext(_contextOptions);
