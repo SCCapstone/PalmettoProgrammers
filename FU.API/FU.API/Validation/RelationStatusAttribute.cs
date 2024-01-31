@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 public class RelationStatusAttribute : ValidationAttribute
 {
-    private const UserRelationStatus BlockedStatus = UserRelationStatus.Blocked;
+    private const UserRelationStatus InvalidStatus = UserRelationStatus.BlockedBy;
 
     private readonly string? propertyName;
 
@@ -22,12 +22,12 @@ public class RelationStatusAttribute : ValidationAttribute
             bool valid = false;
 
             // Try get the value of the string property compared to UserRelationStatus
-            if (Enum.TryParse<UserRelationStatus>(stringValue, out UserRelationStatus status))
+            if (Enum.TryParse<UserRelationStatus>(stringValue, ignoreCase: true, out UserRelationStatus status))
             {
                 // If the status is blocked, return an error
-                if (status == BlockedStatus)
+                if (status == InvalidStatus)
                 {
-                    return new ValidationResult($"{propertyName} cannot be {BlockedStatus}.");
+                    return new ValidationResult($"{propertyName} cannot be {InvalidStatus}.");
                 }
 
                 // Compare the property name to the property name of the UserRelationStatus enum
