@@ -52,6 +52,26 @@ public class AccountsService
         return queryUser.First();
     }
 
+    public async Task UpdatePassord(int userId, string newPassword)
+    {
+        ApplicationUser user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        user.PasswordHash = HashPassword(newPassword);
+        _dbContext.Update(user);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateUsername(int userId, string newUsername)
+    {
+        ApplicationUser user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        user.Username = newUsername;
+        _dbContext.Update(user);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
     /// <summary>
     /// Authenticates the user by returning it's info if the given credentials are valid.
     /// </summary>
