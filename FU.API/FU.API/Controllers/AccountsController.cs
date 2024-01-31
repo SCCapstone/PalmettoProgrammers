@@ -5,6 +5,7 @@ using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Helpers;
+using FU.API.Exceptions;
 
 /// <summary>
 /// Handles accounts endpoint requests.
@@ -81,5 +82,24 @@ public class AccountsController : ControllerBase
         }
 
         return Ok(accountInfo);
+    }
+
+    // Updates the current user's credentials. The current user is obtained from the jwt token.
+    [HttpPatch]
+    public async Task<IActionResult> UpdateAccountCredentials(UpdateCredentailsDTO newCredentials)
+    {
+        var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+
+        if (newCredentials.Username is not null)
+        {
+            await _accountService.UpdateUsername(user.UserId, newCredentials.Username);
+        }
+
+        if (newCredentials.Password is not null)
+        {
+            await _accountService.UpdatePassword(user.UserId, newCredentials.Password);
+        }
+
+        return Ok();
     }
 }
