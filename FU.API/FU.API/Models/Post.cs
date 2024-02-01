@@ -88,6 +88,8 @@ public class Post
     /// </summary>
     public ApplicationUser Creator { get; set; } = new ApplicationUser();
 
+    public PostStatus Status { get; set; }
+
     /// <summary>
     /// Gets or sets the id of the creator.
     /// </summary>
@@ -102,4 +104,27 @@ public class Post
     /// Gets or sets the tags of a post.
     /// </summary>
     public ICollection<TagRelation> Tags { get; set; } = new HashSet<TagRelation>();
+}
+
+public enum PostStatus
+{
+    /// <summary>
+    /// The post has no schedule. This is the default status for posts without a start time.
+    /// </summary>
+    NoSchedule,
+
+    /// <summary>
+    /// The post has expired. This status is set when the post has ended.
+    /// </summary>
+    Expired,
+
+    /// <summary>
+    /// The post is Upcoming. This is the default status for posts with a start time.
+    /// </summary>
+    Upcoming,
+
+    /// <summary>
+    /// The post is on going. This status is set when the post has started.
+    /// </summary>
+    OnGoing,
 }

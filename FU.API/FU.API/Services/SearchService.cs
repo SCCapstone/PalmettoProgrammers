@@ -23,6 +23,9 @@ public class SearchService : CommonService, ISearchService
 
         // Filters are addded one at a time, generally by the amount of posts they filter out
 
+        // Only show active posts - maybe in future we can parameterize this
+        dbQuery = dbQuery.Where(p => p.Status == PostStatus.NoSchedule || p.Status == PostStatus.OnGoing);
+
         // Filter by games
         if (query.GameIds.Count > 0)
         {

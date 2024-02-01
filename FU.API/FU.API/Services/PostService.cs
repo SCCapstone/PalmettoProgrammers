@@ -26,9 +26,32 @@ public class PostService : CommonService, IPostService
             .FindAsync(post.GameId) ?? throw new NonexistentGameException();
 
         var user = await _dbContext.Users
-            .FindAsync(post.Creator.UserId) ?? throw new NotFoundException("Creator not found", "The creator was not found");
+            .FindAsync(post.CreatorId) ?? throw new NotFoundException("Creator not found", "The creator was not found");
 
         post.Game = game;
+
+        if (post.StartTime is null && post.EndTime is null)
+        {
+            // If start and end times are not present, set status to no schedule
+            post.Status = PostStatus.NoSchedule;
+        }
+        else
+        {
+            // Otherwise it is upcoming
+            post.Status = PostStatus.Upcoming;
+
+            // Make sure both are present
+            if (post.StartTime is null || post.EndTime is null)
+            {
+                throw new PostException("Start and end times must both be present", HttpStatusCode.UnprocessableEntity);
+            }
+
+            // Make sure start time is not after end time
+            if (post.StartTime > post.EndTime)
+            {
+                throw new PostException("Start time cannot be after end time", HttpStatusCode.UnprocessableEntity);
+            }
+        }
 
         var postTagIds = post.Tags.Select(t => t.TagId);
         var tags = await _dbContext.Tags
