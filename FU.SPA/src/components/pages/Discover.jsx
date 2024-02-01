@@ -106,7 +106,7 @@ function SearchBar({ searchText, onSearchSubmit }) {
   function handleChange(event) {
     setLocalSearchText(event.target.value);
 
-  };
+  }
   
   return (
     <div id="search-bar">
