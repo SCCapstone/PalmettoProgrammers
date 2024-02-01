@@ -24,14 +24,18 @@ public class SearchService : CommonService, ISearchService
         // Filters are addded one at a time
         // Generally filer out as much as as possible first
 
-        // Only show active posts - maybe in future we can parameterize this
-        dbQuery = dbQuery.Where(p => p.Status == PostStatus.NoSchedule || p.Status == PostStatus.OnGoing);
         // Filter by posts that start after the given date
         if (query.StartOnOrAfterDate is not null)
         {
             // Convert start after date to datetime with time starting at 00:00:00
             DateTime startAfterDateTime = ((DateOnly)query.StartOnOrAfterDate).ToDateTime(new TimeOnly(0, 0, 0));
             dbQuery = dbQuery.Where(p => p.StartTime >= startAfterDateTime);
+
+            // If no time params and search start day is today, then get all posts after the current time
+            if (query.StartOnOrAfterTime is null && query.EndOnOrBeforeTime is null && query.StartOnOrAfterDate.Equals(DateOnly.FromDateTime(DateTime.Now)))
+            {
+                dbQuery = dbQuery.Where(p => p.StartTime >= DateTime.Now);
+            }
         }
 
         // Filter by posts that end before the given date
