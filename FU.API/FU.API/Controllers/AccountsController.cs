@@ -103,7 +103,8 @@ public class AccountsController : ControllerBase
             }
 
             string oldPasswordHashInRequest = AccountsService.HashPassword(newCredentials.OldPassword);
-            string oldPasswordHashStored = _accountService.GetInfo(user.UserId).PasswordHash;
+            var userInfo = _accountService.GetInfo(user.UserId) ?? throw new NotFoundException("Not Found", "User info not found");
+            string oldPasswordHashStored = userInfo.PasswordHash;
             if (!oldPasswordHashInRequest.Equals(oldPasswordHashStored, StringComparison.Ordinal))
             {
                 throw new UnauthorizedException("The given old password does not match the stored old password");
