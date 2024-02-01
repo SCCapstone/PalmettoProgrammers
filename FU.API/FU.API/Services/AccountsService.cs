@@ -30,6 +30,20 @@ public class AccountsService : CommonService
         _dbContext = dbContext;
     }
 
+    public static string HashPassword(string password)
+    {
+        // based on https://gist.github.com/sixpeteunder/235f93ba0b059035abf140beb2ea4e44
+        var argon2 = new Argon2i(Encoding.UTF8.GetBytes(password))
+        {
+            Iterations = 4,
+            DegreeOfParallelism = 2,
+            MemorySize = 1024 * 4,
+        };
+
+        byte[] passwordBytes = argon2.GetBytes(128);
+        return Convert.ToBase64String(passwordBytes);
+    }
+
     /// <summary>
     /// Create a new user.
     /// </summary>
@@ -128,20 +142,6 @@ public class AccountsService : CommonService
             UserId = userCredentials.UserId,
             Username = userCredentials.Username,
         };
-    }
-
-    private static string HashPassword(string password)
-    {
-        // based on https://gist.github.com/sixpeteunder/235f93ba0b059035abf140beb2ea4e44
-        var argon2 = new Argon2i(Encoding.UTF8.GetBytes(password))
-        {
-            Iterations = 4,
-            DegreeOfParallelism = 2,
-            MemorySize = 1024 * 4,
-        };
-
-        byte[] passwordBytes = argon2.GetBytes(128);
-        return Convert.ToBase64String(passwordBytes);
     }
 
     // Return user credentials so userId is accessable without a second db call
