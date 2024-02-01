@@ -36,6 +36,4 @@ public static class ConfigKey
     /// The connection string config key.
     /// </summary>
     public const string ConnectionString = "CONNECTION_STRING";
-
-    public const string JobExpressionsMap = "JOB_EXPRESSIONS";
 }

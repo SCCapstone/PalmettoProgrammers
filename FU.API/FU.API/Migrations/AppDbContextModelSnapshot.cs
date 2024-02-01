@@ -321,9 +321,6 @@ namespace FU.API.Migrations
                     b.Property<DateTime?>("StartTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -335,8 +332,6 @@ namespace FU.API.Migrations
                     b.HasIndex("CreatorId");
 
                     b.HasIndex("GameId");
-
-                    b.HasIndex("Status");
 
                     b.ToTable("Posts");
                 });
