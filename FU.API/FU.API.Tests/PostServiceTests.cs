@@ -3,6 +3,7 @@ namespace FU.API.Tests;
 using FU.API.Data;
 using FU.API.Models;
 using FU.API.Services;
+using FU.API.Tests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -28,14 +29,14 @@ public class PostServiceTests
     [Theory]
     [InlineData(1, 1, true)]
     [InlineData(1, 2, true)]
-    [InlineData(1, 5, false)]
+    [InlineData(1, 9, false)]
     public async void GetPostUsers_WithValidPostId_CheckUserJoined(int postId, int checkUserId, bool expectedJoined)
     {
         // Arrange
         var context = CreateContext();
 
-        var testUsers = CreateTestUsers();
-        var testChat = CreateTestChat(testUsers);
+        var testUsers = MockDataHelper.CreateTestUsers();
+        var testChat = MockDataHelper.CreateTestChat(testUsers);
         context.Set<Chat>().Add(testChat);
         context.Set<ApplicationUser>().AddRange(testUsers);
 
@@ -63,37 +64,10 @@ public class PostServiceTests
         // Assert
         var joined = postUsers.Any(u => u.UserId == checkUserId);
         Assert.Equal(expectedJoined, joined);
-        Assert.Equal(4, postUsers.Count());
+        Assert.Equal(6, postUsers.Count());
     }
 
     AppDbContext CreateContext() => new(_contextOptions);
-
-    private List<ApplicationUser> CreateTestUsers()
-    {
-        return new List<ApplicationUser>()
-        {
-            new ApplicationUser()
-            {
-                UserId = 1,
-                Username = "User1",
-            },
-            new ApplicationUser()
-            {
-                UserId = 2,
-                Username = "User2",
-            },
-            new ApplicationUser()
-            {
-                UserId = 3,
-                Username = "User3",
-            },
-            new ApplicationUser()
-            {
-                UserId = 4,
-                Username = "User4",
-            },
-        };
-    }
 
     async Task<ApplicationUser> CreateUser(AppDbContext context)
     {
@@ -165,22 +139,5 @@ public class PostServiceTests
 
         // Assert
         Assert.Equal(createdPost.Description, updatedPost.Description);
-    }
-
-    private Chat CreateTestChat(List<ApplicationUser> users)
-    {
-        return new Chat()
-        {
-            Id = 1,
-            ChatType = ChatType.Post,
-            ChatName = "Title1",
-            CreatorId = 1,
-            Members = users.Select(u => new ChatMembership()
-            {
-                ChatId = 1,
-                UserId = u.UserId,
-                User = u,
-            }).ToList(),
-        };
     }
 }
