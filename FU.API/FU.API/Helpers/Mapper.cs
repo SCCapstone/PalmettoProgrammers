@@ -199,4 +199,13 @@ public static class Mapper
 
     public static IEnumerable<GroupSimpleDTO> ToSimpleDtos(this IEnumerable<Group> groups) =>
         groups.Select(group => group.ToSimpleDto());
+
+    public static AccountInfoDTO ToDTO(this AccountInfo accountInfo)
+    {
+        return new AccountInfoDTO()
+        {
+            UserId = accountInfo.UserId,
+            Username = accountInfo.Username,
+        };
+    }
 }

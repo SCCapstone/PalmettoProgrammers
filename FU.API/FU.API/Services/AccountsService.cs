@@ -141,6 +141,7 @@ public class AccountsService : CommonService
         {
             UserId = userCredentials.UserId,
             Username = userCredentials.Username,
+            PasswordHash = userCredentials.PasswordHash
         };
     }
 
