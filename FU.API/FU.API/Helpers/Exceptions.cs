@@ -44,9 +44,9 @@ public class DuplicateUserException : ExceptionWithResponse
 
 public class UnauthorizedException : ExceptionWithResponse
 {
-    public override string Description { get; } = "The user is not authorized";
+    public override string Title { get; } = "Unauthorized";
 
-    public override string Title { get; } = "Unauthorized User";
+    public override string Description { get; } = "The user is not authorized";
 
     public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Unauthorized;
 
@@ -54,11 +54,9 @@ public class UnauthorizedException : ExceptionWithResponse
     {
     }
 
-    public UnauthorizedException(string title, string description, HttpStatusCode statusCode)
+    public UnauthorizedException(string description)
     {
-        Title = title;
         Description = description;
-        StatusCode = statusCode;
     }
 }
 
