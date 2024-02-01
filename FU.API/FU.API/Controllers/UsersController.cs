@@ -103,17 +103,4 @@ public class UsersController : ControllerBase
 
         return Ok(response);
     }
-
-    [HttpGet]
-    [Route("current/connected/players")]
-    public async Task<IActionResult> GetUsersPlayers([FromQuery] int limit = 10, [FromQuery] int offset = 0)
-    {
-        var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
-
-        var players = await _userService.GetUsersPlayers(user.UserId, limit, offset);
-
-        var response = players.Select(p => p.ToProfile());
-
-        return Ok(response);
-    }
 }

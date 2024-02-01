@@ -92,6 +92,7 @@ builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IRelationService, RelationService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
 
 // Add SignalR
