@@ -164,9 +164,4 @@ public class RelationServiceTests
             await Assert.ThrowsAsync<ForbidException>(async () => await relationService.GetRelations(checkUserId, status, requestingUserId == checkUserId));
         }
     }
-
-
-    // Test removing friend request
-    // Test removing relation when blocked by
-    // 
 }
