@@ -86,7 +86,10 @@ public static class Mapper
     {
         var query = new PostQuery()
         {
-            After = dto.After,
+            StartAfterDate = dto.StartAfterDate,
+            EndBeforeDate = dto.EndBeforeDate,
+            StartAfterTime = dto.StartAfterTime,
+            EndBeforeTime = dto.EndBeforeTime,
             MinimumRequiredPlayers = dto.MinPlayers ?? 0,
             Limit = dto.Limit ?? 20,
             Offset = dto.Offset ?? 0,
