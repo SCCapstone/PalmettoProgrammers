@@ -11,16 +11,16 @@ public record PostSearchRequestDTO
     public string? Games { get; set; }
 
     [FromQuery]
-    public DateOnly? StartAfterDate { get; set; }
+    public DateOnly? StartOnOrAfterDate { get; set; }
 
     [FromQuery]
-    public DateOnly? EndBeforeDate { get; set; }
+    public DateOnly? EndOnOrBeforeDate { get; set; }
 
     [FromQuery]
-    public TimeOnly? StartAfterTime { get; set; }
+    public TimeOnly? StartOnOrAfterTime { get; set; }
 
     [FromQuery]
-    public TimeOnly? EndBeforeTime { get; set; }
+    public TimeOnly? EndOnOrBeforeTime { get; set; }
 
     [FromQuery]
     public string? Keywords { get; set; }
