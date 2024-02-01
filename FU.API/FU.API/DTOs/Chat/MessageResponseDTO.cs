@@ -1,5 +1,7 @@
 ﻿namespace FU.API.DTOs.Chat;
 
+using FU.API.Models;
+
 public class MessageResponseDTO
 {
     public int Id { get; set; }
@@ -8,7 +10,5 @@ public class MessageResponseDTO
 
     public string Content { get; set; } = string.Empty;
 
-    public int SenderId { get; set; }
-
-    public string SenderName { get; set; } = string.Empty;
+    public UserProfile Sender { get; set; } = new UserProfile();
 }

@@ -6,7 +6,6 @@ import Create from './components/pages/Create';
 import NoPage from './components/pages/NoPage';
 import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
-import Chat from './components/pages/Chat';
 import PostPage from './components/pages/PostPage';
 import UserProfile from './components/pages/UserProfile';
 
@@ -43,7 +42,6 @@ function App() {
             />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/chat/:chatId" element={<Chat />} />
             <Route path="/posts/:postId" element={<PostPage />} />
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
