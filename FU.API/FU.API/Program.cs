@@ -1,14 +1,17 @@
 #pragma warning disable SA1200 // Using directives should be placed correctly
 using System.Text;
+using FluentScheduler;
 using FU.API.Data;
 using FU.API.Helpers;
 using FU.API.Hubs;
 using FU.API.Interfaces;
+using FU.API.Jobs;
 using FU.API.Middleware;
 using FU.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -25,7 +28,23 @@ string jwtSecret = builder.Configuration[ConfigKey.JwtSecret]
     ?? throw new Exception("No jwt secret found from env var " + ConfigKey.JwtSecret);
 
 // Setup the database
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+// Set the db context options
+var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+var optionsAction = new Action<DbContextOptionsBuilder>(optionsBuilder => optionsBuilder.UseNpgsql(connectionString));
+builder.Services.AddDbContext<AppDbContext>(optionsAction);
+ContextFactory.SetOptions(optionsAction);
+
+// Setup jobs
+string? stringCronExpressionsMap = builder.Configuration[ConfigKey.JobExpressionsMap];
+if (stringCronExpressionsMap is not null)
+{
+    JobManager.Initialize();
+    var jobsMap = Mapper.StringJobsToMap(stringCronExpressionsMap);
+
+    JobManager.AddJob(
+        () => UpdatePostStatusJob.Execute(),
+        s => s.ToRunEvery(jobsMap[typeof(UpdatePostStatusJob).Name]).Minutes());
+}
 
 // Validates JWT Tokens
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

@@ -32,7 +32,8 @@ public class PostServiceTests
     public async void GetPostUsers_WithValidPostId_CheckUserJoined(int postId, int checkUserId, bool expectedJoined)
     {
         // Arrange
-        var context = CreateContext();
+        var context = CreateContext();
+
         var testUsers = CreateTestUsers();
         var testChat = CreateTestChat(testUsers);
         context.Set<Chat>().Add(testChat);
@@ -50,7 +51,8 @@ public class PostServiceTests
         };
 
         context.Set<Post>().Add(post);
-        context.SaveChanges();
+        context.SaveChanges();
+
 
         var chatService = new ChatService(context);
         var postService = new PostService(context, chatService);
@@ -126,6 +128,7 @@ public class PostServiceTests
             Title = "Title Text",
             Description = "Description Text",
             GameId = game.Id,
+            Creator = user,
             CreatorId = user.UserId,
         };
         var createdPost = await postService.CreatePost(post);
@@ -151,6 +154,7 @@ public class PostServiceTests
             Title = "Title Text",
             Description = "Description Text",
             GameId = game.Id,
+            Creator = user,
             CreatorId = user.UserId,
         };
         var createdPost = await postService.CreatePost(post);
