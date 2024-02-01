@@ -68,7 +68,7 @@ export default function Discover() {
 
   return (
     <div className="page-content">
-      <div className="sidebar" style={{ textAlign: 'left', minWidth: '200pt' }}>
+      <div className="sidebar" style={{ textAlign: 'left', minWidth: '200pt',  maxWidth:'300px'  }}>
         <Typography variant="h5">Filters</Typography>
         <GamesSelector onChange={(e, v) => setGames(v)} />
         <TagsSelector onChange={(e, v) => setTags(v)} />
