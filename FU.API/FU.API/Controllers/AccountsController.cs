@@ -95,9 +95,21 @@ public class AccountsController : ControllerBase
             await _accountService.UpdateUsername(user.UserId, newCredentials.Username);
         }
 
-        if (newCredentials.Password is not null)
+        if (newCredentials.NewPassword is not null)
         {
-            await _accountService.UpdatePassword(user.UserId, newCredentials.Password);
+            if (newCredentials.OldPassword is null)
+            {
+                throw new UnauthorizedException("The previous password is misssing from the request");
+            }
+
+            string oldPasswordHashInRequest = AccountsService.HashPassword(newCredentials.OldPassword);
+            string oldPasswordHashStored = _accountService.GetInfo(user.UserId).PasswordHash;
+            if (!oldPasswordHashInRequest.Equals(oldPasswordHashStored, StringComparison.Ordinal))
+            {
+                throw new UnauthorizedException("The given old password does not match the stored old password");
+            }
+
+            await _accountService.UpdatePassword(user.UserId, newCredentials.NewPassword);
         }
 
         return Ok();
