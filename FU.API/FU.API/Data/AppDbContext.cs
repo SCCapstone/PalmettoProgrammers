@@ -54,6 +54,10 @@ public class AppDbContext : DbContext
             .HasIndex(g => g.Name)
             .IsUnique();
 
+        // Give index to post status
+        modelBuilder.Entity<Post>()
+            .HasIndex(p => p.Status);
+
         base.OnModelCreating(modelBuilder);
     }
 
