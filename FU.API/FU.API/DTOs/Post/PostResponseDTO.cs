@@ -1,5 +1,7 @@
 ﻿namespace FU.API.DTOs.Post;
 
+using FU.API.Models;
+
 public class PostResponseDTO
 {
     public int Id { get; set; }
@@ -18,7 +20,7 @@ public class PostResponseDTO
 
     public int ChatId { get; set; }
 
-    public string Creator { get; set; } = string.Empty;
+    public UserProfile Creator { get; set; } = new UserProfile();
 
     public ICollection<string> Tags { get; set; } = new HashSet<string>();
 

@@ -36,8 +36,7 @@ public static class Mapper
             Id = message.Id,
             CreatedAt = message.CreatedAt,
             Content = message.Content,
-            SenderId = message.SenderId,
-            SenderName = message.Sender.Username,
+            Sender = message.Sender.ToProfile(),
         };
     }
 
@@ -162,7 +161,7 @@ public static class Mapper
             EndTime = post.EndTime,
             MaxPlayers = post.MaxPlayers,
             ChatId = post.ChatId,
-            Creator = post.Creator.Username,
+            Creator = post.Creator.ToProfile(),
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
             HasJoined = hasJoined,
         };
@@ -208,5 +207,20 @@ public static class Mapper
             User = relation.User1.ToProfile(),
             Status = relation.Status.ToString(),
         };
+    }
+
+    public static Dictionary<string, int> StringJobsToMap(string mapString)
+    {
+        var map = new Dictionary<string, int>();
+        foreach (string job in mapString.Split(";"))
+        {
+            var arr = job.Split(":");
+            if (arr.Length == 2 && int.TryParse(arr[1], out int value))
+            {
+                map.Add(arr[0], value);
+            }
+        }
+
+        return map;
     }
 }
