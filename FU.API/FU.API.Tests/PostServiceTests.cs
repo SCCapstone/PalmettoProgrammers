@@ -4,7 +4,6 @@ using FU.API.Data;
 using FU.API.Models;
 using FU.API.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 public class PostServiceTests
 {
@@ -95,22 +94,6 @@ public class PostServiceTests
         };
     }
 
-    async Task<ApplicationUser> CreateUser(AppDbContext context)
-    {
-        var configPairs = new Dictionary<string, string?> { { "JWT_SECRET", "1234567890" } };
-        var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(configPairs)
-            .Build();
-
-        var accountService = new AccountsService(configuration, context);
-
-        Credentials credentials = new() { Username = "Test", Password = "Test" };
-
-        ApplicationUser user = await accountService.Register(credentials);
-
-        return user;
-    }
-
     [Fact]
     public async void CreatePost_WithValidParams_ReturnsCreated()
     {
@@ -119,7 +102,7 @@ public class PostServiceTests
         var gameService = new GameService(context);
         var chatService = new ChatService(context);
         var postService = new PostService(context, chatService);
-        ApplicationUser user = await CreateUser(context);
+        ApplicationUser user = await TestsHelper.CreateUserAsync(context);
 
         // Act
         Game game = await gameService.CreateGame("Game Title");
@@ -146,7 +129,7 @@ public class PostServiceTests
         var gameService = new GameService(context);
         var chatService = new ChatService(context);
         var postService = new PostService(context, chatService);
-        ApplicationUser user = await CreateUser(context);
+        ApplicationUser user = await TestsHelper.CreateUserAsync(context);
 
         Game game = await gameService.CreateGame("Game Title");
         Post post = new()
