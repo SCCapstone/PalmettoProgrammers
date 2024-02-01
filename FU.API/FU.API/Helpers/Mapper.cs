@@ -208,19 +208,4 @@ public static class Mapper
             Status = relation.Status.ToString(),
         };
     }
-
-    public static Dictionary<string, int> StringJobsToMap(string mapString)
-    {
-        var map = new Dictionary<string, int>();
-        foreach (string job in mapString.Split(";"))
-        {
-            var arr = job.Split(":");
-            if (arr.Length == 2 && int.TryParse(arr[1], out int value))
-            {
-                map.Add(arr[0], value);
-            }
-        }
-
-        return map;
-    }
 }

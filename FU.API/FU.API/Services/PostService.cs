@@ -30,27 +30,18 @@ public class PostService : CommonService, IPostService
 
         post.Game = game;
 
-        if (post.StartTime is null && post.EndTime is null)
+        // Check if either start time or end time is present when the other is present
+        bool isInvalidTimeRange = (post.StartTime is null) != (post.EndTime is null);
+        if (isInvalidTimeRange)
         {
-            // If start and end times are not present, set status to no schedule
-            post.Status = PostStatus.NoSchedule;
+            throw new PostException("Start and end times must both be present", HttpStatusCode.UnprocessableEntity);
         }
-        else
+
+        // Check if start time is after end time
+        bool isStartTimeAfterEndTime = (post.StartTime is not null) && (post.EndTime is not null) && (post.StartTime > post.EndTime);
+        if (isStartTimeAfterEndTime)
         {
-            // Otherwise it is upcoming
-            post.Status = PostStatus.Upcoming;
-
-            // Make sure both are present
-            if (post.StartTime is null || post.EndTime is null)
-            {
-                throw new PostException("Start and end times must both be present", HttpStatusCode.UnprocessableEntity);
-            }
-
-            // Make sure start time is not after end time
-            if (post.StartTime > post.EndTime)
-            {
-                throw new PostException("Start time cannot be after end time", HttpStatusCode.UnprocessableEntity);
-            }
+            throw new PostException("Start time cannot be after end time", HttpStatusCode.UnprocessableEntity);
         }
 
         var postTagIds = post.Tags.Select(t => t.TagId);
