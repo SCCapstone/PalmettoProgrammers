@@ -208,4 +208,13 @@ public static class Mapper
             Status = relation.Status.ToString(),
         };
     }
+
+    public static AccountInfoDTO ToDTO(this AccountInfo accountInfo)
+    {
+        return new AccountInfoDTO()
+        {
+            UserId = accountInfo.UserId,
+            Username = accountInfo.Username,
+        };
+    }
 }
