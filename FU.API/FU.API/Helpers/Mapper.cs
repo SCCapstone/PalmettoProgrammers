@@ -94,7 +94,8 @@ public static class Mapper
             MinimumRequiredPlayers = dto.MinPlayers ?? 0,
             Limit = dto.Limit ?? 20,
             Offset = dto.Offset ?? 0,
-            SortBy = new()
+            SortType = new(),
+            SortDirection = new(),
         };
 
         if (dto.Keywords is not null)
@@ -131,22 +132,22 @@ public static class Mapper
 
         // E.g. dto.Sort = "title:asc" or just "title"
         var arr = dto.Sort.ToLower().Split(":");
-        query.SortBy.Type = arr[0] switch
+        query.SortType = arr[0] switch
         {
-            "players" => SortType.NumberOfPlayers,
-            "soonest" => SortType.NewestCreated,
-            "newest" => SortType.NewestCreated,
-            "title" => SortType.Title,
-            _ => SortType.NewestCreated
+            "players" => PostSortType.NumberOfPlayers,
+            "soonest" => PostSortType.NewestCreated,
+            "newest" => PostSortType.NewestCreated,
+            "title" => PostSortType.Title,
+            _ => PostSortType.NewestCreated
         };
 
         if (arr.Length > 1 && arr[1].StartsWith("desc"))
         {
-            query.SortBy.Direction = SortDirection.Descending;
+            query.SortDirection = SortDirection.Descending;
         }
         else
         {
-            query.SortBy.Direction = SortDirection.Ascending;
+            query.SortDirection = SortDirection.Ascending;
         }
 
         return query;

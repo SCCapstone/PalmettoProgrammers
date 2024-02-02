@@ -85,11 +85,11 @@ public class SearchService : CommonService, ISearchService
         }
 
         // Sort results
-        IOrderedQueryable<Post> orderedDbQuery = query.SortBy?.Direction == SortDirection.Ascending
+        IOrderedQueryable<Post> orderedDbQuery = query.SortDirection == SortDirection.Ascending
             ? dbQuery.OrderBy(
-                SelectPostProperty(query.SortBy?.Type))
+                SelectPostProperty(query.SortType))
             : dbQuery.OrderByDescending(
-                SelectPostProperty(query.SortBy?.Type));
+                SelectPostProperty(query.SortType));
 
         // Always end ordering by Id to ensure order is unique. This ensures order is consistent across calls.
         orderedDbQuery = orderedDbQuery.ThenBy(p => p.Id);
@@ -119,13 +119,13 @@ public class SearchService : CommonService, ISearchService
         return predicate;
     }
 
-    private static Expression<Func<Post, object>> SelectPostProperty(SortType? sortType)
+    private static Expression<Func<Post, object>> SelectPostProperty(PostSortType? sortType)
     {
         return sortType switch
         {
-            SortType.NewestCreated => (post) => post.CreatedAt,
-            SortType.Title => (post) => post.Title,
-            SortType.EarliestToScheduledTime => (post) => post.StartTime ?? post.CreatedAt,
+            PostSortType.NewestCreated => (post) => post.CreatedAt,
+            PostSortType.Title => (post) => post.Title,
+            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? post.CreatedAt,
             _ => (post) => post.CreatedAt,
         };
     }
