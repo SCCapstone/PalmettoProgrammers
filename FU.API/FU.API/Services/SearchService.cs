@@ -177,7 +177,7 @@ public class SearchService : CommonService, ISearchService
     {
         return sortType switch
         {
-            UserSortType.Title => (user) => user.NormalizedUsername,
+            UserSortType.Username => (user) => user.NormalizedUsername,
             _ => (user) => user.NormalizedUsername,
         };
     }

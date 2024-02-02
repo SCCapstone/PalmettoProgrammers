@@ -2,7 +2,7 @@ namespace FU.API.Models;
 
 public enum UserSortType
 {
-    Title,
+    Username,
 }
 
 public enum PostSortType
