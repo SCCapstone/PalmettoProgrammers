@@ -1,5 +1,10 @@
 namespace FU.API.Models;
 
+public enum UserSortType
+{
+    Title,
+}
+
 public enum PostSortType
 {
     EarliestToScheduledTime,
