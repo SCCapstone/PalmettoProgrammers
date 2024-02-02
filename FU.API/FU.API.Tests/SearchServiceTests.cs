@@ -195,7 +195,7 @@ public class SearchServiceTests : IDisposable
     {
         // Arrange
         DateOnly searchDate = DateOnly.FromDateTime(DateTime.Now);
-        TimeOnly searchTime = new(15, 0);
+        TimeOnly searchTime = TimeOnly.FromDateTime(DateTime.Now);
         Game game = await TestsHelper.CreateTestGameAsync(_dbContext);
         var user = await TestsHelper.CreateUserAsync(_dbContext);
         // Create a post that ends an hour before the search time
