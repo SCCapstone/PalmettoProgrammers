@@ -10,23 +10,26 @@ import './Discover.css';
 export default function Discover() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
   const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
 
+  // initial state
   const searchParams = new URLSearchParams(location.search);
   const initialSearchText = searchParams.get('q') || '';
+  const initialPage = parseInt(searchParams.get('page'), 10) || 1;
   const initialGames = searchParams.getAll('game').map(gameId => ({ id: gameId }));
   const initialTags = searchParams.getAll('tag').map(tagId => ({ id: tagId }));
+
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(initialPage);
+  const [searchText, setSearchText] = useState(initialSearchText);
+  const [games, setGames] = useState(initialGames);
+  const [tags, setTags] = useState(initialTags);
+  
   // index of the last post
   const lastPost = page * postsPerPage;
   // index of first
   const firstPost = lastPost - postsPerPage;
 
-  const [posts, setPosts] = useState([]);
-  const [searchText, setSearchText] = useState(initialSearchText);
-  const [games, setGames] = useState(initialGames);
-  const [tags, setTags] = useState(initialTags);
-  
   // each page has correct number of posts
   const currentPosts = posts.slice(firstPost, lastPost);
 
@@ -44,14 +47,26 @@ export default function Discover() {
     submitSearch();
   }, [games, tags, searchText]);
 
+  // if user clicks discover tab again it will reload default discover page state.
+  useEffect(() => {
+     setSearchText(initialSearchText);
+     setPage(initialPage);
+     setGames(initialGames);
+     setTags(initialTags);
+   }, [location.search]);
+
   // function for search submissions
   const searchSubmit = (newSearchText) => {
     setSearchText(newSearchText);
     setPage(1); // reset to page 1 on new search
   };
   
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+    const params = new URLSearchParams(location.search);
+    params.set('page', value);
+    navigate(`/discover?${params.toString()}`);
   };  
 
   useEffect(() => {
@@ -59,8 +74,8 @@ export default function Discover() {
     const params = new URLSearchParams();
     if (searchText) params.append('q', searchText);
     if (page > 1) params.set('page', page);
-    games.forEach(game => game.id && params.append('game', game.id));
-    tags.forEach(tag => tag.id && params.append('tag', tag.id));
+    games.forEach(game => params.append('game', game.id));
+    tags.forEach(tag => params.append('tag', tag.id));
 
     // update URL(only show page in URL if page > 1)
     navigate(`/discover${params.toString() ? `?${params.toString()}` : ''}`, { replace: true });
