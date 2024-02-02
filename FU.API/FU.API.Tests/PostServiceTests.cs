@@ -5,7 +5,6 @@ using FU.API.Models;
 using FU.API.Services;
 using FU.API.Tests.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 public class PostServiceTests
 {
