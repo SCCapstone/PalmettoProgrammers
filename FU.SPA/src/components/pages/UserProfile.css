@@ -40,7 +40,7 @@
     flex-direction: column;
     margin-right: 75px;
     height: 100px;
-    vertical-align: middle;
+    justify-content: space-between;
 
     button {
       width: 233px;
@@ -86,5 +86,5 @@
 
 .page-wrapper {
   background-color: #23194f;
-  height: 100vh;
+  height: 93vh;
 }
