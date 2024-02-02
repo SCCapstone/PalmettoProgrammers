@@ -7,6 +7,7 @@ using FU.API.DTOs.Post;
 using FU.API.DTOs.Tag;
 using FU.API.Models;
 using FU.API.DTOs.Group;
+using FU.API.DTOs.User;
 
 public static class Mapper
 {
@@ -202,18 +203,21 @@ public static class Mapper
     public static IEnumerable<GroupSimpleDTO> ToSimpleDtos(this IEnumerable<Group> groups) =>
         groups.Select(group => group.ToSimpleDto());
 
-    public static Dictionary<string, int> StringJobsToMap(string mapString)
+    public static UserRelationDTO ToDto(this UserRelation relation)
     {
-        var map = new Dictionary<string, int>();
-        foreach (string job in mapString.Split(";"))
+        return new UserRelationDTO()
         {
-            var arr = job.Split(":");
-            if (arr.Length == 2 && int.TryParse(arr[1], out int value))
-            {
-                map.Add(arr[0], value);
-            }
-        }
+            User = relation.User1.ToProfile(),
+            Status = relation.Status.ToString(),
+        };
+    }
 
-        return map;
+    public static AccountInfoDTO ToDTO(this AccountInfo accountInfo)
+    {
+        return new AccountInfoDTO()
+        {
+            UserId = accountInfo.UserId,
+            Username = accountInfo.Username,
+        };
     }
 }

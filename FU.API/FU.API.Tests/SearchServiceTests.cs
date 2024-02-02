@@ -68,7 +68,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(-2)),
             EndTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(-1)),
-            Status = PostStatus.Upcoming,
         });
         // Create a post that starts an after the search time
         await _postService.CreatePost(new Post()
@@ -77,7 +76,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(1)),
             EndTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(2)),
-            Status = PostStatus.Upcoming,
         });
 
         // Act
@@ -104,7 +102,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(-2)),
             EndTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(-1)),
-            Status = PostStatus.Upcoming,
         });
         // Create a post that starts an after the search time
         await _postService.CreatePost(new Post()
@@ -113,7 +110,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(1)),
             EndTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(2)),
-            Status = PostStatus.Upcoming,
         });
 
         // Act
@@ -140,7 +136,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = searchDate.AddDays(-1).ToDateTime(TimeOnly.MinValue),
             EndTime = searchDate.AddDays(-1).ToDateTime(TimeOnly.MaxValue),
-            Status = PostStatus.Upcoming,
         });
         // Create a post is the day after the search date
         await _postService.CreatePost(new Post()
@@ -149,7 +144,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = searchDate.AddDays(1).ToDateTime(TimeOnly.MinValue),
             EndTime = searchDate.AddDays(1).ToDateTime(TimeOnly.MaxValue),
-            Status = PostStatus.Upcoming,
         });
 
         // Act
@@ -176,7 +170,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = searchDate.AddDays(-1).ToDateTime(TimeOnly.MinValue),
             EndTime = searchDate.AddDays(-1).ToDateTime(TimeOnly.MaxValue),
-            Status = PostStatus.Upcoming,
         });
         // Create a post is the day after the search date
         await _postService.CreatePost(new Post()
@@ -185,7 +178,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = searchDate.AddDays(1).ToDateTime(TimeOnly.MinValue),
             EndTime = searchDate.AddDays(1).ToDateTime(TimeOnly.MaxValue),
-            Status = PostStatus.Upcoming,
         });
 
         // Act
@@ -213,7 +205,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = searchDate.ToDateTime(searchTime.AddHours(-2)),
             EndTime = searchDate.ToDateTime(searchTime.AddHours(-1)),
-            Status = PostStatus.Upcoming,
         });
         // Create a post that starts an after the search time
         await _postService.CreatePost(new Post()
@@ -222,7 +213,6 @@ public class SearchServiceTests : IDisposable
             CreatorId = user.UserId,
             StartTime = searchDate.ToDateTime(searchTime.AddHours(1)),
             EndTime = searchDate.ToDateTime(searchTime.AddHours(2)),
-            Status = PostStatus.Upcoming,
         });
 
         // Act
