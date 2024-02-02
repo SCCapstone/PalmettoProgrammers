@@ -167,7 +167,7 @@ public class SearchService : CommonService, ISearchService
         return sortType switch
         {
             PostSortType.NewestCreated => (post) => post.CreatedAt,
-            PostSortType.Title => (post) => post.Title,
+            PostSortType.Title => (post) => post.NormalizedTitle,
             PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? post.CreatedAt,
             _ => (post) => post.CreatedAt,
         };
