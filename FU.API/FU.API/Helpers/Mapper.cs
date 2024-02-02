@@ -83,6 +83,44 @@ public static class Mapper
     public static IEnumerable<TagResponseDTO> ToDtos(this IEnumerable<Tag> tags) =>
         tags.Select(tag => tag.ToDto());
 
+    public static UserQuery ToUserQuery(this UserSearchRequestDTO dto)
+    {
+        var query = new UserQuery()
+        {
+            Limit = dto.Limit ?? 20,
+            Offset = dto.Offset ?? 0,
+            SortType = new(),
+            SortDirection = new(),
+        };
+
+        if (dto.Keywords is not null)
+        {
+            query.Keywords = dto.Keywords.Split(" ").ToList();
+        }
+
+        // defaults if unset
+        dto.Sort ??= "newest:desc";
+
+        // E.g. dto.Sort = "title:asc" or just "title"
+        var arr = dto.Sort.ToLower().Split(":");
+        query.SortType = arr[0] switch
+        {
+            "username" => UserSortType.Username,
+            _ => UserSortType.Username,
+        };
+
+        if (arr.Length > 1 && arr[1].StartsWith("desc"))
+        {
+            query.SortDirection = SortDirection.Descending;
+        }
+        else
+        {
+            query.SortDirection = SortDirection.Ascending;
+        }
+
+        return query;
+    }
+
     public static PostQuery ToPostQuery(this PostSearchRequestDTO dto)
     {
         var query = new PostQuery()

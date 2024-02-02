@@ -4,6 +4,7 @@ using FU.API.DTOs.Post;
 using FU.API.DTOs.Search;
 using FU.API.Helpers;
 using FU.API.Interfaces;
+using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -41,5 +42,14 @@ public class SearchController : ControllerBase
         }
 
         return Ok(response);
+    }
+
+    [HttpGet]
+    [Route("users")]
+    public async Task<IActionResult> SearchUsers([FromQuery] UserSearchRequestDTO request)
+    {
+        List<UserProfile> userProfiles = await _searchService.SearchUsers(request.ToUserQuery());
+
+        return Ok(userProfiles);
     }
 }
