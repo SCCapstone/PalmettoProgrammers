@@ -61,6 +61,12 @@ export default function Discover() {
     setPage(1); // reset to page 1 on new search
   };
   
+  // handle filter changes
+const handleFilterChange = (newGames, newTags) => {
+  setGames(newGames);
+  setTags(newTags);
+  setPage(1); // Reset to page 1 when filters change
+};
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -85,8 +91,8 @@ export default function Discover() {
     <div className="page-content">
       <div className="sidebar" style={{ textAlign: 'left', minWidth: '200pt',  maxWidth:'300px'  }}>
         <Typography variant="h5">Filters</Typography>
-        <GamesSelector onChange={(e, v) => setGames(v)} />
-        <TagsSelector onChange={(e, v) => setTags(v)} />
+        <GamesSelector onChange={(e, v) => handleFilterChange(v, tags)} />
+        <TagsSelector onChange={(e, v) => handleFilterChange(v, games)} />
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
