@@ -6,6 +6,7 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
+using FU.API.Helpers;
 
 public class SearchService : CommonService, ISearchService
 {
@@ -15,6 +16,30 @@ public class SearchService : CommonService, ISearchService
         : base(dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public async Task<List<UserProfile>> SearchUsers(UserQuery query)
+    {
+        var dbQuery = _dbContext.Users.Select(p => p);
+
+        dbQuery = dbQuery.Where(UserContainsKeywords(query.Keywords));
+
+        // Sort results
+        IOrderedQueryable<ApplicationUser> orderedDbQuery = query.SortDirection == SortDirection.Ascending
+            ? dbQuery.OrderBy(
+                SelectUserProperty(query.SortType))
+            : dbQuery.OrderByDescending(
+                SelectUserProperty(query.SortType));
+
+        // Always end ordering by Id to ensure order is unique. This ensures order is consistent across calls.
+        orderedDbQuery = orderedDbQuery.ThenBy(u => u.UserId);
+
+        List<ApplicationUser> applicationUsers = await orderedDbQuery
+            .Skip(query.Offset)
+            .Take(query.Limit)
+            .ToListAsync();
+
+        return applicationUsers.ToProfiles().ToList();
     }
 
     public async Task<List<Post>> SearchPosts(PostQuery query)
@@ -66,7 +91,7 @@ public class SearchService : CommonService, ISearchService
         }
 
         // Filter by search keywords
-        dbQuery = dbQuery.Where(ContainsKeywords(query.Keywords));
+        dbQuery = dbQuery.Where(PostContainsKeywords(query.Keywords));
 
         // Filter by posts that start after the given time
         if (query.StartOnOrAfterTime is not null)
@@ -85,11 +110,11 @@ public class SearchService : CommonService, ISearchService
         }
 
         // Sort results
-        IOrderedQueryable<Post> orderedDbQuery = query.SortBy?.Direction == SortDirection.Ascending
+        IOrderedQueryable<Post> orderedDbQuery = query.SortDirection == SortDirection.Ascending
             ? dbQuery.OrderBy(
-                SelectPostProperty(query.SortBy?.Type))
+                SelectPostProperty(query.SortType))
             : dbQuery.OrderByDescending(
-                SelectPostProperty(query.SortBy?.Type));
+                SelectPostProperty(query.SortType));
 
         // Always end ordering by Id to ensure order is unique. This ensures order is consistent across calls.
         orderedDbQuery = orderedDbQuery.ThenBy(p => p.Id);
@@ -103,7 +128,25 @@ public class SearchService : CommonService, ISearchService
                 .ToListAsync();
     }
 
-    private static Expression<Func<Post, bool>> ContainsKeywords(List<string> keywords)
+    // Determines if a keyword is a user's username or bio
+    private static Expression<Func<ApplicationUser, bool>> UserContainsKeywords(List<string> keywords)
+    {
+        if (keywords.Count == 0)
+        {
+            return PredicateBuilder.New<ApplicationUser>(true); // nothing to do so return a true predicate
+        }
+
+        var predicate = PredicateBuilder.New<ApplicationUser>(false); // create a predicate that's false by default
+        foreach (string keyword in keywords)
+        {
+            predicate = predicate.Or(u => u.NormalizedBio.Contains(keyword.ToUpper()) || u.NormalizedUsername.Contains(keyword.ToUpper()));
+        }
+
+        return predicate;
+    }
+
+    // Determines if a keyword is a posts's description or title
+    private static Expression<Func<Post, bool>> PostContainsKeywords(List<string> keywords)
     {
         if (keywords.Count == 0)
         {
@@ -119,14 +162,23 @@ public class SearchService : CommonService, ISearchService
         return predicate;
     }
 
-    private static Expression<Func<Post, object>> SelectPostProperty(SortType? sortType)
+    private static Expression<Func<Post, object>> SelectPostProperty(PostSortType? sortType)
     {
         return sortType switch
         {
-            SortType.NewestCreated => (post) => post.CreatedAt,
-            SortType.Title => (post) => post.Title,
-            SortType.EarliestToScheduledTime => (post) => post.StartTime ?? post.CreatedAt,
+            PostSortType.NewestCreated => (post) => post.CreatedAt,
+            PostSortType.Title => (post) => post.NormalizedTitle,
+            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? post.CreatedAt,
             _ => (post) => post.CreatedAt,
+        };
+    }
+
+    private static Expression<Func<ApplicationUser, object>> SelectUserProperty(UserSortType? sortType)
+    {
+        return sortType switch
+        {
+            UserSortType.Username => (user) => user.NormalizedUsername,
+            _ => (user) => user.NormalizedUsername,
         };
     }
 }

@@ -5,7 +5,7 @@ using FU.API.Models;
 using FU.API.Services;
 using Microsoft.EntityFrameworkCore;
 
-public class SearchServiceTests : IDisposable
+public class SearchServiceSearchPostsTests : IDisposable
 {
     private readonly DbContextOptions<AppDbContext> _contextOptions;
     private readonly AppDbContext _dbContext;
@@ -13,10 +13,10 @@ public class SearchServiceTests : IDisposable
     private readonly PostService _postService;
 
     // adapted from https://github.com/dotnet/EntityFramework.Docs/blob/main/samples/core/Testing/TestingWithoutTheDatabase/InMemoryBloggingControllerTest.cs
-    public SearchServiceTests()
+    public SearchServiceSearchPostsTests()
     {
         _contextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase("SearchServiceTestsDb")
+            .UseInMemoryDatabase("SearchServiceSearchPostsTestsDb")
             .Options;
 
         _dbContext = new AppDbContext(_contextOptions);

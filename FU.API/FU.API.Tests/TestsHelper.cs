@@ -17,14 +17,18 @@ public static class TestsHelper
 
     public static async Task<ApplicationUser> CreateUserAsync(AppDbContext context)
     {
+        Credentials credentials = new() { Username = "Test", Password = "Test" };
+        return await CreateUserAsync(context, credentials);
+    }
+
+    public static async Task<ApplicationUser> CreateUserAsync(AppDbContext context, Credentials credentials)
+    {
         var configPairs = new Dictionary<string, string?> { { "JWT_SECRET", "1234567890" } };
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(configPairs)
             .Build();
 
         var accountService = new AccountsService(configuration, context);
-
-        Credentials credentials = new() { Username = "Test", Password = "Test" };
 
         ApplicationUser user = await accountService.Register(credentials);
 
