@@ -71,3 +71,36 @@ export const TagsSelector = ({ onChange }) => {
     />
   );
 };
+
+
+export const AscDscSelector = ({ onChange }) => {
+  const [ascDscOptions, setAscDscOptions] = useState([]);
+
+  useEffect(() => {
+    GameService.searchGames('').then((games) => setGameOptions(games));
+  }, []);
+
+  return (
+    <Autocomplete
+      multiple
+      onChange={onChange}
+      options={gameOptions}
+      disableCloseOnSelect
+      getOptionLabel={(option) => option.name}
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          <Checkbox
+            icon={checkboxIconBlank}
+            checkedIcon={checkboxIconChecked}
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {option.name}
+        </li>
+      )}
+      renderInput={(params) => (
+        <TextField {...params} label="Games" placeholder="" />
+      )}
+    />
+  );
+};

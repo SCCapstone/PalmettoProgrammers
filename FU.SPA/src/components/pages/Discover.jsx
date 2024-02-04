@@ -18,13 +18,14 @@ export default function Discover() {
   const initialPage = parseInt(searchParams.get('page'), 10) || 1;
   const initialGames = searchParams.getAll('game').map(gameId => ({ id: gameId }));
   const initialTags = searchParams.getAll('tag').map(tagId => ({ id: tagId }));
+  const initialAscDsc = searchParams.getAll('ascDsc').map(ascDsc => ({ id: ascDscId})); //for ascending/descending filter
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(initialPage);
   const [searchText, setSearchText] = useState(initialSearchText);
   const [games, setGames] = useState(initialGames);
   const [tags, setTags] = useState(initialTags);
-  
+  const [ascDsc, setAscDsc] = useState(initialAscDsc);
   // index of the last post
   const lastPost = page * postsPerPage;
   // index of first
@@ -39,13 +40,14 @@ export default function Discover() {
         keywords: searchText,
         games: games,
         tags: tags,
+        ascDsc: ascDsc,
       };
 
       const response = await SearchService.searchPosts(query);
       setPosts(response);
     };
     submitSearch();
-  }, [games, tags, searchText]);
+  }, [games, tags, ascDsc, searchText]);
 
   // if user clicks discover tab again it will reload default discover page state.
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function Discover() {
      setPage(initialPage);
      setGames(initialGames);
      setTags(initialTags);
+     setAscDsc(initialAscDsc);
    }, [location.search]);
 
   // function for search submissions
@@ -62,9 +65,10 @@ export default function Discover() {
   };
   
   // handle filter changes
-const handleFilterChange = (newGames, newTags) => {
+const handleFilterChange = (newGames, newTags, newAscDsc) => {
   setGames(newGames);
   setTags(newTags);
+  setAscDsc(newAscDsc);
   setPage(1); // Reset to page 1 when filters change
 };
 
@@ -82,10 +86,11 @@ const handleFilterChange = (newGames, newTags) => {
     if (page > 1) params.set('page', page);
     games.forEach(game => params.append('game', game.id));
     tags.forEach(tag => params.append('tag', tag.id));
+    ascDsc.forEach(ascDsc => params.append('ascDsc', ascDsc.id));
 
     // update URL(only show page in URL if page > 1)
     navigate(`/discover${params.toString() ? `?${params.toString()}` : ''}`, { replace: true });
-  }, [searchText, page, games, tags, navigate]);
+  }, [searchText, page, games, tags, ascDsc, navigate]);
 
   return (
     <div className="page-content">
@@ -93,6 +98,7 @@ const handleFilterChange = (newGames, newTags) => {
         <Typography variant="h5">Filters</Typography>
         <GamesSelector onChange={(e, v) => handleFilterChange(v, tags)} />
         <TagsSelector onChange={(e, v) => handleFilterChange(v, games)} />
+        <AscDscSelector onChange={(e, v) => handleFilterChange(v, ascDsc)} />
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
@@ -132,7 +138,6 @@ function SearchBar({ searchText, onSearchSubmit }) {
   return (
     <div id="search-bar">
       <TextField
-        aria-setsize={300}
         id="outlined-basic"
         label="Search"
         variant="outlined"
