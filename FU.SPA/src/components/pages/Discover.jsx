@@ -132,6 +132,7 @@ function SearchBar({ searchText, onSearchSubmit }) {
   return (
     <div id="search-bar">
       <TextField
+        aria-setsize={300}
         id="outlined-basic"
         label="Search"
         variant="outlined"
@@ -139,6 +140,7 @@ function SearchBar({ searchText, onSearchSubmit }) {
         onChange={handleChange}
         onKeyDown={onKeyDown}
       />
+
     </div>
   );
 }
