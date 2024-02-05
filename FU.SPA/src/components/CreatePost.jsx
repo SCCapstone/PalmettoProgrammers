@@ -4,12 +4,10 @@ import {
   Box,
   Container,
   Typography,
-  Grid,
   Autocomplete,
   Checkbox,
   createFilterOptions,
 } from '@mui/material';
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { useEffect, useState } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -86,59 +84,59 @@ export default function CreatePost() {
             display: 'flex',
             flexDirection: 'column',
             mt: 3,
-            gap: 2
+            gap: 2,
           }}
         >
-            <TextField
-              required //may want to get rid of this and just check if it's empty when clicking create button.
-              fullWidth
-              id="searchGames"
-              label="Title" //might want to put a Search icon in front, if we can figure it out.
-              autoFocus
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+          <TextField
+            required //may want to get rid of this and just check if it's empty when clicking create button.
+            fullWidth
+            id="searchGames"
+            label="Title" //might want to put a Search icon in front, if we can figure it out.
+            autoFocus
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <TextField
+            required //may want to get rid of this and just check if it's empty when clicking create button.
+            fullWidth
+            id="searchGames"
+            label="Game" //might want to put a Search icon in front, if we can figure it out.
+            type="searchGames"
+            name="searchGames"
+            value={gameName}
+            onChange={(e) => setGameName(e.target.value)}
+          />
+          <br />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              label="Start Time"
+              value={null}
+              onChange={(newValue) => setStartTime(newValue)}
             />
-            <TextField
-              required //may want to get rid of this and just check if it's empty when clicking create button.
-              fullWidth
-              id="searchGames"
-              label="Game" //might want to put a Search icon in front, if we can figure it out.
-              type="searchGames"
-              name="searchGames"
-              value={gameName}
-              onChange={(e) => setGameName(e.target.value)}
+            <DateTimePicker
+              label="End Time"
+              value={null}
+              onChange={(newValue) => setEndTime(newValue)}
             />
-            <br />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                label="Start Time"
-                value={null}
-                onChange={(newValue) => setStartTime(newValue)}
-              />
-              <DateTimePicker
-                label="End Time"
-                value={null}
-                onChange={(newValue) => setEndTime(newValue)}
-              />
-            </LocalizationProvider>
-              <TagsSelector onChange={setTags} />
-            <Box
-              sx={{
-                display: 'flex',
-              }}
-            >
-              <Typography component="h1" variant="h6">
-                {' '}
-                {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
-                Description
-              </Typography>
-            </Box>
-              <TextField
-                label="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                multiline
-              ></TextField>
+          </LocalizationProvider>
+          <TagsSelector onChange={setTags} />
+          <Box
+            sx={{
+              display: 'flex',
+            }}
+          >
+            <Typography component="h1" variant="h6">
+              {' '}
+              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
+              Description
+            </Typography>
+          </Box>
+          <TextField
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            multiline
+          ></TextField>
           <Button
             type="submit"
             fullWidth
