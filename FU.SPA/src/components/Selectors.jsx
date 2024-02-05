@@ -84,7 +84,7 @@ export const AscDscSelector = ({ onChange }) => {
     <Autocomplete
       multiple
       onChange={onChange}
-      options={gameOptions}
+      options={ascDscOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
@@ -99,7 +99,7 @@ export const AscDscSelector = ({ onChange }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Games" placeholder="" />
+        <TextField {...params} label="ASC/DSC" placeholder="" />
       )}
     />
   );

@@ -2,7 +2,7 @@ import { TextField, Typography, Pagination } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { TagsSelector, GamesSelector } from '../Selectors';
+import { TagsSelector, GamesSelector, AscDscSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import Posts from '../Posts';
 import './Discover.css';
