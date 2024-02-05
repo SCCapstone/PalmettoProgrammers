@@ -99,7 +99,7 @@ export const AscDscSelector = ({ onChange }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="ASC/DSC" placeholder="" />
+        <TextField {...params} label="A-Z or Z-A" placeholder="" />
       )}
     />
   );
