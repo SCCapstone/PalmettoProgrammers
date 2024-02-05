@@ -13,6 +13,7 @@ import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
 import './App.css';
+import ProfileSettings from './components/pages/ProfileSettings';
 
 function App() {
   return (
@@ -43,8 +44,10 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/posts/:postId" element={<PostPage />} />
+
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
+            <Route path="/profilesettings/" element={<ProfileSettings />} />
           </Routes>
         </div>
       </UserProvider>
