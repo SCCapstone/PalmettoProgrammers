@@ -112,12 +112,12 @@ export default function CreatePost() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 label="Start Time"
-                value={startTime}
+                value={null}
                 onChange={(newValue) => setStartTime(newValue)}
               />
               <DateTimePicker
                 label="End Time"
-                value={endTime}
+                value={null}
                 onChange={(newValue) => setEndTime(newValue)}
               />
             </LocalizationProvider>
@@ -133,12 +133,12 @@ export default function CreatePost() {
                 Description
               </Typography>
             </Box>
-              <TextareaAutosize
-                aria-setsize={300}
-                size={1000}
+              <TextField
+                label="Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-              ></TextareaAutosize>
+                multiline
+              ></TextField>
           <Button
             type="submit"
             fullWidth
