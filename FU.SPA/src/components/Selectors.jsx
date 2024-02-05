@@ -77,7 +77,7 @@ export const AscDscSelector = ({ onChange }) => {
   const [ascDscOptions, setAscDscOptions] = useState([]);
 
   useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
+    GameService.searchGames('').then((games) => setAscDscOptions(games));
   }, []);
 
   return (
