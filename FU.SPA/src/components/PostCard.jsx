@@ -23,7 +23,7 @@ const PostCard = ({ post }) => {
     <Card style={{ textAlign: 'left' }}>
       <CardContent style={{ width: '200pt', height: '250pt' }}>
         <Typography variant="body2" color="text.secondary">
-          by {post.creator}
+          by {post.creator.username}
         </Typography>
         <Typography variant="h5">{post.title}</Typography>
         <Typography variant="h6">{post.game}</Typography>
@@ -42,14 +42,9 @@ const PostCard = ({ post }) => {
         </div>
       </CardContent>
       <CardActions>
-        <Button size="large" onClick={(e) => navigate(`/posts/${post.id}`)}>
+        <Button size="large" onClick={() => navigate(`/posts/${post.id}`)}>
           View
         </Button>
-        {post.hasJoined && (
-        <Button size="large" onClick={(e) => navigate(`/chat/${post.chatId}`)}>
-          Chat
-        </Button>
-        )}
       </CardActions>
     </Card>
   );

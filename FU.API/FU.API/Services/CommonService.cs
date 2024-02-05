@@ -1,7 +1,6 @@
 ﻿namespace FU.API.Services;
 
 using FU.API.Data;
-using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using FU.API.Models;

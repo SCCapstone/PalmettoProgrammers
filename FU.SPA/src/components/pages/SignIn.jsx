@@ -38,7 +38,7 @@ export default function SignIn() {
 
   // Creates and returns signin form
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" height="100%">
       <CssBaseline />
       <Box
         sx={{

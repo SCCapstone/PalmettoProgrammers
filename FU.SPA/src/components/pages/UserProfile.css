@@ -1,0 +1,90 @@
+.header {
+  background-color: #31084a;
+  height: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+
+  .userImage {
+    width: 100px;
+    height: 100px;
+    margin-left: 75px;
+  }
+
+  .userInfo {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    text-align: left;
+    height: 100px;
+    justify-content: space-between;
+
+    p {
+      color: #fff;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      margin: 0%;
+    }
+
+    .userName {
+      font-size: 24px;
+      font-weight: 700;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    margin-right: 75px;
+    height: 100px;
+    justify-content: space-between;
+
+    button {
+      width: 233px;
+      background-color: #e340dcdc;
+      color: #fff;
+      padding: 15px;
+      border: none;
+      margin: 5px;
+      /* height: 55px; */
+    }
+
+    button:hover {
+      background-color: #e340dc;
+    }
+  }
+}
+
+.body {
+  display: flex;
+  flex: row;
+
+  .bio {
+    margin-top: 20px;
+    background-color: #31084a;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 300px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+
+    h1 {
+      margin: 0%;
+    }
+
+    p {
+      margin: 0%;
+      padding-top: 10px;
+    }
+  }
+}
+
+.page-wrapper {
+  background-color: #23194f;
+  height: 93vh;
+}
