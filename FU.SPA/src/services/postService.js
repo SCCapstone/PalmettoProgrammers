@@ -30,6 +30,11 @@ const getPostDetails = async (postId) => {
       ...(AuthService.getAuthHeader() ?? {}),
     },
   });
+
+  if (!response.ok) {
+    throw new Error('Error in post creation');
+  }
+
   const jsonResponse = await response.json();
 
   console.log(jsonResponse);

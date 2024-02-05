@@ -1,14 +1,6 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 
-import {
-  Card,
-  CardActions,
-  Button,
-  CardContent,
-  TextField,
-  CardHeader,
-  Avatar,
-} from '@mui/material';
+import { Card, CardContent, CardHeader, Avatar } from '@mui/material';
 
 import PostService from '../services/postService';
 import './PostUsersList.css';
@@ -28,14 +20,14 @@ export default function PostUsersList({ postId }) {
       }
     };
 
-    fetchUsers();
+    if (postId !== undefined) fetchUsers();
   }, [postId]);
 
   return (
     <Card
       style={{
         backgroundColor: '#31084A',
-        maxWidth: '300px',
+        maxWidth: '250px',
       }}
     >
       <CardHeader

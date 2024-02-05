@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
-import { Box, Container, Typography, CssBaseline, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PostService from '../../services/postService';
 import UserContext from '../../context/userContext';
 import Chat from '../Chat';
@@ -9,15 +8,7 @@ import ChatLocked from '../ChatLocked';
 import NoPage from './NoPage';
 import PostUsersList from '../PostUsersList';
 import PostCard from '../PostCard';
-
-const boxStyle = {
-  maxWidth: 600,
-  margin: 'auto',
-  marginTop: 16,
-  marginLeft: 0,
-};
-
-const defaultTheme = createTheme();
+import './PostPage.css';
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -49,6 +40,7 @@ const PostPage = () => {
     setLoading(true);
     try {
       const data = await PostService.getPostDetails(postId);
+      console.log('data:', data);
       setIsOwner(user && data.creator.id === user.id);
       setPost(data);
     } catch (error) {
@@ -60,15 +52,6 @@ const PostPage = () => {
   useEffect(() => {
     update();
   }, [postId, update]);
-
-  let dateTimeString = 'Unspecified time';
-
-  if (post && post.startTime) {
-    dateTimeString = new Date(post.startTime).toLocaleString('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    });
-  }
 
   const renderChat = () => {
     if (post.hasJoined) {
@@ -91,7 +74,11 @@ const PostPage = () => {
     }
 
     return (
-      <Button variant="contained" color="secondary" onClick={handleLeavePost}>
+      <Button
+        variant="contained"
+        style={{ backgroundColor: '#E340DC', width: '250px' }}
+        onClick={handleLeavePost}
+      >
         Leave
       </Button>
     );
@@ -99,11 +86,12 @@ const PostPage = () => {
 
   if (post && !loading) {
     return (
-      <>
-        <PostCard post={post} />
+      <div className="post-page-wrapper">
+        <PostCard post={post} showActions={false} />
+        {renderLeaveButton()}
         <PostUsersList postId={post.id} />
         {renderChat()}
-      </>
+      </div>
     );
   } else if (!post && !loading) {
     return <NoPage />;
