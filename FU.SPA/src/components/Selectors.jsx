@@ -4,6 +4,7 @@ import TagService from '../services/tagService';
 import { Autocomplete, Checkbox, TextField } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import AscDscService from '../services/ascDscService';
 
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
@@ -77,7 +78,9 @@ export const AscDscSelector = ({ onChange }) => {
   const [ascDscOptions, setAscDscOptions] = useState([]);
 
   useEffect(() => {
-    //GameService.searchGames('').then("A-Z" , "Z-A");
+    // GameService.searchGames('').then((games) => setAscDscOptions(games));
+    //AscDscService.twoChoices().then(() => setAscDscOptions());
+    //AscDscService.twoChoices('').then((ascDsc) => setAscDscOptions(ascDsc));
   }, []);
 
   return (
