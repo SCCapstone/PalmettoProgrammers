@@ -37,6 +37,17 @@ const getPostDetails = async (postId) => {
   return jsonResponse;
 };
 
+const getPostUsers = async (postId) => {
+  const response = await fetch(`${API_BASE_URL}/posts/${postId}/users`, {
+    method: 'GET',
+  });
+  const jsonResponse = await response.json();
+
+  console.log(jsonResponse);
+
+  return jsonResponse;
+};
+
 const joinPost = async (postId) => {
   await fetch(`${API_BASE_URL}/Posts/${postId}/users/current`, {
     method: 'POST',
@@ -60,5 +71,6 @@ const PostService = {
   getPostDetails,
   joinPost,
   leavePost,
+  getPostUsers,
 };
 export default PostService;

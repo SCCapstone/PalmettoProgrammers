@@ -20,7 +20,7 @@ const PostCard = ({ post }) => {
   }
 
   return (
-    <Card style={{ textAlign: 'left' }}>
+    <Card style={{ textAlign: 'left', maxWidth: '300px' }}>
       <CardContent style={{ width: '200pt', height: '250pt' }}>
         <Typography variant="body2" color="text.secondary">
           by {post.creator.username}

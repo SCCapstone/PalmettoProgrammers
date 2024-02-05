@@ -7,6 +7,8 @@ import UserContext from '../../context/userContext';
 import Chat from '../Chat';
 import ChatLocked from '../ChatLocked';
 import NoPage from './NoPage';
+import PostUsersList from '../PostUsersList';
+import PostCard from '../PostCard';
 
 const boxStyle = {
   maxWidth: 600,
@@ -97,43 +99,11 @@ const PostPage = () => {
 
   if (post && !loading) {
     return (
-      <ThemeProvider theme={defaultTheme}>
-        <CssBaseline />
-        <Container maxWidth="lg">
-          <Box style={boxStyle}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'baseline',
-              }}
-            >
-              <Typography variant="h4" gutterBottom>
-                {post?.title}
-              </Typography>
-              <Typography variant="h5" color="textSecondary">
-                {post?.game}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                by {post?.creator.username}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {dateTimeString}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                paragraph
-                style={{ wordWrap: 'break-word', textAlign: 'left' }}
-              >
-                {post?.description}
-              </Typography>
-            </div>
-            {renderLeaveButton()}
-          </Box>
-        </Container>
+      <>
+        <PostCard post={post} />
+        <PostUsersList postId={post.id} />
         {renderChat()}
-      </ThemeProvider>
+      </>
     );
   } else if (!post && !loading) {
     return <NoPage />;
