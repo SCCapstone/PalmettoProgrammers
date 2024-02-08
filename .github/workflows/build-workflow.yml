@@ -32,11 +32,11 @@ jobs:
           dotnet publish
         shell: pwsh
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: D:\a\PalmettoProgrammers\PalmettoProgrammers\FU.API\FU.API\bin
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: .net-app
+      #     path: D:\a\PalmettoProgrammers\PalmettoProgrammers\FU.API\FU.API\bin
 
       - name: Test
         run: |
