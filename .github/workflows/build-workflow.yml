@@ -26,11 +26,11 @@ jobs:
             dotnet build
         shell: pwsh
 
-      - name: Publish
-        run: |
-          cd FU.API
-          dotnet publish
-        shell: pwsh
+      # - name: Publish
+      #   run: |
+      #     cd FU.API
+      #     dotnet publish
+      #   shell: pwsh
 
       # - name: Upload Artifacts
       #   uses: actions/upload-artifact@v3
