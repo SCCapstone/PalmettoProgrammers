@@ -1,6 +1,3 @@
-// Logic
-
-// Create post query string
 const buildPostQueryString = (query) => {
   let queryString = '';
   if (query.keywords) {
@@ -12,7 +9,6 @@ const buildPostQueryString = (query) => {
   if (query.tags?.length > 0) {
     queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
   }
-  console.log(queryString)
   return queryString;
 };
 
