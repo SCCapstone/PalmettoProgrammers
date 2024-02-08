@@ -203,16 +203,16 @@ public class SearchServiceSearchPostsTests : IDisposable
         {
             GameId = game.Id,
             CreatorId = user.UserId,
-            StartTime = searchDate.ToDateTime(searchTime.AddHours(-2)),
-            EndTime = searchDate.ToDateTime(searchTime.AddHours(-1)),
+            StartTime = searchDate.ToDateTime(searchTime).AddHours(-2),
+            EndTime = searchDate.ToDateTime(searchTime).AddHours(-1),
         });
         // Create a post that starts an after the search time
         await _postService.CreatePost(new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
-            StartTime = searchDate.ToDateTime(searchTime.AddHours(1)),
-            EndTime = searchDate.ToDateTime(searchTime.AddHours(2)),
+            StartTime = searchDate.ToDateTime(searchTime).AddHours(2),
+            EndTime = searchDate.ToDateTime(searchTime).AddHours(8),
         });
 
         // Act
