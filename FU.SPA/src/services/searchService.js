@@ -1,6 +1,7 @@
 import config from '../config';
 const API_BASE_URL = config.API_URL;
 import AuthService from './authService';
+import StringBuilderService from './stringBuilderService';
 
 /*
   params = {
@@ -8,14 +9,7 @@ import AuthService from './authService';
   }
 */
 const searchPosts = async (query) => {
-  let queryString = '';
-  queryString += 'keywords=' + encodeURIComponent(query.keywords.trim());
-  if (query.games.length > 0) {
-    queryString += '&games=' + query.games.map((g) => String(g.id)).join(',');
-  }
-  if (query.tags.length > 0) {
-    queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
-  }
+  var queryString = StringBuilderService.buildPostQueryString(query);
 
   let authHeader = null;
   try {
