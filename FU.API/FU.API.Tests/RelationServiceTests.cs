@@ -38,7 +38,7 @@ public class RelationServiceTests
         var testUsers = MockDataHelper.CreateTestUsers();
         context.Set<ApplicationUser>().AddRange(testUsers);
 
-        var relationService = new RelationService(context);
+        var relationService = CreateRelationService(context);
 
         // Act
         var initiatingUserId = testUsers[0].UserId;
@@ -65,7 +65,7 @@ public class RelationServiceTests
         var testUsers = MockDataHelper.CreateTestUsers();
         context.Set<ApplicationUser>().AddRange(testUsers);
 
-        var relationService = new RelationService(context);
+        var relationService = CreateRelationService(context);
 
         // Act
         var initiatingUserId = testUsers[0].UserId;
@@ -90,7 +90,7 @@ public class RelationServiceTests
         var testUsers = MockDataHelper.CreateTestUsers();
         context.Set<ApplicationUser>().AddRange(testUsers);
 
-        var relationService = new RelationService(context);
+        var relationService = CreateRelationService(context);
 
         // Act
         var initiatingUserId = testUsers[0].UserId;
@@ -121,7 +121,7 @@ public class RelationServiceTests
         context.Set<UserRelation>().AddRange(testRelations);
         await context.SaveChangesAsync();
 
-        var relationService = new RelationService(context);
+        var relationService = CreateRelationService(context);
 
         // Act
         var initiatingUserId = testUsers[0].UserId;
@@ -151,17 +151,28 @@ public class RelationServiceTests
         context.Set<UserRelation>().AddRange(testRelations);
         await context.SaveChangesAsync();
 
-        var relationService = new RelationService(context);
+        var relationService = CreateRelationService(context);
+        var query = new UserQuery
+        {
+            UserId = checkUserId,
+            RelationStatus = status,
+        };
 
         if (getsResults)
         {
-            var relations = await relationService.GetRelations(checkUserId, status, requestingUserId == checkUserId);
+            var relations = await relationService.GetRelations(query, requestingUserId == checkUserId);
             Assert.NotNull(relations);
             Assert.Single(relations);
         }
         else
         {
-            await Assert.ThrowsAsync<ForbidException>(async () => await relationService.GetRelations(checkUserId, status, requestingUserId == checkUserId));
+            await Assert.ThrowsAsync<ForbidException>(async () => await relationService.GetRelations(query, requestingUserId == checkUserId));
         }
+    }
+
+    private static RelationService CreateRelationService(AppDbContext context)
+    {
+        var searchService = new SearchService(context);
+        return new RelationService(context, searchService);
     }
 }

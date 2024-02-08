@@ -1,6 +1,7 @@
 namespace FU.API.Controllers;
 
 using FU.API.DTOs.Post;
+using FU.API.DTOs.Search;
 using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
@@ -74,11 +75,14 @@ public class UsersController : ControllerBase
 
     [HttpGet]
     [Route("current/connected/posts")]
-    public async Task<IActionResult> GetUsersAssociatedPosts([FromQuery] int limit = 10, [FromQuery] int offset = 0)
+    public async Task<IActionResult> GetUsersAssociatedPosts([FromQuery] PostSearchRequestDTO request)
     {
         var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        var posts = await _userService.GetUsersAssociatedPosts(user.UserId, limit, offset);
+        var query = request.ToPostQuery();
+        query.UserId = user.UserId;
+
+        var posts = await _userService.GetUsersAssociatedPosts(query);
 
         var response = new List<PostResponseDTO>(posts.Count());
 

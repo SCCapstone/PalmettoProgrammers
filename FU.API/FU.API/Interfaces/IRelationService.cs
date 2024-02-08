@@ -10,5 +10,5 @@ public interface IRelationService : ICommonService
 
     Task<UserRelation> GetRelation(int initiatedById, int otherUserId);
 
-    Task<IEnumerable<ApplicationUser>> GetRelations(int userId, UserRelationStatus status, bool userIsRequester = false);
+    Task<IEnumerable<UserProfile>> GetRelations(UserQuery query, bool userIsRequester = false);
 }

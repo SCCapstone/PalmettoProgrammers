@@ -1,5 +1,6 @@
 ﻿namespace FU.API.Controllers;
 
+using FU.API.DTOs.Search;
 using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
@@ -62,16 +63,19 @@ public class RelationsController : ControllerBase
     // GET: api/relations/{userId}/{relationStatus}
     [HttpGet("{userId}/{relationStatus}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetRelations(int userId, [RelationStatus] string relationStatus)
+    public async Task<IActionResult> GetRelations(int userId, [RelationStatus] string relationStatus, [FromQuery] UserSearchRequestDTO request)
     {
         var currentUser = await _relationService.GetCurrentUser(User);
         var userIsRequester = currentUser?.UserId == userId;
 
         var status = Enum.Parse<UserRelationStatus>(relationStatus, ignoreCase: true);
 
-        var relatedUsers = await _relationService.GetRelations(userId, status, userIsRequester);
+        var query = request.ToUserQuery();
+        query.RelationStatus = status;
+        query.UserId = userId;
 
-        var response = relatedUsers.ToProfiles();
-        return Ok(response);
+        var relatedUsers = await _relationService.GetRelations(query, userIsRequester);
+
+        return Ok(relatedUsers);
     }
 }
