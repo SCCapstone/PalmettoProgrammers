@@ -1,3 +1,4 @@
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -10,22 +11,27 @@ import SearchService from '../../services/searchService';
 import Posts from '../Posts';
 import './Discover.css';
 
+const paramToDayjs = (searchParams, paramKey) => {
+  let endTimeParam = searchParams.get(paramKey);
+  if (!endTimeParam || !dayjs(endTimeParam).isValid()) return null;
+  return dayjs(endTimeParam);
+};
+
 export default function Discover() {
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [games, setGames] = useState([]);
   const [tags, setTags] = useState([]);
+
   const [searchParams, setSearchParams] = useSearchParams();
-  const [startDate, setStartDate] = useState(() => {
-    let startDateParam = searchParams.get('startDate');
-    if (startDateParam) return dayjs(startDateParam);
-    else return null;
-  });
-  const [endDate, setEndDate] = useState(() => {
-    let endDateParam = searchParams.get('endDate');
-    if (endDateParam) return dayjs(endDateParam);
-    else return null;
-  });
+  const [startDate, setStartDate] = useState(
+    paramToDayjs(searchParams, 'startDate'),
+  );
+  const [endDate, setEndDate] = useState(paramToDayjs(searchParams, 'endDate'));
+  const [startTime, setStartTime] = useState(
+    paramToDayjs(searchParams, 'startTime'),
+  );
+  const [endTime, setEndTime] = useState(paramToDayjs(searchParams, 'endTime'));
 
   useEffect(() => {
     const submitSearch = async () => {
@@ -47,11 +53,13 @@ export default function Discover() {
       (params) => {
         if (startDate) params.set('startDate', startDate.toISOString());
         if (endDate) params.set('endDate', endDate.toISOString());
+        if (startTime) params.set('startTime', startTime.toISOString());
+        if (endTime) params.set('endTime', endTime.toISOString());
         return params;
       },
       { replace: true },
     );
-  }, [startDate, endDate, setSearchParams]);
+  }, [startDate, endDate, startTime, endTime, setSearchParams]);
 
   return (
     <div className="page-content">
@@ -65,12 +73,40 @@ export default function Discover() {
           onStartDateChange={(newValue) => setStartDate(newValue)}
           onEndDateChange={(newValue) => setEndDate(newValue)}
         />
+        <SelectTimeRange
+          startTime={startTime}
+          endTime={endTime}
+          onStartTimeChange={(newValue) => setStartTime(newValue)}
+          onEndTimeChange={(newValue) => setEndTime(newValue)}
+        />
       </div>
       <div>
         <SearchBar onSearchSubmit={setSearchText} />
         <Posts posts={posts} />
       </div>
     </div>
+  );
+}
+
+function SelectTimeRange({
+  onStartTimeChange,
+  onEndTimeChange,
+  startTime,
+  endTime,
+}) {
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <TimePicker
+        label="From"
+        value={startTime}
+        onChange={(newValue) => onStartTimeChange(newValue)}
+      />
+      <TimePicker
+        label="To"
+        value={endTime}
+        onChange={(newValue) => onEndTimeChange(newValue)}
+      />
+    </LocalizationProvider>
   );
 }
 
