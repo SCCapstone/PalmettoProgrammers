@@ -17,6 +17,25 @@ const searchPosts = async (query) => {
     queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
   }
 
+  if (query.startDate) {
+    // get date from iso string
+    // e.g. "2024-02-09T00:07:50.553Z" to "2024-02-09"
+    queryString += '&startOnOrAfterDate=' + query.startDate.toISOString().split('T')[0];
+  }
+  if (query.endDate) {
+    queryString += '&endOnOrBeforeDate=' + query.endDate.toISOString().split('T')[0];
+  }
+  if (query.startTime) {
+    // get time from iso string
+    // e.g. "2024-02-09T00:07:50.553Z" to "00:07:50"
+    queryString +=
+      '&startOnOrAfterTime=' + query.startTime.toISOString().split('T')[1].split('.')[0];
+  }
+  if (query.endTime) {
+    queryString +=
+      '&endOnOrBeforeTime=' + query.endTime.toISOString().split('T')[1].split('.')[0];
+  }
+
   let authHeader = null;
   try {
     authHeader = AuthService.getAuthHeader();

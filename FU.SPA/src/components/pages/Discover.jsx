@@ -39,13 +39,17 @@ export default function Discover() {
         keywords: searchText,
         games: games,
         tags: tags,
+        startDate: startDate,
+        endDate: endDate,
+        startTime: startTime,
+        endTime: endTime,
       };
 
       const response = await SearchService.searchPosts(query);
       setPosts(response);
     };
     submitSearch();
-  }, [games, tags, searchText]);
+  }, [games, tags, searchText, startDate, endDate, startTime, endTime]);
 
   // Update search params when startDate or endDate is updated
   useEffect(() => {
