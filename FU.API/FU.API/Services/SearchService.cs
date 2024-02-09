@@ -59,7 +59,7 @@ public class SearchService : CommonService, ISearchService
             // If no time params and search start day is today, then get all posts after the current time
             if (query.StartOnOrAfterTime is null && query.EndOnOrBeforeTime is null && query.StartOnOrAfterDate.Equals(DateOnly.FromDateTime(DateTime.Now)))
             {
-                dbQuery = dbQuery.Where(p => p.StartTime >= DateTime.Now);
+                dbQuery = dbQuery.Where(p => p.StartTime >= DateTime.UtcNow);
             }
         }
 
