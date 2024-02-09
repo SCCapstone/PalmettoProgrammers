@@ -211,8 +211,8 @@ public class SearchServiceSearchPostsTests : IDisposable
         {
             GameId = game.Id,
             CreatorId = user.UserId,
-            StartTime = searchDate.ToDateTime(searchTime).AddHours(2),
-            EndTime = searchDate.ToDateTime(searchTime).AddHours(8),
+            StartTime = searchDate.ToDateTime(searchTime).AddHours(1),
+            EndTime = searchDate.ToDateTime(searchTime).AddHours(2),
         });
 
         // Act
