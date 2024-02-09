@@ -39,11 +39,12 @@ export default function Discover() {
         keywords: searchText,
         games: games,
         tags: tags,
-        startDate: startDate,
-        endDate: endDate,
-        startTime: startTime,
-        endTime: endTime,
       };
+
+      if (startDate?.isValid()) query.startDate = startDate;
+      if (endDate?.isValid()) query.endDate = endDate;
+      if (startTime?.isValid()) query.startTime = startTime;
+      if (endTime?.isValid()) query.endTime = endTime;
 
       const response = await SearchService.searchPosts(query);
       setPosts(response);
@@ -55,10 +56,12 @@ export default function Discover() {
   useEffect(() => {
     setSearchParams(
       (params) => {
-        if (startDate) params.set('startDate', startDate.toISOString());
-        if (endDate) params.set('endDate', endDate.toISOString());
-        if (startTime) params.set('startTime', startTime.toISOString());
-        if (endTime) params.set('endTime', endTime.toISOString());
+        if (startDate?.isValid())
+          params.set('startDate', startDate.toISOString());
+        if (endDate?.isValid()) params.set('endDate', endDate.toISOString());
+        if (startTime?.isValid())
+          params.set('startTime', startTime.toISOString());
+        if (endTime?.isValid()) params.set('endTime', endTime.toISOString());
         return params;
       },
       { replace: true },
@@ -67,7 +70,7 @@ export default function Discover() {
 
   return (
     <div className="page-content">
-      <div className="sidebar" style={{ textAlign: 'left', minWidth: '200pt' }}>
+      <div className="sidebar" style={{ textAlign: 'left', width: '200pt' }}>
         <Typography variant="h5">Filters</Typography>
         <GamesSelector onChange={(e, v) => setGames(v)} />
         <TagsSelector onChange={(e, v) => setTags(v)} />
