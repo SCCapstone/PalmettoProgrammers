@@ -105,8 +105,8 @@ public class SearchService : CommonService, ISearchService
         if (query.EndOnOrBeforeTime is not null)
         {
             dbQuery = dbQuery.Where(p => p.EndTime != null
-                    && ((DateTime)p.EndTime).Hour >= ((TimeOnly)query.EndOnOrBeforeTime).Hour
-                    && ((DateTime)p.EndTime).Minute >= ((TimeOnly)query.EndOnOrBeforeTime).Minute);
+                    && ((DateTime)p.EndTime).Hour <= ((TimeOnly)query.EndOnOrBeforeTime).Hour
+                    && ((DateTime)p.EndTime).Minute <= ((TimeOnly)query.EndOnOrBeforeTime).Minute);
         }
 
         // Sort results
