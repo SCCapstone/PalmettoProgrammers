@@ -107,11 +107,13 @@ function SelectTimeRange({
         label="From"
         value={startTime}
         onChange={(newValue) => onStartTimeChange(newValue)}
+        slotProps={{ field: { clearable: true } }}
       />
       <TimePicker
         label="To"
         value={endTime}
         onChange={(newValue) => onEndTimeChange(newValue)}
+        slotProps={{ field: { clearable: true } }}
       />
     </LocalizationProvider>
   );
@@ -129,11 +131,13 @@ function SelectDateRange({
         label="From"
         value={startDate}
         onChange={(newValue) => onStartDateChange(newValue)}
+        slotProps={{ field: { clearable: true } }}
       />
       <DatePicker
         label="To"
         value={endDate}
         onChange={(newValue) => onEndDateChange(newValue)}
+        slotProps={{ field: { clearable: true } }}
       />
     </LocalizationProvider>
   );
