@@ -53,7 +53,7 @@ public class SearchService : CommonService, ISearchService
         if (query.StartOnOrAfterDate is not null)
         {
             // Convert start after date to datetime with time starting at 00:00:00
-            DateTime startAfterDateTime = ((DateOnly)query.StartOnOrAfterDate).ToDateTime(new TimeOnly(0, 0, 0));
+            DateTime startAfterDateTime = ((DateOnly)query.StartOnOrAfterDate).ToDateTime(new TimeOnly(0, 0, 0), DateTimeKind.Utc);
             dbQuery = dbQuery.Where(p => p.StartTime >= startAfterDateTime);
 
             // If no time params and search start day is today, then get all posts after the current time
@@ -67,7 +67,7 @@ public class SearchService : CommonService, ISearchService
         if (query.EndOnOrBeforeDate is not null)
         {
             // Convert start before date to datetime with time ending at 23:59:59
-            DateTime endBeforeDateTime = ((DateOnly)query.EndOnOrBeforeDate).ToDateTime(new TimeOnly(23, 59, 59));
+            DateTime endBeforeDateTime = ((DateOnly)query.EndOnOrBeforeDate).ToDateTime(new TimeOnly(23, 59, 59), DateTimeKind.Utc);
             dbQuery = dbQuery.Where(p => p.EndTime <= endBeforeDateTime);
         }
 
