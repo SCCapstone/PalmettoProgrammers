@@ -77,8 +77,15 @@ export default function Discover() {
         <SelectDateRange
           startDate={startDate}
           endDate={endDate}
-          onStartDateChange={(newValue) => setStartDate(newValue)}
-          onEndDateChange={(newValue) => setEndDate(newValue)}
+          onStartDateChange={(newValue) => {
+            if (endDate && newValue && newValue > endDate) setEndDate(null);
+            setStartDate(newValue);
+          }}
+          onEndDateChange={(newValue) => {
+            if (startDate && newValue && newValue < startDate)
+              setStartDate(null);
+            setEndDate(newValue);
+          }}
         />
         <SelectTimeRange
           startTime={startTime}
