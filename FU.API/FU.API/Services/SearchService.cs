@@ -53,13 +53,13 @@ public class SearchService : CommonService, ISearchService
         if (query.StartOnOrAfterDate is not null)
         {
             // Convert start after date to datetime with time starting at 00:00:00
-            DateTime startAfterDateTime = ((DateOnly)query.StartOnOrAfterDate).ToDateTime(new TimeOnly(0, 0, 0));
+            DateTime startAfterDateTime = ((DateOnly)query.StartOnOrAfterDate).ToDateTime(new TimeOnly(0, 0, 0), DateTimeKind.Utc);
             dbQuery = dbQuery.Where(p => p.StartTime >= startAfterDateTime);
 
             // If no time params and search start day is today, then get all posts after the current time
-            if (query.StartOnOrAfterTime is null && query.EndOnOrBeforeTime is null && query.StartOnOrAfterDate.Equals(DateOnly.FromDateTime(DateTime.Now)))
+            if (query.StartOnOrAfterTime is null && query.EndOnOrBeforeTime is null && query.StartOnOrAfterDate.Equals(DateOnly.FromDateTime(DateTime.UtcNow)))
             {
-                dbQuery = dbQuery.Where(p => p.StartTime >= DateTime.Now);
+                dbQuery = dbQuery.Where(p => p.StartTime >= DateTime.UtcNow);
             }
         }
 
@@ -67,7 +67,7 @@ public class SearchService : CommonService, ISearchService
         if (query.EndOnOrBeforeDate is not null)
         {
             // Convert start before date to datetime with time ending at 23:59:59
-            DateTime endBeforeDateTime = ((DateOnly)query.EndOnOrBeforeDate).ToDateTime(new TimeOnly(23, 59, 59));
+            DateTime endBeforeDateTime = ((DateOnly)query.EndOnOrBeforeDate).ToDateTime(new TimeOnly(23, 59, 59), DateTimeKind.Utc);
             dbQuery = dbQuery.Where(p => p.EndTime <= endBeforeDateTime);
         }
 
@@ -93,20 +93,50 @@ public class SearchService : CommonService, ISearchService
         // Filter by search keywords
         dbQuery = dbQuery.Where(PostContainsKeywords(query.Keywords));
 
-        // Filter by posts that start after the given time
-        if (query.StartOnOrAfterTime is not null)
+        // If start time is before end time, then wrap time around
+        // e.g. startTime=11pm and endTime=2am then search between 11pm and 2am the next day
+        // Note: This is needed to support other timezones
+        if (query.StartOnOrAfterTime is not null && query.EndOnOrBeforeTime is not null
+                && query.EndOnOrBeforeTime < query.StartOnOrAfterTime)
         {
+            // Search for posts with a startTime that is greater than query.startTime or less than query.endTime
             dbQuery = dbQuery.Where(p => p.StartTime != null
-                    && ((DateTime)p.StartTime).Hour >= ((TimeOnly)query.StartOnOrAfterTime).Hour
-                    && ((DateTime)p.StartTime).Minute >= ((TimeOnly)query.StartOnOrAfterTime).Minute);
+                    && ((
+                        ((DateTime)p.StartTime).Hour >= ((TimeOnly)query.StartOnOrAfterTime).Hour
+                        && ((DateTime)p.StartTime).Minute >= ((TimeOnly)query.StartOnOrAfterTime).Minute
+                    ) || (
+                        ((DateTime)p.StartTime).Hour <= ((TimeOnly)query.EndOnOrBeforeTime).Hour
+                        && ((DateTime)p.StartTime).Minute <= ((TimeOnly)query.EndOnOrBeforeTime).Minute
+                    )));
+
+            // Search for posts with an endTime that is less than query.endTime or greater than query.startTime
+            dbQuery = dbQuery.Where(p => p.EndTime != null
+                    && ((
+                        ((DateTime)p.EndTime).Hour <= ((TimeOnly)query.EndOnOrBeforeTime).Hour
+                        && ((DateTime)p.EndTime).Minute <= ((TimeOnly)query.EndOnOrBeforeTime).Minute
+                    ) || (
+                        ((DateTime)p.EndTime).Hour >= ((TimeOnly)query.StartOnOrAfterTime).Hour
+                        && ((DateTime)p.EndTime).Minute >= ((TimeOnly)query.StartOnOrAfterTime).Minute
+                    )));
         }
 
-        // Filter by posts that end before the given time
-        if (query.EndOnOrBeforeTime is not null)
+        else
         {
-            dbQuery = dbQuery.Where(p => p.EndTime != null
-                    && ((DateTime)p.EndTime).Hour >= ((TimeOnly)query.EndOnOrBeforeTime).Hour
-                    && ((DateTime)p.EndTime).Minute >= ((TimeOnly)query.EndOnOrBeforeTime).Minute);
+            // Filter by posts that start after the given time
+            if (query.StartOnOrAfterTime is not null)
+            {
+                dbQuery = dbQuery.Where(p => p.StartTime != null
+                        && ((DateTime)p.StartTime).Hour >= ((TimeOnly)query.StartOnOrAfterTime).Hour
+                        && ((DateTime)p.StartTime).Minute >= ((TimeOnly)query.StartOnOrAfterTime).Minute);
+            }
+
+            // Filter by posts that end before the given time
+            if (query.EndOnOrBeforeTime is not null)
+            {
+                dbQuery = dbQuery.Where(p => p.EndTime != null
+                        && ((DateTime)p.EndTime).Hour <= ((TimeOnly)query.EndOnOrBeforeTime).Hour
+                        && ((DateTime)p.EndTime).Minute <= ((TimeOnly)query.EndOnOrBeforeTime).Minute);
+            }
         }
 
         // Sort results
