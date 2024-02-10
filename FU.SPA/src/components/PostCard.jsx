@@ -14,9 +14,11 @@ import './PostCard.css';
 const PostCard = ({ post, showActions }) => {
   const navigate = useNavigate();
   const user = post.creator;
-  const defaultPfp = user.pfpUrl !== null && user.pfpUrl.includes(
-    'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-  );
+  const defaultPfp =
+    user.pfpUrl !== null &&
+    user.pfpUrl.includes(
+      'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
+    );
   let dateTimeString = 'Unspecified time';
   if (showActions === undefined) {
     showActions = true;
