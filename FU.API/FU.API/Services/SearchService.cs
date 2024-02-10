@@ -20,7 +20,7 @@ public class SearchService : CommonService, ISearchService
 
     public async Task<List<UserProfile>> SearchUsers(UserQuery query)
     {
-        var dbQuery = _dbContext.Users.Select(p => p);
+        var dbQuery = GetUsersDbQuery(query);
 
         dbQuery = dbQuery.Where(UserContainsKeywords(query.Keywords));
 
@@ -44,7 +44,7 @@ public class SearchService : CommonService, ISearchService
 
     public async Task<List<Post>> SearchPosts(PostQuery query)
     {
-        var dbQuery = _dbContext.Posts.Select(p => p);
+        var dbQuery = GetPostsDbQuery(query);
 
         // Filters are addded one at a time
         // Generally filer out as much as as possible first
@@ -180,5 +180,38 @@ public class SearchService : CommonService, ISearchService
             UserSortType.Username => (user) => user.NormalizedUsername,
             _ => (user) => user.NormalizedUsername,
         };
+    }
+
+    /// <summary>
+    /// Gets the database query for users based on the given query.
+    /// </summary>
+    /// <param name="query">The query.</param>
+    /// <returns>The users to query. Either related to user with UserId, or all users.</returns>
+    private IQueryable<ApplicationUser> GetUsersDbQuery(UserQuery query)
+    {
+        if (query.UserId is not null && query.RelationStatus is not null)
+        {
+            return _dbContext.UserRelations
+                .Where(ur => ur.User1Id == query.UserId && ur.Status == query.RelationStatus)
+                .Select(ur => ur.User2);
+        }
+        else
+        {
+            return _dbContext.Users.Select(u => u);
+        }
+    }
+
+    private IQueryable<Post> GetPostsDbQuery(PostQuery query)
+    {
+        if (query.UserId is not null)
+        {
+            return _dbContext.Posts
+                .Where(p => p.Chat.Members.Any(m => m.UserId == query.UserId))
+                .Select(p => p);
+        }
+        else
+        {
+            return _dbContext.Posts.Select(p => p);
+        }
     }
 }
