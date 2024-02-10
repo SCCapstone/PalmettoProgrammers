@@ -194,31 +194,29 @@ public class SearchServiceSearchPostsTests : IDisposable
     public async Task Search_WithSearchDateAsToday_SearchesAfterNow()
     {
         // Arrange
-        DateOnly searchDate = DateOnly.FromDateTime(DateTime.Now);
-        TimeOnly searchTime = TimeOnly.FromDateTime(DateTime.Now);
         Game game = await TestsHelper.CreateTestGameAsync(_dbContext);
         var user = await TestsHelper.CreateUserAsync(_dbContext);
         // Create a post that ends an hour before the search time
-        await _postService.CreatePost(new Post()
+        var post1 = await _postService.CreatePost(new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
-            StartTime = searchDate.ToDateTime(searchTime.AddHours(-2)),
-            EndTime = searchDate.ToDateTime(searchTime.AddHours(-1)),
+            StartTime = DateTime.UtcNow.AddHours(-2),
+            EndTime = DateTime.UtcNow.AddHours(-1),
         });
         // Create a post that starts an after the search time
-        await _postService.CreatePost(new Post()
+        var post2 = await _postService.CreatePost(new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
-            StartTime = searchDate.ToDateTime(searchTime.AddHours(1)),
-            EndTime = searchDate.ToDateTime(searchTime.AddHours(2)),
+            StartTime = DateTime.UtcNow.AddHours(1),
+            EndTime = DateTime.UtcNow.AddHours(2),
         });
 
         // Act
         List<Post> posts = await _searchService.SearchPosts(new PostQuery()
         {
-            StartOnOrAfterDate = searchDate,
+            StartOnOrAfterDate = DateOnly.FromDateTime(DateTime.UtcNow),
         });
 
         // Assert
