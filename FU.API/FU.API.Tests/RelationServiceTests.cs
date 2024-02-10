@@ -131,45 +131,6 @@ public class RelationServiceTests
         await Assert.ThrowsAsync<ForbidException>(async () => await relationService.RemoveRelation(otherUserId, initiatingUserId));
     }
 
-    [Theory]
-    [InlineData(2, 1, UserRelationStatus.Blocked, false)]
-    [InlineData(1, 1, UserRelationStatus.Blocked, true)]
-    [InlineData(1, 1, UserRelationStatus.BlockedBy, false)]
-    [InlineData(1, 5, UserRelationStatus.Friends, true)]
-    [InlineData(2, 6, UserRelationStatus.Friends, true)]
-    [InlineData(6, 6, UserRelationStatus.Friends, true)]
-    [InlineData(3, 3, UserRelationStatus.Requested, true)]
-    [InlineData(3, 4, UserRelationStatus.Pending, false)]
-    public async void GetRelations_WithValidUserIdAndStatus_GetsRightResults(int requestingUserId, int checkUserId, UserRelationStatus status, bool getsResults)
-    {
-        // Arrange
-        var context = CreateContext();
-
-        var testUsers = MockDataHelper.CreateTestUsers();
-        var testRelations = MockDataHelper.CreateTestRelations(testUsers);
-        context.Set<ApplicationUser>().AddRange(testUsers);
-        context.Set<UserRelation>().AddRange(testRelations);
-        await context.SaveChangesAsync();
-
-        var relationService = CreateRelationService(context);
-        var query = new UserQuery
-        {
-            UserId = checkUserId,
-            RelationStatus = status,
-        };
-
-        if (getsResults)
-        {
-            var relations = await relationService.GetRelations(query, requestingUserId == checkUserId);
-            Assert.NotNull(relations);
-            Assert.Single(relations);
-        }
-        else
-        {
-            await Assert.ThrowsAsync<ForbidException>(async () => await relationService.GetRelations(query, requestingUserId == checkUserId));
-        }
-    }
-
     private static RelationService CreateRelationService(AppDbContext context)
     {
         var searchService = new SearchService(context);

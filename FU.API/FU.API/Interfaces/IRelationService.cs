@@ -9,6 +9,4 @@ public interface IRelationService : ICommonService
     Task RemoveRelation(int initiatedById, int otherUserId);
 
     Task<UserRelation> GetRelation(int initiatedById, int otherUserId);
-
-    Task<IEnumerable<UserProfile>> GetRelations(UserQuery query, bool userIsRequester = false);
 }

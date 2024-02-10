@@ -1,7 +1,7 @@
 import config from '../config';
 const API_BASE_URL = config.API_URL;
 import AuthService from './authService';
-import StringBuilderService from './stringBuilderService';
+import RequestBuilder from '../helpers/requestBuilder';
 
 /*
   params = {
@@ -9,7 +9,7 @@ import StringBuilderService from './stringBuilderService';
   }
 */
 const searchPosts = async (query) => {
-  var queryString = StringBuilderService.buildPostQueryString(query);
+  var queryString = RequestBuilder.buildPostQueryString(query);
 
   let authHeader = null;
   try {

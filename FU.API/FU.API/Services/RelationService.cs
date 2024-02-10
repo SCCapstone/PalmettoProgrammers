@@ -39,20 +39,6 @@ public class RelationService : CommonService, IRelationService
         return relation;
     }
 
-    public async Task<IEnumerable<UserProfile>> GetRelations(UserQuery query, bool userIsRequester = false)
-    {
-        if (!userIsRequester && query.RelationStatus != UserRelationStatus.Friends)
-        {
-            throw new ForbidException($"You are not allowed to view this user's {query.RelationStatus.ToString()} relations");
-        }
-        else if (query.RelationStatus == UserRelationStatus.BlockedBy)
-        {
-            throw new ForbidException("You are not allowed to view blocked by relations");
-        }
-
-        return await _searchService.SearchUsers(query);
-    }
-
     public async Task HandleRelationAction(int initiatedById, int otherUserId, UserRelationAction action)
     {
         if (initiatedById == otherUserId)

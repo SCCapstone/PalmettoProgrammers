@@ -1,11 +1,11 @@
 import AuthService from './authService';
-import StringBuilderService from './stringBuilderService';
+import RequestBuilder from '../helpers/requestBuilder';
 
 import config from '../config';
 const API_BASE_URL = config.API_URL;
 
 const getConnectedPosts = async (query) => {
-  var queryString = StringBuilderService.buildPostQueryString(query);
+  var queryString = RequestBuilder.buildPostQueryString(query);
   const response = await fetch(
     `${API_BASE_URL}/users/current/connected/posts?${queryString}`,
     { headers: { ...AuthService.getAuthHeader() } },

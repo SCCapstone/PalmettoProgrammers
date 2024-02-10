@@ -16,10 +16,12 @@ using Microsoft.AspNetCore.Mvc;
 public class RelationsController : ControllerBase
 {
     private readonly IRelationService _relationService;
+    private readonly ISearchService _searchService;
 
-    public RelationsController(IRelationService relationService)
+    public RelationsController(IRelationService relationService, ISearchService searchService)
     {
         _relationService = relationService;
+        _searchService = searchService;
     }
 
     // POST: api/relations/{userId}/{userAction}
@@ -70,11 +72,16 @@ public class RelationsController : ControllerBase
 
         var status = Enum.Parse<UserRelationStatus>(relationStatus, ignoreCase: true);
 
+        if (!userIsRequester && status != UserRelationStatus.Friends)
+        {
+            throw new ForbidException($"You are not allowed to view this user's {status.ToString()} relations");
+        }
+
         var query = request.ToUserQuery();
         query.RelationStatus = status;
         query.UserId = userId;
 
-        var relatedUsers = await _relationService.GetRelations(query, userIsRequester);
+        var relatedUsers = await _searchService.SearchUsers(query);
 
         return Ok(relatedUsers);
     }

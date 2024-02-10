@@ -59,11 +59,6 @@ public class UserService : CommonService, IUserService
         return Task.FromResult<UserProfile?>(user.ToProfile());
     }
 
-    public async Task<IEnumerable<Post>> GetUsersAssociatedPosts(PostQuery query)
-    {
-        return await _searchService.SearchPosts(query);
-    }
-
     public async Task<IEnumerable<Group>> GetUsersGroups(int userId, int limit, int offset)
     {
         return await _dbContext.Groups

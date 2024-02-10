@@ -37,5 +37,5 @@ const buildPostQueryString = (query) => {
   return queryString;
 };
 
-const StringBuilderService = { buildPostQueryString };
-export default StringBuilderService;
+const RequestBuilder = { buildPostQueryString };
+export default RequestBuilder;

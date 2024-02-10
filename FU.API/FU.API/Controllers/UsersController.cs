@@ -14,10 +14,12 @@ using Microsoft.AspNetCore.Mvc;
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ISearchService _searchService;
 
-    public UsersController(IUserService userService)
+    public UsersController(IUserService userService, ISearchService searchService)
     {
         _userService = userService;
+        _searchService = searchService;
     }
 
     [HttpGet]
@@ -82,7 +84,7 @@ public class UsersController : ControllerBase
         var query = request.ToPostQuery();
         query.UserId = user.UserId;
 
-        var posts = await _userService.GetUsersAssociatedPosts(query);
+        var posts = await _searchService.SearchPosts(query);
 
         var response = new List<PostResponseDTO>(posts.Count());
 

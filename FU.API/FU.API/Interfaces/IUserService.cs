@@ -8,7 +8,5 @@ public interface IUserService : ICommonService
 
     Task<UserProfile?> UpdateUserProfile(UserProfile profileChanges);
 
-    Task<IEnumerable<Post>> GetUsersAssociatedPosts(PostQuery query);
-
     Task<IEnumerable<Group>> GetUsersGroups(int userId, int limit, int offset);
 }
