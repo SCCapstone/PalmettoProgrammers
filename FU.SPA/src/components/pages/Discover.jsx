@@ -56,7 +56,7 @@ export default function Discover() {
       if (endTime?.isValid()) {
         query.endTime = endTime;
 
-        if (!endTime?.isValid()) {
+        if (!startTime?.isValid()) {
           // set start time to 00:00:00 if unset
           query.startTime = new Date();
           query.startTime.setHours(0, 0, 0);
