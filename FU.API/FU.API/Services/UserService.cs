@@ -9,11 +9,13 @@ using Microsoft.EntityFrameworkCore;
 public class UserService : CommonService, IUserService
 {
     private readonly AppDbContext _dbContext;
+    private readonly ISearchService _searchService;
 
-    public UserService(AppDbContext dbContext)
+    public UserService(AppDbContext dbContext, ISearchService searchService)
         : base(dbContext)
     {
         _dbContext = dbContext;
+        _searchService = searchService;
     }
 
     public Task<UserProfile?> GetUserProfile(int userId)
@@ -55,18 +57,6 @@ public class UserService : CommonService, IUserService
         _dbContext.SaveChanges();
 
         return Task.FromResult<UserProfile?>(user.ToProfile());
-    }
-
-    public async Task<IEnumerable<Post>> GetUsersAssociatedPosts(int userId, int limit, int offset)
-    {
-        return await _dbContext.Posts
-            .Where(p => p.Chat.Members.Any(m => m.User.UserId == userId))
-            .Include(p => p.Creator)
-            .Include(p => p.Game)
-            .Include(p => p.Tags).ThenInclude(t => t.Tag)
-            .Skip(offset)
-            .Take(limit)
-            .ToListAsync();
     }
 
     public async Task<IEnumerable<Group>> GetUsersGroups(int userId, int limit, int offset)
