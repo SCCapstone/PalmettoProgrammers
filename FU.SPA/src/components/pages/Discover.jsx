@@ -43,8 +43,25 @@ export default function Discover() {
 
       if (startDate?.isValid()) query.startDate = startDate;
       if (endDate?.isValid()) query.endDate = endDate;
-      if (startTime?.isValid()) query.startTime = startTime;
-      if (endTime?.isValid()) query.endTime = endTime;
+
+      if (startTime?.isValid()) {
+        query.startTime = startTime;
+
+        if (!endTime?.isValid()) {
+          // set end time to 23:59:59 if unset
+          query.endTime = new Date();
+          query.endTime.setHours(23, 59, 59);
+        }
+      }
+      if (endTime?.isValid()) {
+        query.endTime = endTime;
+
+        if (!endTime?.isValid()) {
+          // set start time to 00:00:00 if unset
+          query.startTime = new Date();
+          query.startTime.setHours(0, 0, 0);
+        }
+      }
 
       const response = await SearchService.searchPosts(query);
       setPosts(response);
