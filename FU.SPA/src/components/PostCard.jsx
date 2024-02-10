@@ -14,7 +14,7 @@ import './PostCard.css';
 const PostCard = ({ post, showActions }) => {
   const navigate = useNavigate();
   const user = post.creator;
-  const defaultPfp = user.pfpUrl.includes(
+  const defaultPfp = user.pfpUrl !== null && user.pfpUrl.includes(
     'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
   );
   let dateTimeString = 'Unspecified time';
@@ -163,35 +163,6 @@ const PostCard = ({ post, showActions }) => {
       )}
     </Card>
   );
-  // return (
-  //   <Card style={{ textAlign: 'left', maxWidth: '300px', backgroundColor: '#31084A' }}>
-  //     <CardContent style={{ width: '200pt', height: '250pt' }}>
-  //       <Typography variant="body2" color="#E340DC">
-  //         by {post.creator.username}
-  //       </Typography>
-  //       <Typography variant="h5">{post.title}</Typography>
-  //       <Typography variant="h6">{post.game}</Typography>
-  //       {post.startTime && (
-  //         <Typography variant="body1">{dateTimeString}</Typography>
-  //       )}
-  //       <br />
-  //       <Typography variant="body2" color="text.primary">
-  //         {post.description}
-  //       </Typography>
-  //       <br />
-  //       <div>
-  //         {post.tags.map((t) => (
-  //           <Chip key={t} label={t} variant="outlined" />
-  //         ))}
-  //       </div>
-  //     </CardContent>
-  //     <CardActions>
-  //       <Button size="large" onClick={() => navigate(`/posts/${post.id}`)}>
-  //         View
-  //       </Button>
-  //     </CardActions>
-  //   </Card>
-  // );
 };
 
 export default PostCard;

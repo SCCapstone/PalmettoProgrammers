@@ -110,7 +110,7 @@ export default function Chat({ chatId }) {
 
   useEffect(() => {
     // Scroll to the bottom when messages are updated
-    const chatContainer = document.querySelector('.MuiCardContent-root');
+    const chatContainer = document.querySelector('.chat-card').querySelector('.MuiCardContent-root');
     const scrollDifference = chatContainer.scrollHeight - prevScrollHeight;
 
     if (scrollDifference > 0) {
@@ -123,6 +123,7 @@ export default function Chat({ chatId }) {
 
   return (
     <Card
+      className='chat-card'
       style={{
         textAlign: 'left',
         backgroundColor: '#31084A',
