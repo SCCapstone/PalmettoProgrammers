@@ -16,6 +16,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [chatId, setChatId] = useState(null);
   const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [isFriend, setisFriend] = useState(false);
 
   const update = useCallback(async () => {
     setLoading(true);
@@ -76,6 +77,7 @@ const UserProfile = () => {
     return initials;
   };
 
+
   const renderPfp = () => {
     return !defaultPFP ? (
       <img src={userProfile.pfpUrl} className="userImage" />
@@ -109,6 +111,22 @@ const UserProfile = () => {
       </div>
     );
   };
+  /*
+   * Handles the friendButton on click, checking whether the person is 
+   * a friend or not. Based on whether the person is a friend or not,
+   * the user will have it displayed to add them as a friend or remove them.
+   */
+  // handleClick =() => {
+  //   if (isFriend === false) {
+  //     this.useState(isFriend => ({
+  //       isFriendOn: !isFriend.isFriendOn
+  //     }));
+  //   } else if (isFriend === true) {
+  //     this.useState(isFriend => ({
+  //       isFriendOn: isFriend.isFriendOn
+  //     }));
+  //   }
+  // }
 
   const renderHeaderButtons = () => {
     if (!user || user.username === userProfile.username) {
