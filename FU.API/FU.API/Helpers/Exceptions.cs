@@ -44,9 +44,9 @@ public class DuplicateUserException : ExceptionWithResponse
 
 public class UnauthorizedException : ExceptionWithResponse
 {
-    public override string Description { get; } = "The user is not authorized";
+    public override string Title { get; } = "Unauthorized";
 
-    public override string Title { get; } = "Unauthorized User";
+    public override string Description { get; } = "The user is not authorized";
 
     public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Unauthorized;
 
@@ -54,12 +54,36 @@ public class UnauthorizedException : ExceptionWithResponse
     {
     }
 
-    public UnauthorizedException(string title, string description, HttpStatusCode statusCode)
+    public UnauthorizedException(string description)
+    {
+        Description = description;
+    }
+}
+
+public class NotFoundException : ExceptionWithResponse
+{
+    public override string Description { get; } = "Not Found";
+
+    public override string Title { get; } = "The resource was not found";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
+
+    public NotFoundException()
+    {
+    }
+
+    public NotFoundException(string title, string description)
     {
         Title = title;
         Description = description;
-        StatusCode = statusCode;
     }
+}
+
+public class PostNotFoundException : NotFoundException
+{
+    public override string Description { get; } = "Post Not Found";
+
+    public override string Title { get; } = "The post was not found";
 }
 
 public class NonexistentGameException : ExceptionWithResponse
@@ -68,7 +92,7 @@ public class NonexistentGameException : ExceptionWithResponse
 
     public override string Title { get; } = "Nonexistent Game";
 
-    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
 
     public NonexistentGameException()
     {
@@ -88,15 +112,16 @@ public class PostException : ExceptionWithResponse
 
     public override string Title { get; } = "Post Exception";
 
-    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.NotFound;
+    public override HttpStatusCode StatusCode { get; }
 
     public PostException()
     {
     }
 
-    public PostException(string description)
+    public PostException(string description, HttpStatusCode statusCode)
     {
         Description = description;
+        StatusCode = statusCode;
     }
 }
 
@@ -113,6 +138,60 @@ public class ConflictException : ExceptionWithResponse
     }
 
     public ConflictException(string description)
+    {
+        Description = description;
+    }
+}
+
+public class ForbidException : ExceptionWithResponse
+{
+    public override string Description { get; } = "Forbid exception";
+
+    public override string Title { get; } = "Forbid exception";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Forbidden;
+
+    public ForbidException()
+    {
+    }
+
+    public ForbidException(string description)
+    {
+        Description = description;
+    }
+}
+
+public class BadRequestException : ExceptionWithResponse
+{
+    public override string Description { get; } = "Bad request exception";
+
+    public override string Title { get; } = "Bad request exception";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.BadRequest;
+
+    public BadRequestException()
+    {
+    }
+
+    public BadRequestException(string description)
+    {
+        Description = description;
+    }
+}
+
+public class ServerError : ExceptionWithResponse
+{
+    public override string Description { get; } = "Conflict exception";
+
+    public override string Title { get; } = "Conflict exception";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.InternalServerError;
+
+    public ServerError()
+    {
+    }
+
+    public ServerError(string description)
     {
         Description = description;
     }

@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 /// <summary>
 /// Handles account related actions.
 /// </summary>
-public class AccountsService
+public class AccountsService : CommonService
 {
     private readonly IConfiguration _configuration;
     private readonly AppDbContext _dbContext;
@@ -24,9 +24,24 @@ public class AccountsService
     /// <param name="configuration">Allows access to the config.</param>
     /// <param name="dbContext">Allows access to the database.</param>
     public AccountsService(IConfiguration configuration, AppDbContext dbContext)
+        : base(dbContext)
     {
         _configuration = configuration;
         _dbContext = dbContext;
+    }
+
+    public static string HashPassword(string password)
+    {
+        // based on https://gist.github.com/sixpeteunder/235f93ba0b059035abf140beb2ea4e44
+        var argon2 = new Argon2i(Encoding.UTF8.GetBytes(password))
+        {
+            Iterations = 4,
+            DegreeOfParallelism = 2,
+            MemorySize = 1024 * 4,
+        };
+
+        byte[] passwordBytes = argon2.GetBytes(128);
+        return Convert.ToBase64String(passwordBytes);
     }
 
     /// <summary>
@@ -34,7 +49,7 @@ public class AccountsService
     /// </summary>
     /// <param name="credentials">Credentials for the new user.</param>
     /// <returns>Returns the created user, or null if failed.</returns>
-    public Task<ApplicationUser?> Register(Credentials credentials)
+    public async Task<ApplicationUser> Register(Credentials credentials)
     {
         var queryUser = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper());
         if (queryUser.FirstOrDefault() is not null)
@@ -47,9 +62,37 @@ public class AccountsService
             Username = credentials.Username,
             PasswordHash = HashPassword(credentials.Password),
         });
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
-        return Task.FromResult<ApplicationUser?>(queryUser.First());
+        return queryUser.First();
+    }
+
+    public async Task UpdatePassword(int userId, string newPassword)
+    {
+        ApplicationUser user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        user.PasswordHash = HashPassword(newPassword);
+        _dbContext.Update(user);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateUsername(int userId, string newUsername)
+    {
+        ApplicationUser user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        var existingUserWithNewUsername = _dbContext.Users.Where(u => u.NormalizedUsername == newUsername.ToUpper()).FirstOrDefault();
+
+        // If a different user has the same username
+        if (existingUserWithNewUsername is not null && existingUserWithNewUsername.UserId != userId)
+        {
+            throw new DuplicateUserException();
+        }
+
+        user.Username = newUsername;
+        _dbContext.Update(user);
+
+        await _dbContext.SaveChangesAsync();
     }
 
     /// <summary>
@@ -98,21 +141,8 @@ public class AccountsService
         {
             UserId = userCredentials.UserId,
             Username = userCredentials.Username,
+            PasswordHash = userCredentials.PasswordHash
         };
-    }
-
-    private static string HashPassword(string password)
-    {
-        // based on https://gist.github.com/sixpeteunder/235f93ba0b059035abf140beb2ea4e44
-        var argon2 = new Argon2i(Encoding.UTF8.GetBytes(password))
-        {
-            Iterations = 4,
-            DegreeOfParallelism = 2,
-            MemorySize = 1024 * 4,
-        };
-
-        byte[] passwordBytes = argon2.GetBytes(128);
-        return Convert.ToBase64String(passwordBytes);
     }
 
     // Return user credentials so userId is accessable without a second db call

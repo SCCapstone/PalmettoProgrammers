@@ -31,6 +31,7 @@ namespace FU.API.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateOnly?>("DOB")
@@ -44,6 +45,10 @@ namespace FU.API.Migrations
 
                     b.Property<bool>("IsOnline")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("NormalizedBio")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("NormalizedUsername")
                         .IsRequired()

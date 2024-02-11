@@ -7,6 +7,7 @@ using FU.API.DTOs.Post;
 using FU.API.DTOs.Tag;
 using FU.API.Models;
 using FU.API.DTOs.Group;
+using FU.API.DTOs.User;
 
 public static class Mapper
 {
@@ -25,6 +26,9 @@ public static class Mapper
         };
     }
 
+    public static IEnumerable<UserProfile> ToProfiles(this IEnumerable<ApplicationUser> appUsers) =>
+        appUsers.Select(appUser => appUser.ToProfile());
+
     public static MessageResponseDTO ToDto(this Message message)
     {
         return new MessageResponseDTO()
@@ -32,8 +36,7 @@ public static class Mapper
             Id = message.Id,
             CreatedAt = message.CreatedAt,
             Content = message.Content,
-            SenderId = message.SenderId,
-            SenderName = message.Sender.Username,
+            Sender = message.Sender.ToProfile(),
         };
     }
 
@@ -80,15 +83,57 @@ public static class Mapper
     public static IEnumerable<TagResponseDTO> ToDtos(this IEnumerable<Tag> tags) =>
         tags.Select(tag => tag.ToDto());
 
+    public static UserQuery ToUserQuery(this UserSearchRequestDTO dto)
+    {
+        var query = new UserQuery()
+        {
+            Limit = dto.Limit ?? 20,
+            Offset = dto.Offset ?? 0,
+            SortType = new(),
+            SortDirection = new(),
+        };
+
+        if (dto.Keywords is not null)
+        {
+            query.Keywords = dto.Keywords.Split(" ").ToList();
+        }
+
+        // defaults if unset
+        dto.Sort ??= "newest:desc";
+
+        // E.g. dto.Sort = "title:asc" or just "title"
+        var arr = dto.Sort.ToLower().Split(":");
+        query.SortType = arr[0] switch
+        {
+            "username" => UserSortType.Username,
+            _ => UserSortType.Username,
+        };
+
+        if (arr.Length > 1 && arr[1].StartsWith("desc"))
+        {
+            query.SortDirection = SortDirection.Descending;
+        }
+        else
+        {
+            query.SortDirection = SortDirection.Ascending;
+        }
+
+        return query;
+    }
+
     public static PostQuery ToPostQuery(this PostSearchRequestDTO dto)
     {
         var query = new PostQuery()
         {
-            After = dto.After,
+            StartOnOrAfterDate = dto.StartOnOrAfterDate,
+            EndOnOrBeforeDate = dto.EndOnOrBeforeDate,
+            StartOnOrAfterTime = dto.StartOnOrAfterTime,
+            EndOnOrBeforeTime = dto.EndOnOrBeforeTime,
             MinimumRequiredPlayers = dto.MinPlayers ?? 0,
             Limit = dto.Limit ?? 20,
             Offset = dto.Offset ?? 0,
-            SortBy = new()
+            SortType = new(),
+            SortDirection = new(),
         };
 
         if (dto.Keywords is not null)
@@ -125,22 +170,22 @@ public static class Mapper
 
         // E.g. dto.Sort = "title:asc" or just "title"
         var arr = dto.Sort.ToLower().Split(":");
-        query.SortBy.Type = arr[0] switch
+        query.SortType = arr[0] switch
         {
-            "players" => SortType.NumberOfPlayers,
-            "soonest" => SortType.NewestCreated,
-            "newest" => SortType.NewestCreated,
-            "title" => SortType.Title,
-            _ => SortType.NewestCreated
+            "players" => PostSortType.NumberOfPlayers,
+            "soonest" => PostSortType.NewestCreated,
+            "newest" => PostSortType.NewestCreated,
+            "title" => PostSortType.Title,
+            _ => PostSortType.NewestCreated
         };
 
         if (arr.Length > 1 && arr[1].StartsWith("desc"))
         {
-            query.SortBy.Direction = SortDirection.Descending;
+            query.SortDirection = SortDirection.Descending;
         }
         else
         {
-            query.SortBy.Direction = SortDirection.Ascending;
+            query.SortDirection = SortDirection.Ascending;
         }
 
         return query;
@@ -158,7 +203,7 @@ public static class Mapper
             EndTime = post.EndTime,
             MaxPlayers = post.MaxPlayers,
             ChatId = post.ChatId,
-            Creator = post.Creator.Username,
+            Creator = post.Creator.ToProfile(),
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
             HasJoined = hasJoined,
         };
@@ -196,4 +241,22 @@ public static class Mapper
 
     public static IEnumerable<GroupSimpleDTO> ToSimpleDtos(this IEnumerable<Group> groups) =>
         groups.Select(group => group.ToSimpleDto());
+
+    public static UserRelationDTO ToDto(this UserRelation relation)
+    {
+        return new UserRelationDTO()
+        {
+            User = relation.User1.ToProfile(),
+            Status = relation.Status.ToString(),
+        };
+    }
+
+    public static AccountInfoDTO ToDTO(this AccountInfo accountInfo)
+    {
+        return new AccountInfoDTO()
+        {
+            UserId = accountInfo.UserId,
+            Username = accountInfo.Username,
+        };
+    }
 }

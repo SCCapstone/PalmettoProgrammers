@@ -9,11 +9,13 @@ using Microsoft.EntityFrameworkCore;
 public class UserService : CommonService, IUserService
 {
     private readonly AppDbContext _dbContext;
+    private readonly ISearchService _searchService;
 
-    public UserService(AppDbContext dbContext)
+    public UserService(AppDbContext dbContext, ISearchService searchService)
         : base(dbContext)
     {
         _dbContext = dbContext;
+        _searchService = searchService;
     }
 
     public Task<UserProfile?> GetUserProfile(int userId)
@@ -57,18 +59,6 @@ public class UserService : CommonService, IUserService
         return Task.FromResult<UserProfile?>(user.ToProfile());
     }
 
-    public async Task<IEnumerable<Post>> GetUsersAssociatedPosts(int userId, int limit, int offset)
-    {
-        return await _dbContext.Posts
-            .Where(p => p.Chat.Members.Any(m => m.User.UserId == userId))
-            .Include(p => p.Creator)
-            .Include(p => p.Game)
-            .Include(p => p.Tags).ThenInclude(t => t.Tag)
-            .Skip(offset)
-            .Take(limit)
-            .ToListAsync();
-    }
-
     public async Task<IEnumerable<Group>> GetUsersGroups(int userId, int limit, int offset)
     {
         return await _dbContext.Groups
@@ -78,28 +68,5 @@ public class UserService : CommonService, IUserService
             .Skip(offset)
             .Take(limit)
             .ToListAsync();
-    }
-
-    public async Task<IEnumerable<ApplicationUser>> GetUsersPlayers(int userId, int limit, int offset)
-    {
-        var players = await _dbContext.UserRelations
-            .Where(ur => ur.User1Id == userId || ur.User2Id == userId)
-            .Select(ur => ur.User1Id == userId ? ur.User2 : ur.User1)
-            .ToListAsync();
-
-        // Also get users that have sent a direct message to the user
-        var directMessages = await _dbContext.Chats
-            .Where(c => c.ChatType == ChatType.Direct)
-            .Where(c => c.Members.Any(m => m.UserId == userId))
-            .SelectMany(c => c.Members)
-            .Where(m => m.UserId != userId)
-            .Select(m => m.User)
-            .ToListAsync();
-
-        var allPlayers = players.Union(directMessages);
-
-        return allPlayers
-            .Skip(offset)
-            .Take(limit);
     }
 }

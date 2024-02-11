@@ -2,7 +2,10 @@
 
 name: Build ForcesUnite
 
-on: push
+on: 
+  workflow_dispatch:
+  pull_request:
+    types: [ready_for_review]
 
 jobs:
   build-api:
@@ -23,17 +26,17 @@ jobs:
             dotnet build
         shell: pwsh
 
-      - name: Publish
-        run: |
-          cd FU.API
-          dotnet publish
-        shell: pwsh
+      # - name: Publish
+      #   run: |
+      #     cd FU.API
+      #     dotnet publish
+      #   shell: pwsh
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: D:\a\PalmettoProgrammers\PalmettoProgrammers\FU.API\FU.API\bin
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: .net-app
+      #     path: D:\a\PalmettoProgrammers\PalmettoProgrammers\FU.API\FU.API\bin
 
       - name: Test
         run: |

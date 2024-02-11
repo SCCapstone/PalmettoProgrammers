@@ -20,7 +20,8 @@ const findGameByTitle = async (title) => {
   let game = null;
 
   for (const g of games) {
-    if (g.name == title) game = g;
+    // compare ignoring case
+    if (g.name.toLowerCase() === title.toLowerCase()) game = g;
   }
 
   return game;

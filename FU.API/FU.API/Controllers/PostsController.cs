@@ -25,11 +25,33 @@ public class PostsController : ControllerBase
         var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
         var post = dto.ToModel();
+        post.CreatorId = user.UserId;
         post.Creator = user;
 
         var newPost = await _postService.CreatePost(post);
 
         return CreatedAtRoute(string.Empty, new { postId = newPost.Id }, newPost.ToDto());
+    }
+
+    [HttpPut]
+    [Route("{postId}")]
+    public async Task<IActionResult> UpdatePost([FromRoute] int postId, [FromBody] PostRequestDTO dto)
+    {
+        var ogPost = await _postService.GetPost(postId) ?? throw new PostNotFoundException();
+        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+
+        if (ogPost.CreatorId != user.UserId)
+        {
+            return Forbid();
+        }
+
+        var post = dto.ToModel();
+        post.Creator = user;
+        post.Id = postId;
+
+        post = await _postService.UpdatePost(post);
+
+        return Ok(post.ToDto());
     }
 
     [HttpGet]
@@ -88,8 +110,32 @@ public class PostsController : ControllerBase
             return NotFound();
         }
 
+        if (user.UserId == post.CreatorId)
+        {
+            return Forbid("Creator cannot leave post");
+        }
+
         await _postService.LeavePost(post.Id, user);
 
         return NoContent();
+    }
+
+    [HttpGet]
+    [Route("{postId}/users")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPostUsers(int postId)
+    {
+        var post = await _postService.GetPost(postId);
+
+        if (post is null)
+        {
+            return NotFound();
+        }
+
+        var users = await _postService.GetPostUsers(post.Id);
+
+        var response = users.ToProfiles();
+
+        return Ok(response);
     }
 }
