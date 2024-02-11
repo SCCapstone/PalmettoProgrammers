@@ -92,7 +92,7 @@ const handleFilterChange = (newGames, newTags) => {
       <div className="sidebar" style={{ textAlign: 'left', minWidth: '200pt',  maxWidth:'300px'  }}>
         <Typography variant="h5">Filters</Typography>
         <GamesSelector value={games} onChange={(e, v) => handleFilterChange(v, tags)} />
-        <TagsSelector value={tags} onChange={(e, v) => handleFilterChange(v, tags)} />
+        <TagsSelector value={tags} onChange={(e, v) => handleFilterChange(games, v)} />
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
