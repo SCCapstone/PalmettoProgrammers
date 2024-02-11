@@ -76,11 +76,14 @@ export const TagsSelector = ({ onChange }) => {
 
 export const AscDscSelector = ({ onChange }) => {
   const [ascDscOptions, setAscDscOptions] = useState([]);
-
+  
   useEffect(() => {
+    const ascDscChoices = [{ label: 'A-Z'}, { label: "Z-A"}];
+    //setAscDscOptions(ascDscChoices);
+    AscDscService.searchAscDsc('').then((ascDsc) => setAscDscOptions);
+    //ascDscOptions.setAscDscOptions(ascDscOptions);
+    // TagService.searchTags('').then((tags) => setTagOptions(tags));
     // GameService.searchGames('').then((games) => setAscDscOptions(games));
-    //AscDscService.twoChoices().then(() => setAscDscOptions());
-    //AscDscService.twoChoices('').then((ascDsc) => setAscDscOptions(ascDsc));
   }, []);
 
   return (
@@ -98,7 +101,7 @@ export const AscDscSelector = ({ onChange }) => {
             style={{ marginRight: 8 }}
             checked={selected}
           />
-          {option.name}
+          {option}
         </li>
       )}
       renderInput={(params) => (

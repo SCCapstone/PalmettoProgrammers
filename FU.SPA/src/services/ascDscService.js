@@ -40,11 +40,11 @@ const findGameByDscName = async (name) => {
 
 const twoChoices = async (choice) => {
     let choices = {"A-Z" : "Z-A"};
-    if (choice.toLowerCase === "a-z") {
-        choices = "A-Z";
-    } else if (choice.toLowerCase === "z-a") {
-        choices = "Z-A";
-    }
+    // if (choice.toLowerCase === "a-z") {
+    //     choices = "A-Z";
+    // } else if (choice.toLowerCase === "z-a") {
+    //     choices = "Z-A";
+    // }
 
     return choices;
 };
