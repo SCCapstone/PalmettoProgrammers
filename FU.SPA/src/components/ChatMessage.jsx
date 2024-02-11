@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export default function ChatMessage({ chatMessage, userIsSender }) {
   const user = chatMessage.sender;
   const navigate = useNavigate();
-  const defaultPfp = user.pfpUrl.includes(
+  const defaultPfp = user?.pfpUrl.includes(
     'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
   );
 
