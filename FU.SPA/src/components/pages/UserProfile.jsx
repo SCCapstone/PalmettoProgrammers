@@ -135,6 +135,7 @@ const UserProfile = () => {
 
     return (
       <div className="buttons">
+        {/* add an onClick={handleClick()}. cant put it in yet, as it causes an error*/}
         <button className="friendButton">Send Friend Request</button>
       </div>
     );
