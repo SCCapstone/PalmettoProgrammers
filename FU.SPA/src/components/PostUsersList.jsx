@@ -60,9 +60,12 @@ export default function PostUsersList({ postId }) {
 
 const UserListItem = ({ user }) => {
   const navigate = useNavigate();
-  const defaultPfp = user.pfpUrl.includes(
-    'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-  );
+  const defaultPfp =
+    !user.pfpUrl ||
+    (user.pfpUrl !== null &&
+      user.pfpUrl.includes(
+        'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
+      ));
 
   const stringToColor = (string) => {
     let hash = 0;

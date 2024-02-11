@@ -33,7 +33,7 @@ export default function Chat({ chatId }) {
         const chat = await getChat(chatId);
         setChat(chat);
         // sleep to allow the signalr connection to be established
-        await new Promise((resolve) => setTimeout(resolve, 40));
+        await new Promise((resolve) => setTimeout(resolve, 80));
         await joinChatGroup(chatId);
         const messages = await getMessages(chatId, 1, limit);
         setMessages(messages);
