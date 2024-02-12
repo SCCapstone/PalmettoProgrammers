@@ -96,16 +96,9 @@ export default function CreatePost() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            <CustomTextField
-              required //may want to get rid of this and just check if it's empty when clicking create button.
-              fullWidth
-              id="searchGames"
-              label="Game" //might want to put a Search icon in front, if we can figure it out.
-              type="searchGames"
-              name="searchGames"
-              value={gameName}
-              onChange={(e) => setGameName(e.target.value)}
-            />
+            <Grid item xs={12}>
+              <GameSelector onChange={setGameName} />
+            </Grid>
             <br />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <CustomDateTimePicker
@@ -162,6 +155,61 @@ export default function CreatePost() {
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
+
+const GameSelector = ({ onChange }) => {
+  const [gammeOptions, setGameOptions] = useState([]);
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    GameService.searchGames('').then((games) => setGameOptions(games));
+  }, []);
+
+  const onInputChange = (event, newValue) => {
+    console.log('newValue');
+    console.log(newValue);
+
+    setValue(newValue);
+    onChange(newValue);
+  };
+
+  const onFilterOptions = (options, params) => {
+    const filtered = filter(options, params);
+
+    const { inputValue } = params;
+    // Suggest the creation of a new value
+    const isExisting = options.some((option) => inputValue === option.name);
+    if (inputValue !== '' && !isExisting) {
+      filtered.push({
+        // inputValue,
+        id: null,
+        name: inputValue,
+      });
+    }
+
+    return filtered;
+  };
+
+  return (
+    <CustomAutocomplete
+      clearOnBlur
+      value={value}
+      onChange={onInputChange}
+      options={gammeOptions}
+      disableCloseOnSelect
+      filterOptions={onFilterOptions}
+      getOptionLabel={(o) => (o ? o.name : '')}
+      isOptionEqualToValue={(option, value) => option.name === value.name}
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          {option.name}
+        </li>
+      )}
+      renderInput={(params) => (
+        <TextField {...params} label="Game" placeholder="Select or create a game" />
+      )}
+    />
+  );
+};
 
 const TagsSelector = ({ onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
