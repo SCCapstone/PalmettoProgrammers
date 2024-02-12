@@ -6,7 +6,11 @@ export default function Social() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    UserService.getConnectedPosts().then(setPosts);
+    // Pass in empty object for later query parameters
+    var query = {
+      limit: 100,
+    };
+    UserService.getConnectedPosts(query).then(setPosts);
   }, []);
 
   const renderTabContent = () => {

@@ -9,11 +9,13 @@ using Microsoft.EntityFrameworkCore;
 public class RelationService : CommonService, IRelationService
 {
     private readonly AppDbContext _dbContext;
+    private readonly ISearchService _searchService;
 
-    public RelationService(AppDbContext dbContext)
+    public RelationService(AppDbContext dbContext, ISearchService searchService)
         : base(dbContext)
     {
         _dbContext = dbContext;
+        _searchService = searchService;
     }
 
     public async Task<UserRelation> GetRelation(int initiatedById, int otherUserId)
@@ -35,23 +37,6 @@ public class RelationService : CommonService, IRelationService
         }
 
         return relation;
-    }
-
-    public async Task<IEnumerable<ApplicationUser>> GetRelations(int userId, UserRelationStatus status, bool userIsRequester = false)
-    {
-        if (!userIsRequester && status != UserRelationStatus.Friends)
-        {
-            throw new ForbidException($"You are not allowed to view this user's {status.ToString()} relations");
-        }
-        else if (status == UserRelationStatus.BlockedBy)
-        {
-            throw new ForbidException("You are not allowed to view blocked by relations");
-        }
-
-        return await _dbContext.UserRelations
-            .Where(r => r.User1Id == userId && r.Status == status)
-            .Select(r => r.User2)
-            .ToListAsync();
     }
 
     public async Task HandleRelationAction(int initiatedById, int otherUserId, UserRelationAction action)
