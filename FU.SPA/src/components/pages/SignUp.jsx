@@ -14,17 +14,16 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthService from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+    // Need to look into incorporating email address
     const creds = {
       username: data.get('username'),
       password: data.get('password'),
@@ -35,8 +34,13 @@ export default function SignUp() {
       return;
     }
 
-    AuthService.signUp(creds);
-    navigate('/SignIn');
+    try { 
+      await AuthService.signUp(creds);
+      navigate('/SignIn');
+    } catch (event) {
+      window.alert('Error in sign up');
+      console.log(event);
+    }
   };
 
   return (
