@@ -155,7 +155,7 @@ export default function Chat({ chatId }) {
           <ChatMessage
             key={index}
             chatMessage={msg}
-            userIsSender={user?.username === msg.sender.username}
+            userIsSender={user?.username === msg.sender?.username}
           />
         ))}
       </CardContent>
