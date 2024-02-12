@@ -1,6 +1,5 @@
 import {
   Button,
-  TextField,
   Link,
   Box,
   Container,
@@ -13,6 +12,7 @@ import AuthService from '../../services/authService';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CustomTextField } from '../../helpers/styleComponents';
 
 export default function SignIn() {
   const { login } = useContext(UserContext);
@@ -51,12 +51,12 @@ export default function SignIn() {
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" style={{ color: '#FFF' }}>
           Sign in to Forces Unite
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           {/* Username Text Field */}
-          <TextField
+          <CustomTextField
             margin="normal"
             required
             fullWidth
@@ -67,7 +67,7 @@ export default function SignIn() {
             autoFocus
           />
           {/* Password Text Field */}
-          <TextField
+          <CustomTextField
             margin="normal"
             required
             fullWidth
