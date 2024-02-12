@@ -56,10 +56,40 @@ const getUserprofile = async (userString) => {
   return await response.json();
 };
 
+const getUserId = async () => {
+  const response = await fetch(`${API_BASE_URL}/Accounts`, {
+    headers: { ...AuthService.getAuthHeader() },
+    method: 'GET'
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in retrieving ID');
+  }
+  
+  return await response.json();
+}
+
+const updateUserProfile = async (data) => {
+  console.log(JSON.stringify(data));
+  const response = await fetch(`${API_BASE_URL}/Users/current`, {
+    method: 'PATCH',
+    headers: { ...AuthService.getAuthHeader() },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in updating information');
+  }
+
+  return await response.json();
+}
+
 const UserService = {
   getConnectedPosts,
   getConnectedGroups,
   getConnectedPlayers,
   getUserprofile,
+  getUserId,
+  updateUserProfile
 };
 export default UserService;

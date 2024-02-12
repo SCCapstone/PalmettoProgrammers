@@ -4,11 +4,12 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
+import UserService from '../../services/userService'
 
 export default function ProfileSettings () {
 
     {/*
-      * Required Fields:
+      * Possible Fields:
       * pfpurl
       * bio
       * date of birth
@@ -16,10 +17,37 @@ export default function ProfileSettings () {
       * favorite games
       * favorite tags
       */}
+
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [pfpUrl, setPfpUrl] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      var idJson = await UserService.getUserId();
+
+      const data = {
+        id: idJson.userId,
+        pfpUrl: pfpUrl,
+        bio: bio,
+        // Fix DOB issue, currently is appending time which is not desired
+        // dob: dateOfBirth !== null ? dateOfBirth.toISOString() : null,
+        dob: "2024-02-11",
+        username: username
+        // favoriteGames: [],
+        // favoriteTags: []
+      };
+
+      // console.log(data.dob);
+      const response = await UserService.updateUserProfile(data);
+    } catch (e) {
+      console.log(e);
+    }
+
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -37,6 +65,7 @@ export default function ProfileSettings () {
         <Box
           component="form"
           noValidate
+          onSubmit={handleSubmit}
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
@@ -63,7 +92,8 @@ export default function ProfileSettings () {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Date of Birth"
-                value={dateOfBirth}
+                value={null} // Leave null as to not change date
+                fullWidth
                 onChange={(newValue) => setDateOfBirth(newValue)}
               />
             </LocalizationProvider>
