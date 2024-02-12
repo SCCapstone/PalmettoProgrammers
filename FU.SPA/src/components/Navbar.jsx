@@ -13,8 +13,7 @@ export default function Navbar() {
     setPreviousPath(currentPath);
     setCurrentPath(location.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [location.pathname]);
-
+  }, [location.pathname]);
 
   function CustomLink({ to, children, ...props }) {
     const pathName = useResolvedPath(to).pathname;
