@@ -161,7 +161,7 @@ const UserProfile = () => {
         <div
           className="header"
           style={{
-            width: '55%',
+            width: isOwnProfile ? '100%' : '55%',
             transition: 'width 0.3s ease',
           }}
         >
