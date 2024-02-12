@@ -78,9 +78,9 @@ export const AscDscSelector = ({ onChange }) => {
   const [ascDscOptions, setAscDscOptions] = useState([]);
   
   useEffect(() => {
-    const ascDscChoices = [{ label: 'A-Z'}, { label: "Z-A"}];
+    //const ascDscChoices = [{ label: 'A-Z'}, { label: "Z-A"}];
     //setAscDscOptions(ascDscChoices);
-    AscDscService.searchAscDsc('').then((ascDsc) => setAscDscOptions);
+    AscDscService.searchAscDsc('').then((ascDscChoices) => setAscDscOptions);
     //ascDscOptions.setAscDscOptions(ascDscOptions);
     // TagService.searchTags('').then((tags) => setTagOptions(tags));
     // GameService.searchGames('').then((games) => setAscDscOptions(games));
