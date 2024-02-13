@@ -1,5 +1,4 @@
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
@@ -9,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import Posts from '../Posts';
+import { SelectDateRangeFilter } from './Filters';
 import './Discover.css';
 
 const paramToDayjs = (searchParams, paramKey) => {
@@ -85,7 +85,7 @@ export default function Discover() {
         <Typography variant="h5">Filters</Typography>
         <GamesSelector onChange={(e, v) => setGames(v)} />
         <TagsSelector onChange={(e, v) => setTags(v)} />
-        <SelectDateRange
+        <SelectDateRangeFilter
           onStartDateChange={(newValue) => {
             setStartDate(newValue);
           }}
@@ -126,59 +126,6 @@ function SelectTimeRange({
         label="To"
         value={endTime}
         onChange={(newValue) => onEndTimeChange(newValue)}
-        slotProps={{ field: { clearable: true } }}
-      />
-    </LocalizationProvider>
-  );
-}
-
-function SelectDateRange({ onStartDateChange, onEndDateChange }) {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const [startDate, setStartDate] = useState(
-    paramToDayjs(searchParams, 'startDate'),
-  );
-  const [endDate, setEndDate] = useState(paramToDayjs(searchParams, 'endDate'));
-
-  // Update search params when startDate or endDate is updated
-  useEffect(() => {
-    setSearchParams(
-      (params) => {
-        if (startDate?.isValid())
-          params.set('startDate', startDate.toISOString());
-        if (endDate?.isValid()) params.set('endDate', endDate.toISOString());
-        return params;
-      },
-      { replace: true },
-    );
-  }, [startDate, endDate, setSearchParams]);
-
-  useEffect(() => {
-    if (startDate?.isValid()) onStartDateChange(startDate);
-  }, [startDate, onStartDateChange]);
-
-  useEffect(() => {
-    if (endDate?.isValid()) onEndDateChange(endDate);
-  }, [endDate, onEndDateChange]);
-
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker
-        label="From"
-        value={startDate}
-        onChange={(newValue) => {
-          if (endDate && newValue && newValue > endDate) setEndDate(null);
-          setStartDate(newValue);
-        }}
-        slotProps={{ field: { clearable: true } }}
-      />
-      <DatePicker
-        label="To"
-        value={endDate}
-        onChange={(newValue) => {
-          if (startDate && newValue && newValue < startDate)
-            setEndDate(newValue);
-        }}
         slotProps={{ field: { clearable: true } }}
       />
     </LocalizationProvider>
