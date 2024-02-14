@@ -47,8 +47,10 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
       (params) => {
         if (startDate?.isValid())
           params.set(startDateParamKey, startDate.toISOString());
+        else params.delete(startDateParamKey);
         if (endDate?.isValid())
           params.set(endDateParamKey, endDate.toISOString());
+        else params.delete(endDateParamKey);
         if (radioValue) params.set(dateRadioParamKey, radioValue);
         return params;
       },
