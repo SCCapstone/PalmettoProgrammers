@@ -115,7 +115,8 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
           value={endDate}
           onChange={(newValue) => {
             if (startDate && newValue && newValue < startDate)
-              setEndDate(newValue);
+              setStartDate(null);
+            setEndDate(newValue);
           }}
           slotProps={{ field: { clearable: true } }}
         />
