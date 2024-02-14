@@ -5,7 +5,6 @@ import {
   Container,
   Typography,
   Grid,
-  Autocomplete,
   Checkbox,
   createFilterOptions,
 } from '@mui/material';
@@ -16,11 +15,15 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PostService from '../services/postService';
 import TagService from '../services/tagService';
 import GameService from '../services/gameService';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import {
+  CustomAutocomplete,
+  CustomTextField,
+  CustomDateTimePicker,
+} from '../helpers/styleComponents';
 
 export default function CreatePost() {
   const [gameName, setGameName] = useState('');
@@ -84,7 +87,7 @@ export default function CreatePost() {
           sx={{ mt: 3 }}
         >
           <Grid container spacing={2}>
-            <TextField
+            <CustomTextField
               required //may want to get rid of this and just check if it's empty when clicking create button.
               fullWidth
               id="searchGames"
@@ -93,7 +96,7 @@ export default function CreatePost() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            <TextField
+            <CustomTextField
               required //may want to get rid of this and just check if it's empty when clicking create button.
               fullWidth
               id="searchGames"
@@ -105,12 +108,12 @@ export default function CreatePost() {
             />
             <br />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
+              <CustomDateTimePicker
                 label="Start Time"
                 value={startTime}
                 onChange={(newValue) => setStartTime(newValue)}
               />
-              <DateTimePicker
+              <CustomDateTimePicker
                 label="End Time"
                 value={endTime}
                 onChange={(newValue) => setEndTime(newValue)}
@@ -201,7 +204,7 @@ const TagsSelector = ({ onChange }) => {
   };
 
   return (
-    <Autocomplete
+    <CustomAutocomplete
       multiple
       clearOnBlur
       value={value}

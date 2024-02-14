@@ -67,7 +67,6 @@ const PostCard = ({ post, showActions }) => {
   };
 
   const renderPfp = () => {
-    console.log('adasdd');
     return defaultPfp ? (
       <Avatar
         sx={{
