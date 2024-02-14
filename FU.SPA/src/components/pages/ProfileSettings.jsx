@@ -34,14 +34,14 @@ export default function ProfileSettings () {
         pfpUrl: pfpUrl,
         bio: bio,
         // Fix DOB issue, currently is appending time which is not desired
-        // dob: dateOfBirth !== null ? dateOfBirth.toISOString() : null,
-        dob: "2024-02-11",
+        // just split on substring
+        // requestBuilder.js line 22
+        dob: dateOfBirth !== null ? dateOfBirth.toISOString() : null,
         username: username
         // favoriteGames: [],
         // favoriteTags: []
       };
 
-      // console.log(data.dob);
       const response = await UserService.updateUserProfile(data);
     } catch (e) {
       console.log(e);

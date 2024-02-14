@@ -56,7 +56,9 @@ const getUserprofile = async (userString) => {
   return await response.json();
 };
 
+// TODO return *just* id or rename function name
 const getUserId = async () => {
+  // Call API endpoint
   const response = await fetch(`${API_BASE_URL}/Accounts`, {
     headers: { ...AuthService.getAuthHeader() },
     method: 'GET'
@@ -69,11 +71,14 @@ const getUserId = async () => {
   return await response.json();
 }
 
+// Updates Profile Information
 const updateUserProfile = async (data) => {
   console.log(JSON.stringify(data));
+  // Call API endpoint
   const response = await fetch(`${API_BASE_URL}/Users/current`, {
     method: 'PATCH',
-    headers: { ...AuthService.getAuthHeader() },
+    headers: { 'content-type': 'application/json',
+    ...AuthService.getAuthHeader() },
     body: JSON.stringify(data)
   });
 
