@@ -1,6 +1,3 @@
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 import { TextField, Typography } from '@mui/material';
@@ -8,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import Posts from '../Posts';
-import { SelectDateRangeFilter } from './Filters';
+import { SelectDateRangeFilter, SelectTimeRangeFilter } from './Filters';
 import './Discover.css';
 
 const paramToDayjs = (searchParams, paramKey) => {
@@ -91,7 +88,7 @@ export default function Discover() {
             setEndDate(newRange.endDate);
           }}
         />
-        <SelectTimeRange
+        <SelectTimeRangeFilter
           startTime={startTime}
           endTime={endTime}
           onStartTimeChange={(newValue) => setStartTime(newValue)}
@@ -103,30 +100,6 @@ export default function Discover() {
         <Posts posts={posts} />
       </div>
     </div>
-  );
-}
-
-function SelectTimeRange({
-  onStartTimeChange,
-  onEndTimeChange,
-  startTime,
-  endTime,
-}) {
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <TimePicker
-        label="From"
-        value={startTime}
-        onChange={(newValue) => onStartTimeChange(newValue)}
-        slotProps={{ field: { clearable: true } }}
-      />
-      <TimePicker
-        label="To"
-        value={endTime}
-        onChange={(newValue) => onEndTimeChange(newValue)}
-        slotProps={{ field: { clearable: true } }}
-      />
-    </LocalizationProvider>
   );
 }
 

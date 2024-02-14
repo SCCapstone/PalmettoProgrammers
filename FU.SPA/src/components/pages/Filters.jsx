@@ -1,3 +1,4 @@
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
@@ -120,3 +121,27 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
     </FormControl>
   );
 };
+
+export function SelectTimeRangeFilter({
+  onStartTimeChange,
+  onEndTimeChange,
+  startTime,
+  endTime,
+}) {
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <TimePicker
+        label="From"
+        value={startTime}
+        onChange={(newValue) => onStartTimeChange(newValue)}
+        slotProps={{ field: { clearable: true } }}
+      />
+      <TimePicker
+        label="To"
+        value={endTime}
+        onChange={(newValue) => onEndTimeChange(newValue)}
+        slotProps={{ field: { clearable: true } }}
+      />
+    </LocalizationProvider>
+  );
+}
