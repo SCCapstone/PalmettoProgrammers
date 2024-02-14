@@ -86,11 +86,9 @@ export default function Discover() {
         <GamesSelector onChange={(e, v) => setGames(v)} />
         <TagsSelector onChange={(e, v) => setTags(v)} />
         <SelectDateRangeFilter
-          onStartDateChange={(newValue) => {
-            setStartDate(newValue);
-          }}
-          onEndDateChange={(newValue) => {
-            setEndDate(newValue);
+          onDateRangeChange={(newRange) => {
+            setStartDate(newRange.startDate);
+            setEndDate(newRange.endDate);
           }}
         />
         <SelectTimeRange

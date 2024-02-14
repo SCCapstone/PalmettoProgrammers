@@ -16,20 +16,21 @@ const paramToDayjs = (searchParams, paramKey) => {
   return dayjs(endTimeParam);
 };
 
-export const SelectDateRangeFilter = ({
-  onStartDateChange,
-  onEndDateChange,
-}) => {
+export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
   const endDateParamKey = 'endDate';
   const startDateParamKey = 'startDate';
   const dateRadioParamKey = 'dateRadio';
+  const radioValues = { upcoming: 'upcoming', between: 'between' };
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [radioValue, setRadioValue] = useState(() => {
     const paramValue = searchParams.get(dateRadioParamKey);
-    if (paramValue === 'upcoming' || paramValue === 'between')
+    if (
+      paramValue === radioValues.upcoming ||
+      paramValue === radioValues.between
+    )
       return paramValue;
-    else return 'upcoming';
+    else return radioValues.upcoming;
   });
 
   const [startDate, setStartDate] = useState(
@@ -39,7 +40,7 @@ export const SelectDateRangeFilter = ({
     paramToDayjs(searchParams, endDateParamKey),
   );
 
-  // Update search params when startDate or endDate is updated
+  // Update search params
   useEffect(() => {
     setSearchParams(
       (params) => {
@@ -54,34 +55,50 @@ export const SelectDateRangeFilter = ({
     );
   }, [startDate, endDate, setSearchParams, radioValue]);
 
+  // decides when and how to call onDateRangeChange
   useEffect(() => {
-    if (startDate?.isValid()) onStartDateChange(startDate);
-  }, [startDate, onStartDateChange]);
+    const values = {
+      startDate: null,
+      endDate: null,
+    };
 
-  useEffect(() => {
-    if (endDate?.isValid()) onEndDateChange(endDate);
-  }, [endDate, onEndDateChange]);
+    if (radioValue === radioValues.upcoming) {
+      values.startDate = dayjs();
+    } else {
+      if (startDate?.isValid()) values.startDate = startDate;
+      if (endDate?.isValid()) values.endDate = endDate;
+    }
+
+    if (onDateRangeChange) onDateRangeChange(values);
+    // ignore onDateRangeChaage
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, endDate, radioValue, radioValues.upcoming]);
 
   return (
     <FormControl>
       <FormLabel id="demo-controlled-radio-buttons-group">Date</FormLabel>
       <RadioGroup
-        defaultValue="upcoming"
+        defaultValue={radioValues.upcoming}
         value={radioValue}
         onChange={(event) => {
           setRadioValue(event.target.value);
         }}
       >
         <FormControlLabel
-          value="upcoming"
+          value={radioValues.upcoming}
           label="Upcoming"
           control={<Radio />}
         />
-        <FormControlLabel value="between" label="Between" control={<Radio />} />
+        <FormControlLabel
+          value={radioValues.between}
+          label="Between"
+          control={<Radio />}
+        />
       </RadioGroup>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          label="From"
+          disabled={radioValue !== radioValues.between}
+          label="Start Date"
           value={startDate}
           onChange={(newValue) => {
             if (endDate && newValue && newValue > endDate) setEndDate(null);
@@ -90,7 +107,8 @@ export const SelectDateRangeFilter = ({
           slotProps={{ field: { clearable: true } }}
         />
         <DatePicker
-          label="To"
+          disabled={radioValue !== radioValues.between}
+          label="End Date"
           value={endDate}
           onChange={(newValue) => {
             if (startDate && newValue && newValue < startDate)
