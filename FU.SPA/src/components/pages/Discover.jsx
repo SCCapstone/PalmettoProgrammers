@@ -18,14 +18,14 @@ export default function Discover() {
   const initialPage = parseInt(searchParams.get('page'), 10) || 1;
   const initialGames = searchParams.getAll('game').map(gameId => ({ id: gameId }));
   const initialTags = searchParams.getAll('tag').map(tagId => ({ id: tagId }));
-  const initialAscDscs = searchParams.getAll('ascDsc').map(ascDscId => ({ id: ascDscId})); //for ascending/descending filter
+  const initialSortOption = searchParams.getAll('sortOption').map(ascDscId => ({ id: ascDscId})); //for ascending/descending filter
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(initialPage);
   const [searchText, setSearchText] = useState(initialSearchText);
   const [games, setGames] = useState(initialGames);
   const [tags, setTags] = useState(initialTags);
-  const [ascDscs, setAscDsc] = useState(initialAscDscs);
+  const [sortOption, setSortOption] = useState(initialSortOption);
   // index of the last post
   const lastPost = page * postsPerPage;
   // index of first
@@ -40,14 +40,25 @@ export default function Discover() {
         keywords: searchText,
         games: games,
         tags: tags,
-        ascDscs: ascDscs,
+        //pass formatted option after :
+        sortOption: sortOption,
       };
-
+      //sortOption : asc
       const response = await SearchService.searchPosts(query);
       setPosts(response);
     };
     submitSearch();
   }, [games, tags, ascDscs, searchText]);
+
+  //Create method here
+  //if the option is newest, send to the api 'newest:asc'
+  //if the option is oldest, send to the api 'newest:desc'
+  //if the option is oldest, send to the api 'title:asc'
+  //if the option is oldest, send to the api 'title:desc'
+  //if the option is oldest, send to the api 'soonest:asc'
+  //if the option is oldest, send to the api 'soonest:desc'
+  //update searchService searchPosts.
+
 
   // if user clicks discover tab again it will reload default discover page state.
   useEffect(() => {
@@ -90,7 +101,7 @@ const handleFilterChange = (newGames, newTags, newAscDsc) => {
 
     // update URL(only show page in URL if page > 1)
     navigate(`/discover${params.toString() ? `?${params.toString()}` : ''}`, { replace: true });
-  }, [searchText, page, games, tags, ascDscs, navigate]);
+  }, [searchText, page, games, tags, sortOption, navigate]);
 
   return (
     <div className="page-content">
@@ -98,7 +109,7 @@ const handleFilterChange = (newGames, newTags, newAscDsc) => {
         <Typography variant="h5">Filters</Typography>
         <GamesSelector onChange={(e, v) => handleFilterChange(v, tags)} />
         <TagsSelector onChange={(e, v) => handleFilterChange(v, games)} />
-        <AscDscSelector onChange={(e, v) => handleFilterChange(v, ascDscs)} />
+        <AscDscSelector onChange={(e, v) => handleFilterChange(v, sortOption)} />
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />

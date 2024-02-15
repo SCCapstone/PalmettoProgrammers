@@ -75,37 +75,24 @@ export const TagsSelector = ({ onChange }) => {
 
 
 export const AscDscSelector = ({ onChange }) => {
-  const [ascDscOptions, setAscDscOptions] = useState([]);
-  
-  useEffect(() => {
-    //const ascDscChoices = [{ label: 'A-Z'}, { label: "Z-A"}];
-    //setAscDscOptions(ascDscChoices);
-    AscDscService.searchAscDsc('').then((ascDscChoices) => setAscDscOptions);
-    //ascDscOptions.setAscDscOptions(ascDscOptions);
-    // TagService.searchTags('').then((tags) => setTagOptions(tags));
-    // GameService.searchGames('').then((games) => setAscDscOptions(games));
-  }, []);
+  // newest is most recent posted. soonest is the soonest start time.
+  var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
 
+  
   return (
     <Autocomplete
       multiple
       onChange={onChange}
-      options={ascDscOptions}
+      options={options}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
-      renderOption={(props, option, { selected }) => (
+      renderOption={(props, option) => (
         <li {...props}>
-          <Checkbox
-            icon={checkboxIconBlank}
-            checkedIcon={checkboxIconChecked}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
           {option}
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="A-Z or Z-A" placeholder="" />
+        <TextField {...params} label="Sort" placeholder="" />
       )}
     />
   );
