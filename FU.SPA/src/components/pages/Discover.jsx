@@ -30,12 +30,18 @@ export default function Discover() {
   // initial state
   const initialSearchText = searchParams.get('q') || '';
   const initialPage = parseInt(searchParams.get('page'), 10) || 1;
-  const initialGames = searchParams
-    .getAll('game')
-    .map((gameId) => ({ id: gameId }));
-  const initialTags = searchParams
-    .getAll('tag')
-    .map((tagId) => ({ id: tagId }));
+  const initialGames = searchParams.get('games')
+    ? searchParams
+        .get('games')
+        .split(',')
+        .map((id) => ({ id }))
+    : [];
+  const initialTags = searchParams.get('tags')
+    ? searchParams
+        .get('tags')
+        .split(',')
+        .map((id) => ({ id }))
+    : [];
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(initialPage);
@@ -103,9 +109,15 @@ export default function Discover() {
     const newSearchParams = new URLSearchParams();
     if (searchText) newSearchParams.append('q', searchText);
     if (page > 1) newSearchParams.set('page', page.toString());
-    games.forEach((game) => newSearchParams.append('game', game.id.toString()));
-    tags.forEach((tag) => newSearchParams.append('tag', tag.id.toString()));
-
+    // set games and tags with comma separated values
+    if (games.length > 0) {
+      const gameIds = games.map((game) => game.id.toString()).join(',');
+      newSearchParams.set('games', gameIds);
+    }
+    if (tags.length > 0) {
+      const tagIds = tags.map((tag) => tag.id.toString()).join(',');
+      newSearchParams.set('tags', tagIds);
+    }
     if (startDate?.isValid())
       newSearchParams.set('startDate', startDate.toISOString());
     if (endDate?.isValid())
@@ -161,20 +173,24 @@ export default function Discover() {
   };
 
   useEffect(() => {
-    const gamesUrl = searchParams.getAll('game');
-    const tagsUrl = searchParams.getAll('tag');
+    const gamesString = searchParams.get('games');
+    const tagsString = searchParams.get('tags');
 
-    const restoredGames = gamesUrl.map(
+    const gameIds = gamesString ? gamesString.split(',') : [];
+    const tagIds = tagsString ? tagsString.split(',') : [];
+
+    const restoredGames = gameIds.map(
       (gameId) =>
         gameOptions.find((game) => game.id.toString() === gameId) || {
           id: gameId,
         },
     );
 
-    const restoredTags = tagsUrl.map(
+    const restoredTags = tagIds.map(
       (tagId) =>
         tagOptions.find((tag) => tag.id.toString() === tagId) || { id: tagId },
     );
+
     setGames(restoredGames);
     setTags(restoredTags);
   }, [searchParams, gameOptions, tagOptions]);
