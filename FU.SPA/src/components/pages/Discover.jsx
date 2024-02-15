@@ -30,8 +30,12 @@ export default function Discover() {
   // initial state
   const initialSearchText = searchParams.get('q') || '';
   const initialPage = parseInt(searchParams.get('page'), 10) || 1;
-  const initialGames = searchParams.getAll('game').map(gameId => ({ id: gameId }));
-  const initialTags = searchParams.getAll('tag').map(tagId => ({ id: tagId }));
+  const initialGames = searchParams
+    .getAll('game')
+    .map((gameId) => ({ id: gameId }));
+  const initialTags = searchParams
+    .getAll('tag')
+    .map((tagId) => ({ id: tagId }));
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(initialPage);
@@ -99,18 +103,31 @@ export default function Discover() {
     const newSearchParams = new URLSearchParams();
     if (searchText) newSearchParams.append('q', searchText);
     if (page > 1) newSearchParams.set('page', page.toString());
-    games.forEach(game => newSearchParams.append('game', game.id.toString()));
-    tags.forEach(tag => newSearchParams.append('tag', tag.id.toString()));
+    games.forEach((game) => newSearchParams.append('game', game.id.toString()));
+    tags.forEach((tag) => newSearchParams.append('tag', tag.id.toString()));
 
-    if (startDate?.isValid()) newSearchParams.set('startDate', startDate.toISOString());
-    if (endDate?.isValid()) newSearchParams.set('endDate', endDate.toISOString());
-    if (startTime?.isValid()) newSearchParams.set('startTime', startTime.toISOString());
-    if (endTime?.isValid()) newSearchParams.set('endTime', endTime.toISOString());
-  
+    if (startDate?.isValid())
+      newSearchParams.set('startDate', startDate.toISOString());
+    if (endDate?.isValid())
+      newSearchParams.set('endDate', endDate.toISOString());
+    if (startTime?.isValid())
+      newSearchParams.set('startTime', startTime.toISOString());
+    if (endTime?.isValid())
+      newSearchParams.set('endTime', endTime.toISOString());
+
     // update the search params in the URL
     setSearchParams(newSearchParams, { replace: true });
-  }, [searchText, page, games, tags, startDate, endDate, startTime, endTime, setSearchParams]);
-  
+  }, [
+    searchText,
+    page,
+    games,
+    tags,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    setSearchParams,
+  ]);
 
   useEffect(() => {
     // Fetch games and tags for selectors
@@ -120,7 +137,7 @@ export default function Discover() {
       setGameOptions(games);
       setTagOptions(tags);
     };
-  
+
     fetchOptions();
   }, []);
 
@@ -129,7 +146,7 @@ export default function Discover() {
     setSearchText(newSearchText);
     setPage(1); // reset to page 1 on new search
   };
-  
+
   // handle filter changes
   const handleFilterChange = (newGames, newTags) => {
     setGames(newGames);
@@ -139,20 +156,24 @@ export default function Discover() {
 
   const handlePageChange = (event, value) => {
     setPage(value);
-  searchParams.set('page', value.toString());
-  setSearchParams(searchParams);
-  };  
+    searchParams.set('page', value.toString());
+    setSearchParams(searchParams);
+  };
 
   useEffect(() => {
     const gamesUrl = searchParams.getAll('game');
     const tagsUrl = searchParams.getAll('tag');
 
-    const restoredGames = gamesUrl.map(gameId => 
-      gameOptions.find(game => game.id.toString() === gameId) || { id: gameId}
+    const restoredGames = gamesUrl.map(
+      (gameId) =>
+        gameOptions.find((game) => game.id.toString() === gameId) || {
+          id: gameId,
+        },
     );
-    
-    const restoredTags = tagsUrl.map(tagId => 
-      tagOptions.find(tag => tag.id.toString() === tagId) || { id: tagId}
+
+    const restoredTags = tagsUrl.map(
+      (tagId) =>
+        tagOptions.find((tag) => tag.id.toString() === tagId) || { id: tagId },
     );
     setGames(restoredGames);
     setTags(restoredTags);
@@ -162,13 +183,25 @@ export default function Discover() {
     <div className="page-content">
       <div
         className="sidebar"
-        style={{ textAlign: 'left', width: '200pt',  maxWidth:'300px' , minWidth: '190pt' }}
+        style={{
+          textAlign: 'left',
+          width: '200pt',
+          maxWidth: '300px',
+          minWidth: '190pt',
+        }}
       >
         <Typography variant="h5" style={{ color: '#FFF' }}>
           Filters
         </Typography>
-        <GamesSelector value={games} onChange={(e, newGames) => handleFilterChange(newGames, tags)} options={gameOptions} />
-        <TagsSelector value={tags} onChange={(e, newTags) => handleFilterChange(games, newTags)}  />
+        <GamesSelector
+          value={games}
+          onChange={(e, newGames) => handleFilterChange(newGames, tags)}
+          options={gameOptions}
+        />
+        <TagsSelector
+          value={tags}
+          onChange={(e, newTags) => handleFilterChange(games, newTags)}
+        />
         <SelectDateRange
           startDate={startDate}
           endDate={endDate}
@@ -192,16 +225,25 @@ export default function Discover() {
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
         <Posts posts={currentPosts} />
-        <div style={{display: 'flex', color: 'violet', justifyContent: 'center', marginTop:'20px', marginRight:'150px'}}>
-        <Stack spacing={2} >
-    <Typography>Page: {page}</Typography>
-    <Pagination 
-          count={Math.ceil(posts.length / postsPerPage)} 
-          page={page} 
-          onChange={handlePageChange} 
-          color="secondary" />
-  </Stack>
-  </div>
+        <div
+          style={{
+            display: 'flex',
+            color: 'violet',
+            justifyContent: 'center',
+            marginTop: '20px',
+            marginRight: '150px',
+          }}
+        >
+          <Stack spacing={2}>
+            <Typography>Page: {page}</Typography>
+            <Pagination
+              count={Math.ceil(posts.length / postsPerPage)}
+              page={page}
+              onChange={handlePageChange}
+              color="secondary"
+            />
+          </Stack>
+        </div>
       </div>
     </div>
   );
@@ -258,7 +300,7 @@ function SelectDateRange({
 function SearchBar({ searchText, onSearchSubmit }) {
   const [localSearchText, setLocalSearchText] = useState(searchText);
 
- useEffect(() => {
+  useEffect(() => {
     setLocalSearchText(searchText);
   }, [searchText]);
 
@@ -270,9 +312,8 @@ function SearchBar({ searchText, onSearchSubmit }) {
 
   function handleChange(event) {
     setLocalSearchText(event.target.value);
-
   }
-  
+
   return (
     <div id="search-bar">
       <CustomTextField
