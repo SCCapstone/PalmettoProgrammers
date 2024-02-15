@@ -1,11 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import {
-  Card,
-  CardActions,
-  Button,
-  CardContent,
-  TextField,
-} from '@mui/material';
+import { Card, CardActions, Button, CardContent } from '@mui/material';
 import {
   joinChatGroup,
   leaveChatGroup,
@@ -15,6 +9,7 @@ import { getChat, getMessages, saveMessage } from '../services/chatService';
 import './Chat.css';
 import ChatMessage from './ChatMessage';
 import UserContext from '../context/userContext';
+import { CustomTextField } from '../helpers/styleComponents';
 
 export default function Chat({ chatId }) {
   const [chat, setChat] = useState(null);
@@ -33,7 +28,7 @@ export default function Chat({ chatId }) {
         const chat = await getChat(chatId);
         setChat(chat);
         // sleep to allow the signalr connection to be established
-        await new Promise((resolve) => setTimeout(resolve, 40));
+        await new Promise((resolve) => setTimeout(resolve, 80));
         await joinChatGroup(chatId);
         const messages = await getMessages(chatId, 1, limit);
         setMessages(messages);
@@ -110,7 +105,9 @@ export default function Chat({ chatId }) {
 
   useEffect(() => {
     // Scroll to the bottom when messages are updated
-    const chatContainer = document.querySelector('.MuiCardContent-root');
+    const chatContainer = document
+      .querySelector('.chat-card')
+      .querySelector('.MuiCardContent-root');
     const scrollDifference = chatContainer.scrollHeight - prevScrollHeight;
 
     if (scrollDifference > 0) {
@@ -123,6 +120,7 @@ export default function Chat({ chatId }) {
 
   return (
     <Card
+      className="chat-card"
       style={{
         textAlign: 'left',
         backgroundColor: '#31084A',
@@ -152,12 +150,12 @@ export default function Chat({ chatId }) {
           <ChatMessage
             key={index}
             chatMessage={msg}
-            userIsSender={user?.username === msg.sender.username}
+            userIsSender={user?.username === msg.sender?.username}
           />
         ))}
       </CardContent>
       <CardActions className="chat-actions">
-        <TextField
+        <CustomTextField
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}

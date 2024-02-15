@@ -27,7 +27,7 @@ public class SearchServiceSearchUsersTests : IDisposable
         _dbContext.SaveChanges();
 
         _searchService = new SearchService(_dbContext);
-        _userService = new UserService(_dbContext);
+        _userService = new UserService(_dbContext, _searchService);
     }
 
     public void Dispose()

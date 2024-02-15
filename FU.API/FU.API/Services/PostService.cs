@@ -44,6 +44,21 @@ public class PostService : CommonService, IPostService
             throw new PostException("Start time cannot be after end time", HttpStatusCode.UnprocessableEntity);
         }
 
+        // Find how long the post will last
+        if (post.StartTime is not null && post.EndTime is not null)
+        {
+            var duration = post.EndTime - post.StartTime;
+            if (duration.Value.TotalMinutes < 30)
+            {
+                throw new PostException("Post must last at least 30 minutes", HttpStatusCode.UnprocessableEntity);
+            }
+
+            if (duration.Value.TotalHours > 24)
+            {
+                throw new PostException("Post must last at most 24 hours", HttpStatusCode.UnprocessableEntity);
+            }
+        }
+
         var postTagIds = post.Tags.Select(t => t.TagId);
         var tags = await _dbContext.Tags
             .Where(t => postTagIds.Contains(t.Id))
