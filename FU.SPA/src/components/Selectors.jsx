@@ -8,12 +8,12 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({value,  onChange }) => {
-  const [gameOptions, setGameOptions] = useState([]);
+  export const GamesSelector = ({value,  onChange }) => {
+    const [gameOptions, setGameOptions] = useState([]);
 
-  useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
-  }, []);
+    useEffect(() => {
+        GameService.searchGames('').then((games) => setGameOptions(games));
+    }, []);
 
   return (
     <Autocomplete
