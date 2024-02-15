@@ -1,19 +1,19 @@
 import { TextField, Typography, Pagination } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useSearchParams  } from 'react-router-dom';
 import { TagsSelector, GamesSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
+import GameService from '../../services/gameService';
+import TagService from '../../services/tagService';
 import Posts from '../Posts';
 import './Discover.css';
 
 export default function Discover() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
 
   // initial state
-  const searchParams = new URLSearchParams(location.search);
   const initialSearchText = searchParams.get('q') || '';
   const initialPage = parseInt(searchParams.get('page'), 10) || 1;
   const initialGames = searchParams.getAll('game').map(gameId => ({ id: gameId }));
@@ -24,7 +24,9 @@ export default function Discover() {
   const [searchText, setSearchText] = useState(initialSearchText);
   const [games, setGames] = useState(initialGames);
   const [tags, setTags] = useState(initialTags);
-  
+  const [gameOptions, setGameOptions] = useState([]);
+  const [tagOptions, setTagOptions] = useState([]);
+
   // index of the last post
   const lastPost = page * postsPerPage;
   // index of first
@@ -47,13 +49,17 @@ export default function Discover() {
     submitSearch();
   }, [games, tags, searchText]);
 
-  // if user clicks discover tab again it will reload default discover page state.
   useEffect(() => {
-     setSearchText(initialSearchText);
-     setPage(initialPage);
-     setGames(initialGames);
-     setTags(initialTags);
-   }, [location.search]);
+    // Fetch games and tags for selectors
+    const fetchOptions = async () => {
+      const games = await GameService.searchGames('');
+      const tags = await TagService.searchTags('');
+      setGameOptions(games);
+      setTagOptions(tags);
+    };
+  
+    fetchOptions();
+  }, []);
 
   // function for search submissions
   const searchSubmit = (newSearchText) => {
@@ -62,37 +68,50 @@ export default function Discover() {
   };
   
   // handle filter changes
-const handleFilterChange = (newGames, newTags) => {
-  setGames(newGames);
-  setTags(newTags);
-  setPage(1); // Reset to page 1 when filters change
-};
+  const handleFilterChange = (newGames, newTags) => {
+    setGames(newGames);
+    setTags(newTags);
+    setPage(1);
+  };
 
   const handlePageChange = (event, value) => {
     setPage(value);
-    const params = new URLSearchParams(location.search);
-    params.set('page', value);
-    navigate(`/discover?${params.toString()}`);
+  searchParams.set('page', value.toString());
+  setSearchParams(searchParams);
   };  
 
   useEffect(() => {
     // build query string
-    const params = new URLSearchParams();
-    if (searchText) params.append('q', searchText);
-    if (page > 1) params.set('page', page);
-    games.forEach(game => params.append('game', game.id));
-    tags.forEach(tag => params.append('tag', tag.id));
+    const newSearchParams  = new URLSearchParams();
+    if (searchText) newSearchParams.append('q', searchText);
+    if (page > 1) newSearchParams.set('page', page);
+    games.forEach(game => newSearchParams.append('game', game.id));
+    tags.forEach(tag => newSearchParams.append('tag', tag.id));
 
-    // update URL(only show page in URL if page > 1)
-    navigate(`/discover${params.toString() ? `?${params.toString()}` : ''}`, { replace: true });
-  }, [searchText, page, games, tags, navigate]);
+    setSearchParams(newSearchParams, { replace: true });
+  }, [searchText, page, games, tags, setSearchParams]);
+
+  useEffect(() => {
+    const gamesUrl = searchParams.getAll('game');
+    const tagsUrl = searchParams.getAll('tag');
+
+    const restoredGames = gamesUrl.map(gameId => 
+      gameOptions.find(game => game.id.toString() === gameId) || { id: gameId}
+    );
+    
+    const restoredTags = tagsUrl.map(tagId => 
+      tagOptions.find(tag => tag.id.toString() === tagId) || { id: tagId}
+    );
+    setGames(restoredGames);
+    setTags(restoredTags);
+  }, [searchParams, gameOptions, tagOptions]);
 
   return (
     <div className="page-content">
       <div className="sidebar" style={{ textAlign: 'left', minWidth: '200pt',  maxWidth:'300px'  }}>
         <Typography variant="h5">Filters</Typography>
-        <GamesSelector value={games} onChange={(e, v) => handleFilterChange(v, tags)} />
-        <TagsSelector value={tags} onChange={(e, v) => handleFilterChange(games, v)} />
+        <GamesSelector value={games} onChange={(e, newGames) => handleFilterChange(newGames, tags)} options={gameOptions} />
+        <TagsSelector value={tags} onChange={(e, newTags) => handleFilterChange(games, newTags)}  />
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
