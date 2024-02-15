@@ -1,10 +1,10 @@
+import { Typography } from '@mui/material';
 import {
   CustomTimePicker,
   CustomDatePicker,
 } from '../../helpers/styleComponents';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import { RadioGroup } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -82,8 +82,10 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
   }, [startDate, endDate, radioValue, radioValues.upcoming]);
 
   return (
-    <FormControl>
-      <FormLabel>Date</FormLabel>
+    <FormControl class="section">
+      <Typography variant="subtitle1" style={{ color: '#FFF' }}>
+        Date
+      </Typography>
       <RadioGroup
         defaultValue={radioValues.upcoming}
         value={radioValue}
@@ -187,8 +189,10 @@ export function SelectTimeRangeFilter({ onTimeRangeChange }) {
   }, [startTime, endTime, radioValue, radioValues.any]);
 
   return (
-    <FormControl>
-      <FormLabel>Time</FormLabel>
+    <FormControl class="section">
+      <Typography variant="subtitle1" style={{ color: '#FFF' }}>
+        Time
+      </Typography>
       <RadioGroup
         defaultValue={radioValues.any}
         value={radioValue}

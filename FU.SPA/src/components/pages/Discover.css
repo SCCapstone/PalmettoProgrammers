@@ -4,7 +4,7 @@
   column-gap: 20pt;
 }
 
-.page-content > div:nth-child(2) {
+.page-content>div:nth-child(2) {
   flex-grow: 1;
 }
 
@@ -15,7 +15,7 @@
   margin-bottom: 20pt;
 }
 
-#search-bar > div {
+#search-bar>div {
   flex-grow: 1;
 }
 
@@ -24,7 +24,15 @@
 }
 
 .sidebar {
-  gap: 10px;
+  gap: 15px;
   display: flex;
   flex-direction: column;
+}
+
+.section .MuiTextField-root {
+  margin-left: 15pt;
+}
+
+.section .MuiTextField-root:nth-of-type(2) {
+  margin-bottom: 5pt;
 }
