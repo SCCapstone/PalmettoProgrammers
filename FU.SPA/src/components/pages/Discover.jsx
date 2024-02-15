@@ -5,7 +5,6 @@ import { useSearchParams } from 'react-router-dom';
 import { Typography, InputAdornment, Pagination } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
-import { useSearchParams  } from 'react-router-dom';
 import { TagsSelector, GamesSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import GameService from '../../services/gameService';
@@ -25,8 +24,8 @@ const paramToDayjs = (searchParams, paramKey) => {
 };
 
 export default function Discover() {
-  const [searchParams, setSearchParams] = useSearchParams();
   const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // initial state
   const initialSearchText = searchParams.get('q') || '';
@@ -50,7 +49,6 @@ export default function Discover() {
   // each page has correct number of posts
   const currentPosts = posts.slice(firstPost, lastPost);
 
-  const [searchParams, setSearchParams] = useSearchParams();
   const [startDate, setStartDate] = useState(
     paramToDayjs(searchParams, 'startDate'),
   );
@@ -209,7 +207,8 @@ export default function Discover() {
     <Pagination 
           count={Math.ceil(posts.length / postsPerPage)} 
           page={page} 
-          onChange={handlePageChange} />
+          onChange={handlePageChange} 
+          color="secondary" />
   </Stack>
   </div>
       </div>
@@ -265,8 +264,12 @@ function SelectDateRange({
   );
 }
 
-function SearchBar({ onSearchSubmit }) {
-  const [searchText, setSearchText] = useState('');
+function SearchBar({ searchText, onSearchSubmit }) {
+  const [localSearchText, setLocalSearchText] = useState(searchText);
+
+ useEffect(() => {
+    setLocalSearchText(searchText);
+  }, [searchText]);
 
   function onKeyDown(event) {
     if (event.key === 'Enter') {
