@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-import { useSearchParams } from 'react-router-dom';
 import { TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector } from '../Selectors';
@@ -8,28 +6,28 @@ import Posts from '../Posts';
 import { SelectDateRangeFilter, SelectTimeRangeFilter } from './Filters';
 import './Discover.css';
 
-const paramToDayjs = (searchParams, paramKey) => {
-  let endTimeParam = searchParams.get(paramKey);
-  if (!endTimeParam || !dayjs(endTimeParam).isValid()) return null;
-  return dayjs(endTimeParam);
-};
-
 export default function Discover() {
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [games, setGames] = useState([]);
   const [tags, setTags] = useState([]);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [startTime, setStartTime] = useState(
-    paramToDayjs(searchParams, 'startTime'),
-  );
-  const [endTime, setEndTime] = useState(paramToDayjs(searchParams, 'endTime'));
+  const [startDate, setStartDate] = useState(undefined);
+  const [endDate, setEndDate] = useState(undefined);
+  const [startTime, setStartTime] = useState(undefined);
+  const [endTime, setEndTime] = useState(undefined);
 
   useEffect(() => {
     const submitSearch = async () => {
+      // if values haven't been loaded don't search
+      // this prevents an erronious search from occuring and causing flicker on the initial page load
+      if (
+        startDate === undefined ||
+        endDate === undefined ||
+        startTime === undefined ||
+        endTime === undefined
+      )
+        return;
+
       const query = {
         keywords: searchText,
         games: games,
@@ -64,18 +62,6 @@ export default function Discover() {
     submitSearch();
   }, [games, tags, searchText, startDate, endDate, startTime, endTime]);
 
-  useEffect(() => {
-    setSearchParams(
-      (params) => {
-        if (startTime?.isValid())
-          params.set('startTime', startTime.toISOString());
-        if (endTime?.isValid()) params.set('endTime', endTime.toISOString());
-        return params;
-      },
-      { replace: true },
-    );
-  }, [startTime, endTime, setSearchParams]);
-
   return (
     <div className="page-content">
       <div className="sidebar" style={{ textAlign: 'left', width: '200pt' }}>
@@ -89,10 +75,10 @@ export default function Discover() {
           }}
         />
         <SelectTimeRangeFilter
-          startTime={startTime}
-          endTime={endTime}
-          onStartTimeChange={(newValue) => setStartTime(newValue)}
-          onEndTimeChange={(newValue) => setEndTime(newValue)}
+          onTimeRangeChange={(newRange) => {
+            setStartTime(newRange.startTime);
+            setEndTime(newRange.endTime);
+          }}
         />
       </div>
       <div>

@@ -56,7 +56,9 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
       },
       { replace: true },
     );
-  }, [startDate, endDate, setSearchParams, radioValue]);
+    // disable for setSearchParams
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, endDate, radioValue]);
 
   // decides when and how to call onDateRangeChange
   useEffect(() => {
@@ -79,7 +81,7 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
 
   return (
     <FormControl>
-      <FormLabel id="demo-controlled-radio-buttons-group">Date</FormLabel>
+      <FormLabel>Date</FormLabel>
       <RadioGroup
         defaultValue={radioValues.upcoming}
         value={radioValue}
@@ -125,26 +127,100 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
   );
 };
 
-export function SelectTimeRangeFilter({
-  onStartTimeChange,
-  onEndTimeChange,
-  startTime,
-  endTime,
-}) {
+export function SelectTimeRangeFilter({ onTimeRangeChange }) {
+  const endTimeParamKey = 'endDate';
+  const startTimeParamKey = 'startDate';
+  const timeRadioParamKey = 'timeRadio';
+  const radioValues = { any: 'any', between: 'between' };
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [radioValue, setRadioValue] = useState(() => {
+    const paramValue = searchParams.get(timeRadioParamKey);
+    if (paramValue === radioValues.any || paramValue === radioValues.between)
+      return paramValue;
+    else return radioValues.any;
+  });
+
+  const [startTime, setStartTime] = useState(
+    paramToDayjs(searchParams, startTimeParamKey),
+  );
+  const [endTime, setEndTime] = useState(
+    paramToDayjs(searchParams, endTimeParamKey),
+  );
+
+  // Update search params
+  useEffect(() => {
+    setSearchParams(
+      (params) => {
+        if (startTime?.isValid())
+          params.set(startTimeParamKey, startTime.toISOString());
+        else params.delete(startTimeParamKey);
+        if (endTime?.isValid())
+          params.set(endTimeParamKey, endTime.toISOString());
+        else params.delete(endTimeParamKey);
+        if (radioValue) params.set(timeRadioParamKey, radioValue);
+        return params;
+      },
+      { replace: true },
+    );
+    // disable for setSearchParams
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startTime, endTime, radioValue]);
+
+  // decides when and how to call onTimeRangeChange
+  useEffect(() => {
+    const values = {
+      startTime: null,
+      endTime: null,
+    };
+
+    if (radioValue === radioValues.between) {
+      if (startTime?.isValid()) values.startTime = startTime;
+      if (endTime?.isValid()) values.endTime = endTime;
+    }
+
+    if (onTimeRangeChange) onTimeRangeChange(values);
+    // ignore onTimeRangeChaage
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startTime, endTime, radioValue, radioValues.any]);
+
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <TimePicker
-        label="From"
-        value={startTime}
-        onChange={(newValue) => onStartTimeChange(newValue)}
-        slotProps={{ field: { clearable: true } }}
-      />
-      <TimePicker
-        label="To"
-        value={endTime}
-        onChange={(newValue) => onEndTimeChange(newValue)}
-        slotProps={{ field: { clearable: true } }}
-      />
-    </LocalizationProvider>
+    <FormControl>
+      <FormLabel>Time</FormLabel>
+      <RadioGroup
+        defaultValue={radioValues.any}
+        value={radioValue}
+        onChange={(event) => {
+          setRadioValue(event.target.value);
+        }}
+      >
+        <FormControlLabel
+          value={radioValues.any}
+          label="Any"
+          control={<Radio />}
+        />
+        <FormControlLabel
+          value={radioValues.between}
+          label="Between"
+          control={<Radio />}
+        />
+      </RadioGroup>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <TimePicker
+          label="Start Time"
+          disabled={radioValue !== radioValues.between}
+          value={startTime}
+          onChange={(newValue) => setStartTime(newValue)}
+          slotProps={{ field: { clearable: false } }}
+        />
+        <TimePicker
+          label="End Time"
+          disabled={radioValue !== radioValues.between}
+          value={endTime}
+          onChange={(newValue) => setEndTime(newValue)}
+          slotProps={{ field: { clearable: false } }}
+        />
+      </LocalizationProvider>
+    </FormControl>
   );
 }
