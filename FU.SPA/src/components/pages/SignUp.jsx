@@ -1,6 +1,5 @@
 import {
   Button,
-  TextField,
   Link,
   Box,
   Container,
@@ -13,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthService from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
+import { CustomTextField } from '../../helpers/styleComponents';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -54,7 +54,7 @@ export default function SignUp() {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" style={{ color: '#FFF' }}>
             Sign up
           </Typography>
           <Box
@@ -65,7 +65,7 @@ export default function SignUp() {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   id="username"
@@ -76,7 +76,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   id="email"
@@ -86,7 +86,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   name="password"
@@ -97,7 +97,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   name="confirmPassword"

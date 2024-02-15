@@ -1,5 +1,7 @@
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import {
+  CustomTimePicker,
+  CustomDatePicker,
+} from '../../helpers/styleComponents';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -101,7 +103,7 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
         />
       </RadioGroup>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
+        <CustomDatePicker
           disabled={radioValue !== radioValues.between}
           label="Start Date"
           value={startDate}
@@ -111,7 +113,7 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
           }}
           slotProps={{ field: { clearable: true } }}
         />
-        <DatePicker
+        <CustomDatePicker
           disabled={radioValue !== radioValues.between}
           label="End Date"
           value={endDate}
@@ -206,14 +208,14 @@ export function SelectTimeRangeFilter({ onTimeRangeChange }) {
         />
       </RadioGroup>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TimePicker
+        <CustomTimePicker
           label="Start Time"
           disabled={radioValue !== radioValues.between}
           value={startTime}
           onChange={(newValue) => setStartTime(newValue)}
           slotProps={{ field: { clearable: false } }}
         />
-        <TimePicker
+        <CustomTimePicker
           label="End Time"
           disabled={radioValue !== radioValues.between}
           value={endTime}

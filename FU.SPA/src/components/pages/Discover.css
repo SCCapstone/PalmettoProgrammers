@@ -18,3 +18,13 @@
 #search-bar > div {
   flex-grow: 1;
 }
+
+.MuiOutlinedInput-input {
+  color: #fff !important;
+}
+
+.sidebar {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
