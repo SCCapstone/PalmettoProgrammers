@@ -96,19 +96,21 @@ export default function Discover() {
 
   // Update search params when startDate or endDate is updated
   useEffect(() => {
-    setSearchParams(
-      (params) => {
-        if (startDate?.isValid())
-          params.set('startDate', startDate.toISOString());
-        if (endDate?.isValid()) params.set('endDate', endDate.toISOString());
-        if (startTime?.isValid())
-          params.set('startTime', startTime.toISOString());
-        if (endTime?.isValid()) params.set('endTime', endTime.toISOString());
-        return params;
-      },
-      { replace: true },
-    );
-  }, [startDate, endDate, startTime, endTime, setSearchParams]);
+    const newSearchParams = new URLSearchParams();
+    if (searchText) newSearchParams.append('q', searchText);
+    if (page > 1) newSearchParams.set('page', page.toString());
+    games.forEach(game => newSearchParams.append('game', game.id.toString()));
+    tags.forEach(tag => newSearchParams.append('tag', tag.id.toString()));
+
+    if (startDate?.isValid()) newSearchParams.set('startDate', startDate.toISOString());
+    if (endDate?.isValid()) newSearchParams.set('endDate', endDate.toISOString());
+    if (startTime?.isValid()) newSearchParams.set('startTime', startTime.toISOString());
+    if (endTime?.isValid()) newSearchParams.set('endTime', endTime.toISOString());
+  
+    // update the search params in the URL
+    setSearchParams(newSearchParams, { replace: true });
+  }, [searchText, page, games, tags, startDate, endDate, startTime, endTime, setSearchParams]);
+  
 
   useEffect(() => {
     // Fetch games and tags for selectors
@@ -140,17 +142,6 @@ export default function Discover() {
   searchParams.set('page', value.toString());
   setSearchParams(searchParams);
   };  
-
-  useEffect(() => {
-    // build query string
-    const newSearchParams  = new URLSearchParams();
-    if (searchText) newSearchParams.append('q', searchText);
-    if (page > 1) newSearchParams.set('page', page);
-    games.forEach(game => newSearchParams.append('game', game.id));
-    tags.forEach(tag => newSearchParams.append('tag', tag.id));
-
-    setSearchParams(newSearchParams, { replace: true });
-  }, [searchText, page, games, tags, setSearchParams]);
 
   useEffect(() => {
     const gamesUrl = searchParams.getAll('game');
@@ -201,7 +192,7 @@ export default function Discover() {
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
         <Posts posts={currentPosts} />
-        <div style={{display: 'flex', justifyContent: 'center', marginTop:'20px', marginRight:'150px'}}>
+        <div style={{display: 'flex', color: 'violet', justifyContent: 'center', marginTop:'20px', marginRight:'150px'}}>
         <Stack spacing={2} >
     <Typography>Page: {page}</Typography>
     <Pagination 
