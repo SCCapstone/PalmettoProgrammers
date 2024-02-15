@@ -56,7 +56,7 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
       },
       { replace: true },
     );
-    // disable for setSearchParams
+    // disabled for setSearchParams
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate, radioValue]);
 
@@ -163,7 +163,7 @@ export function SelectTimeRangeFilter({ onTimeRangeChange }) {
       },
       { replace: true },
     );
-    // disable for setSearchParams
+    // disabled for setSearchParams
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startTime, endTime, radioValue]);
 
