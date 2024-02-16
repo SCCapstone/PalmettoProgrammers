@@ -30,13 +30,16 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
   };
 
   const renderResolution = () => {
+    console.log('test adsad');
+    // get the current path
+    var path = window.location.pathname;
     let resolutionMessage = reason === 'no-user' ? 'Sign In' : 'Join';
     return (
       <Button
         style={{ backgroundColor: '#E340DC', color: '#FFF', width: '95%' }}
         onClick={() => {
           if (reason === 'no-user') {
-            navigate('/signin');
+            navigate('/signin?returnUrl=' + encodeURIComponent(path));
           }
 
           if (onResolutionClick) {

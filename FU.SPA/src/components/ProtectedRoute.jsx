@@ -5,5 +5,13 @@ import UserContext from '../context/userContext';
 export const ProtectedRoute = ({ children }) => {
   const { user } = useContext(UserContext);
 
-  return user ? children : <Navigate to="/signin" />;
+  // Get the current route
+  var currentRoute = window.location.pathname;
+  console.log('currentRoute: ' + currentRoute);
+
+  return user ? (
+    children
+  ) : (
+    <Navigate to={`/signin?returnUrl=${encodeURIComponent(currentRoute)}`} />
+  );
 };
