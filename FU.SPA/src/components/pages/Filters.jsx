@@ -13,73 +13,41 @@ import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
-const paramToDayjs = (searchParams, paramKey) => {
-  let endTimeParam = searchParams.get(paramKey);
-  if (!endTimeParam || !dayjs(endTimeParam).isValid()) return null;
-  return dayjs(endTimeParam);
+export const DateFilterRadioValues = {
+  upcoming: 'upcoming',
+  between: 'between',
 };
-
-export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
-  const endDateParamKey = 'endDate';
-  const startDateParamKey = 'startDate';
-  const dateRadioParamKey = 'dateRadio';
-  const radioValues = { upcoming: 'upcoming', between: 'between' };
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [radioValue, setRadioValue] = useState(() => {
-    const paramValue = searchParams.get(dateRadioParamKey);
-    if (
-      paramValue === radioValues.upcoming ||
-      paramValue === radioValues.between
-    )
-      return paramValue;
-    else return radioValues.upcoming;
-  });
-
-  const [startDate, setStartDate] = useState(
-    paramToDayjs(searchParams, startDateParamKey),
+export const SelectDateRangeFilter = ({
+  onChange: onChange,
+  initialStartDateValue,
+  initialEndDateValue,
+  initialRadioValue,
+}) => {
+  const [radioValue, setRadioValue] = useState(
+    initialRadioValue ?? DateFilterRadioValues.upcoming,
   );
-  const [endDate, setEndDate] = useState(
-    paramToDayjs(searchParams, endDateParamKey),
-  );
-
-  // Update search params
-  useEffect(() => {
-    setSearchParams(
-      (params) => {
-        if (startDate?.isValid())
-          params.set(startDateParamKey, startDate.toISOString());
-        else params.delete(startDateParamKey);
-        if (endDate?.isValid())
-          params.set(endDateParamKey, endDate.toISOString());
-        else params.delete(endDateParamKey);
-        if (radioValue) params.set(dateRadioParamKey, radioValue);
-        return params;
-      },
-      { replace: true },
-    );
-    // disabled for setSearchParams
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDate, endDate, radioValue]);
+  const [startDate, setStartDate] = useState(initialStartDateValue);
+  const [endDate, setEndDate] = useState(initialEndDateValue);
 
   // decides when and how to call onDateRangeChange
   useEffect(() => {
     const values = {
       startDate: null,
       endDate: null,
+      radioValue: radioValue,
     };
 
-    if (radioValue === radioValues.upcoming) {
+    if (radioValue === DateFilterRadioValues.upcoming) {
       values.startDate = dayjs();
     } else {
       if (startDate?.isValid()) values.startDate = startDate;
       if (endDate?.isValid()) values.endDate = endDate;
     }
 
-    if (onDateRangeChange) onDateRangeChange(values);
-    // ignore onDateRangeChaage
+    if (onChange) onChange(values);
+    // ignore onChange
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDate, endDate, radioValue, radioValues.upcoming]);
+  }, [startDate, endDate, radioValue, DateFilterRadioValues.upcoming]);
 
   return (
     <FormControl class="section">
@@ -87,26 +55,26 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
         Date
       </Typography>
       <RadioGroup
-        defaultValue={radioValues.upcoming}
+        defaultValue={DateFilterRadioValues.upcoming}
         value={radioValue}
         onChange={(event) => {
           setRadioValue(event.target.value);
         }}
       >
         <FormControlLabel
-          value={radioValues.upcoming}
+          value={DateFilterRadioValues.upcoming}
           label="Upcoming"
           control={<Radio />}
         />
         <FormControlLabel
-          value={radioValues.between}
+          value={DateFilterRadioValues.between}
           label="Between"
           control={<Radio />}
         />
       </RadioGroup>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <CustomDatePicker
-          disabled={radioValue !== radioValues.between}
+          disabled={radioValue !== DateFilterRadioValues.between}
           label="Start Date"
           value={startDate}
           onChange={(newValue) => {
@@ -116,7 +84,7 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
           slotProps={{ field: { clearable: true } }}
         />
         <CustomDatePicker
-          disabled={radioValue !== radioValues.between}
+          disabled={radioValue !== DateFilterRadioValues.between}
           label="End Date"
           value={endDate}
           onChange={(newValue) => {
@@ -132,6 +100,12 @@ export const SelectDateRangeFilter = ({ onDateRangeChange }) => {
 };
 
 export function SelectTimeRangeFilter({ onTimeRangeChange }) {
+  const paramToDayjs = (searchParams, paramKey) => {
+    let paramValue = searchParams.get(paramKey);
+    if (!paramValue || !dayjs(paramValue).isValid()) return null;
+    return dayjs(paramValue);
+  };
+
   const endTimeParamKey = 'endDate';
   const startTimeParamKey = 'startDate';
   const timeRadioParamKey = 'timeRadio';

@@ -3,32 +3,75 @@ import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import Posts from '../Posts';
-import { SelectDateRangeFilter, SelectTimeRangeFilter } from './Filters';
+import {
+  DateFilterRadioValues,
+  SelectDateRangeFilter,
+  SelectTimeRangeFilter,
+} from './Filters';
 import './Discover.css';
 import { CustomTextField } from '../../helpers/styleComponents';
+import { useSearchParams } from 'react-router-dom';
+import dayjs from 'dayjs';
+
+const endDateParamKey = 'endDate';
+const startDateParamKey = 'startDate';
+const dateRadioParamKey = 'dateRadio';
+
+const paramToDayjs = (searchParams, paramKey) => {
+  let paramValue = searchParams.get(paramKey);
+  if (!paramValue || !dayjs(paramValue).isValid()) return null;
+  return dayjs(paramValue);
+};
 
 export default function Discover() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [games, setGames] = useState([]);
   const [tags, setTags] = useState([]);
-  const [startDate, setStartDate] = useState(undefined);
-  const [endDate, setEndDate] = useState(undefined);
+  const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
+    const paramValue = searchParams.get(dateRadioParamKey);
+    if (
+      paramValue === DateFilterRadioValues.upcoming ||
+      paramValue === DateFilterRadioValues.between
+    )
+      return paramValue;
+    else return DateFilterRadioValues.upcoming;
+  });
+  const [startDate, setStartDate] = useState(
+    paramToDayjs(searchParams, startDateParamKey) || null,
+  );
+  const [endDate, setEndDate] = useState(
+    paramToDayjs(searchParams, endDateParamKey) || null,
+  );
   const [startTime, setStartTime] = useState(undefined);
   const [endTime, setEndTime] = useState(undefined);
 
   useEffect(() => {
-    const submitSearch = async () => {
-      // if values haven't been loaded don't search
-      // this prevents an erronious search from occuring and causing flicker on the initial page load
-      if (
-        startDate === undefined ||
-        endDate === undefined ||
-        startTime === undefined ||
-        endTime === undefined
-      )
-        return;
+    const updateSearchParams = async () => {
+      setSearchParams(
+        (params) => {
+          if (
+            dateRangeRadioValue === DateFilterRadioValues.between &&
+            startDate?.isValid()
+          )
+            params.set(startDateParamKey, startDate.toISOString());
+          else params.delete(startDateParamKey);
+          if (
+            dateRangeRadioValue === DateFilterRadioValues.between &&
+            endDate?.isValid()
+          )
+            params.set(endDateParamKey, endDate.toISOString());
+          else params.delete(endDateParamKey);
+          if (dateRangeRadioValue)
+            params.set(dateRadioParamKey, dateRangeRadioValue);
+          return params;
+        },
+        { replace: true },
+      );
+    };
 
+    const updateSearchResults = async () => {
       const query = {
         keywords: searchText,
         games: games,
@@ -60,8 +103,34 @@ export default function Discover() {
       const response = await SearchService.searchPosts(query);
       setPosts(response);
     };
+
+    const submitSearch = async () => {
+      updateSearchParams();
+
+      // if values haven't been loaded don't search
+      // this prevents an erronious search from occuring and causing flicker on the initial page load
+      if (
+        startDate === undefined ||
+        endDate === undefined ||
+        startTime === undefined ||
+        endTime === undefined
+      )
+        return;
+
+      updateSearchResults();
+    };
+
     submitSearch();
-  }, [games, tags, searchText, startDate, endDate, startTime, endTime]);
+  }, [
+    games,
+    tags,
+    searchText,
+    dateRangeRadioValue,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+  ]);
 
   return (
     <div className="page-content">
@@ -75,9 +144,13 @@ export default function Discover() {
         <GamesSelector onChange={(e, v) => setGames(v)} />
         <TagsSelector onChange={(e, v) => setTags(v)} />
         <SelectDateRangeFilter
-          onDateRangeChange={(newRange) => {
-            setStartDate(newRange.startDate);
-            setEndDate(newRange.endDate);
+          initialRadioValue={dateRangeRadioValue}
+          initialStartDateValue={startDate}
+          initialEndDateValue={endDate}
+          onChange={(newValues) => {
+            setStartDate(newValues.startDate);
+            setEndDate(newValues.endDate);
+            setDateRangeRadioValue(newValues.radioValue);
           }}
         />
         <SelectTimeRangeFilter
