@@ -7,6 +7,7 @@ import {
   DateFilterRadioValues,
   SelectDateRangeFilter,
   SelectTimeRangeFilter,
+  SelectTimeRangeRadioValues,
 } from './Filters';
 import './Discover.css';
 import { CustomTextField } from '../../helpers/styleComponents';
@@ -16,6 +17,9 @@ import dayjs from 'dayjs';
 const endDateParamKey = 'endDate';
 const startDateParamKey = 'startDate';
 const dateRadioParamKey = 'dateRadio';
+const endTimeParamKey = 'endTime';
+const startTimeParamKey = 'startTime';
+const timeRadioParamKey = 'timeRadio';
 
 const paramToDayjs = (searchParams, paramKey) => {
   let paramValue = searchParams.get(paramKey);
@@ -44,8 +48,21 @@ export default function Discover() {
   const [endDate, setEndDate] = useState(
     paramToDayjs(searchParams, endDateParamKey) || null,
   );
-  const [startTime, setStartTime] = useState(undefined);
-  const [endTime, setEndTime] = useState(undefined);
+  const [timeRangeRadioValue, setTimeRangeRadioValue] = useState(() => {
+    const paramValue = searchParams.get(timeRadioParamKey);
+    if (
+      paramValue === SelectTimeRangeRadioValues.any ||
+      paramValue === SelectTimeRangeRadioValues.between
+    )
+      return paramValue;
+    else return SelectTimeRangeRadioValues.any;
+  });
+  const [startTime, setStartTime] = useState(
+    paramToDayjs(searchParams, startTimeParamKey),
+  );
+  const [endTime, setEndTime] = useState(
+    paramToDayjs(searchParams, endTimeParamKey),
+  );
 
   useEffect(() => {
     const updateSearchParams = async () => {
@@ -57,14 +74,28 @@ export default function Discover() {
           )
             params.set(startDateParamKey, startDate.toISOString());
           else params.delete(startDateParamKey);
+
           if (
             dateRangeRadioValue === DateFilterRadioValues.between &&
             endDate?.isValid()
           )
             params.set(endDateParamKey, endDate.toISOString());
           else params.delete(endDateParamKey);
+
           if (dateRangeRadioValue)
             params.set(dateRadioParamKey, dateRangeRadioValue);
+
+          if (startTime?.isValid())
+            params.set(startTimeParamKey, startTime.toISOString());
+          else params.delete(startTimeParamKey);
+
+          if (endTime?.isValid())
+            params.set(endTimeParamKey, endTime.toISOString());
+          else params.delete(endTimeParamKey);
+
+          if (timeRangeRadioValue)
+            params.set(timeRadioParamKey, timeRangeRadioValue);
+
           return params;
         },
         { replace: true },
@@ -121,6 +152,9 @@ export default function Discover() {
     };
 
     submitSearch();
+
+    // disable for setSearchParams
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     games,
     tags,
@@ -128,6 +162,7 @@ export default function Discover() {
     dateRangeRadioValue,
     startDate,
     endDate,
+    timeRangeRadioValue,
     startTime,
     endTime,
   ]);
@@ -154,9 +189,13 @@ export default function Discover() {
           }}
         />
         <SelectTimeRangeFilter
-          onTimeRangeChange={(newRange) => {
-            setStartTime(newRange.startTime);
-            setEndTime(newRange.endTime);
+          initialRadioValue={timeRangeRadioValue}
+          initialStartTimeValue={startTime}
+          initialEndTimeValue={endTime}
+          onTimeRangeChange={(newValues) => {
+            setStartTime(newValues.startTime);
+            setEndTime(newValues.endTime);
+            setTimeRangeRadioValue(newValues.radioValue);
           }}
         />
       </div>
