@@ -20,7 +20,6 @@ export default function SignIn() {
   // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   var returnUrl = searchParams.get('returnUrl');
-  console.log('returnUrl poop: ' + returnUrl);
   var signUpLink = returnUrl
     ? `/SignUp?returnUrl=${encodeURIComponent(returnUrl)}`
     : '/SignUp';
