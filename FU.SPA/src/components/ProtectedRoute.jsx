@@ -7,7 +7,6 @@ export const ProtectedRoute = ({ children }) => {
 
   // Get the current route
   var currentRoute = window.location.pathname;
-  console.log('currentRoute: ' + currentRoute);
 
   return user ? (
     children

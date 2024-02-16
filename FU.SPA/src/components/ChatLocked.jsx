@@ -30,7 +30,6 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
   };
 
   const renderResolution = () => {
-    console.log('test adsad');
     // get the current path
     var path = window.location.pathname;
     let resolutionMessage = reason === 'no-user' ? 'Sign In' : 'Join';
