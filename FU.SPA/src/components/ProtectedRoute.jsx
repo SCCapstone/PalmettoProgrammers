@@ -12,11 +12,9 @@ export const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const delay = async () => {
       var lowerRoute = currentRoute.toLocaleLowerCase();
-      var waitTime = 0;
       if (lowerRoute === '/social' || lowerRoute === '/create') {
-        waitTime = 80;
+        await new Promise((resolve) => setTimeout(resolve, 80));
       }
-      await new Promise((resolve) => setTimeout(resolve, waitTime));
       setIsLoading(false);
     };
 
