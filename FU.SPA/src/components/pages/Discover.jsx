@@ -2,10 +2,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
-import { Typography, InputAdornment } from '@mui/material';
+import { Typography, InputAdornment, Pagination } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
+import GameService from '../../services/gameService';
+import TagService from '../../services/tagService';
 import Posts from '../Posts';
 import './Discover.css';
 import {
@@ -21,12 +24,41 @@ const paramToDayjs = (searchParams, paramKey) => {
 };
 
 export default function Discover() {
-  const [posts, setPosts] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const [games, setGames] = useState([]);
-  const [tags, setTags] = useState([]);
-
+  const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // initial state
+  const initialSearchText = searchParams.get('q') || '';
+  const initialPage = parseInt(searchParams.get('page'), 10) || 1;
+  const initialGames = searchParams.get('games')
+    ? searchParams
+        .get('games')
+        .split(',')
+        .map((id) => ({ id }))
+    : [];
+  const initialTags = searchParams.get('tags')
+    ? searchParams
+        .get('tags')
+        .split(',')
+        .map((id) => ({ id }))
+    : [];
+
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(initialPage);
+  const [searchText, setSearchText] = useState(initialSearchText);
+  const [games, setGames] = useState(initialGames);
+  const [tags, setTags] = useState(initialTags);
+  const [gameOptions, setGameOptions] = useState([]);
+  const [tagOptions, setTagOptions] = useState([]);
+
+  // index of the last post
+  const lastPost = page * postsPerPage;
+  // index of first
+  const firstPost = lastPost - postsPerPage;
+
+  // each page has correct number of posts
+  const currentPosts = posts.slice(firstPost, lastPost);
+
   const [startDate, setStartDate] = useState(
     paramToDayjs(searchParams, 'startDate'),
   );
@@ -74,31 +106,118 @@ export default function Discover() {
 
   // Update search params when startDate or endDate is updated
   useEffect(() => {
-    setSearchParams(
-      (params) => {
-        if (startDate?.isValid())
-          params.set('startDate', startDate.toISOString());
-        if (endDate?.isValid()) params.set('endDate', endDate.toISOString());
-        if (startTime?.isValid())
-          params.set('startTime', startTime.toISOString());
-        if (endTime?.isValid()) params.set('endTime', endTime.toISOString());
-        return params;
-      },
-      { replace: true },
+    const newSearchParams = new URLSearchParams();
+    if (searchText) newSearchParams.append('q', searchText);
+    if (page > 1) newSearchParams.set('page', page.toString());
+    // set games and tags with comma separated values
+    if (games.length > 0) {
+      const gameIds = games.map((game) => game.id.toString()).join(',');
+      newSearchParams.set('games', gameIds);
+    }
+    if (tags.length > 0) {
+      const tagIds = tags.map((tag) => tag.id.toString()).join(',');
+      newSearchParams.set('tags', tagIds);
+    }
+    if (startDate?.isValid())
+      newSearchParams.set('startDate', startDate.toISOString());
+    if (endDate?.isValid())
+      newSearchParams.set('endDate', endDate.toISOString());
+    if (startTime?.isValid())
+      newSearchParams.set('startTime', startTime.toISOString());
+    if (endTime?.isValid())
+      newSearchParams.set('endTime', endTime.toISOString());
+
+    // update the search params in the URL
+    setSearchParams(newSearchParams, { replace: true });
+  }, [
+    searchText,
+    page,
+    games,
+    tags,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    setSearchParams,
+  ]);
+
+  useEffect(() => {
+    // Fetch games and tags for selectors
+    const fetchOptions = async () => {
+      const games = await GameService.searchGames('');
+      const tags = await TagService.searchTags('');
+      setGameOptions(games);
+      setTagOptions(tags);
+    };
+
+    fetchOptions();
+  }, []);
+
+  // function for search submissions
+  const searchSubmit = (newSearchText) => {
+    setSearchText(newSearchText);
+    setPage(1); // reset to page 1 on new search
+  };
+
+  // handle filter changes
+  const handleFilterChange = (newGames, newTags) => {
+    setGames(newGames);
+    setTags(newTags);
+    setPage(1);
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+    searchParams.set('page', value.toString());
+    setSearchParams(searchParams);
+  };
+
+  useEffect(() => {
+    const gamesString = searchParams.get('games');
+    const tagsString = searchParams.get('tags');
+
+    const gameIds = gamesString ? gamesString.split(',') : [];
+    const tagIds = tagsString ? tagsString.split(',') : [];
+
+    const restoredGames = gameIds.map(
+      (gameId) =>
+        gameOptions.find((game) => game.id.toString() === gameId) || {
+          id: gameId,
+        },
     );
-  }, [startDate, endDate, startTime, endTime, setSearchParams]);
+
+    const restoredTags = tagIds.map(
+      (tagId) =>
+        tagOptions.find((tag) => tag.id.toString() === tagId) || { id: tagId },
+    );
+
+    setGames(restoredGames);
+    setTags(restoredTags);
+  }, [searchParams, gameOptions, tagOptions]);
 
   return (
     <div className="page-content">
       <div
         className="sidebar"
-        style={{ textAlign: 'left', width: '200pt', minWidth: '190pt' }}
+        style={{
+          textAlign: 'left',
+          width: '200pt',
+          maxWidth: '300px',
+          minWidth: '190pt',
+        }}
       >
         <Typography variant="h5" style={{ color: '#FFF' }}>
           Filters
         </Typography>
-        <GamesSelector onChange={(e, v) => setGames(v)} />
-        <TagsSelector onChange={(e, v) => setTags(v)} />
+        <GamesSelector
+          value={games}
+          onChange={(e, newGames) => handleFilterChange(newGames, tags)}
+          options={gameOptions}
+        />
+        <TagsSelector
+          value={tags}
+          onChange={(e, newTags) => handleFilterChange(games, newTags)}
+        />
         <SelectDateRange
           startDate={startDate}
           endDate={endDate}
@@ -120,8 +239,27 @@ export default function Discover() {
         />
       </div>
       <div>
-        <SearchBar onSearchSubmit={setSearchText} />
-        <Posts posts={posts} />
+        <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
+        <Posts posts={currentPosts} />
+        <div
+          style={{
+            display: 'flex',
+            color: 'violet',
+            justifyContent: 'center',
+            marginTop: '20px',
+            marginRight: '150px',
+          }}
+        >
+          <Stack spacing={2}>
+            <Typography>Page: {page}</Typography>
+            <Pagination
+              count={Math.ceil(posts.length / postsPerPage)}
+              page={page}
+              onChange={handlePageChange}
+              color="secondary"
+            />
+          </Stack>
+        </div>
       </div>
     </div>
   );
@@ -175,13 +313,21 @@ function SelectDateRange({
   );
 }
 
-function SearchBar({ onSearchSubmit }) {
-  const [searchText, setSearchText] = useState('');
+function SearchBar({ searchText, onSearchSubmit }) {
+  const [localSearchText, setLocalSearchText] = useState(searchText);
+
+  useEffect(() => {
+    setLocalSearchText(searchText);
+  }, [searchText]);
 
   function onKeyDown(event) {
     if (event.key === 'Enter') {
-      onSearchSubmit(searchText);
+      onSearchSubmit(localSearchText);
     }
+  }
+
+  function handleChange(event) {
+    setLocalSearchText(event.target.value);
   }
 
   return (
@@ -190,8 +336,8 @@ function SearchBar({ onSearchSubmit }) {
         id="outlined-basic"
         label="Search"
         variant="outlined"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
+        value={localSearchText}
+        onChange={handleChange}
         onKeyDown={onKeyDown}
         InputProps={{
           startAdornment: (

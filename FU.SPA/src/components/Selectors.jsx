@@ -10,7 +10,7 @@ import { CustomAutocomplete } from '../helpers/styleComponents';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({ onChange }) => {
+export const GamesSelector = ({ value, onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
@@ -20,10 +20,12 @@ export const GamesSelector = ({ onChange }) => {
   return (
     <CustomAutocomplete
       multiple
+      value={value}
       onChange={onChange}
       options={gameOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -42,7 +44,7 @@ export const GamesSelector = ({ onChange }) => {
   );
 };
 
-export const TagsSelector = ({ onChange }) => {
+export const TagsSelector = ({ value, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
@@ -52,10 +54,12 @@ export const TagsSelector = ({ onChange }) => {
   return (
     <CustomAutocomplete
       multiple
+      value={value}
       onChange={onChange}
       options={tagOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
