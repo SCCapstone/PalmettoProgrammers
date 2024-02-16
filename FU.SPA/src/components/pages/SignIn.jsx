@@ -36,14 +36,6 @@ export default function SignIn() {
     try {
       const response = await AuthService.signIn(creds);
       login(response.token);
-
-      // This is a hacky fix for the social page
-      // it's not waiting for the user to be logged in before navigating
-      var lowerReturnUrl = returnUrl?.toLocaleLowerCase();
-      if (lowerReturnUrl === '/social' || lowerReturnUrl === '/create') {
-        console.log('waiting for user to be logged in');
-        await new Promise((r) => setTimeout(r, 80));
-      }
       navigate(returnUrl ? returnUrl : '/');
     } catch {
       window.alert('Error signing in');
