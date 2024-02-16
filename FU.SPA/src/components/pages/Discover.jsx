@@ -19,7 +19,7 @@ const dateRadioParamKey = 'dateRadio';
 
 const paramToDayjs = (searchParams, paramKey) => {
   let paramValue = searchParams.get(paramKey);
-  if (!paramValue || !dayjs(paramValue).isValid()) return null;
+  if (!paramValue || !dayjs(paramValue).isValid()) return undefined;
   return dayjs(paramValue);
 };
 
