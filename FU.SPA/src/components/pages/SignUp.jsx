@@ -20,8 +20,7 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
-  // eslint-disable-next-line no-unused-vars
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const handleSubmit = (event) => {
     event.preventDefault();

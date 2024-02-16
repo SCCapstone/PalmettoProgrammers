@@ -11,10 +11,8 @@ export const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     const delay = async () => {
-      var lowerRoute = currentRoute.toLocaleLowerCase();
-      if (lowerRoute === '/social' || lowerRoute === '/create') {
-        await new Promise((resolve) => setTimeout(resolve, 80));
-      }
+      // See #281: We need to wait for the user to be set before rendering the children
+      await new Promise((resolve) => setTimeout(resolve, 80));
       setIsLoading(false);
     };
 

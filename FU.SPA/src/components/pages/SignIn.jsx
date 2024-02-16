@@ -17,8 +17,7 @@ import { CustomTextField } from '../../helpers/styleComponents';
 export default function SignIn() {
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
-  // eslint-disable-next-line no-unused-vars
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   var returnUrl = searchParams.get('returnUrl');
   var signUpLink = returnUrl
     ? `/SignUp?returnUrl=${encodeURIComponent(returnUrl)}`
@@ -36,7 +35,7 @@ export default function SignIn() {
     try {
       const response = await AuthService.signIn(creds);
       login(response.token);
-      navigate(returnUrl ? returnUrl : '/');
+      navigate(returnUrl ?? '/');
     } catch {
       window.alert('Error signing in');
     }
