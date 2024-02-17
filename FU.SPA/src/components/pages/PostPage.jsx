@@ -29,7 +29,7 @@ const PostPage = () => {
   const handleLeavePost = async () => {
     try {
       await PostService.leavePost(post.id);
-      update();
+      navigate(-1);
     } catch (error) {
       console.error('Error leaving post:', error);
     }
