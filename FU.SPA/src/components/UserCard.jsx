@@ -123,15 +123,15 @@ const UserCard = ({ user }) => {
             {user.bio}
           </Typography>
         )}
-        <CardActions style={{ justifyContent: 'flex-end' }}>
-          <Button
-            style={{ backgroundColor: '#E340DC', color: '#FFF', width: '100%' }}
-            onClick={() => navigate(`/profile/${user.id}`)}
-          >
-            View Profile
-          </Button>
-        </CardActions>
       </CardContent>
+      <CardActions style={{ justifyContent: 'flex-end' }}>
+        <Button
+          style={{ backgroundColor: '#E340DC', color: '#FFF', width: '100%' }}
+          onClick={() => navigate(`/profile/${user.id}`)}
+        >
+          View Profile
+        </Button>
+      </CardActions>
     </Card>
   );
 };
