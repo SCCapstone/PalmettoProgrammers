@@ -18,7 +18,7 @@ export default function Discover() {
   const initialPage = parseInt(searchParams.get('page'), 10) || 1;
   const initialGames = searchParams.getAll('game').map(gameId => ({ id: gameId }));
   const initialTags = searchParams.getAll('tag').map(tagId => ({ id: tagId }));
-  const initialSortOption = searchParams.getAll('sortOption').map(ascDscId => ({ id: ascDscId})); //for ascending/descending filter
+  const initialSortOption = searchParams.getAll('sortOption').map(sortOptionId => ({ id: sortOptionId})); //for option asc/dsc filter
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(initialPage);
@@ -41,24 +41,41 @@ export default function Discover() {
         games: games,
         tags: tags,
         //pass formatted option after :
-        sortOption: sortOption,
+        sortOption: optionSort(sortOption),
       };
       //sortOption : asc
       const response = await SearchService.searchPosts(query);
       setPosts(response);
     };
     submitSearch();
-  }, [games, tags, ascDscs, searchText]);
+  }, [games, tags, sortOption, searchText]);
 
   //Create method here
   //if the option is newest, send to the api 'newest:asc'
   //if the option is oldest, send to the api 'newest:desc'
-  //if the option is oldest, send to the api 'title:asc'
-  //if the option is oldest, send to the api 'title:desc'
-  //if the option is oldest, send to the api 'soonest:asc'
-  //if the option is oldest, send to the api 'soonest:desc'
+  //if the option is asc, send to the api 'title:asc'
+  //if the option is desc, send to the api 'title:desc'
+  //if the option is soonest, send to the api 'soonest:asc'
+  //if the option is latest:dsc, send to the api 'soonest:desc'
   //update searchService searchPosts.
+  const optionSort = (option) => {
+    var choice;
+    if (option === 'newest') {
+      const choice = 'newest:asc';
+    } else if (option === 'oldest') {
+      const choice = 'newest:desc';
+    } else if (option === 'asc') {
+      const choice = 'title:asc';
+    } else if (option === 'desc') {
+      const choice = 'title:desc';
+    } else if (option === 'soonest') {
+      const choice = 'soonest:asc';
+    } else if (option === 'latest') {
+      const choice = 'soonest:desc';
+    }
 
+    return choice;
+  }
 
   // if user clicks discover tab again it will reload default discover page state.
   useEffect(() => {
@@ -66,7 +83,7 @@ export default function Discover() {
      setPage(initialPage);
      setGames(initialGames);
      setTags(initialTags);
-     setAscDsc(initialAscDscs);
+     setAscDsc(initialSortOption);
    }, [location.search]);
 
   // function for search submissions
@@ -76,10 +93,10 @@ export default function Discover() {
   };
   
   // handle filter changes
-const handleFilterChange = (newGames, newTags, newAscDsc) => {
+const handleFilterChange = (newGames, newTags, newSortOption) => {
   setGames(newGames);
   setTags(newTags);
-  setAscDsc(newAscDsc);
+  setSortOption(newSortOption);
   setPage(1); // Reset to page 1 when filters change
 };
 
