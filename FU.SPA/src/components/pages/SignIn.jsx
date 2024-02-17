@@ -11,12 +11,17 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with
 import AuthService from '../../services/authService';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CustomTextField } from '../../helpers/styleComponents';
 
 export default function SignIn() {
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  var returnUrl = searchParams.get('returnUrl');
+  var signUpLink = returnUrl
+    ? `/SignUp?returnUrl=${encodeURIComponent(returnUrl)}`
+    : '/SignUp';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,7 +35,7 @@ export default function SignIn() {
     try {
       const response = await AuthService.signIn(creds);
       login(response.token);
-      navigate('/');
+      navigate(returnUrl ?? '/');
     } catch {
       window.alert('Error signing in');
     }
@@ -85,7 +90,7 @@ export default function SignIn() {
           >
             Sign In
           </Button>
-          <Link href="#" variant="body2">
+          <Link href={signUpLink} variant="body2">
             Sign Up
           </Link>
         </Box>
