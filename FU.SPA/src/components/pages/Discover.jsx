@@ -56,7 +56,7 @@ export default function Discover() {
   //if the option is asc, send to the api 'title:asc'
   //if the option is desc, send to the api 'title:desc'
   //if the option is soonest, send to the api 'soonest:asc'
-  //if the option is latest:dsc, send to the api 'soonest:desc'
+  //if the option is soonest:desc, send to the api 'soonest:desc'
   //update searchService searchPosts.
   const optionSort = (option) => {
     var choice;
@@ -69,8 +69,8 @@ export default function Discover() {
     } else if (option === 'desc') {
       const choice = 'title:desc';
     } else if (option === 'soonest') {
-      const choice = 'soonest:asc';
-    } else if (option === 'latest') {
+      const choice = 'soonest';
+    } else if (option === 'soonest:desc') {
       const choice = 'soonest:desc';
     } else {
       alert("other option chosen for optionSort method");
