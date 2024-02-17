@@ -72,7 +72,7 @@ const getStatus = async (userId) => {
 /**
  * GetRelations
  * Use this function to get the relations of a user with other users
- * 
+ *
  * @param {number} userId Id of the user to get the relations with
  * @param {string} relationStatus The status of the relation {pending|requested|friends|blocked}
  * @returns {List<object>} UserProfiles: UserProfiles of the users with the given relation status
