@@ -61,17 +61,17 @@ export default function Discover() {
   const optionSort = (option) => {
     var choice;
     if (option === 'newest') {
-      const choice = 'newest:asc';
+      choice = 'newest:asc';
     } else if (option === 'oldest') {
-      const choice = 'newest:desc';
+      choice = 'newest:desc';
     } else if (option === 'asc') {
-      const choice = 'title:asc';
+      choice = 'title:asc';
     } else if (option === 'desc') {
-      const choice = 'title:desc';
+      choice = 'title:desc';
     } else if (option === 'soonest') {
-      const choice = 'soonest';
+      choice = 'soonest';
     } else if (option === 'soonest:desc') {
-      const choice = 'soonest:desc';
+      choice = 'soonest:desc';
     } else {
       alert("other option chosen for optionSort method");
     }
