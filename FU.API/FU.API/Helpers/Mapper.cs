@@ -246,7 +246,6 @@ public static class Mapper
     {
         return new UserRelationDTO()
         {
-            User = relation.User1.ToProfile(),
             Status = relation.Status.ToString(),
         };
     }

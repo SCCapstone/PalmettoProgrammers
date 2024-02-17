@@ -9,16 +9,14 @@ using Microsoft.EntityFrameworkCore;
 public class RelationService : CommonService, IRelationService
 {
     private readonly AppDbContext _dbContext;
-    private readonly ISearchService _searchService;
 
-    public RelationService(AppDbContext dbContext, ISearchService searchService)
+    public RelationService(AppDbContext dbContext)
         : base(dbContext)
     {
         _dbContext = dbContext;
-        _searchService = searchService;
     }
 
-    public async Task<UserRelation> GetRelation(int initiatedById, int otherUserId)
+    public async Task<UserRelation?> GetRelation(int initiatedById, int otherUserId)
     {
         if (initiatedById == otherUserId)
         {
@@ -30,11 +28,6 @@ public class RelationService : CommonService, IRelationService
         var otherUser = await _dbContext.Users.FindAsync(otherUserId) ?? throw new NotFoundException("User not found", "The requested user was not found");
 
         var relation = await _dbContext.UserRelations.Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId).FirstOrDefaultAsync();
-
-        if (relation is null)
-        {
-            throw new NotFoundException("Relation not found", "The requested relation was not found");
-        }
 
         return relation;
     }
