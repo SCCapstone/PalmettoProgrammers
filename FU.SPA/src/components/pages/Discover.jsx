@@ -72,6 +72,8 @@ export default function Discover() {
       const choice = 'soonest:asc';
     } else if (option === 'latest') {
       const choice = 'soonest:desc';
+    } else {
+      alert("other option chosen for optionSort method");
     }
 
     return choice;
