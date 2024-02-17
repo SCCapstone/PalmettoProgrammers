@@ -14,7 +14,6 @@ const PostPage = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isOwner, setIsOwner] = useState(false);
 
   const { user } = useContext(UserContext);
 
@@ -41,13 +40,12 @@ const PostPage = () => {
     try {
       const data = await PostService.getPostDetails(postId);
       console.log('data:', data);
-      setIsOwner(user && data.creator.id === user.id);
       setPost(data);
     } catch (error) {
       console.error('Error fetching post details:', error);
     }
     setLoading(false);
-  }, [postId, user]);
+  }, [postId]);
 
   useEffect(() => {
     update();
@@ -69,9 +67,7 @@ const PostPage = () => {
   };
 
   const renderLeaveButton = () => {
-    if (!post.hasJoined || isOwner) {
-      return;
-    }
+    if (!post.hasJoined) return;
 
     return (
       <Button
