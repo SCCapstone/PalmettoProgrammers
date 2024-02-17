@@ -17,12 +17,17 @@ import {
 import './Discover.css';
 import { CustomTextField } from '../../helpers/styleComponents';
 
-const endDateParamKey = 'endDate';
-const startDateParamKey = 'startDate';
-const dateRadioParamKey = 'dateRadio';
-const endTimeParamKey = 'endTime';
-const startTimeParamKey = 'startTime';
-const timeRadioParamKey = 'timeRadio';
+const paramKey = {
+  endDate: 'endDate',
+  startDate: 'startDate',
+  dateRadio: 'dateRadio',
+  endTime: 'endTime',
+  startTime: 'startTime',
+  timeRadio: 'timeRadio',
+  games: 'games',
+  tags: 'tags',
+  page: 'page',
+};
 
 const paramToDayjs = (searchParams, paramKey) => {
   let paramValue = searchParams.get(paramKey);
@@ -31,30 +36,26 @@ const paramToDayjs = (searchParams, paramKey) => {
 };
 
 export default function Discover() {
-  const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
+  const postsPerPage = 3; // limit of posts on a page(increase later, low for testing)
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // initial state
-  const initialSearchText = searchParams.get('q') || '';
-  const initialPage = parseInt(searchParams.get('page'), 10) || 1;
-  const initialGames = searchParams.get('games')
-    ? searchParams
-        .get('games')
-        .split(',')
-        .map((id) => ({ id }))
-    : [];
-  const initialTags = searchParams.get('tags')
-    ? searchParams
-        .get('tags')
-        .split(',')
-        .map((id) => ({ id }))
-    : [];
-
   const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(initialPage);
-  const [searchText, setSearchText] = useState(initialSearchText);
-  const [games, setGames] = useState(initialGames);
-  const [tags, setTags] = useState(initialTags);
+  const [page, setPage] = useState(
+    parseInt(searchParams.get(paramKey.page), 10) || 1,
+  );
+  const [searchText, setSearchText] = useState(searchParams.get('q') || '');
+  const [games, setGames] = useState(
+    searchParams
+      .get(paramKey.games)
+      ?.split(',')
+      .map((id) => ({ id })) ?? [],
+  );
+  const [tags, setTags] = useState(
+    searchParams
+      .get(paramKey.tags)
+      ?.split(',')
+      .map((id) => ({ id })) ?? [],
+  );
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
 
@@ -67,7 +68,7 @@ export default function Discover() {
   const currentPosts = posts.slice(firstPost, lastPost);
 
   const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
-    const paramValue = searchParams.get(dateRadioParamKey);
+    const paramValue = searchParams.get(paramKey.dateRadio);
     if (
       paramValue === DateFilterRadioValues.upcoming ||
       paramValue === DateFilterRadioValues.between
@@ -76,13 +77,13 @@ export default function Discover() {
     else return DateFilterRadioValues.upcoming;
   });
   const [startDate, setStartDate] = useState(
-    paramToDayjs(searchParams, startDateParamKey) || null,
+    paramToDayjs(searchParams, paramKey.startDate) || null,
   );
   const [endDate, setEndDate] = useState(
-    paramToDayjs(searchParams, endDateParamKey) || null,
+    paramToDayjs(searchParams, paramKey.endDate) || null,
   );
   const [timeRangeRadioValue, setTimeRangeRadioValue] = useState(() => {
-    const paramValue = searchParams.get(timeRadioParamKey);
+    const paramValue = searchParams.get(paramKey.timeRadio);
     if (
       paramValue === SelectTimeRangeRadioValues.any ||
       paramValue === SelectTimeRangeRadioValues.between
@@ -91,11 +92,24 @@ export default function Discover() {
     else return SelectTimeRangeRadioValues.any;
   });
   const [startTime, setStartTime] = useState(
-    paramToDayjs(searchParams, startTimeParamKey),
+    paramToDayjs(searchParams, paramKey.startTime),
   );
   const [endTime, setEndTime] = useState(
-    paramToDayjs(searchParams, endTimeParamKey),
+    paramToDayjs(searchParams, paramKey.endTime),
   );
+
+  useEffect(() => {
+    setPage(1);
+  }, [
+    // games and tags reset the page at their component callbacks
+    searchText,
+    dateRangeRadioValue,
+    startDate,
+    endDate,
+    timeRangeRadioValue,
+    startTime,
+    endTime,
+  ]);
 
   useEffect(() => {
     const updateSearchParams = async () => {
@@ -105,40 +119,47 @@ export default function Discover() {
             dateRangeRadioValue === DateFilterRadioValues.between &&
             startDate?.isValid()
           )
-            params.set(startDateParamKey, startDate.toISOString());
-          else params.delete(startDateParamKey);
+            params.set(paramKey.startDate, startDate.toISOString());
+          else params.delete(paramKey.startDate);
 
           if (
             dateRangeRadioValue === DateFilterRadioValues.between &&
             endDate?.isValid()
           )
-            params.set(endDateParamKey, endDate.toISOString());
-          else params.delete(endDateParamKey);
+            params.set(paramKey.endDate, endDate.toISOString());
+          else params.delete(paramKey.endDate);
 
           if (dateRangeRadioValue)
-            params.set(dateRadioParamKey, dateRangeRadioValue);
+            params.set(paramKey.dateRadio, dateRangeRadioValue);
 
           if (startTime?.isValid())
-            params.set(startTimeParamKey, startTime.toISOString());
-          else params.delete(startTimeParamKey);
+            params.set(paramKey.startTime, startTime.toISOString());
+          else params.delete(paramKey.startTime);
 
           if (endTime?.isValid())
-            params.set(endTimeParamKey, endTime.toISOString());
-          else params.delete(endTimeParamKey);
+            params.set(paramKey.endTime, endTime.toISOString());
+          else params.delete(paramKey.endTime);
 
           if (timeRangeRadioValue)
-            params.set(timeRadioParamKey, timeRangeRadioValue);
+            params.set(paramKey.timeRadio, timeRangeRadioValue);
 
-          if (searchText) params.append('q', searchText);
-          if (page > 1) params.set('page', page.toString());
-          // set games and tags with comma separated values
+          if (searchText) params.set('q', searchText);
+
+          params.set(paramKey.page, page.toString());
+          if (page === 1) params.delete(paramKey.page);
+
           if (games.length > 0) {
+            // set games and tags with comma separated values
             const gameIds = games.map((game) => game.id.toString()).join(',');
-            params.set('games', gameIds);
+            params.set(paramKey.games, gameIds);
+          } else {
+            params.delete(paramKey.games);
           }
           if (tags.length > 0) {
             const tagIds = tags.map((tag) => tag.id.toString()).join(',');
-            params.set('tags', tagIds);
+            params.set(paramKey.tags, tagIds);
+          } else {
+            params.delete(paramKey.tags);
           }
 
           return params;
@@ -201,10 +222,9 @@ export default function Discover() {
     // disable for setSearchParams
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    searchText,
-    page,
     games,
     tags,
+    page,
     searchText,
     dateRangeRadioValue,
     startDate,
@@ -212,7 +232,6 @@ export default function Discover() {
     timeRangeRadioValue,
     startTime,
     endTime,
-    setSearchParams,
   ]);
 
   useEffect(() => {
@@ -227,28 +246,9 @@ export default function Discover() {
     fetchOptions();
   }, []);
 
-  // function for search submissions
-  const searchSubmit = (newSearchText) => {
-    setSearchText(newSearchText);
-    setPage(1); // reset to page 1 on new search
-  };
-
-  // handle filter changes
-  const handleFilterChange = (newGames, newTags) => {
-    setGames(newGames);
-    setTags(newTags);
-    setPage(1);
-  };
-
-  const handlePageChange = (event, value) => {
-    setPage(value);
-    searchParams.set('page', value.toString());
-    setSearchParams(searchParams);
-  };
-
   useEffect(() => {
-    const gamesString = searchParams.get('games');
-    const tagsString = searchParams.get('tags');
+    const gamesString = searchParams.get(paramKey.games);
+    const tagsString = searchParams.get(paramKey.tags);
 
     const gameIds = gamesString ? gamesString.split(',') : [];
     const tagIds = tagsString ? tagsString.split(',') : [];
@@ -285,12 +285,18 @@ export default function Discover() {
         </Typography>
         <GamesSelector
           value={games}
-          onChange={(e, newGames) => handleFilterChange(newGames, tags)}
+          onChange={(_, newGames) => {
+            setPage(1);
+            setGames(newGames);
+          }}
           options={gameOptions}
         />
         <TagsSelector
           value={tags}
-          onChange={(e, newTags) => handleFilterChange(games, newTags)}
+          onChange={(_, newTags) => {
+            setPage(1);
+            setTags(newTags);
+          }}
         />
         <SelectDateRangeFilter
           initialRadioValue={dateRangeRadioValue}
@@ -314,7 +320,7 @@ export default function Discover() {
         />
       </div>
       <div>
-        <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
+        <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
         <Posts posts={currentPosts} />
         <div
           style={{
@@ -330,7 +336,7 @@ export default function Discover() {
             <Pagination
               count={Math.ceil(posts.length / postsPerPage)}
               page={page}
-              onChange={handlePageChange}
+              onChange={(_, value) => setPage(value)}
               color="secondary"
             />
           </Stack>
