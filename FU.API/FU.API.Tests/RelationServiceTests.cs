@@ -133,7 +133,6 @@ public class RelationServiceTests
 
     private static RelationService CreateRelationService(AppDbContext context)
     {
-        var searchService = new SearchService(context);
-        return new RelationService(context, searchService);
+        return new RelationService(context);
     }
 }

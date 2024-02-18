@@ -1,4 +1,4 @@
-import { Typography, MenuItem } from '@mui/material';
+import { Typography, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import UserService from '../../services/userService';
 import RelationService from '../../services/relationService';
@@ -10,12 +10,20 @@ import { CustomSelect } from '../../helpers/styleComponents';
 import UserContext from '../../context/userContext';
 
 export default function Social() {
-  var tabOptions = ['Posts', 'Users'];
-  var relationOptions = ['Friends', 'Pending', 'Requested'];
+  var tabOptions = {
+    Posts: 'Posts',
+    Users: 'Users',
+  };
+
+  var relationOptions = {
+    Friends: 'Friends',
+    Pending: 'Pending',
+    Requested: 'Requested',
+  };
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialTab = searchParams.get('o') || tabOptions[0];
-  const initialRelation = searchParams.get('r') || relationOptions[0];
+  const initialTab = searchParams.get('o') || tabOptions.Posts;
+  const initialRelation = searchParams.get('r') || relationOptions.Friends;
 
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
@@ -25,30 +33,30 @@ export default function Social() {
 
   useEffect(() => {
     const loadContent = async () => {
-      if (tabOption === 'Posts') {
+      if (tabOption === tabOptions.Posts) {
         // Pass in empty object for later query parameters
         var query = {
           limit: 100,
         };
         UserService.getConnectedPosts(query).then(setPosts);
-      } else if (tabOption === 'Users') {
+      } else {
         RelationService.getRelations(user.id, relationOption).then(setUsers);
       }
     };
     loadContent();
-  }, [tabOption, relationOption, user.id]);
+  }, [tabOption, relationOption, user.id, tabOptions.Posts]);
 
   // use effect to update search params
   useEffect(() => {
-    if (tabOption === 'Posts') {
+    if (tabOption === tabOptions.Posts) {
       setSearchParams({ o: tabOption });
     } else {
       setSearchParams({ o: tabOption, r: relationOption });
     }
-  }, [tabOption, relationOption, setSearchParams]);
+  }, [tabOption, relationOption, tabOptions.Posts, setSearchParams]);
 
   const renderTabContent = () => {
-    if (tabOption === tabOptions[0]) {
+    if (tabOption === tabOptions.Posts) {
       return <Posts posts={posts} />;
     } else {
       return <Users users={users} />;
@@ -58,23 +66,38 @@ export default function Social() {
   const renderTabSelectors = () => {
     return (
       <div className="selectors-wrapper">
-        <CustomSelect
-          value={tabOption}
-          onChange={(e) => setTabOption(e.target.value)}
-        >
-          {tabOptions.map((option, index) => (
-            <MenuItem key={index} value={option}>{option}</MenuItem>
-          ))}
-        </CustomSelect>
-        {tabOption === tabOptions[1] && (
+        <FormControl>
+          <InputLabel id="social-option-label">Associated</InputLabel>
           <CustomSelect
-            value={relationOption}
-            onChange={(e) => setRelationOption(e.target.value)}
+            labelId="social-option-label"
+            value={tabOption}
+            label="Associated"
+            onChange={(e) => setTabOption(e.target.value)}
           >
-            {relationOptions.map((option, index) => (
-              <MenuItem key={index} value={option}>{option}</MenuItem>
+            {Object.keys(tabOptions).map((option, index) => (
+              <MenuItem key={index} value={tabOptions[option]}>
+                {tabOptions[option]}
+              </MenuItem>
             ))}
           </CustomSelect>
+        </FormControl>
+        {tabOption === tabOptions.Users && (
+          <FormControl>
+            <InputLabel id="status-selector-label">Relation Status</InputLabel>
+            <CustomSelect
+              labelId="status-selector-label"
+              label="Relation Status"
+              value={relationOption}
+              onChange={(e) => setRelationOption(e.target.value)}
+              style={{ minWidth: '150px', textAlign: 'left' }}
+            >
+              {Object.keys(relationOptions).map((option, index) => (
+                <MenuItem key={index} value={relationOptions[option]}>
+                  {relationOptions[option]}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+          </FormControl>
         )}
       </div>
     );
