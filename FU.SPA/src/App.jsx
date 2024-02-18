@@ -8,6 +8,7 @@ import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import PostPage from './components/pages/PostPage';
 import UserProfile from './components/pages/UserProfile';
+import PlayerDiscover from './components/pages/PlayerDiscover';
 
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -45,6 +46,7 @@ function App() {
             <Route path="/posts/:postId" element={<PostPage />} />
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
+            <Route path="/discover/players" element={<PlayerDiscover />} />
           </Routes>
         </div>
       </UserProvider>
