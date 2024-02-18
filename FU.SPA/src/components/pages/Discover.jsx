@@ -41,7 +41,7 @@ export default function Discover() {
         games: games,
         tags: tags,
         //pass formatted option after :
-        sortOption: optionSort(sortOption),
+        //sortOption: optionSort(sortOption),
       };
       //sortOption : asc
       const response = await SearchService.searchPosts(query);
@@ -57,7 +57,7 @@ export default function Discover() {
   //if the option is desc, send to the api 'title:desc'
   //if the option is soonest, send to the api 'soonest:asc'
   //if the option is soonest:desc, send to the api 'soonest:desc'
-  //update searchService searchPosts.
+  //update searchService searchPosts. 
   const optionSort = (option) => {
     var choice;
     if (option === 'newest') {
@@ -85,7 +85,7 @@ export default function Discover() {
      setPage(initialPage);
      setGames(initialGames);
      setTags(initialTags);
-     setAscDsc(initialSortOption);
+     setSortOption(initialSortOption);
    }, [location.search]);
 
   // function for search submissions
@@ -116,7 +116,7 @@ const handleFilterChange = (newGames, newTags, newSortOption) => {
     if (page > 1) params.set('page', page);
     games.forEach(game => params.append('game', game.id));
     tags.forEach(tag => params.append('tag', tag.id));
-    ascDscs.forEach(ascDsc => params.append('ascDsc', ascDsc.id));
+    sortOption.forEach(sortOption => params.append('sortOption', sortOption.id));
 
     // update URL(only show page in URL if page > 1)
     navigate(`/discover${params.toString() ? `?${params.toString()}` : ''}`, { replace: true });
