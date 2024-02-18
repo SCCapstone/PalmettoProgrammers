@@ -216,4 +216,31 @@ public class PostService : CommonService, IPostService
 
         return;
     }
+
+    public async Task DeletePost(int postId)
+    {
+        // Find everything associated with a post
+        var post = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+        var postMessages = _dbContext.Messages.Where(m => m.ChatId == post.ChatId).ToList();
+        var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
+        var chat = _dbContext.Chats.Find(post.ChatId);
+
+        // Delete everything found
+        if (chat is not null)
+        {
+            // Break dependency on last message to allow for deletion
+            chat.LastMessageId = null;
+            _dbContext.Chats.Update(chat);
+            await _dbContext.SaveChangesAsync();
+
+            // Delete Chat
+            _dbContext.Chats.Remove(chat);
+        }
+
+        _dbContext.Posts.Remove(post);
+        _dbContext.Messages.RemoveRange(postMessages);
+        _dbContext.ChatMemberships.RemoveRange(chatMemberships);
+
+        await _dbContext.SaveChangesAsync();
+    }
 }

@@ -110,12 +110,14 @@ public class PostsController : ControllerBase
             return NotFound();
         }
 
-        if (user.UserId == post.CreatorId)
-        {
-            return Forbid("Creator cannot leave post");
-        }
-
         await _postService.LeavePost(post.Id, user);
+
+        // Delete post if there are no other users in the post
+        var postMembers = await _postService.GetPostUsers(postId);
+        if (!postMembers.Any())
+        {
+            await _postService.DeletePost(postId);
+        }
 
         return NoContent();
     }

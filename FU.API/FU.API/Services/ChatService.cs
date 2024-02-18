@@ -107,6 +107,7 @@ public class ChatService : CommonService, IChatService
             .Where(c => c.Id == chatId)
             .SelectMany(c => c.Messages)
             .OrderByDescending(m => m.CreatedAt)
+            .Include(m => m.Sender)
             .Skip((offset - 1) * limit)
             .Take(limit)
             .Reverse()
