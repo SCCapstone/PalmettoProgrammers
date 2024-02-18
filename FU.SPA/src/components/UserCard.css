@@ -1,4 +1,5 @@
-.user-name:hover {
+.user-name:hover .MuiTypography-root{
   text-decoration: underline;
   cursor: pointer;
+  text-decoration-thickness: 2px;
 }
