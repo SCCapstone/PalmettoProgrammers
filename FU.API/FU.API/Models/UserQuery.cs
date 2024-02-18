@@ -7,4 +7,8 @@ public record UserQuery
     public SortDirection? SortDirection { get; set; } = null;
     public int Limit { get; set; } = 20;
     public int Offset { get; set; } = 0;
+
+    // For user related users
+    public int? UserId { get; set; } = null;
+    public UserRelationStatus? RelationStatus { get; set; } = null;
 }

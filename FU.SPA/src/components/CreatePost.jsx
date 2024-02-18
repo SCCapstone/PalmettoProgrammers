@@ -5,6 +5,9 @@ import {
   Container,
   Typography,
   Autocomplete,
+
+  Grid,
+
   Checkbox,
   createFilterOptions,
 } from '@mui/material';
@@ -14,11 +17,15 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PostService from '../services/postService';
 import TagService from '../services/tagService';
 import GameService from '../services/gameService';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import {
+  CustomAutocomplete,
+  CustomTextField,
+  CustomDateTimePicker,
+} from '../helpers/styleComponents';
 
 export default function CreatePost() {
   const [gameName, setGameName] = useState('');
@@ -87,56 +94,57 @@ export default function CreatePost() {
             gap: 2,
           }}
         >
-          <TextField
-            required //may want to get rid of this and just check if it's empty when clicking create button.
-            fullWidth
-            id="searchGames"
-            label="Title" //might want to put a Search icon in front, if we can figure it out.
-            autoFocus
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <TextField
-            required //may want to get rid of this and just check if it's empty when clicking create button.
-            fullWidth
-            id="searchGames"
-            label="Game" //might want to put a Search icon in front, if we can figure it out.
-            type="searchGames"
-            name="searchGames"
-            value={gameName}
-            onChange={(e) => setGameName(e.target.value)}
-          />
-          <br />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker
-              label="Start Time"
-              value={null}
-              onChange={(newValue) => setStartTime(newValue)}
+            <CustomTextField
+              required //may want to get rid of this and just check if it's empty when clicking create button.
+              fullWidth
+              id="searchGames"
+              label="Title" //might want to put a Search icon in front, if we can figure it out.
+              autoFocus
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
-            <DateTimePicker
-              label="End Time"
-              value={null}
-              onChange={(newValue) => setEndTime(newValue)}
+            <CustomTextField
+              required //may want to get rid of this and just check if it's empty when clicking create button.
+              fullWidth
+              id="searchGames"
+              label="Game" //might want to put a Search icon in front, if we can figure it out.
+              type="searchGames"
+              name="searchGames"
+              value={gameName}
+              onChange={(e) => setGameName(e.target.value)}
             />
-          </LocalizationProvider>
-          <TagsSelector onChange={setTags} />
-          <Box
-            sx={{
-              display: 'flex',
-            }}
-          >
-            <Typography component="h1" variant="h6">
-              {' '}
-              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
-              Description
-            </Typography>
-          </Box>
-          <TextField
+            <br />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <CustomDateTimePicker
+                label="Start Time"
+                value={startTime}
+                onChange={(newValue) => setStartTime(newValue)}
+              />
+              <CustomDateTimePicker
+                label="End Time"
+                value={endTime}
+                onChange={(newValue) => setEndTime(newValue)}
+              />
+            </LocalizationProvider>
+            <TagsSelector onChange={setTags} />
+            <Box
+              sx={{
+                display: 'flex'
+              }}
+            >
+              <Typography component="h1" variant="h6">
+                {' '}
+                {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
+                Description
+              </Typography>
+            </Box>
+            <CustomTextField
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             multiline
-          ></TextField>
+           ></CustomTextField>
+
           <Button
             type="submit"
             fullWidth
@@ -196,7 +204,7 @@ const TagsSelector = ({ onChange }) => {
   };
 
   return (
-    <Autocomplete
+    <CustomAutocomplete
       multiple
       clearOnBlur
       value={value}

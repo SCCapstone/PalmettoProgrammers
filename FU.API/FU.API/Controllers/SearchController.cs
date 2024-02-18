@@ -22,6 +22,13 @@ public class SearchController : ControllerBase
     [Route("posts")]
     public async Task<IActionResult> SearchPosts([FromQuery] PostSearchRequestDTO request)
     {
+        // Ensure if start or end time is set, the other is set
+        // This prevents unexpected assumptions from translating client time to utc time
+        if (request.StartOnOrAfterTime is null ^ request.EndOnOrBeforeTime is null)
+        {
+            return UnprocessableEntity("Start and end time must both be set, or both be null");
+        }
+
         var posts = await _searchService.SearchPosts(request.ToPostQuery());
         var response = new List<PostResponseDTO>(posts.Count);
 

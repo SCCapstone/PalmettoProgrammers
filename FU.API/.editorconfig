@@ -14,6 +14,13 @@ dotnet_diagnostic.SA1000.severity = none
 # SA1201: Elements should appear in the correct order
 dotnet_diagnostic.SA1201.severity = none
 
+# Closing parans should not be preceded by a space
+# Disabled for long condition clarity
+dotnet_diagnostic.SA1009.severity = none
+
+# Disable remove underscores in funciton name for xUnit naming conventions
+dotnet_diagnostic.CA1707.severity = none
+
 dotnet_diagnostic.SA1309.severity = none
 dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1600.severity = none
