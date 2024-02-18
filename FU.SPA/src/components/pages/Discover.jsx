@@ -60,21 +60,22 @@ export default function Discover() {
   //update searchService searchPosts. 
   const optionSort = (option) => {
     var choice;
-    if (option === 'Newest') {
-      choice = 'newest:asc';
-    } else if (option === 'oldest') {
-      choice = 'newest:desc';
-    } else if (option === 'asc') {
-      choice = 'title:asc';
-    } else if (option === 'desc') {
-      choice = 'title:desc';
-    } else if (option === 'soonest') {
-      choice = 'soonest';
-    } else if (option === 'soonest:desc') {
-      choice = 'soonest:desc';
-    } else {
-      alert("other option chosen for optionSort method");
-    }
+    
+      if (option === 'Newest') {
+        choice = 'newest:asc';
+      } else if (option === 'oldest') {
+        choice = 'newest:desc';
+      } else if (option === 'asc') {
+        choice = 'title:asc';
+      } else if (option === 'desc') {
+        choice = 'title:desc';
+      } else if (option === 'soonest') {
+        choice = 'soonest';
+      } else if (option === 'soonest:desc') {
+        choice = 'soonest:desc';
+      } else {
+        alert("other option chosen for optionSort method");
+      }
 
     return choice;
   }
@@ -98,7 +99,7 @@ export default function Discover() {
 const handleFilterChange = (newGames, newTags, newSortOption) => {
   setGames(newGames);
   setTags(newTags);
-  setSortOption(newSortOption);
+  //setSortOption(newSortOption);
   setPage(1); // Reset to page 1 when filters change
 };
 
@@ -116,7 +117,7 @@ const handleFilterChange = (newGames, newTags, newSortOption) => {
     if (page > 1) params.set('page', page);
     games.forEach(game => params.append('game', game.id));
     tags.forEach(tag => params.append('tag', tag.id));
-    sortOption.forEach(sortOption => params.append('sortOption', sortOption.id));
+    //sortOption.forEach(sortOption => params.append('sortOption', sortOption.id));
 
     // update URL(only show page in URL if page > 1)
     navigate(`/discover${params.toString() ? `?${params.toString()}` : ''}`, { replace: true });
