@@ -4,7 +4,7 @@ import TagService from '../services/tagService';
 import { Autocomplete, Checkbox, TextField } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import AscDscService from '../services/ascDscService';
+import SortOptionService from '../services/sortOptionService';
 
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
@@ -74,7 +74,7 @@ export const TagsSelector = ({ onChange }) => {
 };
 
 
-export const AscDscSelector = ({ onChange }) => {
+export const SortOptionSelector = ({ onChange }) => {
   // newest is most recent posted. soonest is the soonest start time.
   var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
 

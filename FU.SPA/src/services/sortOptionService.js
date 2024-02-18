@@ -49,10 +49,10 @@ const twoChoices = async (choice) => {
     return choices;
 };
 
-const AscDscService = {
+const SortOptionService = {
     findGameByAscName,
     findGameByDscName,
     searchAscDsc,
     twoChoices
 }
-export default AscDscService;
+export default SortOptionService;

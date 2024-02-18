@@ -2,7 +2,7 @@ import { TextField, Typography, Pagination } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { TagsSelector, GamesSelector, AscDscSelector } from '../Selectors';
+import { TagsSelector, GamesSelector, SortOptionSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import Posts from '../Posts';
 import './Discover.css';
@@ -60,7 +60,7 @@ export default function Discover() {
   //update searchService searchPosts. 
   const optionSort = (option) => {
     var choice;
-    if (option === 'newest') {
+    if (option === 'Newest') {
       choice = 'newest:asc';
     } else if (option === 'oldest') {
       choice = 'newest:desc';
@@ -128,7 +128,7 @@ const handleFilterChange = (newGames, newTags, newSortOption) => {
         <Typography variant="h5">Filters</Typography>
         <GamesSelector onChange={(e, v) => handleFilterChange(v, tags)} />
         <TagsSelector onChange={(e, v) => handleFilterChange(v, games)} />
-        <AscDscSelector onChange={(e, v) => handleFilterChange(v, sortOption)} />
+        <SortOptionSelector onChange={(e, v) => handleFilterChange(v, sortOption)} />
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
