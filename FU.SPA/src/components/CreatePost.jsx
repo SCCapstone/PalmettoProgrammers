@@ -31,7 +31,7 @@ export default function CreatePost() {
   const [gameName, setGameName] = useState('');
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs());
-  const [endTime, setEndTime] = useState(dayjs());
+  const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
