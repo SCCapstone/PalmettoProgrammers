@@ -4,10 +4,7 @@ import {
   Box,
   Container,
   Typography,
-  Autocomplete,
-
   Grid,
-
   Checkbox,
   createFilterOptions,
 } from '@mui/material';
@@ -94,56 +91,49 @@ export default function CreatePost() {
             gap: 2,
           }}
         >
-            <CustomTextField
-              required //may want to get rid of this and just check if it's empty when clicking create button.
-              fullWidth
-              id="searchGames"
-              label="Title" //might want to put a Search icon in front, if we can figure it out.
-              autoFocus
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+          <CustomTextField
+            required //may want to get rid of this and just check if it's empty when clicking create button.
+            fullWidth
+            id="searchGames"
+            label="Title" //might want to put a Search icon in front, if we can figure it out.
+            autoFocus
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Grid item xs={12}>
+            <GameSelector onChange={setGameName} />
+          </Grid>
+          <br />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <CustomDateTimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
             />
-            <CustomTextField
-              required //may want to get rid of this and just check if it's empty when clicking create button.
-              fullWidth
-              id="searchGames"
-              label="Game" //might want to put a Search icon in front, if we can figure it out.
-              type="searchGames"
-              name="searchGames"
-              value={gameName}
-              onChange={(e) => setGameName(e.target.value)}
+            <CustomDateTimePicker
+              label="End Time"
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
             />
-            <br />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <CustomDateTimePicker
-                label="Start Time"
-                value={startTime}
-                onChange={(newValue) => setStartTime(newValue)}
-              />
-              <CustomDateTimePicker
-                label="End Time"
-                value={endTime}
-                onChange={(newValue) => setEndTime(newValue)}
-              />
-            </LocalizationProvider>
-            <TagsSelector onChange={setTags} />
-            <Box
-              sx={{
-                display: 'flex'
-              }}
-            >
-              <Typography component="h1" variant="h6">
-                {' '}
-                {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
-                Description
-              </Typography>
-            </Box>
-            <CustomTextField
+          </LocalizationProvider>
+          <TagsSelector onChange={setTags} />
+          <Box
+            sx={{
+              display: 'flex',
+            }}
+          >
+            <Typography component="h1" variant="h6">
+              {' '}
+              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
+              Description
+            </Typography>
+          </Box>
+          <CustomTextField
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             multiline
-           ></CustomTextField>
+          ></CustomTextField>
 
           <Button
             type="submit"
@@ -162,6 +152,61 @@ export default function CreatePost() {
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
+
+const GameSelector = ({ onChange }) => {
+  const [gammeOptions, setGameOptions] = useState([]);
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    GameService.searchGames('').then((games) => setGameOptions(games));
+  }, []);
+
+  const onInputChange = (event, newValue) => {
+    console.log('newValue');
+    console.log(newValue);
+
+    setValue(newValue);
+    onChange(newValue);
+  };
+
+  const onFilterOptions = (options, params) => {
+    const filtered = filter(options, params);
+
+    const { inputValue } = params;
+    // Suggest the creation of a new value
+    const isExisting = options.some((option) => inputValue === option.name);
+    if (inputValue !== '' && !isExisting) {
+      filtered.push({
+        // inputValue,
+        id: null,
+        name: inputValue,
+      });
+    }
+
+    return filtered;
+  };
+
+  return (
+    <CustomAutocomplete
+      clearOnBlur
+      value={value}
+      onChange={onInputChange}
+      options={gammeOptions}
+      disableCloseOnSelect
+      filterOptions={onFilterOptions}
+      getOptionLabel={(o) => (o ? o.name : '')}
+      isOptionEqualToValue={(option, value) => option.name === value.name}
+      renderOption={(props, option) => <li {...props}>{option.name}</li>}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Game"
+          placeholder="Select or create a game"
+        />
+      )}
+    />
+  );
+};
 
 const TagsSelector = ({ onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
