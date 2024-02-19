@@ -25,7 +25,7 @@ import {
 } from '../helpers/styleComponents';
 
 export default function CreatePost() {
-  const [gameName, setGameName] = useState('');
+  const [game, setGame] = useState(null);
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs());
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
@@ -43,7 +43,7 @@ export default function CreatePost() {
       tagIds.push(newTag.id);
     }
 
-    let game = await GameService.findOrCreateGameByTitle(gameName);
+    var findGame = await GameService.findOrCreateGameByTitle(game.name);
 
     const post = {
       title: title,
@@ -51,7 +51,7 @@ export default function CreatePost() {
       startTime: startTime !== null ? startTime.toISOString() : null,
       endTime: endTime !== null ? endTime.toISOString() : null,
       tagIds: tagIds,
-      gameId: game.id,
+      gameId: findGame.id,
     };
 
     try {
@@ -101,7 +101,7 @@ export default function CreatePost() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector onChange={setGameName} />
+            <GameSelector onChange={setGame} />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
