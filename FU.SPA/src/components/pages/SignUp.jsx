@@ -20,6 +20,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  // Function called when button is pressed
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -30,11 +31,14 @@ export default function SignUp() {
       password: data.get('password'),
     };
 
+    // Checking if passwords are identical
     if (creds.password !== data.get('confirmPassword')) {
       alert('Passwords do not match');
       return;
     }
 
+    // This try/catch block will attempt to sign the user up, check for any
+    // errors in signup, and redirect to signin/last page if there are no errors
     try { 
       await AuthService.signUp(creds);
       navigate('/SignIn');
@@ -50,6 +54,7 @@ export default function SignUp() {
     }
   };
 
+  // Display component
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
