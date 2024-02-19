@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, TextField, Select } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -113,5 +113,25 @@ export const CustomDateTimePicker = styled(DateTimePicker)({
   },
   '& .MuiIconButton-root': {
     color: '#E340DC', // Change clear button color
+  },
+});
+
+export const CustomSelect = styled(Select)({
+  '& .MuiInputLabel-root': {
+    color: 'white', // Change label text color
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#E340DC',
+    },
+    '&:hover fieldset': {
+      borderColor: '#E340DC',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#E340DC',
+    },
+  },
+  '& .MuiSelect-icon': {
+    color: '#E340DC', // Change the color of the select icon
   },
 });

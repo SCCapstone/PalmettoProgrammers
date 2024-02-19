@@ -66,6 +66,11 @@ public enum UserRelationStatus
     /// User1 is blocked by User2
     /// </summary>
     BlockedBy,
+
+    /// <summary>
+    /// No relation.
+    /// </summary>
+    None,
 }
 
 /// <summary>
