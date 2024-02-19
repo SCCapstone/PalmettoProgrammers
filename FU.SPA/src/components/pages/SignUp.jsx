@@ -1,6 +1,5 @@
 import {
   Button,
-  TextField,
   Link,
   Box,
   Container,
@@ -12,12 +11,14 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthService from '../../services/authService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { CustomTextField } from '../../helpers/styleComponents';
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,6 +38,12 @@ export default function SignUp() {
     try { 
       await AuthService.signUp(creds);
       navigate('/SignIn');
+      var returnUrl = searchParams.get('returnUrl');
+      if (returnUrl !== null && returnUrl !== '') {
+        navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
+      } else {
+        navigate('/SignIn');
+      }
     } catch (event) {
       window.alert('Error in sign up');
       console.log(event);
@@ -58,7 +65,7 @@ export default function SignUp() {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" style={{ color: '#FFF' }}>
             Sign up
           </Typography>
           <Box
@@ -69,7 +76,7 @@ export default function SignUp() {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   id="username"
@@ -80,7 +87,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   id="email"
@@ -90,7 +97,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   name="password"
@@ -101,7 +108,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   name="confirmPassword"
@@ -122,7 +129,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/SignIn" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
