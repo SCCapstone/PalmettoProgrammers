@@ -1,0 +1,22 @@
+.user-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  text-align: left;
+  color: #fff;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.user-name:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

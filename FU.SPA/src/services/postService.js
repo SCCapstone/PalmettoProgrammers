@@ -30,6 +30,22 @@ const getPostDetails = async (postId) => {
       ...(AuthService.getAuthHeader() ?? {}),
     },
   });
+
+  if (!response.ok) {
+    throw new Error('Error in post creation');
+  }
+
+  const jsonResponse = await response.json();
+
+  console.log(jsonResponse);
+
+  return jsonResponse;
+};
+
+const getPostUsers = async (postId) => {
+  const response = await fetch(`${API_BASE_URL}/posts/${postId}/users`, {
+    method: 'GET',
+  });
   const jsonResponse = await response.json();
 
   console.log(jsonResponse);
@@ -60,5 +76,6 @@ const PostService = {
   getPostDetails,
   joinPost,
   leavePost,
+  getPostUsers,
 };
 export default PostService;

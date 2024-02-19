@@ -23,9 +23,11 @@ const UserProfile = () => {
       const profile = await UserService.getUserprofile(userId);
       setUserProfile(profile);
       setDefaultPFP(
-        profile.pfpUrl.includes(
-          'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-        ),
+        !profile.pfpUrl ||
+          (profile.pfpUrl !== null &&
+            profile.pfpUrl.includes(
+              'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
+            )),
       );
       setIsOwnProfile(user && user.id === profile.id);
       if (profile && user && !(user.id === profile.id)) {
@@ -159,7 +161,7 @@ const UserProfile = () => {
         <div
           className="header"
           style={{
-            width: '55%',
+            width: isOwnProfile ? '100%' : '55%',
             transition: 'width 0.3s ease',
           }}
         >
