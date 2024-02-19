@@ -33,8 +33,6 @@ const signUp = async (credentials) => {
   if (!response.ok) {
     throw new Error('Error in sign up');
   }
-
-  // return response.json();
 };
 
 const getToken = () => {
