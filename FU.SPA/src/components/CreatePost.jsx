@@ -201,6 +201,7 @@ const GameSelector = ({ onChange }) => {
         <TextField
           {...params}
           label="Game"
+          required
           placeholder="Select or create a game"
         />
       )}
