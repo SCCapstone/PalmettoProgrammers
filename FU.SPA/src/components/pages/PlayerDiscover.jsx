@@ -1,10 +1,11 @@
 import { Typography, InputAdornment, Pagination } from '@mui/material';
 import { TagsSelector, GamesSelector } from '../Selectors';
 import Stack from '@mui/material/Stack';
+import UserService from '../../services/userService';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './Discover.css';
-import Players from '../Players';
+import Users from '../Users';
 import {
     CustomTextField,
     CustomTimePicker,
@@ -18,7 +19,7 @@ const PlayerDiscover = () => {
     const initialPage = parseInt(searchParams.get('page'), 10) || 1;
     const [page, setPage] = useState(initialPage);
     const [searchText, setSearchText] = useState(initialSearchText);
-    const [players, setplayers] = useState([]);
+    const [players, setPlayers] = useState([]);
 
 
     const lastPost = page * postsPerPage;
@@ -28,8 +29,7 @@ const PlayerDiscover = () => {
   // each page has correct number of posts
   const currentPlayers = players.slice(firstPost, lastPost);
 
-
-     // function for search submissions
+  // function for search submissions
   const searchSubmit = (newSearchText) => {
     setSearchText(newSearchText);
     setPage(1); // reset to page 1 on new search
@@ -57,7 +57,7 @@ return (
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={searchSubmit} />
-        <Players players={currentPlayers} />
+        <Users users={currentPlayers} />
         <div
           style={{
             display: 'flex',
