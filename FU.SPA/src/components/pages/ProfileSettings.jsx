@@ -1,10 +1,11 @@
-import { Container, Box, Typography, Grid, TextField, Button } from "@mui/material";
+import { Container, Box, Typography, Button } from "@mui/material";
 import { useState } from 'react';
-import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
 import UserService from '../../services/userService'
+import { TagsSelector, GamesSelector } from "../Selectors";
+import { CustomTextField, CustomDatePicker } from "../../helpers/styleComponents";
 
 export default function ProfileSettings () {
 
@@ -13,15 +14,16 @@ export default function ProfileSettings () {
       * pfpurl
       * bio
       * date of birth
-      * username
       * favorite games
       * favorite tags
       */}
 
-  const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [pfpUrl, setPfpUrl] = useState('');
+  const [favoriteGames, setFavoriteGames] = useState([]);
+  const [favoriteTags, setFavoriteTags] = useState([]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,20 +31,19 @@ export default function ProfileSettings () {
     try {
       var idJson = await UserService.getUserId();
 
+      //console.log(favoriteGames);
+      //console.log(favoriteTags);
+
       const data = {
         id: idJson.userId,
         pfpUrl: pfpUrl,
         bio: bio,
-        // Fix DOB issue, currently is appending time which is not desired
-        // just split on substring
-        // requestBuilder.js line 22
-        dob: dateOfBirth !== null ? dateOfBirth.toISOString() : null,
-        username: username
-        // favoriteGames: [],
-        // favoriteTags: []
+        dob: dateOfBirth !== null ? dateOfBirth.toISOString().substring(0, 10) : null,
+        favoriteGames: favoriteGames,
+        favoriteTags: favoriteTags
       };
 
-      const response = await UserService.updateUserProfile(data);
+      await UserService.updateUserProfile(data);
     } catch (e) {
       console.log(e);
     }
@@ -71,16 +72,7 @@ export default function ProfileSettings () {
           }}
           sx={{ mt: 3 }}
         >
-          <Grid container spacing={2}>
-            <TextField
-              fullWidth
-              id="setUsername"
-              label="Update Username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
+            <CustomTextField
               fullWidth
               id="setBio"
               label="Update Bio"
@@ -90,21 +82,26 @@ export default function ProfileSettings () {
             />
             <br />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+              <CustomDatePicker
                 label="Date of Birth"
                 value={null} // Leave null as to not change date
                 fullWidth
                 onChange={(newValue) => setDateOfBirth(newValue)}
               />
             </LocalizationProvider>
-            <TextField
+            <CustomTextField
               fullWidth
               id="setPfpUrl"
               label="Update Profile Picture (Insert link)"
               value={pfpUrl}
               onChange={(e) => setPfpUrl(e.target.value)}
             />
-          </Grid>
+            <TagsSelector
+              onChange={setFavoriteTags}
+            />
+            <GamesSelector
+              onChange={setFavoriteGames}
+            />
           <Button
             type="submit"
             fullWidth
