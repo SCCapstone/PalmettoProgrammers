@@ -77,7 +77,7 @@ export const TagsSelector = ({ onChange }) => {
 export const SortOptionSelector = ({ onChange }) => {
   // newest is most recent posted. soonest is the soonest start time.
   var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
-
+  //var optionsVal = [1, 2, 3, 4, 5, 6];
   
   return (
     <Autocomplete
@@ -85,7 +85,8 @@ export const SortOptionSelector = ({ onChange }) => {
       onChange={onChange}
       options={options}
       disableCloseOnSelect
-      getOptionLabel={(option) => option.name}
+      getOptionLabel={(option) => options.name}
+      //value={(option) => optionsVal}
       renderOption={(props, option) => (
         <li {...props}>
           {option}

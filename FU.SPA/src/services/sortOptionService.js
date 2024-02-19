@@ -42,6 +42,5 @@ const SortOptionService = {
     findGameByAscName,
     findGameByDscName,
     searchAscDsc,
-    twoChoices
-}
+};
 export default SortOptionService;
