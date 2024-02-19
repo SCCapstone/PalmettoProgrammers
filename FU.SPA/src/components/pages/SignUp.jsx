@@ -39,7 +39,7 @@ export default function SignUp() {
 
     // This try/catch block will attempt to sign the user up, check for any
     // errors in signup, and redirect to signin/last page if there are no errors
-    try { 
+    try {
       await AuthService.signUp(creds);
       navigate('/SignIn');
       var returnUrl = searchParams.get('returnUrl');
