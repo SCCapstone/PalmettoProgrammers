@@ -18,17 +18,19 @@ A random string of 32+ characters is required in the `JWT_SECRET` environment va
 JWT_SECRET="my-32-character-ultra-secure-and-ultra-long-secret"
 ```
 ### Starting Postgres
-Install and start the DB by installing Docker and running the following command.
+Install and start the database by installing Docker and running the following command.
 ```
 docker run --name postgres-490 -e POSTGRES_DB=fu_dev -e POSTGRES_PASSWORD=dev -e POSTGRES_USER=dev -p 5432:5432 postgres:alpine
 ```
 To run the container at a later time, run:
-```docker container start postgres-490```
+```
+docker container start postgres-490
+```
 
 Alternatively, install and start a PostgreSQL database manually.
 
-### Setup Postgres
-Run the following command to apply the latest db changes.
+### Updating Postgres
+Run the following command to apply the latest database changes.
 Make sure you have the Entity Framework tool installed.
 ```
 dotnet tool install --global dotnet-ef
@@ -38,7 +40,7 @@ dotnet ef database update
 ### Connect to Postgres
 Set the `CONNECTION_STRING` environment variable.
 ```
-CONNECTION_STRING="Host=localhost; Database=ForcesUnite; Username=dev; Password=dev"
+CONNECTION_STRING="Host=localhost; Database=fu_dev; Username=dev; Password=dev"
 ```
 
 ### SPA Environment Setup
@@ -67,16 +69,40 @@ npm run dev
 ## FU.API
 Follow Google's C# [style guide](https://google.github.io/styleguide/csharp-style.html)
 ## FU.SPA
-Follow Google's JavaScript [style guide](https://google.github.io/styleguide/jsguide.html)
+Follow Prettier's HTML, CSS, JavaScript/JSX [style formatting](https://prettier.io/docs/en/)
 
-Follow Google's HTML/CSS [style guide](https://google.github.io/styleguide/htmlcssguide.html)
 # Deployment
-Not yet deployed. Will deploy to Azure using publish profile.
+Deployed to Azure using GitHub Actions.
+
+# Testing
+## Unit Tests
+To run unit tests on the backend:
+```
+cd FU.API
+dotnet test
+```
+Tests are located in `FU.API/FU.API.Tests`.
+The tests are ran on every commit made.
+
+## Behavioral Tests
+To run behavioral tests on the frontend:
+```
+cd FU.SPA
+npm run selenium-test
+```
+Alternativly, you can use:
+```
+selenium-side-runner tests/*.side -c browserName=firefox
+```
+This does the same as above but directly calls the CLI command. You can also change the browserName
+option to chrome/chromium if you want to test that browser engine instead.
+
+Tests are located in `FU.SPA/tests`.
 
 # Authors
-Ethan Adams - epadams@email.sc.edu
-
 Aaron Keys - alkeys@email.sc.edu
+
+Ethan Adams - epadams@email.sc.edu
 
 Evan Scales - escales@email.sc.edu
 

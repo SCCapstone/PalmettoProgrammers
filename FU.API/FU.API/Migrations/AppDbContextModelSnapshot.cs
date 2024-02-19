@@ -31,6 +31,7 @@ namespace FU.API.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateOnly?>("DOB")
@@ -44,6 +45,10 @@ namespace FU.API.Migrations
 
                     b.Property<bool>("IsOnline")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("NormalizedBio")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("NormalizedUsername")
                         .IsRequired()
@@ -298,6 +303,7 @@ namespace FU.API.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("EndTime")
@@ -308,6 +314,14 @@ namespace FU.API.Migrations
 
                     b.Property<int?>("MaxPlayers")
                         .HasColumnType("integer");
+
+                    b.Property<string>("NormalizedDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("StartTime")
                         .HasColumnType("timestamp with time zone");

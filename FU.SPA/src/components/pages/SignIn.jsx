@@ -1,6 +1,5 @@
 import {
   Button,
-  TextField,
   Link,
   Box,
   Container,
@@ -10,9 +9,21 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import AuthService from '../../services/authService';
+import UserContext from '../../context/userContext';
+import { useContext } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { CustomTextField } from '../../helpers/styleComponents';
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const { login } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  var returnUrl = searchParams.get('returnUrl');
+  var signUpLink = returnUrl
+    ? `/SignUp?returnUrl=${encodeURIComponent(returnUrl)}`
+    : '/SignUp';
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -21,12 +32,18 @@ export default function SignIn() {
       password: data.get('password'),
     };
 
-    AuthService.signIn(creds);
+    try {
+      const response = await AuthService.signIn(creds);
+      login(response.token);
+      navigate(returnUrl ?? '/');
+    } catch {
+      window.alert('Error signing in');
+    }
   };
 
   // Creates and returns signin form
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" height="100%">
       <CssBaseline />
       <Box
         sx={{
@@ -39,12 +56,12 @@ export default function SignIn() {
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" style={{ color: '#FFF' }}>
           Sign in to Forces Unite
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           {/* Username Text Field */}
-          <TextField
+          <CustomTextField
             margin="normal"
             required
             fullWidth
@@ -55,7 +72,7 @@ export default function SignIn() {
             autoFocus
           />
           {/* Password Text Field */}
-          <TextField
+          <CustomTextField
             margin="normal"
             required
             fullWidth
@@ -73,7 +90,7 @@ export default function SignIn() {
           >
             Sign In
           </Button>
-          <Link href="#" variant="body2">
+          <Link href={signUpLink} variant="body2">
             Sign Up
           </Link>
         </Box>

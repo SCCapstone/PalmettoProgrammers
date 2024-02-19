@@ -8,4 +8,6 @@ public interface ICommonService
     Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims);
 
     Task<ApplicationUser?> GetUser(int userId);
+
+    Task<bool> HasJoinedPost(int userId, int postId);
 }

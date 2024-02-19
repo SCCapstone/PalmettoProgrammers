@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import config from '../config';
+const API_BASE_URL = config.API_URL;
 const LOCAL_STORAGE_TOKEN_KEY = 'token';
 
 // Sign in, passes username and password to API
@@ -38,11 +39,6 @@ const signUp = async (credentials) => {
 
 const getToken = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
-
-  if (!token) {
-    throw new Error('No token in local storage');
-  }
-
   return token;
 };
 

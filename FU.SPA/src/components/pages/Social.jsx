@@ -6,13 +6,21 @@ export default function Social() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    UserService.getConnectedPosts().then(setPosts);
+    // Pass in empty object for later query parameters
+    var query = {
+      limit: 100,
+    };
+    UserService.getConnectedPosts(query).then(setPosts);
   }, []);
+
+  const renderTabContent = () => {
+    return <Posts posts={posts} />;
+  };
 
   return (
     <>
-      <h1 style={{ textAlign: 'left' }}>Posts</h1>
-      <Posts posts={posts} />
+      <h1 style={{ textAlign: 'left' }}>Associated Posts</h1>
+      {renderTabContent()}
     </>
   );
 }

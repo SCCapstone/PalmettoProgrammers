@@ -3,8 +3,23 @@
 # SA1633: File should have header
 dotnet_diagnostic.SA1633.severity = none
 
+# Xml Comment Analysis Disabled warning
+dotnet_diagnostic.SA0001.severity = none
+
+# KeywordsMustBeSpacedCorrectly 
+# disabled because conflicts with formatter
+# should never happed if using a formatter anyways
+dotnet_diagnostic.SA1000.severity = none
+
 # SA1201: Elements should appear in the correct order
 dotnet_diagnostic.SA1201.severity = none
+
+# Closing parans should not be preceded by a space
+# Disabled for long condition clarity
+dotnet_diagnostic.SA1009.severity = none
+
+# Disable remove underscores in funciton name for xUnit naming conventions
+dotnet_diagnostic.CA1707.severity = none
 
 dotnet_diagnostic.SA1309.severity = none
 dotnet_diagnostic.SA1101.severity = none
@@ -13,21 +28,23 @@ dotnet_diagnostic.SA1600.severity = none
 # SA1413: Use trailing comma in multi-line initializers
 dotnet_diagnostic.SA1413.severity = none
 csharp_indent_labels = one_less_than_current
-csharp_using_directive_placement = outside_namespace:silent
+csharp_using_directive_placement = inside_namespace
 csharp_prefer_simple_using_statement = true:suggestion
-csharp_prefer_braces = true:silent
-csharp_style_namespace_declarations = block_scoped:silent
-csharp_style_prefer_method_group_conversion = true:silent
-csharp_style_prefer_top_level_statements = true:silent
+csharp_prefer_braces = true
+csharp_style_namespace_declarations = file_scoped
+csharp_style_prefer_method_group_conversion = true
+csharp_style_prefer_top_level_statements = true
 csharp_style_prefer_primary_constructors = true:suggestion
-csharp_style_expression_bodied_methods = false:silent
-csharp_style_expression_bodied_constructors = false:silent
-csharp_style_expression_bodied_operators = false:silent
-csharp_style_expression_bodied_properties = true:silent
-csharp_style_expression_bodied_indexers = true:silent
-csharp_style_expression_bodied_accessors = true:silent
-csharp_style_expression_bodied_lambdas = true:silent
-csharp_style_expression_bodied_local_functions = false:silent
+csharp_style_expression_bodied_methods = false
+csharp_style_expression_bodied_constructors = false
+csharp_style_expression_bodied_operators = false
+csharp_style_expression_bodied_properties = true
+csharp_style_expression_bodied_indexers = true
+csharp_style_expression_bodied_accessors = true
+csharp_style_expression_bodied_lambdas = true
+csharp_style_expression_bodied_local_functions = false
+dotnet_diagnostic.IDE0007.severity = none
+dotnet_diagnostic.IDE0008.severity = none
 csharp_space_around_binary_operators = before_and_after
 
 [*.{cs,vb}]
@@ -84,10 +101,19 @@ end_of_line = crlf
 dotnet_style_coalesce_expression = true:suggestion
 dotnet_style_null_propagation = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
-dotnet_style_prefer_auto_properties = true:silent
+dotnet_style_prefer_auto_properties = true
 dotnet_style_object_initializer = true:suggestion
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 
 # SA:1602 Disable enumeration documentation
 dotnet_diagnostic.SA1602.severity = none
+
+# Disable langauge rules
+dotnet_diagnostic.CA1303.severity = none
+dotnet_diagnostic.CA1304.severity = none
+dotnet_diagnostic.CA1311.severity = none
+dotnet_diagnostic.CA1305.severity = none
+
+# disable style rules so they don't overlap with stylecop
+dotnet_analyzer_diagnostic.category-Style.severity = none

@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 {
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
-    options.TokenValidationParameters = new ()
+    options.TokenValidationParameters = new()
     {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
         ValidateLifetime = true,
@@ -72,7 +72,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ITagService, TagService>();
-builder.Services.AddScoped<SearchService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IRelationService, RelationService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
 
 // Add SignalR
@@ -144,7 +145,14 @@ else
 }
 
 // Allow any cors
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(x => x
+    .WithOrigins("http://localhost:5173", "https://jolly-glacier-0ae92c40f.4.azurestaticapps.net")
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials());
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = ExceptionHandler.HandleException });
