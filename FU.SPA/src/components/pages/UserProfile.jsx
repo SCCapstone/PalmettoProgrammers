@@ -26,10 +26,10 @@ const UserProfile = () => {
       setUserProfile(profile);
       setDefaultPFP(
         !profile.pfpUrl ||
-        (profile.pfpUrl !== null &&
-          profile.pfpUrl.includes(
-            'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-          )),
+          (profile.pfpUrl !== null &&
+            profile.pfpUrl.includes(
+              'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
+            )),
       );
       setIsOwnProfile(user && user.id === profile.id);
       if (profile && user && !(user.id === profile.id)) {
@@ -139,7 +139,7 @@ const UserProfile = () => {
       return;
     }
     if (user) {
-      // return <Chat chatId={chatId} />;
+      return <Chat chatId={chatId} />;
     } else {
       return <ChatLocked chatType="direct" reason="no-user" />;
     }
@@ -190,7 +190,7 @@ const SocialRelationActionButton = ({ requesteeId }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => UpdateStatus(), []);
 
-  let handleClick = () => { };
+  let handleClick = () => {};
   let buttonText = '';
 
   // don't render if current user and viewed user are not loaded

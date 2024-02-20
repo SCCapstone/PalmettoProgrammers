@@ -36,7 +36,7 @@ const paramToDayjs = (searchParams, paramKey) => {
 };
 
 export default function Discover() {
-  const postsPerPage = 3; // limit of posts on a page(increase later, low for testing)
+  const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [posts, setPosts] = useState([]);
