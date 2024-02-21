@@ -1,7 +1,7 @@
 import { Typography, InputAdornment, Pagination } from '@mui/material';
 import { TagsSelector, GamesSelector } from '../Selectors';
 import Stack from '@mui/material/Stack';
-import UserService from '../../services/userService';
+import SearchService from '../../services/searchService';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './Discover.css';
@@ -28,6 +28,17 @@ const PlayerDiscover = () => {
 
   // each page has correct number of posts
   const currentPlayers = players.slice(firstPost, lastPost);
+
+  useEffect(() => {
+    const submitSearch = async () => {
+      const query = {
+        keywords: searchText,
+      };
+      const response = await SearchService.searchUsers(query);
+      setPlayers(response);
+    };
+    submitSearch();
+  },[searchText])
 
   // function for search submissions
   const searchSubmit = (newSearchText) => {
