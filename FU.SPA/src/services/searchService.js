@@ -27,5 +27,24 @@ const searchPosts = async (query) => {
   return await response.json();
 };
 
-const SearchService = { searchPosts };
+const searchUsers = async (query) => {
+  var queryString = RequestBuilder.buildUserQueryString(query);
+  
+  let authHeader = null;
+  try {
+    authHeader = AuthService.getAuthHeader();
+  } catch {
+    // Nothing
+  }
+
+  const response = await fetch(`${API_BASE_URL}/search/users?${queryString}`, {
+    headers: {
+      ...(authHeader ? { ...authHeader } : {}),
+    },
+  });
+
+  return await response.json();
+};
+
+const SearchService = { searchPosts, searchUsers };
 export default SearchService;
