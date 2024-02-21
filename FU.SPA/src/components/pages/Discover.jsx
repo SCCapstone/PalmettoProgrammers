@@ -374,11 +374,9 @@ export default function Discover() {
           }}
         />
         {renderTabSelectors()}
-        
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
-        {/*<Posts posts={currentPosts} />*/}
         {renderTabContent()}
         <div
           style={{
