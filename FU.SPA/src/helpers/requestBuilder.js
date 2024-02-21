@@ -37,5 +37,14 @@ const buildPostQueryString = (query) => {
   return queryString;
 };
 
-const RequestBuilder = { buildPostQueryString };
+const buildUserQueryString = (query) => {
+  let queryString = '';
+  if (query.keywords) {
+    queryString += `keywords=${encodeURIComponent(query.keywords.trim())}`;
+  }
+
+  return queryString;
+};
+
+const RequestBuilder = { buildPostQueryString, buildUserQueryString };
 export default RequestBuilder;
