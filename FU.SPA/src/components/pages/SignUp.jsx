@@ -14,37 +14,47 @@ import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CustomTextField } from '../../helpers/styleComponents';
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const handleSubmit = (event) => {
+  // Function called when button is pressed
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+    // Need to look into incorporating email address
     const creds = {
       username: data.get('username'),
       password: data.get('password'),
     };
 
+    // Checking if passwords are identical
     if (creds.password !== data.get('confirmPassword')) {
       alert('Passwords do not match');
       return;
     }
 
-    AuthService.signUp(creds);
-    var returnUrl = searchParams.get('returnUrl');
-    if (returnUrl !== null && returnUrl !== '') {
-      navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
-    } else {
+    // This try/catch block will attempt to sign the user up, check for any
+    // errors in signup, and redirect to signin/last page if there are no errors
+    try {
+      await AuthService.signUp(creds);
       navigate('/SignIn');
+      var returnUrl = searchParams.get('returnUrl');
+      if (returnUrl !== null && returnUrl !== '') {
+        navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
+      } else {
+        navigate('/SignIn');
+      }
+    } catch (event) {
+      window.alert('Error in sign up');
+      console.log(event);
     }
   };
 
+  // Display component
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">

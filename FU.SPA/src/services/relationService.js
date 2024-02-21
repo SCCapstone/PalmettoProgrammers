@@ -3,6 +3,19 @@ import AuthService from './authService';
 import config from '../config';
 const API_BASE_URL = config.API_URL;
 
+const ACTIONS = {
+  FRIEND: 'friend',
+  BLOCK: 'block',
+};
+
+const STATUS = {
+  PENDING: 'Pending',
+  REQUESTED: 'Requested',
+  FRIENDS: 'Friends',
+  BLOCKED: 'Blocked',
+  NONE: 'None',
+};
+
 /**
  * PostRelation
  * Use this function to create a relation between two users
@@ -49,10 +62,10 @@ const removeRelation = async (userId) => {
 
 /**
  * GetStatus
- * Use this function to get the status of a relation between two users
+ * Use this function to get the status of a relation between the logged in user and user given by id
  *
  * @param {number} userId Id of the user to get the relation status with
- * @returns {object} Status: The status of the relation {pending|requested|friends|blocked|none}
+ * @returns {string} Status: The status of the relation {Pending|Requested|Friends|Blocked|None}
  */
 const getStatus = async (userId) => {
   const response = await fetch(`${API_BASE_URL}/relations/${userId}/status`, {
@@ -66,7 +79,8 @@ const getStatus = async (userId) => {
     throw new Error('Error in getting relation status');
   }
 
-  return await response.json();
+  const jsonResponse = await response.json();
+  return jsonResponse.status;
 };
 
 /**
@@ -103,6 +117,8 @@ const getRelations = async (userId, relationStatus) => {
 };
 
 const RelationService = {
+  ACTIONS,
+  STATUS,
   postRelation,
   removeRelation,
   getStatus,

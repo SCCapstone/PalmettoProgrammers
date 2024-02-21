@@ -9,12 +9,19 @@ import NoPage from './NoPage';
 import PostUsersList from '../PostUsersList';
 import PostCard from '../PostCard';
 import './PostPage.css';
+import { useNavigate } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const PostPage = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isOwner, setIsOwner] = useState(false);
+  const navigate = useNavigate();
+  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
 
   const { user } = useContext(UserContext);
 
@@ -30,7 +37,7 @@ const PostPage = () => {
   const handleLeavePost = async () => {
     try {
       await PostService.leavePost(post.id);
-      update();
+      navigate(-1);
     } catch (error) {
       console.error('Error leaving post:', error);
     }
@@ -41,13 +48,12 @@ const PostPage = () => {
     try {
       const data = await PostService.getPostDetails(postId);
       console.log('data:', data);
-      setIsOwner(user && data.creator.id === user.id);
       setPost(data);
     } catch (error) {
       console.error('Error fetching post details:', error);
     }
     setLoading(false);
-  }, [postId, user]);
+  }, [postId]);
 
   useEffect(() => {
     update();
@@ -69,18 +75,54 @@ const PostPage = () => {
   };
 
   const renderLeaveButton = () => {
-    if (!post.hasJoined || isOwner) {
-      return;
-    }
+    if (!post.hasJoined) return;
 
     return (
       <Button
         variant="contained"
         style={{ backgroundColor: '#E340DC', width: '250px' }}
-        onClick={handleLeavePost}
+        onClick={() => setLeaveDialogOpen(true)}
       >
         Leave
       </Button>
+    );
+  };
+
+  const ConfirmLeaveDialog = () => {
+    const handleClose = () => {
+      setLeaveDialogOpen(false);
+    };
+
+    return (
+      <>
+        <Dialog
+          open={leaveDialogOpen}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            Are you sure you want to leave?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              This may be irreversible
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button
+              onClick={() => {
+                handleClose();
+                handleLeavePost();
+              }}
+              autoFocus
+            >
+              Leave
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
     );
   };
 
@@ -91,6 +133,7 @@ const PostPage = () => {
         {renderLeaveButton()}
         <PostUsersList postId={post.id} />
         {renderChat()}
+        <ConfirmLeaveDialog />
       </div>
     );
   } else if (!post && !loading) {
