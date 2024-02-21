@@ -80,6 +80,7 @@ export const SortOptionSelector = ({ onChange }) => {
   //var optionsVal = [1, 2, 3, 4, 5, 6];
   
   return (
+    // change autocomplete to a select, not input. mui docs will show the on change method is.
     <Autocomplete
       multiple
       onChange={onChange}

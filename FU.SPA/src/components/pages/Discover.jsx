@@ -18,6 +18,11 @@ export default function Discover() {
   const initialPage = parseInt(searchParams.get('page'), 10) || 1;
   const initialGames = searchParams.getAll('game').map(gameId => ({ id: gameId }));
   const initialTags = searchParams.getAll('tag').map(tagId => ({ id: tagId }));
+  //don't need an array, need to make it a string.
+  //look up searchParams and create it as a string.
+  //const initialSortOption searchParams.get('sortOption');
+  //git merge to merge main into my branch.
+
   const initialSortOption = searchParams.getAll('sortOption').map(sortOptionId => ({ id: sortOptionId})); //for option asc/dsc filter
 
   const [posts, setPosts] = useState([]);

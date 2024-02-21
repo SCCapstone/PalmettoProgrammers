@@ -16,6 +16,7 @@ const searchPosts = async (query) => {
   if (query.tags.length > 0) {
     queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
   }
+  //'&sort=' + query.sortOption.;
 
   let authHeader = null;
   try {
