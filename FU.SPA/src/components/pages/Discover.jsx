@@ -174,9 +174,9 @@ export default function Discover() {
             params.delete(paramKey.tags);
           }
           if (tabOption === tabOptions.Posts) {
-            setSearchParams({ o: tabOption });
+            params.set('o', tabOption);
           } else {
-            setSearchParams({ o: tabOption });
+            params.set('o', tabOption);
           }
 
           return params;
