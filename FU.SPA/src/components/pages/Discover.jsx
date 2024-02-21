@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
-import { Typography, InputAdornment, Pagination } from '@mui/material';
+import { Typography, MenuItem, InputLabel, InputAdornment, Pagination, FormControl } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector } from '../Selectors';
@@ -8,6 +8,7 @@ import SearchService from '../../services/searchService';
 import GameService from '../../services/gameService';
 import TagService from '../../services/tagService';
 import Posts from '../Posts';
+import Users from '../Users';
 import {
   DateFilterRadioValues,
   SelectDateRangeFilter,
@@ -15,6 +16,7 @@ import {
   SelectTimeRangeRadioValues,
 } from './Filters';
 import './Discover.css';
+import { CustomSelect } from '../../helpers/styleComponents';
 import { CustomTextField } from '../../helpers/styleComponents';
 
 const paramKey = {
@@ -36,8 +38,18 @@ const paramToDayjs = (searchParams, paramKey) => {
 };
 
 export default function Discover() {
+  var tabOptions = {
+    Posts: 'Posts',
+    Users: 'Users',
+  };
+
   const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
   const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = searchParams.get('o') || tabOptions.Posts;
+
+
+  const [tabOption, setTabOption] = useState(initialTab);
+  const [players, setPlayers] = useState([]);
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(
@@ -161,6 +173,11 @@ export default function Discover() {
           } else {
             params.delete(paramKey.tags);
           }
+          if (tabOption === tabOptions.Posts) {
+            setSearchParams({ o: tabOption });
+          } else {
+            setSearchParams({ o: tabOption });
+          }
 
           return params;
         },
@@ -169,6 +186,7 @@ export default function Discover() {
     };
 
     const updateSearchResults = async () => {
+      if (tabOption === tabOptions.Posts) {
       const query = {
         keywords: searchText,
         games: games,
@@ -199,6 +217,13 @@ export default function Discover() {
 
       const response = await SearchService.searchPosts(query);
       setPosts(response);
+    } else {
+      const query = {
+        keywords: searchText,
+      };
+      const response = await SearchService.searchUsers(query);
+      setPlayers(response);
+    };
     };
 
     const submitSearch = async () => {
@@ -232,6 +257,7 @@ export default function Discover() {
     timeRangeRadioValue,
     startTime,
     endTime,
+    tabOption
   ]);
 
   useEffect(() => {
@@ -269,6 +295,35 @@ export default function Discover() {
     setTags(restoredTags);
   }, [searchParams, gameOptions, tagOptions]);
 
+  const renderTabContent = () => {
+    if (tabOption === tabOptions.Posts) {
+      return <Posts posts={posts} />;
+    } else if (tabOption === tabOptions.Users){
+      return <Users users={players} />;
+    }
+  };
+
+  const renderTabSelectors = () => {
+    return (
+      <div className="selectors-wrapper">
+        <FormControl>
+          <InputLabel id="social-option-label">Content</InputLabel>
+          <CustomSelect
+            labelId="social-option-label"
+            value={tabOption}
+            label="Associated"
+            onChange={(e) => setTabOption(e.target.value)}
+          >
+            {Object.keys(tabOptions).map((option, index) => (
+              <MenuItem key={index} value={tabOptions[option]}>
+                {tabOptions[option]}
+              </MenuItem>
+            ))}
+          </CustomSelect>
+        </FormControl>
+      </div>
+    );
+  };
   return (
     <div className="page-content">
       <div
@@ -318,10 +373,13 @@ export default function Discover() {
             setTimeRangeRadioValue(newValues.radioValue);
           }}
         />
+        {renderTabSelectors()}
+        
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
-        <Posts posts={currentPosts} />
+        {/*<Posts posts={currentPosts} />*/}
+        {renderTabContent()}
         <div
           style={{
             display: 'flex',
