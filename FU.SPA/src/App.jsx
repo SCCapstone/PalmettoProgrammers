@@ -8,6 +8,7 @@ import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import PostPage from './components/pages/PostPage';
 import UserProfile from './components/pages/UserProfile';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -17,6 +18,7 @@ import './App.css';
 function App() {
   return (
     <>
+      <CssBaseline />
       <UserProvider>
         <Navbar />
         <div className="container">
