@@ -122,7 +122,6 @@ export default function Chat({ chatId }) {
       className="chat-card"
       style={{
         textAlign: 'left',
-        backgroundColor: '#31084A',
         width: '700px',
         height: '90%',
         display: 'flex',
@@ -165,7 +164,11 @@ export default function Chat({ chatId }) {
             }
           }}
         />
-        <Button onClick={handleSendMessage} className="send-button">
+        <Button
+          variant="outlined"
+          onClick={handleSendMessage}
+          className="send-button"
+        >
           Send
         </Button>
       </CardActions>
