@@ -46,7 +46,6 @@ function App() {
             <Route path="/posts/:postId" element={<PostPage />} />
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
-            <Route path="/discover/players" element={<PlayerDiscover />} />
           </Routes>
         </div>
       </UserProvider>
