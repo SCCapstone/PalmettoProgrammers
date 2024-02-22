@@ -78,7 +78,6 @@ const UserCard = ({ user }) => {
       style={{
         textAlign: 'left',
         width: '250px',
-        backgroundColor: '#31084A',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -122,7 +121,8 @@ const UserCard = ({ user }) => {
       </CardContent>
       <CardActions style={{ justifyContent: 'flex-end' }}>
         <Button
-          style={{ backgroundColor: '#E340DC', color: '#FFF', width: '100%' }}
+          variant="contained"
+          style={{ color: '#FFF', width: '100%' }}
           onClick={() => navigate(`/profile/${user.id}`)}
         >
           View Profile
