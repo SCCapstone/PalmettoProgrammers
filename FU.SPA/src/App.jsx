@@ -8,7 +8,6 @@ import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import PostPage from './components/pages/PostPage';
 import UserProfile from './components/pages/UserProfile';
-import PlayerDiscover from './components/pages/PlayerDiscover';
 
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
