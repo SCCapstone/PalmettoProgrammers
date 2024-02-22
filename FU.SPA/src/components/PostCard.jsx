@@ -144,9 +144,7 @@ const PostCard = ({ post, showActions }) => {
           flexDirection: 'column',
         }}
       >
-        <Typography variant="body2" color="#FFF">
-          {post.description}
-        </Typography>
+        <Typography variant="body2">{post.description}</Typography>
         <div style={{ paddingTop: '10px' }}>
           {post.tags.map((t) => (
             <Chip

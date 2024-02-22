@@ -118,11 +118,7 @@ const UserCard = ({ user }) => {
           flexDirection: 'column',
         }}
       >
-        {user.bio && (
-          <Typography variant="body2" color="#FFF">
-            {user.bio}
-          </Typography>
-        )}
+        {user.bio && <Typography variant="body2">{user.bio}</Typography>}
       </CardContent>
       <CardActions style={{ justifyContent: 'flex-end' }}>
         <Button
