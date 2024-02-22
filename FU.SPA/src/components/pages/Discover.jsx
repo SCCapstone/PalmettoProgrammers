@@ -1,6 +1,11 @@
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
-import { TextField, Typography, InputAdornment, Pagination } from '@mui/material';
+import {
+  TextField,
+  Typography,
+  InputAdornment,
+  Pagination,
+} from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector } from '../Selectors';
