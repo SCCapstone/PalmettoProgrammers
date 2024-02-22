@@ -8,8 +8,9 @@ import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import PostPage from './components/pages/PostPage';
 import UserProfile from './components/pages/UserProfile';
+import { ThemeProvider } from '@mui/material/styles';
+import Theme from './Theme';
 import CssBaseline from '@mui/material/CssBaseline';
-
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
@@ -17,7 +18,7 @@ import './App.css';
 
 function App() {
   return (
-    <>
+    <ThemeProvider theme={Theme}>
       <CssBaseline />
       <UserProvider>
         <Navbar />
@@ -50,7 +51,7 @@ function App() {
           </Routes>
         </div>
       </UserProvider>
-    </>
+    </ThemeProvider>
   );
 }
 
