@@ -44,6 +44,7 @@ export default function Discover() {
   };
 
   const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
+  const userPerPage = 10;
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('o') || tabOptions.Posts;
 
@@ -78,6 +79,11 @@ export default function Discover() {
 
   // each page has correct number of posts
   const currentPosts = posts.slice(firstPost, lastPost);
+
+  const lastUser = page * userPerPage;
+  const firstUser = lastPost - userPerPage;
+
+  const currentPlayers = players.slice(firstUser, lastUser);
 
   const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
     const paramValue = searchParams.get(paramKey.dateRadio);
@@ -297,9 +303,9 @@ export default function Discover() {
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
-      return <Posts posts={posts} />;
+      return <Posts posts={currentPosts} />;
     } else if (tabOption === tabOptions.Users){
-      return <Users users={players} />;
+      return <Users users={currentPlayers} />;
     }
   };
 
