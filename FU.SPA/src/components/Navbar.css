@@ -12,8 +12,6 @@ body {
 }
 
 .nav {
-  background-color: #e340dc;
-  color: white;
   display: flex;
   justify-content: space-between;
   align-items: stretch;
@@ -42,7 +40,6 @@ body {
 }
 
 .nav button {
-  color: white;
   background: none;
   border: none;
   outline: none;

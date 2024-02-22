@@ -2,6 +2,7 @@ import { Link, useMatch, useResolvedPath, useLocation } from 'react-router-dom';
 import UserContext from '../context/userContext';
 import { useContext, useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
+import Theme from '../Theme';
 
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
@@ -69,7 +70,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="nav">
+    <nav
+      className="nav"
+      style={{ backgroundColor: Theme.palette.primary.main }}
+    >
       <div className="left-content">
         <Link to="/" className="site-title">
           Forces Unite
