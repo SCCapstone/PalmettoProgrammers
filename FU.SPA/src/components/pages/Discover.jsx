@@ -263,7 +263,7 @@ export default function Discover() {
     timeRangeRadioValue,
     startTime,
     endTime,
-    tabOption
+    tabOption,
   ]);
 
   useEffect(() => {
@@ -396,7 +396,7 @@ export default function Discover() {
           <Stack spacing={2}>
             <Typography>Page: {page}</Typography>
             <Pagination
-              count={Math.ceil(posts.length / postsPerPage)}
+              count={tabOption === tabOptions.Posts ? Math.ceil(posts.length / postsPerPage) : Math.ceil(players.length / userPerPage)}
               page={page}
               onChange={(_, value) => setPage(value)}
               color="secondary"
