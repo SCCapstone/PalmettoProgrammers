@@ -7,12 +7,12 @@ import {
   CssBaseline,
   Avatar,
   Grid,
+  TextField,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CustomTextField } from '../../helpers/styleComponents';
 
 const defaultTheme = createTheme();
 
@@ -81,7 +81,7 @@ export default function SignUp() {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <CustomTextField
+                <TextField
                   required
                   fullWidth
                   id="username"
@@ -92,7 +92,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <CustomTextField
+                <TextField
                   required
                   fullWidth
                   id="email"
@@ -102,7 +102,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <CustomTextField
+                <TextField
                   required
                   fullWidth
                   name="password"
@@ -113,7 +113,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <CustomTextField
+                <TextField
                   required
                   fullWidth
                   name="confirmPassword"

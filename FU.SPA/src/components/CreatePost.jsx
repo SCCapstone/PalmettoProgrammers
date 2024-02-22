@@ -6,6 +6,7 @@ import {
   Typography,
   Grid,
   Checkbox,
+  Autocomplete,
   createFilterOptions,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -18,11 +19,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import {
-  CustomAutocomplete,
-  CustomTextField,
-  CustomDateTimePicker,
-} from '../helpers/styleComponents';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 export default function CreatePost() {
   const [game, setGame] = useState(null);
@@ -91,7 +88,7 @@ export default function CreatePost() {
             gap: 2,
           }}
         >
-          <CustomTextField
+          <TextField
             required //may want to get rid of this and just check if it's empty when clicking create button.
             fullWidth
             id="searchGames"
@@ -105,12 +102,12 @@ export default function CreatePost() {
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <CustomDateTimePicker
+            <DateTimePicker
               label="Start Time"
               value={startTime}
               onChange={(newValue) => setStartTime(newValue)}
             />
-            <CustomDateTimePicker
+            <DateTimePicker
               label="End Time"
               value={endTime}
               onChange={(newValue) => setEndTime(newValue)}
@@ -128,12 +125,12 @@ export default function CreatePost() {
               Description
             </Typography>
           </Box>
-          <CustomTextField
+          <TextField
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             multiline
-          ></CustomTextField>
+          ></TextField>
 
           <Button
             type="submit"
@@ -187,7 +184,7 @@ const GameSelector = ({ onChange }) => {
   };
 
   return (
-    <CustomAutocomplete
+    <Autocomplete
       clearOnBlur
       value={value}
       onChange={onInputChange}
@@ -250,7 +247,7 @@ const TagsSelector = ({ onChange }) => {
   };
 
   return (
-    <CustomAutocomplete
+    <Autocomplete
       multiple
       clearOnBlur
       value={value}

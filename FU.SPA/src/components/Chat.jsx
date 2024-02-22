@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { Card, CardActions, Button, CardContent } from '@mui/material';
+import { TextField, Card, CardActions, Button, CardContent } from '@mui/material';
 import {
   joinChatGroup,
   leaveChatGroup,
@@ -9,7 +9,6 @@ import { getChat, getMessages, saveMessage } from '../services/chatService';
 import './Chat.css';
 import ChatMessage from './ChatMessage';
 import UserContext from '../context/userContext';
-import { CustomTextField } from '../helpers/styleComponents';
 
 export default function Chat({ chatId }) {
   const [chat, setChat] = useState(null);
@@ -155,7 +154,7 @@ export default function Chat({ chatId }) {
         ))}
       </CardContent>
       <CardActions className="chat-actions">
-        <CustomTextField
+        <TextField
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
