@@ -29,7 +29,7 @@ const searchPosts = async (query) => {
 
 const searchUsers = async (query) => {
   var queryString = RequestBuilder.buildUserQueryString(query);
-  
+
   let authHeader = null;
   try {
     authHeader = AuthService.getAuthHeader();

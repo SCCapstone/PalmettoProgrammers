@@ -1,6 +1,13 @@
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
-import { Typography, MenuItem, InputLabel, InputAdornment, Pagination, FormControl } from '@mui/material';
+import {
+  Typography,
+  MenuItem,
+  InputLabel,
+  InputAdornment,
+  Pagination,
+  FormControl,
+} from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector } from '../Selectors';
@@ -47,7 +54,6 @@ export default function Discover() {
   const userPerPage = 10;
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('o') || tabOptions.Posts;
-
 
   const [tabOption, setTabOption] = useState(initialTab);
   const [players, setPlayers] = useState([]);
@@ -193,43 +199,43 @@ export default function Discover() {
 
     const updateSearchResults = async () => {
       if (tabOption === tabOptions.Posts) {
-      const query = {
-        keywords: searchText,
-        games: games,
-        tags: tags,
-      };
+        const query = {
+          keywords: searchText,
+          games: games,
+          tags: tags,
+        };
 
-      if (startDate) query.startDate = startDate;
-      if (endDate) query.endDate = endDate;
+        if (startDate) query.startDate = startDate;
+        if (endDate) query.endDate = endDate;
 
-      if (startTime?.isValid()) {
-        query.startTime = startTime;
+        if (startTime?.isValid()) {
+          query.startTime = startTime;
 
-        if (!endTime?.isValid()) {
-          // set end time to 23:59:59 if unset
-          query.endTime = new Date();
-          query.endTime.setHours(23, 59, 59);
+          if (!endTime?.isValid()) {
+            // set end time to 23:59:59 if unset
+            query.endTime = new Date();
+            query.endTime.setHours(23, 59, 59);
+          }
         }
-      }
-      if (endTime?.isValid()) {
-        query.endTime = endTime;
+        if (endTime?.isValid()) {
+          query.endTime = endTime;
 
-        if (!startTime?.isValid()) {
-          // set start time to 00:00:00 if unset
-          query.startTime = new Date();
-          query.startTime.setHours(0, 0, 0);
+          if (!startTime?.isValid()) {
+            // set start time to 00:00:00 if unset
+            query.startTime = new Date();
+            query.startTime.setHours(0, 0, 0);
+          }
         }
-      }
 
-      const response = await SearchService.searchPosts(query);
-      setPosts(response);
-    } else {
-      const query = {
-        keywords: searchText,
-      };
-      const response = await SearchService.searchUsers(query);
-      setPlayers(response);
-    };
+        const response = await SearchService.searchPosts(query);
+        setPosts(response);
+      } else {
+        const query = {
+          keywords: searchText,
+        };
+        const response = await SearchService.searchUsers(query);
+        setPlayers(response);
+      }
     };
 
     const submitSearch = async () => {
@@ -304,7 +310,7 @@ export default function Discover() {
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
       return <Posts posts={currentPosts} />;
-    } else if (tabOption === tabOptions.Users){
+    } else if (tabOption === tabOptions.Users) {
       return <Users users={currentPlayers} />;
     }
   };
@@ -396,7 +402,11 @@ export default function Discover() {
           <Stack spacing={2}>
             <Typography>Page: {page}</Typography>
             <Pagination
-              count={tabOption === tabOptions.Posts ? Math.ceil(posts.length / postsPerPage) : Math.ceil(players.length / userPerPage)}
+              count={
+                tabOption === tabOptions.Posts
+                  ? Math.ceil(posts.length / postsPerPage)
+                  : Math.ceil(players.length / userPerPage)
+              }
               page={page}
               onChange={(_, value) => setPage(value)}
               color="secondary"
