@@ -152,12 +152,6 @@ const PostCard = ({ post, showActions }) => {
             <Chip
               key={t}
               label={'# ' + t}
-              variant="outlined"
-              style={{
-                color: Theme.palette.primary.main,
-                borderColor: Theme.palette.primary.main,
-                border: '2px solid ${Theme.palette.primary.main}',
-              }}
             />
           ))}
         </div>
