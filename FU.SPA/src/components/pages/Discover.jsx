@@ -255,7 +255,7 @@ export default function Discover() {
     };
 
     submitSearch();
-
+    updateSearchResults();
     // disable for setSearchParams
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -319,11 +319,11 @@ export default function Discover() {
     return (
       <div className="selectors-wrapper">
         <FormControl>
-          <InputLabel id="social-option-label">Content</InputLabel>
+          <InputLabel id="social-option-label">Discover</InputLabel>
           <CustomSelect
             labelId="social-option-label"
             value={tabOption}
-            label="Associated"
+            label="Discover"
             onChange={(e) => setTabOption(e.target.value)}
           >
             {Object.keys(tabOptions).map((option, index) => (
@@ -347,45 +347,50 @@ export default function Discover() {
           minWidth: '190pt',
         }}
       >
-        <Typography variant="h5" style={{ color: '#FFF' }}>
-          Filters
-        </Typography>
-        <GamesSelector
-          value={games}
-          onChange={(_, newGames) => {
-            setPage(1);
-            setGames(newGames);
-          }}
-          options={gameOptions}
-        />
-        <TagsSelector
-          value={tags}
-          onChange={(_, newTags) => {
-            setPage(1);
-            setTags(newTags);
-          }}
-        />
-        <SelectDateRangeFilter
-          initialRadioValue={dateRangeRadioValue}
-          initialStartDateValue={startDate}
-          initialEndDateValue={endDate}
-          onChange={(newValues) => {
-            setStartDate(newValues.startDate);
-            setEndDate(newValues.endDate);
-            setDateRangeRadioValue(newValues.radioValue);
-          }}
-        />
-        <SelectTimeRangeFilter
-          initialRadioValue={timeRangeRadioValue}
-          initialStartTimeValue={startTime}
-          initialEndTimeValue={endTime}
-          onTimeRangeChange={(newValues) => {
-            setStartTime(newValues.startTime);
-            setEndTime(newValues.endTime);
-            setTimeRangeRadioValue(newValues.radioValue);
-          }}
-        />
         {renderTabSelectors()}
+        {tabOption === tabOptions.Posts && (
+          <>
+            <Typography variant="h5" style={{ color: '#FFF' }}>
+              Filters
+            </Typography>
+
+            <GamesSelector
+              value={games}
+              onChange={(_, newGames) => {
+                setPage(1);
+                setGames(newGames);
+              }}
+              options={gameOptions}
+            />
+            <TagsSelector
+              value={tags}
+              onChange={(_, newTags) => {
+                setPage(1);
+                setTags(newTags);
+              }}
+            />
+            <SelectDateRangeFilter
+              initialRadioValue={dateRangeRadioValue}
+              initialStartDateValue={startDate}
+              initialEndDateValue={endDate}
+              onChange={(newValues) => {
+                setStartDate(newValues.startDate);
+                setEndDate(newValues.endDate);
+                setDateRangeRadioValue(newValues.radioValue);
+              }}
+            />
+            <SelectTimeRangeFilter
+              initialRadioValue={timeRangeRadioValue}
+              initialStartTimeValue={startTime}
+              initialEndTimeValue={endTime}
+              onTimeRangeChange={(newValues) => {
+                setStartTime(newValues.startTime);
+                setEndTime(newValues.endTime);
+                setTimeRangeRadioValue(newValues.radioValue);
+              }}
+            />
+          </>
+        )}
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
