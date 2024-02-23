@@ -1,4 +1,10 @@
-import { Typography, MenuItem, InputLabel, FormControl } from '@mui/material';
+import {
+  Select,
+  Typography,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import UserService from '../../services/userService';
 import RelationService from '../../services/relationService';
@@ -6,7 +12,6 @@ import Posts from '../Posts';
 import Users from '../Users';
 import './Social.css';
 import { useSearchParams } from 'react-router-dom';
-import { CustomSelect } from '../../helpers/styleComponents';
 import UserContext from '../../context/userContext';
 
 export default function Social() {
@@ -68,7 +73,7 @@ export default function Social() {
       <div className="selectors-wrapper">
         <FormControl>
           <InputLabel id="social-option-label">Associated</InputLabel>
-          <CustomSelect
+          <Select
             labelId="social-option-label"
             value={tabOption}
             label="Associated"
@@ -79,12 +84,12 @@ export default function Social() {
                 {tabOptions[option]}
               </MenuItem>
             ))}
-          </CustomSelect>
+          </Select>
         </FormControl>
         {tabOption === tabOptions.Users && (
           <FormControl>
             <InputLabel id="status-selector-label">Relation Status</InputLabel>
-            <CustomSelect
+            <Select
               labelId="status-selector-label"
               label="Relation Status"
               value={relationOption}
@@ -96,7 +101,7 @@ export default function Social() {
                   {relationOptions[option]}
                 </MenuItem>
               ))}
-            </CustomSelect>
+            </Select>
           </FormControl>
         )}
       </div>

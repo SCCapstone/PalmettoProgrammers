@@ -1,14 +1,12 @@
 import { Typography } from '@mui/material';
-import {
-  CustomTimePicker,
-  CustomDatePicker,
-} from '../../helpers/styleComponents';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import Radio from '@mui/material/Radio';
 import { RadioGroup } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
@@ -73,7 +71,7 @@ export const SelectDateRangeFilter = ({
         />
       </RadioGroup>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <CustomDatePicker
+        <DatePicker
           disabled={radioValue !== DateFilterRadioValues.between}
           label="Start Date"
           value={startDate}
@@ -83,7 +81,7 @@ export const SelectDateRangeFilter = ({
           }}
           slotProps={{ field: { clearable: true } }}
         />
-        <CustomDatePicker
+        <DatePicker
           disabled={radioValue !== DateFilterRadioValues.between}
           label="End Date"
           value={endDate}
@@ -155,14 +153,14 @@ export function SelectTimeRangeFilter({
         />
       </RadioGroup>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <CustomTimePicker
+        <TimePicker
           label="Start Time"
           disabled={radioValue !== SelectTimeRangeRadioValues.between}
           value={startTime}
           onChange={(newValue) => setStartTime(newValue)}
           slotProps={{ field: { clearable: false } }}
         />
-        <CustomTimePicker
+        <TimePicker
           label="End Time"
           disabled={radioValue !== SelectTimeRangeRadioValues.between}
           value={endTime}

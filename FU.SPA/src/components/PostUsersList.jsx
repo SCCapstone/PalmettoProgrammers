@@ -26,14 +26,12 @@ export default function PostUsersList({ postId }) {
   return (
     <Card
       style={{
-        backgroundColor: '#31084A',
         maxWidth: '250px',
       }}
     >
       <CardHeader
         title="Players"
         style={{
-          color: 'white',
           textAlign: 'left',
           paddingBottom: '0px',
           paddingTop: '5px',

@@ -1,11 +1,12 @@
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 import {
+  TextField,
   Typography,
-  MenuItem,
-  InputLabel,
   InputAdornment,
   Pagination,
+  MenuItem,
+  InputLabel,
   FormControl,
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
@@ -23,8 +24,6 @@ import {
   SelectTimeRangeRadioValues,
 } from './Filters';
 import './Discover.css';
-import { CustomSelect } from '../../helpers/styleComponents';
-import { CustomTextField } from '../../helpers/styleComponents';
 
 const paramKey = {
   endDate: 'endDate',
@@ -442,7 +441,7 @@ function SearchBar({ searchText, onSearchSubmit }) {
 
   return (
     <div id="search-bar">
-      <CustomTextField
+      <TextField
         id="outlined-basic"
         label="Search"
         variant="outlined"

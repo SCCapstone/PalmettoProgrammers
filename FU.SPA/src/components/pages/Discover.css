@@ -19,10 +19,6 @@
   flex-grow: 1;
 }
 
-.MuiOutlinedInput-input {
-  color: #fff !important;
-}
-
 .sidebar {
   gap: 15px;
   display: flex;

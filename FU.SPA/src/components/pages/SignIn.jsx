@@ -6,13 +6,13 @@ import {
   Typography,
   CssBaseline,
   Avatar,
+  TextField,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import AuthService from '../../services/authService';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CustomTextField } from '../../helpers/styleComponents';
 
 export default function SignIn() {
   const { login } = useContext(UserContext);
@@ -61,7 +61,7 @@ export default function SignIn() {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           {/* Username Text Field */}
-          <CustomTextField
+          <TextField
             margin="normal"
             required
             fullWidth
@@ -72,7 +72,7 @@ export default function SignIn() {
             autoFocus
           />
           {/* Password Text Field */}
-          <CustomTextField
+          <TextField
             margin="normal"
             required
             fullWidth
