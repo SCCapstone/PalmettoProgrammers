@@ -149,10 +149,7 @@ const PostCard = ({ post, showActions }) => {
         <Typography variant="body2">{post.description}</Typography>
         <div style={{ paddingTop: '10px' }}>
           {post.tags.map((t) => (
-            <Chip
-              key={t}
-              label={'# ' + t}
-            />
+            <Chip key={t} label={'# ' + t} />
           ))}
         </div>
       </CardContent>

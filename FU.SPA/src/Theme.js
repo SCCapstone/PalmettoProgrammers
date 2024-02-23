@@ -11,7 +11,7 @@ const Theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: PRIMARY_MAIN,
+      main: COLORS.PRIMARY_MAIN,
     },
     secondary: {
       main: COLORS.SECONDARY_MAIN,
@@ -28,8 +28,8 @@ const Theme = createTheme({
       },
       styleOverrides: {
         root: {
-          color: PRIMARY_MAIN,
-          borderColor: PRIMARY_MAIN,
+          color: COLORS.PRIMARY_MAIN,
+          borderColor: COLORS.PRIMARY_MAIN,
           border: '2px solid ${COLORS.PRIMARY_MAIN}',
         },
       },
