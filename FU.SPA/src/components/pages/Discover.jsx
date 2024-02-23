@@ -255,7 +255,6 @@ export default function Discover() {
     };
 
     submitSearch();
-    updateSearchResults();
     // disable for setSearchParams
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
