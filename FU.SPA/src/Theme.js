@@ -3,6 +3,8 @@ import { createTheme } from '@mui/material/styles';
 const COLORS = {
   PRIMARY_MAIN: '#e354dc',
   SECONDARY_MAIN: '#4290f5',
+  BACKGROUND_PAPER: '#31084a',
+  BACKGROUND_DEFAULT: '#23194f',
 };
 
 const Theme = createTheme({
@@ -13,6 +15,10 @@ const Theme = createTheme({
     },
     secondary: {
       main: COLORS.SECONDARY_MAIN,
+    },
+    background: {
+      paper: COLORS.BACKGROUND_PAPER,
+      default: COLORS.BACKGROUND_DEFAULT,
     },
   },
   components: {
