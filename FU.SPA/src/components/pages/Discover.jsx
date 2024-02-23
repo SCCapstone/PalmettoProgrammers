@@ -8,6 +8,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Select,
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
@@ -319,7 +320,7 @@ export default function Discover() {
       <div className="selectors-wrapper">
         <FormControl>
           <InputLabel id="social-option-label">Discover</InputLabel>
-          <CustomSelect
+          <Select
             labelId="social-option-label"
             value={tabOption}
             label="Discover"
@@ -330,7 +331,7 @@ export default function Discover() {
                 {tabOptions[option]}
               </MenuItem>
             ))}
-          </CustomSelect>
+          </Select>
         </FormControl>
       </div>
     );
