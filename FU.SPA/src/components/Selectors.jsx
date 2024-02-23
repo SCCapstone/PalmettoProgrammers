@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import GameService from '../services/gameService';
 import TagService from '../services/tagService';
-import { Checkbox, TextField } from '@mui/material';
+import { Checkbox, TextField, Autocomplete } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import './Selectors.css';
-import { CustomAutocomplete } from '../helpers/styleComponents';
 
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
@@ -18,7 +16,7 @@ export const GamesSelector = ({ value, onChange }) => {
   }, []);
 
   return (
-    <CustomAutocomplete
+    <Autocomplete
       multiple
       value={value}
       onChange={onChange}
@@ -52,7 +50,7 @@ export const TagsSelector = ({ value, onChange }) => {
   }, []);
 
   return (
-    <CustomAutocomplete
+    <Autocomplete
       multiple
       value={value}
       onChange={onChange}
