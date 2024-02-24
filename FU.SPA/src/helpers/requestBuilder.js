@@ -1,3 +1,4 @@
+// Function that builds a query string to search for posts
 const buildPostQueryString = (query) => {
   let queryString = '';
   if (query.keywords) {
@@ -37,6 +38,7 @@ const buildPostQueryString = (query) => {
   return queryString;
 };
 
+// Function that builds a query string to search for users
 const buildUserQueryString = (query) => {
   let queryString = '';
   if (query.keywords) {

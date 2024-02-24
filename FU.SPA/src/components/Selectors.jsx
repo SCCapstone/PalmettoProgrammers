@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import GameService from '../services/gameService';
 import TagService from '../services/tagService';
-import { Checkbox, TextField, Autocomplete } from '@mui/material';
+import { Checkbox, TextField, Autocomplete, NativeSelect } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import SortOptionService from '../services/sortOptionService';
@@ -81,55 +81,22 @@ export const TagsSelector = ({ value, onChange }) => {
 export const SortOptionSelector = ({ onChange }) => {
   // newest is most recent posted. soonest is the soonest start time.
   var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
-  //var optionsVal = [1, 2, 3, 4, 5, 6];
-  /*
-   *<Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Age
-        </InputLabel>
-        <NativeSelect
-          defaultValue={30}
-          inputProps={{
-            name: 'age',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
-        </NativeSelect>
-      </FormControl>
-    </Box>
 
-    
-   *function Form() {
-      const [firstName, setFirstName] = useState('');
-      return (
-        <>
-          <label>
-            First name:
-            <input value={firstName} onChange={e => setFirstName(e.target.value)} />
-          </label>
-          {firstName !== '' && <p>Your name is {firstName}.</p>}
-   */
   return (
     // change autocomplete to a select, not input. mui docs will show the on change method is.
-    <Autocomplete
-      multiple
-      onChange={onChange}
-      options={options}
-      disableCloseOnSelect
-      getOptionLabel={(option) => options.name}
-      //value={(option) => optionsVal}
-      renderOption={(props, option) => (
-        <li {...props}>
-          {option}
-        </li>
-      )}
-      renderInput={(params) => (
-        <TextField {...params} label="Sort" placeholder="" />
-      )}
-    />
+    <NativeSelect
+      defaultValue={1}
+      inputProps={{
+        name: 'Sort',
+        id: 'sort-filter',
+      }}
+    >
+      <option value={1}>Newest</option>
+      <option value={2}>Oldest</option>
+      <option value={3}>Title: A-Z</option>
+      <option value={4}>Title: Z-A</option>
+      <option value={5}>Start Time: Asc</option>
+      <option value={6}>Start Time: Desc</option>
+    </NativeSelect>
   );
 };

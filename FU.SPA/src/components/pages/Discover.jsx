@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
-import { TagsSelector, GamesSelector } from '../Selectors';
+import { TagsSelector, GamesSelector, SortOptionSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import GameService from '../../services/gameService';
 import TagService from '../../services/tagService';
@@ -76,6 +76,8 @@ export default function Discover() {
       ?.split(',')
       .map((id) => ({ id })) ?? [],
   );
+
+  // 
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
   //create sortOptions, setSortOptions
@@ -308,6 +310,7 @@ export default function Discover() {
     setTags(restoredTags);
   }, [searchParams, gameOptions, tagOptions]);
 
+  // Function that displays either posts or users depending on state
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
       return <Posts posts={currentPosts} />;
@@ -316,6 +319,7 @@ export default function Discover() {
     }
   };
 
+  // Function that displays selectors depending on posts or users 
   const renderTabSelectors = () => {
     return (
       <div className="selectors-wrapper">
@@ -337,6 +341,8 @@ export default function Discover() {
       </div>
     );
   };
+
+  // Start displaying component
   return (
     <div className="page-content">
       <div
@@ -348,6 +354,7 @@ export default function Discover() {
           minWidth: '190pt',
         }}
       >
+        {/* Display tag selectors like game selector, tag selector, filters, etc */}
         {renderTabSelectors()}
         {tabOption === tabOptions.Posts && (
           <>
@@ -390,6 +397,7 @@ export default function Discover() {
                 setTimeRangeRadioValue(newValues.radioValue);
               }}
             />
+            <SortOptionSelector></SortOptionSelector>
           </>
         )}
       </div>
@@ -423,6 +431,7 @@ export default function Discover() {
     </div>
   );
 }
+
 
 function SearchBar({ searchText, onSearchSubmit }) {
   const [localSearchText, setLocalSearchText] = useState(searchText);
