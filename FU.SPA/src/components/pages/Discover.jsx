@@ -36,6 +36,7 @@ const paramKey = {
   games: 'games',
   tags: 'tags',
   page: 'page',
+  //create sortOption here.
 };
 
 const paramToDayjs = (searchParams, paramKey) => {
@@ -77,6 +78,7 @@ export default function Discover() {
   );
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
+  //create sortOptions, setSortOptions
 
   // index of the last post
   const lastPost = page * postsPerPage;
