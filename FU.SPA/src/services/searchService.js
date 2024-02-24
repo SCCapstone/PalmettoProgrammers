@@ -16,6 +16,9 @@ const searchPosts = async (query) => {
   if (query.tags.length > 0) {
     queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
   }
+  if (query.sortOptions.length > 0) {
+    queryString += '&sort=' + query.sortOptions; //supposed to get the posts in different order based on the sort filter option.
+  }
   //'&sort=' + query.sortOption.;
 
   let authHeader = null;

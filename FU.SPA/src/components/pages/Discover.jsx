@@ -63,20 +63,21 @@ export default function Discover() {
   //if the option is soonest, send to the api 'soonest:asc'
   //if the option is soonest:desc, send to the api 'soonest:desc'
   //update searchService searchPosts. 
+  //['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ]
   const optionSort = (option) => {
     var choice;
       console.log(option);
       if (option === 'Newest') {
         choice = 'newest:asc';
-      } else if (option === 'oldest') {
+      } else if (option === 'Oldest') {
         choice = 'newest:desc';
-      } else if (option === 'asc') {
+      } else if (option === 'Title: A-Z') {
         choice = 'title:asc';
-      } else if (option === 'desc') {
+      } else if (option === 'Title: Z-A') {
         choice = 'title:desc';
-      } else if (option === 'soonest') {
-        choice = 'soonest';
-      } else if (option === 'soonest:desc') {
+      } else if (option === 'Start Time: Asc') {
+        choice = 'soonest:asc';
+      } else if (option === 'Start Time: Desc') {
         choice = 'soonest:desc';
       } else {
         alert("other option chosen for optionSort method");
