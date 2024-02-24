@@ -4,6 +4,7 @@ using FU.API.DTOs.Post;
 using FU.API.DTOs.Search;
 using FU.API.Helpers;
 using FU.API.Interfaces;
+using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -21,6 +22,13 @@ public class SearchController : ControllerBase
     [Route("posts")]
     public async Task<IActionResult> SearchPosts([FromQuery] PostSearchRequestDTO request)
     {
+        // Ensure if start or end time is set, the other is set
+        // This prevents unexpected assumptions from translating client time to utc time
+        if (request.StartOnOrAfterTime is null ^ request.EndOnOrBeforeTime is null)
+        {
+            return UnprocessableEntity("Start and end time must both be set, or both be null");
+        }
+
         var posts = await _searchService.SearchPosts(request.ToPostQuery());
         var response = new List<PostResponseDTO>(posts.Count);
 
@@ -41,5 +49,14 @@ public class SearchController : ControllerBase
         }
 
         return Ok(response);
+    }
+
+    [HttpGet]
+    [Route("users")]
+    public async Task<IActionResult> SearchUsers([FromQuery] UserSearchRequestDTO request)
+    {
+        List<UserProfile> userProfiles = await _searchService.SearchUsers(request.ToUserQuery());
+
+        return Ok(userProfiles);
     }
 }

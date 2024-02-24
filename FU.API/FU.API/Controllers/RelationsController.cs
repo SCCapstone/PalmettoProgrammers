@@ -1,5 +1,6 @@
 ﻿namespace FU.API.Controllers;
 
+using FU.API.DTOs.Search;
 using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
@@ -15,10 +16,12 @@ using Microsoft.AspNetCore.Mvc;
 public class RelationsController : ControllerBase
 {
     private readonly IRelationService _relationService;
+    private readonly ISearchService _searchService;
 
-    public RelationsController(IRelationService relationService)
+    public RelationsController(IRelationService relationService, ISearchService searchService)
     {
         _relationService = relationService;
+        _searchService = searchService;
     }
 
     // POST: api/relations/{userId}/{userAction}
@@ -55,6 +58,14 @@ public class RelationsController : ControllerBase
 
         var relation = await _relationService.GetRelation(currentUser.UserId, userId);
 
+        if (relation is null)
+        {
+            relation = new UserRelation
+            {
+                Status = UserRelationStatus.None
+            };
+        }
+
         var response = relation.ToDto();
         return Ok(response);
     }
@@ -62,16 +73,24 @@ public class RelationsController : ControllerBase
     // GET: api/relations/{userId}/{relationStatus}
     [HttpGet("{userId}/{relationStatus}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetRelations(int userId, [RelationStatus] string relationStatus)
+    public async Task<IActionResult> GetRelations(int userId, [RelationStatus] string relationStatus, [FromQuery] UserSearchRequestDTO request)
     {
         var currentUser = await _relationService.GetCurrentUser(User);
         var userIsRequester = currentUser?.UserId == userId;
 
         var status = Enum.Parse<UserRelationStatus>(relationStatus, ignoreCase: true);
 
-        var relatedUsers = await _relationService.GetRelations(userId, status, userIsRequester);
+        if (!userIsRequester && status != UserRelationStatus.Friends)
+        {
+            throw new ForbidException($"You are not allowed to view this user's {status.ToString()} relations");
+        }
 
-        var response = relatedUsers.ToProfiles();
-        return Ok(response);
+        var query = request.ToUserQuery();
+        query.RelationStatus = status;
+        query.UserId = userId;
+
+        var relatedUsers = await _searchService.SearchUsers(query);
+
+        return Ok(relatedUsers);
     }
 }

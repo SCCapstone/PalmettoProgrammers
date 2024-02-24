@@ -16,7 +16,7 @@ public class RelationService : CommonService, IRelationService
         _dbContext = dbContext;
     }
 
-    public async Task<UserRelation> GetRelation(int initiatedById, int otherUserId)
+    public async Task<UserRelation?> GetRelation(int initiatedById, int otherUserId)
     {
         if (initiatedById == otherUserId)
         {
@@ -29,29 +29,7 @@ public class RelationService : CommonService, IRelationService
 
         var relation = await _dbContext.UserRelations.Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId).FirstOrDefaultAsync();
 
-        if (relation is null)
-        {
-            throw new NotFoundException("Relation not found", "The requested relation was not found");
-        }
-
         return relation;
-    }
-
-    public async Task<IEnumerable<ApplicationUser>> GetRelations(int userId, UserRelationStatus status, bool userIsRequester = false)
-    {
-        if (!userIsRequester && status != UserRelationStatus.Friends)
-        {
-            throw new ForbidException($"You are not allowed to view this user's {status.ToString()} relations");
-        }
-        else if (status == UserRelationStatus.BlockedBy)
-        {
-            throw new ForbidException("You are not allowed to view blocked by relations");
-        }
-
-        return await _dbContext.UserRelations
-            .Where(r => r.User1Id == userId && r.Status == status)
-            .Select(r => r.User2)
-            .ToListAsync();
     }
 
     public async Task HandleRelationAction(int initiatedById, int otherUserId, UserRelationAction action)

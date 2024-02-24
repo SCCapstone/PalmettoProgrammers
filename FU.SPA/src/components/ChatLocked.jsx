@@ -30,13 +30,16 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
   };
 
   const renderResolution = () => {
+    // get the current path
+    var path = window.location.pathname;
     let resolutionMessage = reason === 'no-user' ? 'Sign In' : 'Join';
     return (
       <Button
-        style={{ backgroundColor: '#E340DC', color: '#FFF', width: '95%' }}
+        variant="contained"
+        style={{ width: '95%' }}
         onClick={() => {
           if (reason === 'no-user') {
-            navigate('/signin');
+            navigate('/signin?returnUrl=' + encodeURIComponent(path));
           }
 
           if (onResolutionClick) {
@@ -53,7 +56,6 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
     <Card
       style={{
         textAlign: 'left',
-        backgroundColor: '#31084A',
         width: '700px',
         height: '90%',
         minHeight: '100px',

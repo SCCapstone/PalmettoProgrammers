@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from 'react';
 import {
+  TextField,
   Card,
   CardActions,
   Button,
   CardContent,
-  TextField,
 } from '@mui/material';
 import {
   joinChatGroup,
@@ -32,8 +32,8 @@ export default function Chat({ chatId }) {
       try {
         const chat = await getChat(chatId);
         setChat(chat);
-        // sleep to allow the signalr connection to be established
-        await new Promise((resolve) => setTimeout(resolve, 40));
+        // See #281: We need to wait for the signalR connection to be started before joining the chat
+        await new Promise((resolve) => setTimeout(resolve, 80));
         await joinChatGroup(chatId);
         const messages = await getMessages(chatId, 1, limit);
         setMessages(messages);
@@ -110,7 +110,9 @@ export default function Chat({ chatId }) {
 
   useEffect(() => {
     // Scroll to the bottom when messages are updated
-    const chatContainer = document.querySelector('.MuiCardContent-root');
+    const chatContainer = document
+      .querySelector('.chat-card')
+      .querySelector('.MuiCardContent-root');
     const scrollDifference = chatContainer.scrollHeight - prevScrollHeight;
 
     if (scrollDifference > 0) {
@@ -123,9 +125,9 @@ export default function Chat({ chatId }) {
 
   return (
     <Card
+      className="chat-card"
       style={{
         textAlign: 'left',
-        backgroundColor: '#31084A',
         width: '700px',
         height: '90%',
         display: 'flex',
@@ -152,7 +154,7 @@ export default function Chat({ chatId }) {
           <ChatMessage
             key={index}
             chatMessage={msg}
-            userIsSender={user?.username === msg.sender.username}
+            userIsSender={user?.username === msg.sender?.username}
           />
         ))}
       </CardContent>
@@ -168,7 +170,11 @@ export default function Chat({ chatId }) {
             }
           }}
         />
-        <Button onClick={handleSendMessage} className="send-button">
+        <Button
+          variant="outlined"
+          onClick={handleSendMessage}
+          className="send-button"
+        >
           Send
         </Button>
       </CardActions>
