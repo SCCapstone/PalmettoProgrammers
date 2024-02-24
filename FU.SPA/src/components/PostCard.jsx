@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './PostCard.css';
+import Theme from '../Theme';
 
 const PostCard = ({ post, showActions }) => {
   const navigate = useNavigate();
@@ -91,7 +92,6 @@ const PostCard = ({ post, showActions }) => {
       style={{
         textAlign: 'left',
         width: '250px',
-        backgroundColor: '#31084A',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -104,7 +104,6 @@ const PostCard = ({ post, showActions }) => {
               <Typography
                 variant="h6"
                 style={{
-                  color: '#E340DC',
                   fontSize: 'medium',
                   display: 'flex',
                   gap: '5px',
@@ -129,7 +128,10 @@ const PostCard = ({ post, showActions }) => {
               {dateTimeString}
             </Typography>
             <div
-              style={{ borderTop: '2px solid #E340DC', marginTop: '5px' }}
+              style={{
+                borderTop: `2px solid ${Theme.palette.primary.main}`,
+                marginTop: '5px',
+              }}
             ></div>
           </>
         }
@@ -144,28 +146,18 @@ const PostCard = ({ post, showActions }) => {
           flexDirection: 'column',
         }}
       >
-        <Typography variant="body2" color="#FFF">
-          {post.description}
-        </Typography>
+        <Typography variant="body2">{post.description}</Typography>
         <div style={{ paddingTop: '10px' }}>
           {post.tags.map((t) => (
-            <Chip
-              key={t}
-              label={'# ' + t}
-              variant="outlined"
-              style={{
-                color: '#E340DC',
-                borderColor: '#E340DC',
-                border: '2px solid #E340DC',
-              }}
-            />
+            <Chip key={t} label={'# ' + t} />
           ))}
         </div>
       </CardContent>
       {showActions && (
         <CardActions style={{ justifyContent: 'flex-end' }}>
           <Button
-            style={{ backgroundColor: '#E340DC', color: '#FFF', width: '100%' }}
+            variant="contained"
+            style={{ width: '100%' }}
             onClick={() => navigate(`/posts/${post.id}`)}
           >
             View

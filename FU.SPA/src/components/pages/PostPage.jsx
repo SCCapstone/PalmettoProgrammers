@@ -80,7 +80,7 @@ const PostPage = () => {
     return (
       <Button
         variant="contained"
-        style={{ backgroundColor: '#E340DC', width: '250px' }}
+        style={{ width: '250px' }}
         onClick={() => setLeaveDialogOpen(true)}
       >
         Leave

@@ -8,7 +8,9 @@ import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import PostPage from './components/pages/PostPage';
 import UserProfile from './components/pages/UserProfile';
-
+import { ThemeProvider } from '@mui/material/styles';
+import Theme from './Theme';
+import CssBaseline from '@mui/material/CssBaseline';
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
@@ -17,7 +19,8 @@ import ProfileSettings from './components/pages/ProfileSettings';
 
 function App() {
   return (
-    <>
+    <ThemeProvider theme={Theme}>
+      <CssBaseline />
       <UserProvider>
         <Navbar />
         <div className="container">
@@ -51,7 +54,7 @@ function App() {
           </Routes>
         </div>
       </UserProvider>
-    </>
+    </ThemeProvider>
   );
 }
 

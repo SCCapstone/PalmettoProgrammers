@@ -2,17 +2,13 @@
   gap: 10px;
 
   input {
-    border: 1px solid #e340dc;
-    border-radius: 4px;
-    color: #fff;
     /* Set width to 800px to takeup whole width  */
     width: 800px;
   }
 
   button {
-    background-color: #23194f;
+    /* background-color: #23194f; */
     height: 100%;
-    color: #e340dc;
     width: 100px;
   }
 }

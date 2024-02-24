@@ -1,5 +1,11 @@
 import { useEffect, useState, useContext } from 'react';
-import { Card, CardActions, Button, CardContent } from '@mui/material';
+import {
+  TextField,
+  Card,
+  CardActions,
+  Button,
+  CardContent,
+} from '@mui/material';
 import {
   joinChatGroup,
   leaveChatGroup,
@@ -9,7 +15,7 @@ import { getChat, getMessages, saveMessage } from '../services/chatService';
 import './Chat.css';
 import ChatMessage from './ChatMessage';
 import UserContext from '../context/userContext';
-import { CustomTextField } from '../helpers/styleComponents';
+import config from '../config';
 
 export default function Chat({ chatId }) {
   const [chat, setChat] = useState(null);
@@ -28,7 +34,7 @@ export default function Chat({ chatId }) {
         const chat = await getChat(chatId);
         setChat(chat);
         // See #281: We need to wait for the signalR connection to be started before joining the chat
-        await new Promise((resolve) => setTimeout(resolve, 80));
+        await new Promise((resolve) => setTimeout(resolve, config.WAIT_TIME));
         await joinChatGroup(chatId);
         const messages = await getMessages(chatId, 1, limit);
         setMessages(messages);
@@ -123,7 +129,6 @@ export default function Chat({ chatId }) {
       className="chat-card"
       style={{
         textAlign: 'left',
-        backgroundColor: '#31084A',
         width: '700px',
         height: '90%',
         display: 'flex',
@@ -155,7 +160,7 @@ export default function Chat({ chatId }) {
         ))}
       </CardContent>
       <CardActions className="chat-actions">
-        <CustomTextField
+        <TextField
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -166,7 +171,11 @@ export default function Chat({ chatId }) {
             }
           }}
         />
-        <Button onClick={handleSendMessage} className="send-button">
+        <Button
+          variant="outlined"
+          onClick={handleSendMessage}
+          className="send-button"
+        >
           Send
         </Button>
       </CardActions>
