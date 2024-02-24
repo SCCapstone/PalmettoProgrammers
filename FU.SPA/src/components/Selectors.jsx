@@ -79,6 +79,26 @@ export const SortOptionSelector = ({ onChange }) => {
   var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
   //var optionsVal = [1, 2, 3, 4, 5, 6];
   /*
+   *<Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          Age
+        </InputLabel>
+        <NativeSelect
+          defaultValue={30}
+          inputProps={{
+            name: 'age',
+            id: 'uncontrolled-native',
+          }}
+        >
+          <option value={10}>Ten</option>
+          <option value={20}>Twenty</option>
+          <option value={30}>Thirty</option>
+        </NativeSelect>
+      </FormControl>
+    </Box>
+
+    
    *function Form() {
       const [firstName, setFirstName] = useState('');
       return (
