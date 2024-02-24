@@ -15,6 +15,7 @@ import { getChat, getMessages, saveMessage } from '../services/chatService';
 import './Chat.css';
 import ChatMessage from './ChatMessage';
 import UserContext from '../context/userContext';
+import config from '../config';
 
 export default function Chat({ chatId }) {
   const [chat, setChat] = useState(null);
@@ -33,7 +34,7 @@ export default function Chat({ chatId }) {
         const chat = await getChat(chatId);
         setChat(chat);
         // See #281: We need to wait for the signalR connection to be started before joining the chat
-        await new Promise((resolve) => setTimeout(resolve, 80));
+        await new Promise((resolve) => setTimeout(resolve, config.WAIT_TIME));
         await joinChatGroup(chatId);
         const messages = await getMessages(chatId, 1, limit);
         setMessages(messages);
