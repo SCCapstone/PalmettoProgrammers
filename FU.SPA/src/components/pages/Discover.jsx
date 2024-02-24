@@ -46,7 +46,7 @@ export default function Discover() {
         games: games,
         tags: tags,
         //pass formatted option after :
-        sortOption: sortOption,
+        sortOption: optionSort(sortOption),
       };
       //sortOption : asc
       const response = await SearchService.searchPosts(query);
@@ -80,7 +80,7 @@ export default function Discover() {
       } else if (option === 'Start Time: Desc') {
         choice = 'soonest:desc';
       } else {
-        alert("other option chosen for optionSort method");
+        //alert("other option chosen for optionSort method");
       }
 
     return choice;
