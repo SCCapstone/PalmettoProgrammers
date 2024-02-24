@@ -78,7 +78,17 @@ export const SortOptionSelector = ({ onChange }) => {
   // newest is most recent posted. soonest is the soonest start time.
   var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
   //var optionsVal = [1, 2, 3, 4, 5, 6];
-  
+  /*
+   *function Form() {
+      const [firstName, setFirstName] = useState('');
+      return (
+        <>
+          <label>
+            First name:
+            <input value={firstName} onChange={e => setFirstName(e.target.value)} />
+          </label>
+          {firstName !== '' && <p>Your name is {firstName}.</p>}
+   */
   return (
     // change autocomplete to a select, not input. mui docs will show the on change method is.
     <Autocomplete
