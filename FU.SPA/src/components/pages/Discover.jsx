@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
-import { TagsSelector, GamesSelector } from '../Selectors';
+import { TagsSelector, GamesSelector, SortOptionSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import GameService from '../../services/gameService';
 import TagService from '../../services/tagService';
@@ -36,7 +36,8 @@ const paramKey = {
   games: 'games',
   tags: 'tags',
   page: 'page',
-  //create sortOption here.
+  sortOption: 'sortOption'
+  //create sortOption here. make a method to make the string after to equal the selected option in the drop down box.
 };
 
 const paramToDayjs = (searchParams, paramKey) => {
@@ -78,6 +79,7 @@ export default function Discover() {
   );
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
+  const [sortOption, setSortOptions] = useState([]);
   //create sortOptions, setSortOptions
 
   // index of the last post
@@ -288,7 +290,7 @@ export default function Discover() {
   useEffect(() => {
     const gamesString = searchParams.get(paramKey.games);
     const tagsString = searchParams.get(paramKey.tags);
-
+    //create sortOptions string
     const gameIds = gamesString ? gamesString.split(',') : [];
     const tagIds = tagsString ? tagsString.split(',') : [];
 
