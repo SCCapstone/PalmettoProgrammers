@@ -5,6 +5,10 @@ import {
   Typography,
   InputAdornment,
   Pagination,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Select,
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
@@ -13,6 +17,7 @@ import SearchService from '../../services/searchService';
 import GameService from '../../services/gameService';
 import TagService from '../../services/tagService';
 import Posts from '../Posts';
+import Users from '../Users';
 import {
   DateFilterRadioValues,
   SelectDateRangeFilter,
@@ -40,8 +45,18 @@ const paramToDayjs = (searchParams, paramKey) => {
 };
 
 export default function Discover() {
+  var tabOptions = {
+    Posts: 'Posts',
+    Users: 'Users',
+  };
+
   const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
+  const userPerPage = 10;
   const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = searchParams.get('o') || tabOptions.Posts;
+
+  const [tabOption, setTabOption] = useState(initialTab);
+  const [players, setPlayers] = useState([]);
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(
@@ -70,6 +85,11 @@ export default function Discover() {
 
   // each page has correct number of posts
   const currentPosts = posts.slice(firstPost, lastPost);
+
+  const lastUser = page * userPerPage;
+  const firstUser = lastPost - userPerPage;
+
+  const currentPlayers = players.slice(firstUser, lastUser);
 
   const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
     const paramValue = searchParams.get(paramKey.dateRadio);
@@ -165,6 +185,11 @@ export default function Discover() {
           } else {
             params.delete(paramKey.tags);
           }
+          if (tabOption === tabOptions.Posts) {
+            params.set('o', tabOption);
+          } else {
+            params.set('o', tabOption);
+          }
 
           return params;
         },
@@ -173,36 +198,44 @@ export default function Discover() {
     };
 
     const updateSearchResults = async () => {
-      const query = {
-        keywords: searchText,
-        games: games,
-        tags: tags,
-      };
+      if (tabOption === tabOptions.Posts) {
+        const query = {
+          keywords: searchText,
+          games: games,
+          tags: tags,
+        };
 
-      if (startDate) query.startDate = startDate;
-      if (endDate) query.endDate = endDate;
+        if (startDate) query.startDate = startDate;
+        if (endDate) query.endDate = endDate;
 
-      if (startTime?.isValid()) {
-        query.startTime = startTime;
+        if (startTime?.isValid()) {
+          query.startTime = startTime;
 
-        if (!endTime?.isValid()) {
-          // set end time to 23:59:59 if unset
-          query.endTime = new Date();
-          query.endTime.setHours(23, 59, 59);
+          if (!endTime?.isValid()) {
+            // set end time to 23:59:59 if unset
+            query.endTime = new Date();
+            query.endTime.setHours(23, 59, 59);
+          }
         }
-      }
-      if (endTime?.isValid()) {
-        query.endTime = endTime;
+        if (endTime?.isValid()) {
+          query.endTime = endTime;
 
-        if (!startTime?.isValid()) {
-          // set start time to 00:00:00 if unset
-          query.startTime = new Date();
-          query.startTime.setHours(0, 0, 0);
+          if (!startTime?.isValid()) {
+            // set start time to 00:00:00 if unset
+            query.startTime = new Date();
+            query.startTime.setHours(0, 0, 0);
+          }
         }
-      }
 
-      const response = await SearchService.searchPosts(query);
-      setPosts(response);
+        const response = await SearchService.searchPosts(query);
+        setPosts(response);
+      } else {
+        const query = {
+          keywords: searchText,
+        };
+        const response = await SearchService.searchUsers(query);
+        setPlayers(response);
+      }
     };
 
     const submitSearch = async () => {
@@ -222,7 +255,6 @@ export default function Discover() {
     };
 
     submitSearch();
-
     // disable for setSearchParams
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -236,6 +268,7 @@ export default function Discover() {
     timeRangeRadioValue,
     startTime,
     endTime,
+    tabOption,
   ]);
 
   useEffect(() => {
@@ -273,6 +306,35 @@ export default function Discover() {
     setTags(restoredTags);
   }, [searchParams, gameOptions, tagOptions]);
 
+  const renderTabContent = () => {
+    if (tabOption === tabOptions.Posts) {
+      return <Posts posts={currentPosts} />;
+    } else if (tabOption === tabOptions.Users) {
+      return <Users users={currentPlayers} />;
+    }
+  };
+
+  const renderTabSelectors = () => {
+    return (
+      <div className="selectors-wrapper">
+        <FormControl>
+          <InputLabel id="social-option-label">Discover</InputLabel>
+          <Select
+            labelId="social-option-label"
+            value={tabOption}
+            label="Discover"
+            onChange={(e) => setTabOption(e.target.value)}
+          >
+            {Object.keys(tabOptions).map((option, index) => (
+              <MenuItem key={index} value={tabOptions[option]}>
+                {tabOptions[option]}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+    );
+  };
   return (
     <div className="page-content">
       <div
@@ -284,48 +346,54 @@ export default function Discover() {
           minWidth: '190pt',
         }}
       >
-        <Typography variant="h5" style={{ color: '#FFF' }}>
-          Filters
-        </Typography>
-        <GamesSelector
-          value={games}
-          onChange={(_, newGames) => {
-            setPage(1);
-            setGames(newGames);
-          }}
-          options={gameOptions}
-        />
-        <TagsSelector
-          value={tags}
-          onChange={(_, newTags) => {
-            setPage(1);
-            setTags(newTags);
-          }}
-        />
-        <SelectDateRangeFilter
-          initialRadioValue={dateRangeRadioValue}
-          initialStartDateValue={startDate}
-          initialEndDateValue={endDate}
-          onChange={(newValues) => {
-            setStartDate(newValues.startDate);
-            setEndDate(newValues.endDate);
-            setDateRangeRadioValue(newValues.radioValue);
-          }}
-        />
-        <SelectTimeRangeFilter
-          initialRadioValue={timeRangeRadioValue}
-          initialStartTimeValue={startTime}
-          initialEndTimeValue={endTime}
-          onTimeRangeChange={(newValues) => {
-            setStartTime(newValues.startTime);
-            setEndTime(newValues.endTime);
-            setTimeRangeRadioValue(newValues.radioValue);
-          }}
-        />
+        {renderTabSelectors()}
+        {tabOption === tabOptions.Posts && (
+          <>
+            <Typography variant="h5" style={{ color: '#FFF' }}>
+              Filters
+            </Typography>
+
+            <GamesSelector
+              value={games}
+              onChange={(_, newGames) => {
+                setPage(1);
+                setGames(newGames);
+              }}
+              options={gameOptions}
+            />
+            <TagsSelector
+              value={tags}
+              onChange={(_, newTags) => {
+                setPage(1);
+                setTags(newTags);
+              }}
+            />
+            <SelectDateRangeFilter
+              initialRadioValue={dateRangeRadioValue}
+              initialStartDateValue={startDate}
+              initialEndDateValue={endDate}
+              onChange={(newValues) => {
+                setStartDate(newValues.startDate);
+                setEndDate(newValues.endDate);
+                setDateRangeRadioValue(newValues.radioValue);
+              }}
+            />
+            <SelectTimeRangeFilter
+              initialRadioValue={timeRangeRadioValue}
+              initialStartTimeValue={startTime}
+              initialEndTimeValue={endTime}
+              onTimeRangeChange={(newValues) => {
+                setStartTime(newValues.startTime);
+                setEndTime(newValues.endTime);
+                setTimeRangeRadioValue(newValues.radioValue);
+              }}
+            />
+          </>
+        )}
       </div>
       <div>
         <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
-        <Posts posts={currentPosts} />
+        {renderTabContent()}
         <div
           style={{
             display: 'flex',
@@ -338,7 +406,11 @@ export default function Discover() {
           <Stack spacing={2}>
             <Typography>Page: {page}</Typography>
             <Pagination
-              count={Math.ceil(posts.length / postsPerPage)}
+              count={
+                tabOption === tabOptions.Posts
+                  ? Math.ceil(posts.length / postsPerPage)
+                  : Math.ceil(players.length / userPerPage)
+              }
               page={page}
               onChange={(_, value) => setPage(value)}
               color="secondary"
