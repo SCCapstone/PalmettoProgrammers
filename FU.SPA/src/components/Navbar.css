@@ -12,8 +12,6 @@ body {
 }
 
 .nav {
-  background-color: #e340dc;
-  color: white;
   display: flex;
   justify-content: space-between;
   align-items: stretch;
@@ -42,7 +40,6 @@ body {
 }
 
 .nav button {
-  color: white;
   background: none;
   border: none;
   outline: none;
@@ -65,7 +62,7 @@ body {
 }
 
 .nav li.active {
-  background-color: rgb(90, 60, 118);
+  border-bottom: 2px solid white;
 }
 
 .nav li:hover {

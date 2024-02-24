@@ -1,17 +1,46 @@
-import { Link, useMatch, useResolvedPath } from 'react-router-dom';
+import { Link, useMatch, useResolvedPath, useLocation } from 'react-router-dom';
 import UserContext from '../context/userContext';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
+import Theme from '../Theme';
 
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
+  const location = useLocation();
+  const [previousPath, setPreviousPath] = useState(location.pathname);
+  const [currentPath, setCurrentPath] = useState(location.pathname);
+
+  useEffect(() => {
+    setPreviousPath(currentPath);
+    setCurrentPath(location.pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
+
+  function CustomLink({ to, children, ...props }) {
+    const pathName = useResolvedPath(to).pathname;
+    // determine if current path is a post page
+    var isPostPage = currentPath.includes('posts');
+    const isActive =
+      useMatch({ path: pathName, end: true }) ||
+      (isPostPage && previousPath === pathName);
+    return (
+      <li className={isActive ? 'active' : ''}>
+        <Link to={to} {...props}>
+          {children}
+        </Link>
+      </li>
+    );
+  }
 
   const renderTabContent = () => {
     if (user) {
       // if user has a custom pfp then use that, if not then use MUI instead of default pfp
-      const defaultPFP = user.pfpUrl.includes(
-        'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-      );
+      const defaultPFP =
+        !user.pfpUrl ||
+        (user.pfpUrl !== null &&
+          user.pfpUrl.includes(
+            'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
+          ));
       const pfpComponent = !defaultPFP ? (
         <Avatar src={user.pfpUrl} sx={{ width: 33, height: 33 }} />
       ) : (
@@ -41,9 +70,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="nav">
+    <nav
+      className="nav"
+      style={{ backgroundColor: Theme.palette.primary.main }}
+    >
       <div className="left-content">
-        <Link href="/" className="site-title">
+        <Link to="/" className="site-title">
           Forces Unite
         </Link>
         <ul>
@@ -61,17 +93,6 @@ export default function Navbar() {
         <ul>{renderTabContent()}</ul>
       </div>
     </nav>
-  );
-}
-function CustomLink({ to, children, ...props }) {
-  const resolvedPath = useResolvedPath(to);
-  const isActive = useMatch({ path: resolvedPath.pathname, end: true });
-  return (
-    <li className={isActive ? 'active' : ''}>
-      <Link to={to} {...props}>
-        {children}
-      </Link>
-    </li>
   );
 }
 function stringToColor(string) {

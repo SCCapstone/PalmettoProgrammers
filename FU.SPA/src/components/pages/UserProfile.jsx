@@ -7,6 +7,8 @@ import './UserProfile.css';
 import { getDirectChat } from '../../services/chatService';
 import Chat from '../Chat';
 import ChatLocked from '../ChatLocked';
+import RelationService from '../../services/relationService';
+import Button from '@mui/material/Button';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -23,9 +25,11 @@ const UserProfile = () => {
       const profile = await UserService.getUserprofile(userId);
       setUserProfile(profile);
       setDefaultPFP(
-        profile.pfpUrl.includes(
-          'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-        ),
+        !profile.pfpUrl ||
+          (profile.pfpUrl !== null &&
+            profile.pfpUrl.includes(
+              'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
+            )),
       );
       setIsOwnProfile(user && user.id === profile.id);
       if (profile && user && !(user.id === profile.id)) {
@@ -110,18 +114,6 @@ const UserProfile = () => {
     );
   };
 
-  const renderHeaderButtons = () => {
-    if (!user || user.username === userProfile.username) {
-      return;
-    }
-
-    return (
-      <div className="buttons">
-        <button className="friendButton">Send Friend Request</button>
-      </div>
-    );
-  };
-
   const renderOnlineStatus = (isOnline) => {
     const fillColor = isOnline ? '#4CD436' : '#FF0000';
 
@@ -159,7 +151,7 @@ const UserProfile = () => {
         <div
           className="header"
           style={{
-            width: '55%',
+            width: isOwnProfile ? '100%' : '55%',
             transition: 'width 0.3s ease',
           }}
         >
@@ -171,7 +163,9 @@ const UserProfile = () => {
               {userProfile.dob && <p>Age: {age} years old</p>}
             </div>
           </div>
-          <div className="right-content">{renderHeaderButtons()}</div>
+          <div className="right-content">
+            <SocialRelationActionButton requesteeId={userProfile?.id} />
+          </div>
         </div>
         <div className="body">{renderBio()}</div>
         {renderChat()}
@@ -180,6 +174,72 @@ const UserProfile = () => {
   } else if (!userProfile && !loading) {
     return <NoPage />;
   }
+};
+
+// param requesteeId: the id of the user profile to act on
+const SocialRelationActionButton = ({ requesteeId }) => {
+  const { user: currentUser } = useContext(UserContext);
+  const [relationStatus, setRelationStatus] = useState();
+
+  const UpdateStatus = () => {
+    if (requesteeId)
+      RelationService.getStatus(requesteeId).then((s) => setRelationStatus(s));
+  };
+
+  // Only call on first load
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => UpdateStatus(), []);
+
+  let handleClick = () => {};
+  let buttonText = '';
+
+  // don't render if current user and viewed user are not loaded
+  if (!requesteeId || !currentUser) return;
+
+  // don't render if viewing your own profile
+  if (requesteeId === currentUser.id) return;
+
+  if (relationStatus === RelationService.STATUS.NONE) {
+    buttonText = 'Send Friend Request';
+    handleClick = async () => {
+      await RelationService.postRelation(
+        requesteeId,
+        RelationService.ACTIONS.FRIEND,
+      );
+      UpdateStatus();
+    };
+  } else if (relationStatus === RelationService.STATUS.REQUESTED) {
+    buttonText = 'Cancel Friend Request';
+    handleClick = async () => {
+      await RelationService.removeRelation(requesteeId);
+      UpdateStatus();
+    };
+  } else if (relationStatus === RelationService.STATUS.PENDING) {
+    buttonText = 'Accept Friend Request';
+    handleClick = async () => {
+      await RelationService.postRelation(
+        requesteeId,
+        RelationService.ACTIONS.FRIEND,
+      );
+      UpdateStatus();
+    };
+  } else if (relationStatus === RelationService.STATUS.FRIENDS) {
+    buttonText = 'Unfriend';
+    handleClick = async () => {
+      await RelationService.removeRelation(requesteeId);
+      UpdateStatus();
+    };
+  }
+
+  return (
+    <Button
+      onClick={handleClick}
+      variant="contained"
+      className="socialRelationActionButton"
+    >
+      {buttonText}
+    </Button>
+  );
 };
 
 export default UserProfile;

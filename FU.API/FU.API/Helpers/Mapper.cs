@@ -173,7 +173,7 @@ public static class Mapper
         query.SortType = arr[0] switch
         {
             "players" => PostSortType.NumberOfPlayers,
-            "soonest" => PostSortType.NewestCreated,
+            "soonest" => PostSortType.EarliestToScheduledTime,
             "newest" => PostSortType.NewestCreated,
             "title" => PostSortType.Title,
             _ => PostSortType.NewestCreated
@@ -246,7 +246,6 @@ public static class Mapper
     {
         return new UserRelationDTO()
         {
-            User = relation.User1.ToProfile(),
             Status = relation.Status.ToString(),
         };
     }
