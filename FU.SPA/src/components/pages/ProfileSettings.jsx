@@ -5,7 +5,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
 import UserService from '../../services/userService'
 import { TagsSelector, GamesSelector } from "../Selectors";
-import { CustomTextField, CustomDatePicker } from "../../helpers/styleComponents";
 
 export default function ProfileSettings () {
 
@@ -72,7 +71,7 @@ export default function ProfileSettings () {
           }}
           sx={{ mt: 3 }}
         >
-            <CustomTextField
+            <TextField
               fullWidth
               id="setBio"
               label="Update Bio"
@@ -82,14 +81,14 @@ export default function ProfileSettings () {
             />
             <br />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <CustomDatePicker
+              <DatePicker
                 label="Date of Birth"
                 value={null} // Leave null as to not change date
                 fullWidth
                 onChange={(newValue) => setDateOfBirth(newValue)}
               />
             </LocalizationProvider>
-            <CustomTextField
+            <TextField
               fullWidth
               id="setPfpUrl"
               label="Update Profile Picture (Insert link)"
