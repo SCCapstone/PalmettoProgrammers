@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import GameService from '../services/gameService';
 import TagService from '../services/tagService';
-import { Checkbox, TextField, Autocomplete } from '@mui/material';
+import { Checkbox, TextField, Autocomplete, Select, MenuItem, InputLabel, NativeSelect, FormControl } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import SortOptionService from '../services/sortOptionService';
@@ -77,59 +77,34 @@ export const TagsSelector = ({ value, onChange }) => {
   );
 };
 
-
-export const SortOptionSelector = ({ value, onChange }) => {
+// Function that displays/returns a Select component for selecting the asc/dsc
+// filter state
+export const SortOptionSelector = ({ onChange }) => {
   // newest is most recent posted. soonest is the soonest start time.
-  var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
-  //var optionsVal = [1, 2, 3, 4, 5, 6];
-  /*
-   *<Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Age
-        </InputLabel>
-        <NativeSelect
-          defaultValue={30}
-          inputProps={{
-            name: 'age',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
-        </NativeSelect>
-      </FormControl>
-    </Box>
+  // var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
+  const [sortOption, setSortOption] = useState('');
 
-    
-   *function Form() {
-      const [firstName, setFirstName] = useState('');
-      return (
-        <>
-          <label>
-            First name:
-            <input value={firstName} onChange={e => setFirstName(e.target.value)} />
-          </label>
-          {firstName !== '' && <p>Your name is {firstName}.</p>}
-   */
+  const handleChange = (event) => {
+    setSortOption(event.target.value);
+  }
+
   return (
-    // change autocomplete to a select, not input. mui docs will show the on change method is.
-    <Autocomplete
-      multiple
-      onChange={onChange}
-      options={options}
-      disableCloseOnSelect
-      getOptionLabel={(option) => options.name}
-      //value={(option) => optionsVal}
-      renderOption={(props, option) => (
-        <li {...props}>
-          {option}
-        </li>
-      )}
-      renderInput={(params) => (
-        <TextField {...params} label="Sort" placeholder="" />
-      )}
-    />
+    <FormControl fullWidth>
+    <InputLabel id="sort-filter-label">Sort Filter</InputLabel>
+    <Select
+      label="Sort Options"
+      labelId="sort-filter-label"
+      id="sort-filter"
+      value={sortOption}
+      onChange={handleChange}
+    >
+      <MenuItem value={1}>Newest</MenuItem>
+      <MenuItem value={2}>Oldest</MenuItem>
+      <MenuItem value={3}>Title: A-Z</MenuItem>
+      <MenuItem value={4}>Title: Z-A</MenuItem>
+      <MenuItem value={5}>Start Time: Asc</MenuItem>
+      <MenuItem value={6}>Start Time: Desc</MenuItem>
+    </Select>
+    </FormControl>
   );
 };
