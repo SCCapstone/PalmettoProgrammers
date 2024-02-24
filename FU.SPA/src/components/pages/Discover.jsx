@@ -77,7 +77,6 @@ export default function Discover() {
       .map((id) => ({ id })) ?? [],
   );
 
-  // 
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
   //create sortOptions, setSortOptions
@@ -201,6 +200,7 @@ export default function Discover() {
       );
     };
 
+    
     const updateSearchResults = async () => {
       if (tabOption === tabOptions.Posts) {
         const query = {

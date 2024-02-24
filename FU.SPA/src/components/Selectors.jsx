@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import GameService from '../services/gameService';
 import TagService from '../services/tagService';
-import { Checkbox, TextField, Autocomplete, NativeSelect } from '@mui/material';
+import { Checkbox, TextField, Autocomplete, Select, MenuItem, InputLabel, NativeSelect, FormControl } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import SortOptionService from '../services/sortOptionService';
@@ -77,26 +77,34 @@ export const TagsSelector = ({ value, onChange }) => {
   );
 };
 
-
+// Function that displays/returns a Select component for selecting the asc/dsc
+// filter state
 export const SortOptionSelector = ({ onChange }) => {
   // newest is most recent posted. soonest is the soonest start time.
-  var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
+  // var options = ['Newest', 'Oldest', 'Title: A-Z', 'Title: Z-A', 'Start Time: Asc', 'Start Time: Desc' ];
+  const [sortOption, setSortOption] = useState('');
+
+  const handleChange = (event) => {
+    setSortOption(event.target.value);
+  }
 
   return (
-    // change autocomplete to a select, not input. mui docs will show the on change method is.
-    <NativeSelect
-      defaultValue={1}
-      inputProps={{
-        name: 'Sort',
-        id: 'sort-filter',
-      }}
+    <FormControl fullWidth>
+    <InputLabel id="sort-filter-label">Sort Filter</InputLabel>
+    <Select
+      label="Sort Options"
+      labelId="sort-filter-label"
+      id="sort-filter"
+      value={sortOption}
+      onChange={handleChange}
     >
-      <option value={1}>Newest</option>
-      <option value={2}>Oldest</option>
-      <option value={3}>Title: A-Z</option>
-      <option value={4}>Title: Z-A</option>
-      <option value={5}>Start Time: Asc</option>
-      <option value={6}>Start Time: Desc</option>
-    </NativeSelect>
+      <MenuItem value={1}>Newest</MenuItem>
+      <MenuItem value={2}>Oldest</MenuItem>
+      <MenuItem value={3}>Title: A-Z</MenuItem>
+      <MenuItem value={4}>Title: Z-A</MenuItem>
+      <MenuItem value={5}>Start Time: Asc</MenuItem>
+      <MenuItem value={6}>Start Time: Desc</MenuItem>
+    </Select>
+    </FormControl>
   );
 };
