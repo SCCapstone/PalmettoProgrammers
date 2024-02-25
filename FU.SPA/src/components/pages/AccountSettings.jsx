@@ -1,16 +1,14 @@
-import { Container, Box, Typography, Button, TextField } from "@mui/material";
+import { Container, Box, Typography, Button, TextField } from '@mui/material';
 import { useState } from 'react';
-import UserService from '../../services/userService'
-import { useNavigate } from "react-router";
+import UserService from '../../services/userService';
+import { useNavigate } from 'react-router';
 
-export default function AccountSettings () {
-
+export default function AccountSettings() {
   const [username, setUsername] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,8 +27,8 @@ export default function AccountSettings () {
       const data = {
         username: username !== null ? username : null,
         oldPassword: oldPassword !== null ? oldPassword : null,
-        newPassword: newPassword !== null ? newPassword : null
-      }
+        newPassword: newPassword !== null ? newPassword : null,
+      };
 
       await UserService.updateAccountInfo(data);
       alert('Info updated successfully!');
@@ -57,45 +55,48 @@ export default function AccountSettings () {
         <Typography component="h1" variant="h5">
           Account Settings
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit}
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
           sx={{ mt: 3 }}
         >
-            <TextField
-              fullWidth
-              id="setUsername"
-              label="New Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              id="oldPassword"
-              label="Old Password"
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              id="newPassword"
-              label="New Password"
-              type="password"
-              value={newPassword}
-              autoComplete="new-password"
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              id="confirmPassword"
-              label="Confirm Password"
-              type="password"
-              value={confirmPassword}
-              autoComplete="new-password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+          <TextField
+            fullWidth
+            id="setUsername"
+            label="New Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            id="oldPassword"
+            label="Old Password"
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            id="newPassword"
+            label="New Password"
+            type="password"
+            value={newPassword}
+            autoComplete="new-password"
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            id="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            value={confirmPassword}
+            autoComplete="new-password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
           <Button
             type="submit"
             fullWidth
@@ -107,5 +108,5 @@ export default function AccountSettings () {
         </Box>
       </Box>
     </Container>
-  )
+  );
 }

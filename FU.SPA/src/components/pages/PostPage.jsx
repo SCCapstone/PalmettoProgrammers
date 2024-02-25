@@ -100,7 +100,7 @@ const PostPage = () => {
         Edit Post Details
       </Button>
     );
-  }
+  };
 
   const ConfirmLeaveDialog = () => {
     const handleClose = () => {

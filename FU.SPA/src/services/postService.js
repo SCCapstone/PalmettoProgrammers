@@ -102,6 +102,6 @@ const PostService = {
   getPostDetails,
   joinPost,
   leavePost,
-  getPostUsers
+  getPostUsers,
 };
 export default PostService;

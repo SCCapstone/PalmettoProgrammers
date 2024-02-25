@@ -9,7 +9,7 @@ import {
   Autocomplete,
   createFilterOptions,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PostService from '../services/postService';
@@ -20,14 +20,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import UserContext from '../context/userContext';
 
-export default function Edit() {
-  //const { postId } = useParams();
-  //const [post, setPost] = useState(null);
-  //const { user } = useContext(UserContext);
-
-
-  const [game, setGame] = useState( );
+export default function Edit({ postId }) {
+  const [game, setGame] = useState();
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs());
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
@@ -35,13 +31,27 @@ export default function Edit() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const { user } = useContext(UserContext);
 
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const postDetails = await PostService.getPostDetails(postId);
+        if (user.id !== postDetails.creator.id) {
+          alert('You are not authorized to edit this post');
+          navigate(`/discover`);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    init();
+  });
+
+  const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
-    // call update post
-    // redirct to post
     // make sure user is owner of post
-    // console.log(post.id);
     e.preventDefault();
 
     let tagIds = [];
@@ -62,15 +72,10 @@ export default function Edit() {
       gameId: findGame.id,
     };
 
-    console.log(updatedPost);
-    // TODO(epadams) remove, hardcoded
-    const postId = 12;
-
     try {
       const newPost = await PostService.updatePost(updatedPost, postId);
-      console.log(newPost);
-
-      // navigate(`/posts/${newPost.id}`);
+      alert('Post updated successfully!');
+      navigate(`/posts/${postId}`);
     } catch (e) {
       window.alert(e);
       console.log(e);
