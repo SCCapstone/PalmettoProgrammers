@@ -437,7 +437,7 @@ export default function Discover() {
             <SortOptionSelector 
               onChange={(option) => {
                 setSortOption(option);
-                }}
+              }}
             />
 
             
