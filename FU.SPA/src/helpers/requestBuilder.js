@@ -11,7 +11,7 @@ const buildPostQueryString = (query) => {
     queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
   }
   if (query.sortOption?.length > 0) {
-    queryString += '&sort=' + query.sortOption.toISOString();
+    queryString += '&sort=' + query.sortOption.String();
   }
 
   // Update from DateAndTimeFilter Branch
