@@ -89,7 +89,8 @@ const PostPage = () => {
   };
 
   const renderEditButton = () => {
-    if (user.id !== post.creator.id) return;
+    if (user == null || user.id !== post.creator.id) return;
+
     return (
       <Button
         variant="contained"
