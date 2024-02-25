@@ -30,6 +30,5 @@ const findGameByDscName = async (name) => {
 const SortOptionService = {
     findGameByAscName,
     findGameByDscName,
-    searchAscDsc,
 };
 export default SortOptionService;
