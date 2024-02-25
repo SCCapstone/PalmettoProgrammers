@@ -6,33 +6,31 @@ import dayjs from 'dayjs';
 import UserService from '../../services/userService'
 import { TagsSelector, GamesSelector } from "../Selectors";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useNavigate } from "react-router";
 
 export default function ProfileSettings () {
 
-    {/*
-      * Possible Fields:
-      * pfpurl
-      * bio
-      * date of birth
-      * favorite games
-      * favorite tags
-      */}
-
   const [bio, setBio] = useState('');
+  // This needs to be changed, I can't figure out how to set a default/null
+  // value as it currently pulls the current date/time and using
+  // dayjs(null) throws a 'Invalid Date' error
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [pfpUrl, setPfpUrl] = useState('');
   const [favoriteGames, setFavoriteGames] = useState([]);
   const [favoriteTags, setFavoriteTags] = useState([]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      var idJson = await UserService.getUserIdJson();
+      const idJson = await UserService.getUserIdJson();
 
       console.log(favoriteGames);
       console.log(favoriteTags);
+      console.log(dateOfBirth);
 
+      // Form request payload
       const data = {
         id: idJson.userId,
         pfpUrl: pfpUrl,
@@ -42,13 +40,19 @@ export default function ProfileSettings () {
         favoriteTags: favoriteTags
       };      
 
-      await UserService.updateUserProfile(data);
+      const response = await UserService.updateUserProfile(data);
+      alert('Info updated successfully!');
+
+      // Redirect to user profile
+      navigate('/profile/' + idJson.userId);
     } catch (e) {
+      alert(e)
       console.log(e);
     }
 
   };
 
+  // Display component
   return (
     <Container component="main" maxWidth="xs">
       <Box

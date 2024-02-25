@@ -86,9 +86,10 @@ const updateUserProfile = async (data) => {
     throw new Error('Error in updating information');
   }
 
-  return await response.json();
+  return response.json();
 }
 
+// Updates Account Information
 const updateAccountInfo = async (data) => {
   const response = await fetch(`${API_BASE_URL}/Accounts`, {
     method: 'PATCH',

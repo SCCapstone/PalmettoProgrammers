@@ -9,6 +9,8 @@ import Chat from '../Chat';
 import ChatLocked from '../ChatLocked';
 import RelationService from '../../services/relationService';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
+import { Box, ButtonGroup } from '@mui/material';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -135,8 +137,7 @@ const UserProfile = () => {
 
   const renderChat = () => {
     if (isOwnProfile) {
-      // Maybe instead we can render profile/account settings
-      return;
+      return <UserSettings />;
     }
     if (user) {
       return <Chat chatId={chatId} />;
@@ -240,6 +241,19 @@ const SocialRelationActionButton = ({ requesteeId }) => {
       {buttonText}
     </Button>
   );
+};
+
+const UserSettings = () => {
+  return (
+    <Box sx={{
+      mt: 3
+    }}>
+      <ButtonGroup variant="contained" aria-label="Basic button group">
+        <Button><Link to="/accountsettings">Account Settings</Link></Button>
+        <Button><Link to="/profilesettings">Profile Settings</Link></Button>
+      </ButtonGroup>
+    </Box>
+  )
 };
 
 export default UserProfile;
