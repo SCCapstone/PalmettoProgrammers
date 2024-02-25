@@ -49,10 +49,14 @@ export default function Navbar() {
           sx={{ width: 33, height: 33, bgcolor: stringToColor(user.username) }}
         />
       );
+      // For some reason, can't user user.Id inside of link itself so this is
+      // an easy workaround
+      const navUserId = user.id;
       return (
         <>
           <li style={{ display: 'flex', alignItems: 'center' }}>
-            {pfpComponent}
+            {/* This link redirects to a user's profile page */}
+            <Link to={`/profile/${navUserId}`}>{pfpComponent}</Link>
           </li>
           <li style={{ display: 'flex', alignItems: 'center' }}>
             <button onClick={logout}>Logout</button>
@@ -95,6 +99,7 @@ export default function Navbar() {
     </nav>
   );
 }
+
 function stringToColor(string) {
   let hash = 0;
   let i;
