@@ -36,7 +36,7 @@ const paramKey = {
   games: 'games',
   tags: 'tags',
   page: 'page',
-  sortOption: 'Sort' //may need to switch back to sortOption, but we'll see.
+  sortOption: 'sortOption' //may need to switch back to sortOption, but we'll see.
   //create sortOption here. make a method to make the string after to equal the selected option in the drop down box.
 };
 
