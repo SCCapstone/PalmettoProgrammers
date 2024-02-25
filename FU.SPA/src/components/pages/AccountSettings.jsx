@@ -4,7 +4,6 @@ import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
-import RequestBuilder from '../../helpers/requestBuilder';
 
 export default function AccountSettings() {
   const { logout } = useContext(UserContext);
@@ -29,16 +28,22 @@ export default function AccountSettings() {
     try {
       // Make request and attempt to fetch API
       const data = {
-         username: username !== '' ? username : null,
-         oldPassword: oldPassword !== '' ? oldPassword : null,
-         newPassword: newPassword !== '' ? newPassword : null,
+        username: username !== '' ? username : null,
+        oldPassword: oldPassword !== '' ? oldPassword : null,
+        newPassword: newPassword !== '' ? newPassword : null,
       };
 
       await UserService.updateAccountInfo(data);
-      alert('Info updated successfully!\nYou will be logged out.');
-      localStorage.clear();
-      logout();
-      navigate('/signin');
+      let alertMessage = 'Info updated successfully!';
+      if (data.newPassword !== null) {
+        alertMessage += '\nYou will be logged out.';
+      }
+      alert(alertMessage);
+      if (data.newPassword !== null) {
+        localStorage.clear();
+        logout();
+        navigate('/signin');
+      }
       // Not the best way to do this but it'll do for now
       //const idJson = await UserService.getUserIdJson();
       //navigate('/profile/' + idJson.userId);

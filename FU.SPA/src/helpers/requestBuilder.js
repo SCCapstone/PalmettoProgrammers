@@ -46,20 +46,8 @@ const buildUserQueryString = (query) => {
   return queryString;
 };
 
-const buildUpdateAccountInfo = (username, oldPassword, newPassword) => {
-  var request = {};
-  if (username !== null) {
-    request.username = username;
-  }
-  if (oldPass !== null) {
-    request.oldPassword = oldPassword;
-  }
-  if (newPass !== null) {
-    request.newPassword = newPassword;
-  }
-
-  return request;
-} 
-
-const RequestBuilder = { buildPostQueryString, buildUserQueryString, buildUpdateAccountInfo };
+const RequestBuilder = {
+  buildPostQueryString,
+  buildUserQueryString,
+};
 export default RequestBuilder;
