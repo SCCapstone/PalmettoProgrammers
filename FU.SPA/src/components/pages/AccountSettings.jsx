@@ -6,7 +6,7 @@ import UserContext from '../../context/userContext';
 import { useContext } from 'react';
 
 export default function AccountSettings() {
-  const { user, logout } = useContext(UserContext);
+  const { logout } = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');

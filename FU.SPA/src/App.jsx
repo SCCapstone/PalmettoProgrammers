@@ -46,23 +46,28 @@ function App() {
               }
             />
 
-            <Route path="/profilesettings/" element={
-              <ProtectedRoute>
-                <ProfileSettings />
-              </ProtectedRoute>              
-            } />
-            <Route path="/accountsettings/" element={
-              <ProtectedRoute>
-                <AccountSettings />
-              </ProtectedRoute>
-            } />
+            <Route
+              path="/profilesettings/"
+              element={
+                <ProtectedRoute>
+                  <ProfileSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/accountsettings/"
+              element={
+                <ProtectedRoute>
+                  <AccountSettings />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/posts/:postId" element={<PostPage />} />
 
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
-            
           </Routes>
         </div>
       </UserProvider>

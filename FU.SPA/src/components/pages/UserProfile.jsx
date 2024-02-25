@@ -11,8 +11,6 @@ import RelationService from '../../services/relationService';
 import Button from '@mui/material/Button';
 import { Box, ButtonGroup } from '@mui/material';
 
-
-
 const UserProfile = () => {
   const { userId } = useParams();
   const { user } = useContext(UserContext);
@@ -21,9 +19,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [chatId, setChatId] = useState(null);
   const [isOwnProfile, setIsOwnProfile] = useState(false);
-  
 
-  
   const update = useCallback(async () => {
     setLoading(true);
     try {
@@ -255,12 +251,12 @@ const UserSettings = () => {
       }}
     >
       <ButtonGroup variant="contained" aria-label="Basic button group">
-      <Button
-        onClick={() => navigate(`/accountsettings`)}
-      >Account Settings</Button>
-      <Button
-        onClick={() => navigate(`/profilesettings`)}
-      >Profile Settings</Button>
+        <Button onClick={() => navigate(`/accountsettings`)}>
+          Account Settings
+        </Button>
+        <Button onClick={() => navigate(`/profilesettings`)}>
+          Profile Settings
+        </Button>
       </ButtonGroup>
     </Box>
   );

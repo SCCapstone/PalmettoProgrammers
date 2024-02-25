@@ -79,7 +79,7 @@ export default function ProfileSettings() {
             display: 'flex',
             flexDirection: 'column',
             mt: 1,
-            gap: 2
+            gap: 2,
           }}
         >
           <TextField
