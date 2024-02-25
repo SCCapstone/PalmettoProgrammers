@@ -10,9 +10,6 @@ import { useNavigate } from 'react-router';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
-  // This needs to be changed, I can't figure out how to set a default/null
-  // value as it currently pulls the current date/time and using
-  // dayjs(null) throws a 'Invalid Date' error
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [pfpUrl, setPfpUrl] = useState('');
   // const [favoriteGames, setFavoriteGames] = useState([]);
@@ -27,15 +24,17 @@ export default function ProfileSettings() {
 
       // console.log(favoriteGames);
       // console.log(favoriteTags);
-      console.log(dateOfBirth);
 
       // Form request payload
       const data = {
         id: idJson.userId,
-        pfpUrl: pfpUrl,
-        bio: bio,
+        pfpUrl: pfpUrl !== '' ? pfpUrl : null,
+        bio: bio !== '' ? bio : null,
+        // if the date of birth is the same as today, ignore and set as null
+        // if not same day, update
         dob:
-          dateOfBirth !== null
+          dateOfBirth.toISOString().substring(0, 10) !==
+          dayjs().toISOString().substring(0, 10)
             ? dateOfBirth.toISOString().substring(0, 10)
             : null,
         //favoriteGames: favoriteGames,
@@ -75,7 +74,12 @@ export default function ProfileSettings() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
-          sx={{ mt: 3 }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 1,
+            gap: 2,
+          }}
         >
           <TextField
             fullWidth

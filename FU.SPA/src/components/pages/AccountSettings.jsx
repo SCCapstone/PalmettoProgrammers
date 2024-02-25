@@ -2,8 +2,11 @@ import { Container, Box, Typography, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
+import UserContext from '../../context/userContext';
+import { useContext } from 'react';
 
 export default function AccountSettings() {
+  const { logout } = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -17,7 +20,7 @@ export default function AccountSettings() {
     if (newPassword !== confirmPassword) {
       alert('Passwords do not match');
       return;
-    } else if (newPassword !== null && oldPassword == null) {
+    } else if (newPassword !== '' && oldPassword === '') {
       alert('Old password must be supplied when updating password');
       return;
     }
@@ -25,18 +28,27 @@ export default function AccountSettings() {
     try {
       // Make request and attempt to fetch API
       const data = {
-        username: username !== null ? username : null,
-        oldPassword: oldPassword !== null ? oldPassword : null,
-        newPassword: newPassword !== null ? newPassword : null,
+        username: username !== '' ? username : null,
+        oldPassword: oldPassword !== '' ? oldPassword : null,
+        newPassword: newPassword !== '' ? newPassword : null,
       };
 
       await UserService.updateAccountInfo(data);
-      alert('Info updated successfully!');
-
+      let alertMessage = 'Info updated successfully!';
+      if (data.newPassword !== null) {
+        alertMessage += '\nYou will be logged out.';
+      }
+      alert(alertMessage);
+      if (data.newPassword !== null) {
+        localStorage.clear();
+        logout();
+        navigate('/signin');
+      }
       // Not the best way to do this but it'll do for now
-      const idJson = await UserService.getUserIdJson();
-      navigate('/profile/' + idJson.userId);
+      //const idJson = await UserService.getUserIdJson();
+      //navigate('/profile/' + idJson.userId);
     } catch (e) {
+      alert(e);
       console.log(e);
     }
   };
@@ -62,7 +74,12 @@ export default function AccountSettings() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
-          sx={{ mt: 3 }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 1,
+            gap: 2,
+          }}
         >
           <TextField
             fullWidth

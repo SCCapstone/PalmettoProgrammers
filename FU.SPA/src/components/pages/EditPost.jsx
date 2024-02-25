@@ -1,5 +1,7 @@
-import CreatePost from '../CreatePost.jsx';
+import Edit from '../Edit.jsx';
+import { useParams } from 'react-router';
 
 export default function EditPost() {
-  return <CreatePost />;
+  const { postId } = useParams();
+  return <Edit postId={postId} />;
 }
