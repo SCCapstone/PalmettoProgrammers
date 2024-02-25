@@ -16,8 +16,8 @@ export default function ProfileSettings () {
   // dayjs(null) throws a 'Invalid Date' error
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [pfpUrl, setPfpUrl] = useState('');
-  const [favoriteGames, setFavoriteGames] = useState([]);
-  const [favoriteTags, setFavoriteTags] = useState([]);
+  // const [favoriteGames, setFavoriteGames] = useState([]);
+  // const [favoriteTags, setFavoriteTags] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -35,9 +35,9 @@ export default function ProfileSettings () {
         id: idJson.userId,
         pfpUrl: pfpUrl,
         bio: bio,
-        dob: dateOfBirth !== null ? dateOfBirth.toISOString().substring(0, 10) : null,
-        favoriteGames: favoriteGames,
-        favoriteTags: favoriteTags
+        dob: dateOfBirth !== null ? dateOfBirth.toISOString().substring(0, 10) : null
+        //favoriteGames: favoriteGames,
+        //favoriteTags: favoriteTags
       };      
 
       const response = await UserService.updateUserProfile(data);
@@ -99,12 +99,14 @@ export default function ProfileSettings () {
               value={pfpUrl}
               onChange={(e) => setPfpUrl(e.target.value)}
             />
+            {/* TODO(epadams) make this work once the backend gets fixed
             <GamesSelector
               onChange={(e) => setFavoriteGames(e.target.value)}
             />
             <TagsSelector
               onChange={(e) => setFavoriteTags(e.target.value)}
             />
+            */}
           <Button
             type="submit"
             fullWidth
