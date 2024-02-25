@@ -15,6 +15,8 @@ import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
 import './App.css';
+import ProfileSettings from './components/pages/ProfileSettings';
+import AccountSettings from './components/pages/AccountSettings';
 
 function App() {
   return (
@@ -43,9 +45,27 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/profilesettings/"
+              element={
+                <ProtectedRoute>
+                  <ProfileSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/accountsettings/"
+              element={
+                <ProtectedRoute>
+                  <AccountSettings />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/posts/:postId" element={<PostPage />} />
+
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
           </Routes>
