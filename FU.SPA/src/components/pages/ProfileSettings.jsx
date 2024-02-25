@@ -4,19 +4,16 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import UserService from '../../services/userService';
-import { TagsSelector, GamesSelector } from '../Selectors';
+// import { TagsSelector, GamesSelector } from "../Selectors";
 import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
-  // This needs to be changed, I can't figure out how to set a default/null
-  // value as it currently pulls the current date/time and using
-  // dayjs(null) throws a 'Invalid Date' error
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [pfpUrl, setPfpUrl] = useState('');
-  const [favoriteGames, setFavoriteGames] = useState([]);
-  const [favoriteTags, setFavoriteTags] = useState([]);
+  // const [favoriteGames, setFavoriteGames] = useState([]);
+  // const [favoriteTags, setFavoriteTags] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,24 +22,27 @@ export default function ProfileSettings() {
     try {
       const idJson = await UserService.getUserIdJson();
 
-      console.log(favoriteGames);
-      console.log(favoriteTags);
-      console.log(dateOfBirth);
+      // console.log(favoriteGames);
+      // console.log(favoriteTags);
 
       // Form request payload
       const data = {
         id: idJson.userId,
-        pfpUrl: pfpUrl,
-        bio: bio,
+        pfpUrl: pfpUrl !== '' ? pfpUrl : null,
+        bio: bio !== '' ? bio : null,
+        // if the date of birth is the same as today, ignore and set as null
+        // if not same day, update
         dob:
-          dateOfBirth !== null
+          dateOfBirth.toISOString().substring(0, 10) !==
+          dayjs().toISOString().substring(0, 10)
             ? dateOfBirth.toISOString().substring(0, 10)
             : null,
-        favoriteGames: favoriteGames,
-        favoriteTags: favoriteTags,
+        //favoriteGames: favoriteGames,
+        //favoriteTags: favoriteTags
       };
 
       const response = await UserService.updateUserProfile(data);
+      console.log(response);
       alert('Info updated successfully!');
 
       // Redirect to user profile
@@ -74,7 +74,12 @@ export default function ProfileSettings() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
-          sx={{ mt: 3 }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 1,
+            gap: 2,
+          }}
         >
           <TextField
             fullWidth
@@ -100,8 +105,14 @@ export default function ProfileSettings() {
             value={pfpUrl}
             onChange={(e) => setPfpUrl(e.target.value)}
           />
-          <GamesSelector onChange={(e) => setFavoriteGames(e.target.value)} />
-          <TagsSelector onChange={(e) => setFavoriteTags(e.target.value)} />
+          {/* TODO(epadams) make this work once the backend gets fixed
+            <GamesSelector
+              onChange={(e) => setFavoriteGames(e.target.value)}
+            />
+            <TagsSelector
+              onChange={(e) => setFavoriteTags(e.target.value)}
+            />
+            */}
           <Button
             type="submit"
             fullWidth

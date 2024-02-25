@@ -46,7 +46,7 @@ public class PostsController : ControllerBase
         }
 
         var post = dto.ToModel();
-        post.Creator = user;
+        post.CreatorId = user.UserId;
         post.Id = postId;
 
         post = await _postService.UpdatePost(post);

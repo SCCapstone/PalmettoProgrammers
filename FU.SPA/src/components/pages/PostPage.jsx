@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import { Button } from '@mui/material';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PostService from '../../services/postService';
 import UserContext from '../../context/userContext';
 import Chat from '../Chat';

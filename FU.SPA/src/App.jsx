@@ -17,7 +17,6 @@ import UserProvider from './context/userProvider';
 import './App.css';
 import ProfileSettings from './components/pages/ProfileSettings';
 import AccountSettings from './components/pages/AccountSettings';
-import EditPost from './components/pages/EditPost';
 
 function App() {
   return (
@@ -46,15 +45,29 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/profilesettings/"
+              element={
+                <ProtectedRoute>
+                  <ProfileSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/accountsettings/"
+              element={
+                <ProtectedRoute>
+                  <AccountSettings />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/posts/:postId" element={<PostPage />} />
 
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
-            <Route path="/profilesettings/" element={<ProfileSettings />} />
-            <Route path="/accountsettings/" element={<AccountSettings />} />
-            <Route path="/posts/:postId/edit" element={<EditPost />} />
           </Routes>
         </div>
       </UserProvider>
