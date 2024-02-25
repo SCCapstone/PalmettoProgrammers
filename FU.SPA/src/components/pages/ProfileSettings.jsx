@@ -1,10 +1,11 @@
-import { Container, Box, Typography, Button } from "@mui/material";
+import { Container, Box, Typography, Button, TextField } from "@mui/material";
 import { useState } from 'react';
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
 import UserService from '../../services/userService'
 import { TagsSelector, GamesSelector } from "../Selectors";
+import { DatePicker } from "@mui/x-date-pickers";
 
 export default function ProfileSettings () {
 
@@ -23,15 +24,14 @@ export default function ProfileSettings () {
   const [favoriteGames, setFavoriteGames] = useState([]);
   const [favoriteTags, setFavoriteTags] = useState([]);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      var idJson = await UserService.getUserId();
+      var idJson = await UserService.getUserIdJson();
 
-      //console.log(favoriteGames);
-      //console.log(favoriteTags);
+      console.log(favoriteGames);
+      console.log(favoriteTags);
 
       const data = {
         id: idJson.userId,
@@ -40,7 +40,7 @@ export default function ProfileSettings () {
         dob: dateOfBirth !== null ? dateOfBirth.toISOString().substring(0, 10) : null,
         favoriteGames: favoriteGames,
         favoriteTags: favoriteTags
-      };
+      };      
 
       await UserService.updateUserProfile(data);
     } catch (e) {
@@ -95,11 +95,11 @@ export default function ProfileSettings () {
               value={pfpUrl}
               onChange={(e) => setPfpUrl(e.target.value)}
             />
-            <TagsSelector
-              onChange={setFavoriteTags}
-            />
             <GamesSelector
-              onChange={setFavoriteGames}
+              onChange={(e) => setFavoriteGames(e.target.value)}
+            />
+            <TagsSelector
+              onChange={(e) => setFavoriteTags(e.target.value)}
             />
           <Button
             type="submit"

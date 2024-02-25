@@ -16,6 +16,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
 import './App.css';
 import ProfileSettings from './components/pages/ProfileSettings';
+import AccountSettings from './components/pages/AccountSettings';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
             <Route path="/profilesettings/" element={<ProfileSettings />} />
+            <Route path="/accountsettings/" element={<AccountSettings />} />
           </Routes>
         </div>
       </UserProvider>

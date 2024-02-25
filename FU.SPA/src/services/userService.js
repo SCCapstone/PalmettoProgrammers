@@ -57,7 +57,8 @@ const getUserprofile = async (userString) => {
 };
 
 // TODO return *just* id or rename function name
-const getUserId = async () => {
+// Currently this function returns the username and id
+const getUserIdJson = async () => {
   // Call API endpoint
   const response = await fetch(`${API_BASE_URL}/Accounts`, {
     headers: { ...AuthService.getAuthHeader() },
@@ -73,7 +74,6 @@ const getUserId = async () => {
 
 // Updates Profile Information
 const updateUserProfile = async (data) => {
-  console.log(JSON.stringify(data));
   // Call API endpoint
   const response = await fetch(`${API_BASE_URL}/Users/current`, {
     method: 'PATCH',
@@ -89,12 +89,26 @@ const updateUserProfile = async (data) => {
   return await response.json();
 }
 
+const updateAccountInfo = async (data) => {
+  const response = await fetch(`${API_BASE_URL}/Accounts`, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json',
+    ...AuthService.getAuthHeader() },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in updating account information');
+  }
+}
+
 const UserService = {
   getConnectedPosts,
   getConnectedGroups,
   getConnectedPlayers,
   getUserprofile,
-  getUserId,
-  updateUserProfile
+  getUserIdJson,
+  updateUserProfile,
+  updateAccountInfo
 };
 export default UserService;
