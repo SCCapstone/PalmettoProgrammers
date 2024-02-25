@@ -318,8 +318,7 @@ export default function Discover() {
   useEffect(() => {
     const gamesString = searchParams.get(paramKey.games);
     const tagsString = searchParams.get(paramKey.tags);
-    const sortOption = searchParams.get(paramKey.sortOption);
-    //create sortOptions string
+    const sortString = searchParams.get(paramKey.sortOption); // as is, it should be a string and not need a sortId
     const gameIds = gamesString ? gamesString.split(',') : [];
     const tagIds = tagsString ? tagsString.split(',') : [];
 
@@ -335,12 +334,14 @@ export default function Discover() {
         tagOptions.find((tag) => tag.id.toString() === tagId) || { id: tagId },
     );
     
-    //const restoredSortOption = sortOption.toString();
+    //not sure this is needed, but it functions with it because it was null before
+    //it could just be replacing the null with a ','
+    const restoredSortOption = sortString ? sortString.split(',') : []; 
 
     setGames(restoredGames);
     setTags(restoredTags);
-    //setSortOption(restoredSortOption);
-  }, [searchParams, gameOptions, tagOptions]);
+    setSortOption(restoredSortOption);
+  }, [searchParams, gameOptions, tagOptions, sortOption]);
 
   // Function that displays either posts or users depending on state
   const renderTabContent = () => {
