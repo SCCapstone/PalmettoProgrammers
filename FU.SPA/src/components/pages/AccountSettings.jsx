@@ -17,10 +17,6 @@ export default function AccountSettings() {
     e.preventDefault();
 
     // Error checking common cases
-    console.log(oldPassword);
-    console.log(newPassword);
-    console.log(confirmPassword);
-
     if (newPassword !== confirmPassword) {
       alert('Passwords do not match');
       return;
