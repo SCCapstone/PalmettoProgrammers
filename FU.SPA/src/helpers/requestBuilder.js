@@ -10,6 +10,9 @@ const buildPostQueryString = (query) => {
   if (query.tags?.length > 0) {
     queryString += '&tags=' + query.tags.map((g) => String(g.id)).join(',');
   }
+  if (query.sortOption?.length > 0) {
+    queryString += '&sort=' + query.sortOption.toISOString;
+  }
 
   // Update from DateAndTimeFilter Branch
   if (query.startDate) {

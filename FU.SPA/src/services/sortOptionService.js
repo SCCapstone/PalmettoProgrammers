@@ -1,14 +1,3 @@
-import config from '../config';
-const API_BASE_URL = config.API_URL;
-import AuthService from './authService';
-
-const searchAscDsc = async (keyword) => {
-    keyword = encodeURIComponent(keyword);
-    const response = await fetch(`${API_BASE_URL}/ascDsc?$keyword=${keyword}`);
-
-    return await response.json();
-};
-
 const findGameByAscName = async (name) => {
     let games = await searchGames(title);
     console.log(tags);

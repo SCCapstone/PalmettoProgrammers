@@ -36,9 +36,32 @@ const paramKey = {
   games: 'games',
   tags: 'tags',
   page: 'page',
-  sortOption: 'sortOption'
+  sortOption: 'Sort' //may need to switch back to sortOption, but we'll see.
   //create sortOption here. make a method to make the string after to equal the selected option in the drop down box.
 };
+
+// const optionSort = (option) => {
+//   var choice;
+//     console.log(option);
+//     if (option === 'Newest') {
+//       choice = 'newest:asc';
+//     } else if (option === 'Oldest') {
+//       choice = 'newest:desc';
+//     } else if (option === 'Title: A-Z') {
+//       choice = 'title:asc';
+//     } else if (option === 'Title: Z-A') {
+//       choice = 'title:desc';
+//     } else if (option === 'Start Time: Asc') {
+//       choice = 'soonest:asc';
+//     } else if (option === 'Start Time: Desc') {
+//       choice = 'soonest:desc';
+//     } else {
+//       //alert("other option chosen for optionSort method");
+//     }
+
+//   return choice;
+// }
+
 
 const paramToDayjs = (searchParams, paramKey) => {
   let paramValue = searchParams.get(paramKey);
@@ -80,8 +103,7 @@ export default function Discover() {
 
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
-  const [sortOption, setSortOptions] = useState([]);
-  //create sortOptions, setSortOptions
+  const [sortOption, setSortOption] = useState('');
 
   // index of the last post
   const lastPost = page * postsPerPage;
@@ -196,6 +218,9 @@ export default function Discover() {
             params.set('o', tabOption);
           }
 
+          //param.set(paramKey.sortOption, sortOption.toString());
+          
+
           return params;
         },
         { replace: true },
@@ -209,6 +234,7 @@ export default function Discover() {
           keywords: searchText,
           games: games,
           tags: tags,
+          sortOption: sortOption
         };
 
         if (startDate) query.startDate = startDate;
@@ -292,6 +318,7 @@ export default function Discover() {
   useEffect(() => {
     const gamesString = searchParams.get(paramKey.games);
     const tagsString = searchParams.get(paramKey.tags);
+    const sortOption = searchParams.get(paramKey.sortOption);
     //create sortOptions string
     const gameIds = gamesString ? gamesString.split(',') : [];
     const tagIds = tagsString ? tagsString.split(',') : [];
@@ -307,9 +334,12 @@ export default function Discover() {
       (tagId) =>
         tagOptions.find((tag) => tag.id.toString() === tagId) || { id: tagId },
     );
+    
+    //const restoredSortOption = sortOption.toString();
 
     setGames(restoredGames);
     setTags(restoredTags);
+    setSortOption(restoredSortOption);
   }, [searchParams, gameOptions, tagOptions]);
 
   // Function that displays either posts or users depending on state
@@ -399,7 +429,9 @@ export default function Discover() {
                 setTimeRangeRadioValue(newValues.radioValue);
               }}
             />
-            <SortOptionSelector></SortOptionSelector>
+            <SortOptionSelector onChange={setSortOption}>
+
+            </SortOptionSelector>
           </>
         )}
       </div>

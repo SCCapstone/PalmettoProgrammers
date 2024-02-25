@@ -98,12 +98,12 @@ export const SortOptionSelector = ({ onChange }) => {
       value={sortOption}
       onChange={handleChange}
     >
-      <MenuItem value={1}>Newest</MenuItem>
-      <MenuItem value={2}>Oldest</MenuItem>
-      <MenuItem value={3}>Title: A-Z</MenuItem>
-      <MenuItem value={4}>Title: Z-A</MenuItem>
-      <MenuItem value={5}>Start Time: Asc</MenuItem>
-      <MenuItem value={6}>Start Time: Desc</MenuItem>
+      <MenuItem value={'newest:asc'}>Newest</MenuItem>
+      <MenuItem value={'newest:desc'}>Oldest</MenuItem>
+      <MenuItem value={'title:asc'}>Title: A-Z</MenuItem>
+      <MenuItem value={'title:desc'}>Title: Z-A</MenuItem>
+      <MenuItem value={'soonest:asc'}>Start Time: Asc</MenuItem>
+      <MenuItem value={'soonest:desc'}>Start Time: Desc</MenuItem>
     </Select>
     </FormControl>
   );

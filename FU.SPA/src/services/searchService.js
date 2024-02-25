@@ -10,10 +10,6 @@ import RequestBuilder from '../helpers/requestBuilder';
 */
 const searchPosts = async (query) => {
   var queryString = RequestBuilder.buildPostQueryString(query);
-  if (query.sortOptions.length > 0) {
-    queryString += '&sort=' + query.sortOptions; //supposed to get the posts in different order based on the sort filter option.
-  }
-  //'&sort=' + query.sortOption.;
 
   let authHeader = null;
   try {
