@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import UserContext from '../../context/userContext';
 import UserService from '../../services/userService';
 import NoPage from './NoPage';
@@ -9,8 +9,9 @@ import Chat from '../Chat';
 import ChatLocked from '../ChatLocked';
 import RelationService from '../../services/relationService';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
 import { Box, ButtonGroup } from '@mui/material';
+
+
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -20,7 +21,9 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [chatId, setChatId] = useState(null);
   const [isOwnProfile, setIsOwnProfile] = useState(false);
+  
 
+  
   const update = useCallback(async () => {
     setLoading(true);
     try {
@@ -244,6 +247,7 @@ const SocialRelationActionButton = ({ requesteeId }) => {
 };
 
 const UserSettings = () => {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -251,12 +255,12 @@ const UserSettings = () => {
       }}
     >
       <ButtonGroup variant="contained" aria-label="Basic button group">
-        <Button>
-          <Link to="/accountsettings">Account Settings</Link>
-        </Button>
-        <Button>
-          <Link to="/profilesettings">Profile Settings</Link>
-        </Button>
+      <Button
+        onClick={() => navigate(`/accountsettings`)}
+      >Account Settings</Button>
+      <Button
+        onClick={() => navigate(`/profilesettings`)}
+      >Profile Settings</Button>
       </ButtonGroup>
     </Box>
   );

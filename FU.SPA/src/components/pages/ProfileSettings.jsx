@@ -75,7 +75,12 @@ export default function ProfileSettings() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
-          sx={{ mt: 3 }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 1,
+            gap: 2
+          }}
         >
           <TextField
             fullWidth

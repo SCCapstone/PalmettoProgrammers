@@ -2,8 +2,11 @@ import { Container, Box, Typography, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
+import UserContext from '../../context/userContext';
+import { useContext } from 'react';
 
 export default function AccountSettings() {
+  const { user, logout } = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -14,10 +17,14 @@ export default function AccountSettings() {
     e.preventDefault();
 
     // Error checking common cases
+    console.log(oldPassword);
+    console.log(newPassword);
+    console.log(confirmPassword);
+
     if (newPassword !== confirmPassword) {
       alert('Passwords do not match');
       return;
-    } else if (newPassword !== null && oldPassword == null) {
+    } else if (newPassword !== '' && oldPassword === '') {
       alert('Old password must be supplied when updating password');
       return;
     }
@@ -31,12 +38,15 @@ export default function AccountSettings() {
       };
 
       await UserService.updateAccountInfo(data);
-      alert('Info updated successfully!');
-
+      alert('Info updated successfully!\nYou will be logged out.');
+      localStorage.clear();
+      logout();
+      navigate('/signin');
       // Not the best way to do this but it'll do for now
-      const idJson = await UserService.getUserIdJson();
-      navigate('/profile/' + idJson.userId);
+      //const idJson = await UserService.getUserIdJson();
+      //navigate('/profile/' + idJson.userId);
     } catch (e) {
+      alert(e);
       console.log(e);
     }
   };
@@ -62,7 +72,12 @@ export default function AccountSettings() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
-          sx={{ mt: 3 }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 1,
+            gap: 2,
+          }}
         >
           <TextField
             fullWidth

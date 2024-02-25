@@ -56,7 +56,6 @@ const getUserprofile = async (userString) => {
   return await response.json();
 };
 
-// TODO return *just* id or rename function name
 // Currently this function returns the username and id
 const getUserIdJson = async () => {
   // Call API endpoint
