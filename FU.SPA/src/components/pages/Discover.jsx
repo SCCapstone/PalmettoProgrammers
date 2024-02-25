@@ -321,7 +321,7 @@ export default function Discover() {
     const sortString = searchParams.get(paramKey.sortOption); // as is, it should be a string and not need a sortId
     const gameIds = gamesString ? gamesString.split(',') : [];
     const tagIds = tagsString ? tagsString.split(',') : [];
-
+    const sortChoices = sortString ? sortString.split(',') : ''; 
     const restoredGames = gameIds.map(
       (gameId) =>
         gameOptions.find((game) => game.id.toString() === gameId) || {
@@ -336,7 +336,11 @@ export default function Discover() {
     
     //not sure this is needed, but it functions with it because it was null before
     //it could just be replacing the null with a ','
-    const restoredSortOption = sortString ? sortString.split(',') : []; 
+    // Might need to rework this.
+    const restoredSortOption = sortChoices.toString(
+      (sortChoice) =>
+        sortOption.find((sort) => sort.option.toString() === sortChoice) || { option: sortChoice },
+    );
 
     setGames(restoredGames);
     setTags(restoredTags);
