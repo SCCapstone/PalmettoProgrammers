@@ -4,6 +4,7 @@ import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
+import RequestBuilder from '../../helpers/requestBuilder';
 
 export default function AccountSettings() {
   const { logout } = useContext(UserContext);
@@ -28,9 +29,9 @@ export default function AccountSettings() {
     try {
       // Make request and attempt to fetch API
       const data = {
-        username: username !== null ? username : null,
-        oldPassword: oldPassword !== null ? oldPassword : null,
-        newPassword: newPassword !== null ? newPassword : null,
+         username: username !== '' ? username : null,
+         oldPassword: oldPassword !== '' ? oldPassword : null,
+         newPassword: newPassword !== '' ? newPassword : null,
       };
 
       await UserService.updateAccountInfo(data);

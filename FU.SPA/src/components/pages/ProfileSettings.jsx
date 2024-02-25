@@ -28,8 +28,8 @@ export default function ProfileSettings() {
       // Form request payload
       const data = {
         id: idJson.userId,
-        pfpUrl: pfpUrl,
-        bio: bio,
+        pfpUrl: pfpUrl !== '' ? pfpUrl : null,
+        bio: bio !== '' ? bio : null,
         // if the date of birth is the same as today, ignore and set as null
         // if not same day, update
         dob:
