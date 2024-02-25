@@ -41,7 +41,7 @@ export default function Edit() {
     // call update post
     // redirct to post
     // make sure user is owner of post
-    console.log(post.id);
+    // console.log(post.id);
     e.preventDefault();
 
     let tagIds = [];
@@ -62,11 +62,17 @@ export default function Edit() {
       gameId: findGame.id,
     };
 
+    console.log(updatedPost);
+    // TODO(epadams) remove, hardcoded
+    const postId = 12;
+
     try {
-      const newPost = await PostService.updatePost(updatedPost);
-      navigate(`/posts/${newPost.id}`);
+      const newPost = await PostService.updatePost(updatedPost, postId);
+      console.log(newPost);
+
+      // navigate(`/posts/${newPost.id}`);
     } catch (e) {
-      window.alert('Error creating post');
+      window.alert(e);
       console.log(e);
     }
   };
@@ -100,10 +106,10 @@ export default function Edit() {
           }}
         >
           <TextField
-            required //may want to get rid of this and just check if it's empty when clicking create button.
+            required
             fullWidth
             id="searchGames"
-            label="Title" //might want to put a Search icon in front, if we can figure it out.
+            label="Title"
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -132,7 +138,6 @@ export default function Edit() {
           >
             <Typography component="h1" variant="h6">
               {' '}
-              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
               Description
             </Typography>
           </Box>

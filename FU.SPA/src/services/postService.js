@@ -24,8 +24,8 @@ const createPost = async (params) => {
 };
 
 // Update post information
-const updatePost = async (params) => {
-  const response = await fetch(`${API_BASE_URL}/Posts`, {
+const updatePost = async (params, postId) => {
+  const response = await fetch(`${API_BASE_URL}/Posts/${postId}`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
@@ -35,7 +35,7 @@ const updatePost = async (params) => {
   });
 
   if (!response.ok) {
-    throw new Error('Error in post creation');
+    throw new Error('Error in updating post');
   }
   const jsonResponse = await response.json();
 
