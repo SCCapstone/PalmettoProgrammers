@@ -1,3 +1,4 @@
+// may end up deleting this, as it may not be needed.
 const findGameByAscName = async (name) => {
     let games = await searchGames(title);
     console.log(tags);
