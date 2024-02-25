@@ -339,7 +339,7 @@ export default function Discover() {
 
     setGames(restoredGames);
     setTags(restoredTags);
-    setSortOption(restoredSortOption);
+    //setSortOption(restoredSortOption);
   }, [searchParams, gameOptions, tagOptions]);
 
   // Function that displays either posts or users depending on state
