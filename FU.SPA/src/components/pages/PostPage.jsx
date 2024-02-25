@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import { Button } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import PostService from '../../services/postService';
 import UserContext from '../../context/userContext';
 import Chat from '../Chat';
@@ -88,6 +88,19 @@ const PostPage = () => {
     );
   };
 
+  const renderEditButton = () => {
+    if (user.id !== post.creator.id) return;
+    return (
+      <Button
+        variant="contained"
+        style={{ width: '250px' }}
+      >
+        {/* TODO(epadams): Change to not be a link, more consistent styling */}
+        <Link to="/posts/edit">Edit Post Details</Link>
+      </Button>
+    );
+  }
+
   const ConfirmLeaveDialog = () => {
     const handleClose = () => {
       setLeaveDialogOpen(false);
@@ -133,6 +146,7 @@ const PostPage = () => {
         {renderLeaveButton()}
         <PostUsersList postId={post.id} />
         {renderChat()}
+        {renderEditButton()}
         <ConfirmLeaveDialog />
       </div>
     );
