@@ -39,7 +39,7 @@ const paramKey = {
   sortOption: 'sortOption' //may need to switch back to sortOption, but we'll see.
   //create sortOption here. make a method to make the string after to equal the selected option in the drop down box.
 };
-
+// This code may no longer be necessary, as the selector handles these options in the selectors.jsx page
 // const optionSort = (option) => {
 //   var choice;
 //     console.log(option);
@@ -336,7 +336,7 @@ export default function Discover() {
     
     //not sure this is needed, but it functions with it because it was null before
     //it could just be replacing the null with a ','
-    // Might need to rework this.
+    // Might need to rework this, as I believe that the value is coming in null from the selector.
     const restoredSortOption = sortChoices.toString(
       (sortChoice) =>
         sortOption.find((sort) => sort.option.toString() === sortChoice) || { option: sortChoice },
