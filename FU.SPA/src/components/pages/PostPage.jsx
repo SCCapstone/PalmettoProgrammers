@@ -94,9 +94,9 @@ const PostPage = () => {
       <Button
         variant="contained"
         style={{ width: '250px' }}
+        onClick={() => navigate(`edit`)}
       >
-        {/* TODO(epadams): Change to not be a link, more consistent styling */}
-        <Link to="/posts/edit">Edit Post Details</Link>
+        Edit Post Details
       </Button>
     );
   }
