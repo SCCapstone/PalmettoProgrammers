@@ -1,15 +1,14 @@
-import { Container, Box, Typography, Button, TextField } from "@mui/material";
+import { Container, Box, Typography, Button, TextField } from '@mui/material';
 import { useState } from 'react';
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import UserService from '../../services/userService'
-import { TagsSelector, GamesSelector } from "../Selectors";
-import { DatePicker } from "@mui/x-date-pickers";
-import { useNavigate } from "react-router";
+import UserService from '../../services/userService';
+// import { TagsSelector, GamesSelector } from "../Selectors";
+import { DatePicker } from '@mui/x-date-pickers';
+import { useNavigate } from 'react-router';
 
-export default function ProfileSettings () {
-
+export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   // This needs to be changed, I can't figure out how to set a default/null
   // value as it currently pulls the current date/time and using
@@ -26,8 +25,8 @@ export default function ProfileSettings () {
     try {
       const idJson = await UserService.getUserIdJson();
 
-      console.log(favoriteGames);
-      console.log(favoriteTags);
+      // console.log(favoriteGames);
+      // console.log(favoriteTags);
       console.log(dateOfBirth);
 
       // Form request payload
@@ -35,21 +34,24 @@ export default function ProfileSettings () {
         id: idJson.userId,
         pfpUrl: pfpUrl,
         bio: bio,
-        dob: dateOfBirth !== null ? dateOfBirth.toISOString().substring(0, 10) : null
+        dob:
+          dateOfBirth !== null
+            ? dateOfBirth.toISOString().substring(0, 10)
+            : null,
         //favoriteGames: favoriteGames,
         //favoriteTags: favoriteTags
-      };      
+      };
 
       const response = await UserService.updateUserProfile(data);
+      console.log(response);
       alert('Info updated successfully!');
 
       // Redirect to user profile
       navigate('/profile/' + idJson.userId);
     } catch (e) {
-      alert(e)
+      alert(e);
       console.log(e);
     }
-
   };
 
   // Display component
@@ -75,31 +77,31 @@ export default function ProfileSettings () {
           }}
           sx={{ mt: 3 }}
         >
-            <TextField
+          <TextField
+            fullWidth
+            id="setBio"
+            label="Update Bio"
+            value={bio}
+            multiline
+            onChange={(e) => setBio(e.target.value)}
+          />
+          <br />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Date of Birth"
+              value={null} // Leave null as to not change date
               fullWidth
-              id="setBio"
-              label="Update Bio"
-              value={bio}
-              multiline
-              onChange={(e) => setBio(e.target.value)}
+              onChange={(newValue) => setDateOfBirth(newValue)}
             />
-            <br />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Date of Birth"
-                value={null} // Leave null as to not change date
-                fullWidth
-                onChange={(newValue) => setDateOfBirth(newValue)}
-              />
-            </LocalizationProvider>
-            <TextField
-              fullWidth
-              id="setPfpUrl"
-              label="Update Profile Picture (Insert link)"
-              value={pfpUrl}
-              onChange={(e) => setPfpUrl(e.target.value)}
-            />
-            {/* TODO(epadams) make this work once the backend gets fixed
+          </LocalizationProvider>
+          <TextField
+            fullWidth
+            id="setPfpUrl"
+            label="Update Profile Picture (Insert link)"
+            value={pfpUrl}
+            onChange={(e) => setPfpUrl(e.target.value)}
+          />
+          {/* TODO(epadams) make this work once the backend gets fixed
             <GamesSelector
               onChange={(e) => setFavoriteGames(e.target.value)}
             />
@@ -118,5 +120,5 @@ export default function ProfileSettings () {
         </Box>
       </Box>
     </Container>
-  )
+  );
 }
