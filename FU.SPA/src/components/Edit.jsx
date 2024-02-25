@@ -51,7 +51,6 @@ export default function Edit({ postId }) {
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
-    // make sure user is owner of post
     e.preventDefault();
 
     let tagIds = [];
@@ -61,7 +60,12 @@ export default function Edit({ postId }) {
       tagIds.push(newTag.id);
     }
 
-    var findGame = await GameService.findOrCreateGameByTitle(game.name);
+    try {
+      var findGame = await GameService.findOrCreateGameByTitle(game.name);
+    } catch (e) {
+      alert(e);
+      console.log(e);
+    }
 
     const updatedPost = {
       title: title,

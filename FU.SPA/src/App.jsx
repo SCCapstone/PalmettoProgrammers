@@ -17,6 +17,7 @@ import UserProvider from './context/userProvider';
 import './App.css';
 import ProfileSettings from './components/pages/ProfileSettings';
 import AccountSettings from './components/pages/AccountSettings';
+import EditPost from './components/pages/EditPost';
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
 
             <Route path="*" element={<NoPage />} />
             <Route path="/profile/:userId" element={<UserProfile />} />
+            <Route path="/posts/:postId/edit" element={<EditPost />} />
           </Routes>
         </div>
       </UserProvider>
