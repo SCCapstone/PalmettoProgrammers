@@ -62,24 +62,26 @@ const getUserIdJson = async () => {
   // Call API endpoint
   const response = await fetch(`${API_BASE_URL}/Accounts`, {
     headers: { ...AuthService.getAuthHeader() },
-    method: 'GET'
+    method: 'GET',
   });
 
   if (!response.ok) {
     throw new Error('Error in retrieving ID');
   }
-  
+
   return await response.json();
-}
+};
 
 // Updates Profile Information
 const updateUserProfile = async (data) => {
   // Call API endpoint
   const response = await fetch(`${API_BASE_URL}/Users/current`, {
     method: 'PATCH',
-    headers: { 'content-type': 'application/json',
-    ...AuthService.getAuthHeader() },
-    body: JSON.stringify(data)
+    headers: {
+      'content-type': 'application/json',
+      ...AuthService.getAuthHeader(),
+    },
+    body: JSON.stringify(data),
   });
 
   if (!response.ok) {
@@ -87,21 +89,23 @@ const updateUserProfile = async (data) => {
   }
 
   return response.json();
-}
+};
 
 // Updates Account Information
 const updateAccountInfo = async (data) => {
   const response = await fetch(`${API_BASE_URL}/Accounts`, {
     method: 'PATCH',
-    headers: { 'content-type': 'application/json',
-    ...AuthService.getAuthHeader() },
-    body: JSON.stringify(data)
+    headers: {
+      'content-type': 'application/json',
+      ...AuthService.getAuthHeader(),
+    },
+    body: JSON.stringify(data),
   });
 
   if (!response.ok) {
     throw new Error('Error in updating account information');
   }
-}
+};
 
 const UserService = {
   getConnectedPosts,
@@ -110,6 +114,6 @@ const UserService = {
   getUserprofile,
   getUserIdJson,
   updateUserProfile,
-  updateAccountInfo
+  updateAccountInfo,
 };
 export default UserService;

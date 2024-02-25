@@ -245,15 +245,21 @@ const SocialRelationActionButton = ({ requesteeId }) => {
 
 const UserSettings = () => {
   return (
-    <Box sx={{
-      mt: 3
-    }}>
+    <Box
+      sx={{
+        mt: 3,
+      }}
+    >
       <ButtonGroup variant="contained" aria-label="Basic button group">
-        <Button><Link to="/accountsettings">Account Settings</Link></Button>
-        <Button><Link to="/profilesettings">Profile Settings</Link></Button>
+        <Button>
+          <Link to="/accountsettings">Account Settings</Link>
+        </Button>
+        <Button>
+          <Link to="/profilesettings">Profile Settings</Link>
+        </Button>
       </ButtonGroup>
     </Box>
-  )
+  );
 };
 
 export default UserProfile;
