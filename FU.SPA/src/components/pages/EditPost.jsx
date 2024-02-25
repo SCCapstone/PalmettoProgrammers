@@ -1,5 +1,5 @@
-import CreatePost from '../CreatePost.jsx';
+import Edit from '../Edit.jsx';
 
 export default function EditPost() {
-  return <CreatePost />;
+  return <Edit />;
 }
