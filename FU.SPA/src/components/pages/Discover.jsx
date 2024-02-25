@@ -434,9 +434,13 @@ export default function Discover() {
                 setTimeRangeRadioValue(newValues.radioValue);
               }}
             />
-            <SortOptionSelector onChange={setSortOption}>
+            <SortOptionSelector 
+              onChange={(option) => {
+                setSortOption(option);
+                }}
+            />
 
-            </SortOptionSelector>
+            
           </>
         )}
       </div>
