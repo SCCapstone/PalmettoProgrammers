@@ -46,5 +46,8 @@ const buildUserQueryString = (query) => {
   return queryString;
 };
 
-const RequestBuilder = { buildPostQueryString, buildUserQueryString };
+const RequestBuilder = {
+  buildPostQueryString,
+  buildUserQueryString,
+};
 export default RequestBuilder;

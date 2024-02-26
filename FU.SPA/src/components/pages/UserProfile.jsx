@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import UserContext from '../../context/userContext';
 import UserService from '../../services/userService';
 import NoPage from './NoPage';
@@ -9,6 +9,7 @@ import Chat from '../Chat';
 import ChatLocked from '../ChatLocked';
 import RelationService from '../../services/relationService';
 import Button from '@mui/material/Button';
+import { Box, ButtonGroup } from '@mui/material';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -135,8 +136,7 @@ const UserProfile = () => {
 
   const renderChat = () => {
     if (isOwnProfile) {
-      // Maybe instead we can render profile/account settings
-      return;
+      return <UserSettings />;
     }
     if (user) {
       return <Chat chatId={chatId} />;
@@ -239,6 +239,26 @@ const SocialRelationActionButton = ({ requesteeId }) => {
     >
       {buttonText}
     </Button>
+  );
+};
+
+const UserSettings = () => {
+  const navigate = useNavigate();
+  return (
+    <Box
+      sx={{
+        mt: 3,
+      }}
+    >
+      <ButtonGroup variant="contained" aria-label="Basic button group">
+        <Button onClick={() => navigate(`/accountsettings`)}>
+          Account Settings
+        </Button>
+        <Button onClick={() => navigate(`/profilesettings`)}>
+          Profile Settings
+        </Button>
+      </ButtonGroup>
+    </Box>
   );
 };
 
