@@ -1,9 +1,11 @@
 ﻿namespace FU.API.DTOs.Post;
 
+using FU.API.Helpers;
 using System.ComponentModel.DataAnnotations;
 
 public class PostRequestDTO
 {
+    [NonEmptyString]
     [StringLength(60, ErrorMessage = "Title can't be longer than 60 chracters")]
     public string Title { get; set; } = string.Empty;
 

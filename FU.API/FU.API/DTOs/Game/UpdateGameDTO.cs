@@ -1,9 +1,11 @@
 ﻿namespace FU.API.DTOs.Game;
 
+using FU.API.Helpers;
 using System.ComponentModel.DataAnnotations;
 
 public class UpdateGameDTO
 {
+    [NonEmptyString]
     [StringLength(80, ErrorMessage = "Game name can't be longer than 80 chracters")]
     public string? Name { get; set; }
 
