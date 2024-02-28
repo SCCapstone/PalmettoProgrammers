@@ -1,9 +1,8 @@
-using Microsoft.EntityFrameworkCore.Migrations;
-
 #nullable disable
 
 namespace FU.API.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
     using Microsoft.EntityFrameworkCore.Migrations;
 
     /// <inheritdoc />

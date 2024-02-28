@@ -102,7 +102,7 @@ public class RelationService : CommonService, IRelationService
             _dbContext.UserRelations.Update(inverseRelation);
             await _dbContext.SaveChangesAsync();
         }
-        catch(DbUpdateException)
+        catch (DbUpdateException)
         {
             throw new DbUpdateException();
         }
@@ -204,7 +204,7 @@ public class RelationService : CommonService, IRelationService
         {
             await _dbContext.SaveChangesAsync();
         }
-        catch(DbUpdateException)
+        catch (DbUpdateException)
         {
             throw new DbUpdateException();
         }
