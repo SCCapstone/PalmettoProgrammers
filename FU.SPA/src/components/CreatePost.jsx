@@ -29,7 +29,7 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
-  const { id, name, completed } = CreatePost; //connected to the CreatePost behavior test in App.jsx
+  
 
 
   const handleSubmit = async (e) => {
@@ -64,8 +64,6 @@ export default function CreatePost() {
 
   return (
     <Container component="main" maxWidth="xs">
-      {/*  may need to put the closing div at bottom so the test can find 'game' and 'title' in it */}
-      {/* <div data-testid="cpTest-1"> */}
       <Box
         sx={{
           marginTop: 1,
@@ -146,7 +144,6 @@ export default function CreatePost() {
           </Button>
         </Box>
       </Box>
-      {/* </div> */}
     </Container>
   );
 }
