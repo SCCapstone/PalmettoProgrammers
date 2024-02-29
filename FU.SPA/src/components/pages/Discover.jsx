@@ -372,6 +372,11 @@ export default function Discover() {
                 setPage(1);
                 setTags(newTags);
               }}
+              onKeyDown={(event, newTags) => {
+                if (event.key === 'Enter')
+                setPage(1);
+                setGames(newTags);
+              }}
             />
             <SelectDateRangeFilter
               initialRadioValue={dateRangeRadioValue}
