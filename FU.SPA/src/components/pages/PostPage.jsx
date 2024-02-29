@@ -88,6 +88,20 @@ const PostPage = () => {
     );
   };
 
+  const renderEditButton = () => {
+    if (user == null || user.id !== post.creator.id) return;
+
+    return (
+      <Button
+        variant="contained"
+        style={{ width: '250px' }}
+        onClick={() => navigate(`edit`)}
+      >
+        Edit Post Details
+      </Button>
+    );
+  };
+
   const ConfirmLeaveDialog = () => {
     const handleClose = () => {
       setLeaveDialogOpen(false);
@@ -133,6 +147,7 @@ const PostPage = () => {
         {renderLeaveButton()}
         <PostUsersList postId={post.id} />
         {renderChat()}
+        {renderEditButton()}
         <ConfirmLeaveDialog />
       </div>
     );
