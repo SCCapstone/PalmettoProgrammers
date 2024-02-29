@@ -29,8 +29,6 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
-  
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
