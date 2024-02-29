@@ -20,7 +20,6 @@ import AccountSettings from './components/pages/AccountSettings';
 import EditPost from './components/pages/EditPost';
 
 function App() {
-
   return (
     <ThemeProvider theme={Theme}>
       <CssBaseline />
