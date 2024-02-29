@@ -3,7 +3,6 @@
 namespace FU.API.Migrations
 {
     using Microsoft.EntityFrameworkCore.Migrations;
-    using Microsoft.EntityFrameworkCore.Migrations;
 
     /// <inheritdoc />
     public partial class NonNullablePostDescription : Migration
