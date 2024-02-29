@@ -2,7 +2,8 @@
   "dependencies": {
     "@microsoft/signalr": "^8.0.0",
     "@mui/x-date-pickers": "^6.19.0",
-    "dayjs": "^1.11.10"
+    "dayjs": "^1.11.10",
+    "lint": "^1.1.2"
   },
   "devDependencies": {
     "@testing-library/react": "^14.1.2",

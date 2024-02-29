@@ -20,11 +20,6 @@ import AccountSettings from './components/pages/AccountSettings';
 import EditPost from './components/pages/EditPost';
 
 function App() {
-  //creating to do behavioral test, which is connected to createPostBehavior.test.js and CreatPost.jsx
-  const CreatePosts = [ 
-    { id: 1, name: 'test CP', completed: false,},
-    { id: 2, name: 'test CP2', completed: true,},
-  ];
 
   return (
     <ThemeProvider theme={Theme}>
