@@ -8,7 +8,13 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({ value, onChange }) => {
+// const keyEnter = ({e}) => {
+//   if(e.keyCode == 13) {
+//     console.log('value', e.target.value);
+//   }
+// }
+
+export const GamesSelector = ({ value, onChange, keydown }) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
@@ -20,6 +26,7 @@ export const GamesSelector = ({ value, onChange }) => {
       multiple
       value={value}
       onChange={onChange}
+      onKeyDown={keydown}
       options={gameOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
