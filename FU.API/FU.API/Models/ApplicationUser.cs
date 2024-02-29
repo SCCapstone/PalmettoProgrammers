@@ -3,12 +3,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// User of the application.
 /// </summary>
-[Index(nameof(Username))]
+[Microsoft.EntityFrameworkCore.Index(nameof(Username))]
 public class ApplicationUser
 {
     /// <summary>
@@ -26,10 +25,20 @@ public class ApplicationUser
     /// </summary>
     public bool IsAdmin { get; set; }
 
-    /// <summary>
-    /// Gets or sets the bio of the user.
-    /// </summary>
-    public string? Bio { get; set; }
+    [NotMapped]
+    private string _bio = string.Empty;
+
+    public string Bio
+    {
+        get => _bio;
+        set
+        {
+            _bio = value;
+            NormalizedBio = value.ToUpper();
+        }
+    }
+
+    public string NormalizedBio { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the dob of the user.

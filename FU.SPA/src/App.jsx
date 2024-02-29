@@ -6,14 +6,18 @@ import Create from './components/pages/Create';
 import NoPage from './components/pages/NoPage';
 import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
-import Chat from './components/pages/Chat';
 import PostPage from './components/pages/PostPage';
-import createPage from './components/CreatePost'; //using for behavioral testing
-
+import UserProfile from './components/pages/UserProfile';
+import { ThemeProvider } from '@mui/material/styles';
+import Theme from './Theme';
+import CssBaseline from '@mui/material/CssBaseline';
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
-import CreatePost from './components/CreatePost';
+import './App.css';
+import ProfileSettings from './components/pages/ProfileSettings';
+import AccountSettings from './components/pages/AccountSettings';
+import EditPost from './components/pages/EditPost';
 
 function App() {
   //creating to do behavioral test, which is connected to createPostBehavior.test.js and CreatPost.jsx
@@ -23,12 +27,8 @@ function App() {
   ];
 
   return (
-    <>
-    <div className='CPBTest'>
-      { CreatePosts.map((CreatePost) => {
-        return (<CreatePost CreatePost={CreatePost}/>)
-      })}
-    </div>
+    <ThemeProvider theme={Theme}>
+      <CssBaseline />
       <UserProvider>
         <Navbar />
         <div className="container">
@@ -52,15 +52,34 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/profilesettings/"
+              element={
+                <ProtectedRoute>
+                  <ProfileSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/accountsettings/"
+              element={
+                <ProtectedRoute>
+                  <AccountSettings />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/chat/:chatId" element={<Chat />} />
             <Route path="/posts/:postId" element={<PostPage />} />
+
             <Route path="*" element={<NoPage />} />
+            <Route path="/profile/:userId" element={<UserProfile />} />
+            <Route path="/posts/:postId/edit" element={<EditPost />} />
           </Routes>
         </div>
       </UserProvider>
-    </>
+    </ThemeProvider>
   );
 }
 

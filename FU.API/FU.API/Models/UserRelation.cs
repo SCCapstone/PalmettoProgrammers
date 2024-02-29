@@ -43,9 +43,14 @@ public class UserRelation
 public enum UserRelationStatus
 {
     /// <summary>
-    /// The second user has yet to accept/reject the new relation.
+    /// User1 has a pending request from User2
     /// </summary>
     Pending,
+
+    /// <summary>
+    /// User1 has requested User2 as a friend
+    /// </summary>
+    Requested,
 
     /// <summary>
     /// User1 and User2 are friends
@@ -55,5 +60,31 @@ public enum UserRelationStatus
     /// <summary>
     /// User1 has blocked User2
     /// </summary>
-    Blocked
+    Blocked,
+
+    /// <summary>
+    /// User1 is blocked by User2
+    /// </summary>
+    BlockedBy,
+
+    /// <summary>
+    /// No relation.
+    /// </summary>
+    None,
+}
+
+/// <summary>
+/// The actions related to user relations.
+/// </summary>
+public enum UserRelationAction
+{
+    /// <summary>
+    /// Friend another user
+    /// </summary>
+    Friend,
+
+    /// <summary>
+    /// Block another user
+    /// </summary>
+    Block,
 }

@@ -29,7 +29,7 @@ docker container start postgres-490
 
 Alternatively, install and start a PostgreSQL database manually.
 
-### Setup Postgres
+### Updating Postgres
 Run the following command to apply the latest database changes.
 Make sure you have the Entity Framework tool installed.
 ```
@@ -40,7 +40,7 @@ dotnet ef database update
 ### Connect to Postgres
 Set the `CONNECTION_STRING` environment variable.
 ```
-CONNECTION_STRING="Host=localhost; Database=ForcesUnite; Username=dev; Password=dev"
+CONNECTION_STRING="Host=localhost; Database=fu_dev; Username=dev; Password=dev"
 ```
 
 ### SPA Environment Setup
@@ -73,6 +73,31 @@ Follow Prettier's HTML, CSS, JavaScript/JSX [style formatting](https://prettier.
 
 # Deployment
 Deployed to Azure using GitHub Actions.
+
+# Testing
+## Unit Tests
+To run unit tests on the backend:
+```
+cd FU.API
+dotnet test
+```
+Tests are located in `FU.API/FU.API.Tests`.
+The tests are ran on every commit made.
+
+## Behavioral Tests
+To run behavioral tests on the frontend:
+```
+cd FU.SPA
+npm run selenium-test
+```
+Alternativly, you can use:
+```
+selenium-side-runner tests/*.side -c browserName=firefox
+```
+This does the same as above but directly calls the CLI command. You can also change the browserName
+option to chrome/chromium if you want to test that browser engine instead.
+
+Tests are located in `FU.SPA/tests`.
 
 # Authors
 Aaron Keys - alkeys@email.sc.edu

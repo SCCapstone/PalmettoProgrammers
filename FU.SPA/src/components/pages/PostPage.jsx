@@ -1,22 +1,27 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
-import { Box, Container, Typography, CssBaseline, Button } from '@mui/material';
-import { useParams, Link } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Button } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import PostService from '../../services/postService';
 import UserContext from '../../context/userContext';
-
-const boxStyle = {
-  maxWidth: 600,
-  margin: 'auto',
-  marginTop: 16,
-  marginLeft: 0,
-};
-
-const defaultTheme = createTheme();
+import Chat from '../Chat';
+import ChatLocked from '../ChatLocked';
+import NoPage from './NoPage';
+import PostUsersList from '../PostUsersList';
+import PostCard from '../PostCard';
+import './PostPage.css';
+import { useNavigate } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const PostPage = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
 
   const { user } = useContext(UserContext);
 
@@ -32,96 +37,122 @@ const PostPage = () => {
   const handleLeavePost = async () => {
     try {
       await PostService.leavePost(post.id);
-      update();
+      navigate(-1);
     } catch (error) {
       console.error('Error leaving post:', error);
     }
   };
 
   const update = useCallback(async () => {
+    setLoading(true);
     try {
       const data = await PostService.getPostDetails(postId);
+      console.log('data:', data);
       setPost(data);
     } catch (error) {
       console.error('Error fetching post details:', error);
     }
+    setLoading(false);
   }, [postId]);
 
   useEffect(() => {
     update();
   }, [postId, update]);
 
-  let dateTimeString = 'Unspecified time';
+  const renderChat = () => {
+    if (post.hasJoined) {
+      return <Chat chatId={post.chatId} />;
+    } else {
+      var reason = user ? 'not-joined' : 'no-user';
+      return (
+        <ChatLocked
+          chatType="post"
+          reason={reason}
+          onResolutionClick={handleJoinPost}
+        />
+      );
+    }
+  };
 
-  if (post && post.startTime) {
-    dateTimeString = new Date(post.startTime).toLocaleString('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    });
-  }
+  const renderLeaveButton = () => {
+    if (!post.hasJoined) return;
 
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
-      <Container maxWidth="lg">
-        <Box style={boxStyle}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'baseline',
-            }}
-          >
-            <Typography variant="h4" gutterBottom>
-              {post?.title}
-            </Typography>
-            <Typography variant="h5" color="textSecondary">
-              {post?.game}
-            </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              by {post?.creator}
-            </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {dateTimeString}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              paragraph
-              style={{ wordWrap: 'break-word', textAlign: 'left' }}
-            >
-              {post?.description}
-            </Typography>
-          </div>
-          {!post?.hasJoined && user && (
+    return (
+      <Button
+        variant="contained"
+        style={{ width: '250px' }}
+        onClick={() => setLeaveDialogOpen(true)}
+      >
+        Leave
+      </Button>
+    );
+  };
+
+  const renderEditButton = () => {
+    if (user == null || user.id !== post.creator.id) return;
+
+    return (
+      <Button
+        variant="contained"
+        style={{ width: '250px' }}
+        onClick={() => navigate(`edit`)}
+      >
+        Edit Post Details
+      </Button>
+    );
+  };
+
+  const ConfirmLeaveDialog = () => {
+    const handleClose = () => {
+      setLeaveDialogOpen(false);
+    };
+
+    return (
+      <>
+        <Dialog
+          open={leaveDialogOpen}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            Are you sure you want to leave?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              This may be irreversible
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
             <Button
-              variant="contained"
-              color="primary"
-              onClick={handleJoinPost}
-            >
-              Join
-            </Button>
-          )}
-          {post?.hasJoined && (
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleLeavePost}
+              onClick={() => {
+                handleClose();
+                handleLeavePost();
+              }}
+              autoFocus
             >
               Leave
             </Button>
-          )}
-          {post?.hasJoined && (
-            <Link
-              to={`/chat/${post.chatId}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <Button size="large">Chat</Button>
-            </Link>
-          )}
-        </Box>
-      </Container>
-    </ThemeProvider>
-  );
+          </DialogActions>
+        </Dialog>
+      </>
+    );
+  };
+
+  if (post && !loading) {
+    return (
+      <div className="post-page-wrapper">
+        <PostCard post={post} showActions={false} />
+        {renderLeaveButton()}
+        <PostUsersList postId={post.id} />
+        {renderChat()}
+        {renderEditButton()}
+        <ConfirmLeaveDialog />
+      </div>
+    );
+  } else if (!post && !loading) {
+    return <NoPage />;
+  }
 };
 export default PostPage;
