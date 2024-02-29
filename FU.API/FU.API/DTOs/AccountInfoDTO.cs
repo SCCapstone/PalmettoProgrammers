@@ -1,6 +1,7 @@
 namespace FU.API.Models;
 
 using FU.API.Helpers;
+using FU.API.Validation;
 
 public record AccountInfoDTO
 {

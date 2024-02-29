@@ -1,7 +1,7 @@
 ﻿namespace FU.API.DTOs.Game;
 
+using FU.API.Validation;
 using System.ComponentModel.DataAnnotations;
-using FU.API.Helpers;
 
 public class GameDTO
 {

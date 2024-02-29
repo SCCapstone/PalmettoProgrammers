@@ -1,6 +1,6 @@
 ﻿namespace FU.API.Models;
 
-using FU.API.Helpers;
+using FU.API.Validation;
 using System.ComponentModel.DataAnnotations;
 
 public record UpdateCredentailsDTO
