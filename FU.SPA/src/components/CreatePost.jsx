@@ -274,4 +274,3 @@ const TagsSelector = ({ onChange }) => {
     />
   );
 };
-
