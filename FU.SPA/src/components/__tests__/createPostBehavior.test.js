@@ -1,6 +1,9 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import CreatePost from '../CreatePost';
 
+/*
+ * Code being worked on before testing milestone.
+ */
 test('renderCreatePostComponent', () => { //npm run test
     render(<CreatePost/>);
     const createPostElement = screen.getByTestId('cpTest-1');
