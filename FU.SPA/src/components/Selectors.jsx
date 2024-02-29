@@ -49,7 +49,7 @@ export const GamesSelector = ({ value, onChange, keydown }) => {
   );
 };
 
-export const TagsSelector = ({ value, onChange }) => {
+export const TagsSelector = ({ value, onChange, keydown }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
@@ -61,6 +61,7 @@ export const TagsSelector = ({ value, onChange }) => {
       multiple
       value={value}
       onChange={onChange}
+      onKeyDown={keydown}
       options={tagOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
