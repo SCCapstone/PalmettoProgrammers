@@ -119,7 +119,6 @@ public class SearchService : CommonService, ISearchService
                         && ((DateTime)p.EndTime).Minute >= ((TimeOnly)query.StartOnOrAfterTime).Minute
                     )));
         }
-
         else
         {
             // Filter by posts that start after the given time
