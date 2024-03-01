@@ -360,9 +360,11 @@ export default function Discover() {
                 setGames(newGames);
               }}
               onKeyDown={(event, newGames) => {
-                if (event.key === 'Enter')
-                setPage(1);
-                setGames(newGames);
+                if (event.key === 'Enter') {
+                  event.defaultMuiprevented = true;
+                  setPage(1);
+                  setGames(newGames);
+                }
               }}
               options={gameOptions}
             />

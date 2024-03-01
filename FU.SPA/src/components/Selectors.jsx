@@ -8,16 +8,25 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-// const keyEnter = ({e}) => {
+// const handleKeyEnter = (e) => {
 //   if(e.keyCode == 13) {
 //     console.log('value', e.target.value);
+
 //   }
 // }
 
-export const GamesSelector = ({ value, onChange, keydown }) => {
+export const GamesSelector = ({ value, onChange, keydown}) => {
   const [gameOptions, setGameOptions] = useState([]);
 
+  const handleKeyEnter = (e) => {
+    if(e.keyCode == 13) {
+      //console.log('value: ', e.target.value);
+      //GameService.searchGames('').then((games) => setGameOptions(games));
+    }
+  }
+
   useEffect(() => {
+    //document.addEventListener('keydown', handleKeyEnter, true);
     GameService.searchGames('').then((games) => setGameOptions(games));
   }, []);
 
@@ -26,7 +35,7 @@ export const GamesSelector = ({ value, onChange, keydown }) => {
       multiple
       value={value}
       onChange={onChange}
-      onKeyDown={keydown}
+      onKeyDown={handleKeyEnter}
       options={gameOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
@@ -49,7 +58,7 @@ export const GamesSelector = ({ value, onChange, keydown }) => {
   );
 };
 
-export const TagsSelector = ({ value, onChange, keydown }) => {
+export const TagsSelector = ({ value, onChange}) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
@@ -61,7 +70,7 @@ export const TagsSelector = ({ value, onChange, keydown }) => {
       multiple
       value={value}
       onChange={onChange}
-      onKeyDown={keydown}
+      //onKeyDown={keydown}
       options={tagOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
