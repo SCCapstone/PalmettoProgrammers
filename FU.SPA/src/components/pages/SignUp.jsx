@@ -8,7 +8,6 @@ import {
   Avatar,
   Grid,
   TextField,
-  Alert,
   IconButton,
   InputAdornment
 } from '@mui/material';
