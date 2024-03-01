@@ -48,8 +48,9 @@ Config settings are loaded from the environment variables. To automatically load
 
 Then set the `VITE_API_URL` environment variable
 ```
-VITE_API_URL=https://localhost:7171/api
+VITE_API_URL=https://localhost:PORT/api
 ```
+where `PORT` is the port number the API is running on. If there are CORS errors, change the URL to match `http://` instead of `https://` and this may resolve the issue.
 
 ## Running
 ### Running Web API
