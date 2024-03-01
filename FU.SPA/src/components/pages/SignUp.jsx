@@ -20,13 +20,33 @@ export default function SignUp() {
   const [searchParams] = useSearchParams();
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+    // Update state for each field
+    const handleUsernameChange = (event) => {
+      setUsername(event.target.value);
+      setUsernameError('');
+    };
+  
+    const handlePasswordChange = (event) => {
+      setPassword(event.target.value);
+      setPasswordError('');
+    };
+  
+    const handleConfirmPasswordChange = (event) => {
+      setConfirmPassword(event.target.value);
+      setPasswordError('');
+    };
+
+  // Check if all fields are filled
+  const isEnabled = username.length > 0 && password.length > 0 && confirmPassword.length > 0;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    setUsernameError(''); // Reset errors
-    setPasswordError('');
 
     const creds = {
       username: data.get('username'),
@@ -89,6 +109,7 @@ export default function SignUp() {
               <TextField
                 error={!!usernameError}
                 helperText={usernameError}
+                onChange={handleUsernameChange}
                 required
                 fullWidth
                 id="username"
@@ -102,6 +123,7 @@ export default function SignUp() {
               <TextField
                 error={!!passwordError}
                 helperText={passwordError}
+                onChange={handlePasswordChange}
                 required
                 fullWidth
                 name="password"
@@ -115,6 +137,7 @@ export default function SignUp() {
               <TextField
                 error={!!passwordError}
                 helperText={passwordError}
+                onChange={handleConfirmPasswordChange}
                 required
                 fullWidth
                 name="confirmPassword"
@@ -129,6 +152,7 @@ export default function SignUp() {
             type="submit"
             fullWidth
             variant="contained"
+            disabled={!isEnabled}
             sx={{ mt: 3, mb: 2 }}
           >
             Sign Up
