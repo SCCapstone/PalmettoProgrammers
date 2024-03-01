@@ -8,21 +8,26 @@ import {
   Avatar,
   Grid,
   TextField,
+  Alert,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    setUsernameError(''); // Reset errors
+    setPasswordError('');
 
-    // Need to look into incorporating email address
     const creds = {
       username: data.get('username'),
       password: data.get('password'),
@@ -30,7 +35,7 @@ export default function SignUp() {
 
     // Checking if passwords are identical
     if (creds.password !== data.get('confirmPassword')) {
-      alert('Passwords do not match');
+      setPasswordError('Passwords do not match');
       return;
     }
 
@@ -46,8 +51,17 @@ export default function SignUp() {
         navigate('/SignIn');
       }
     } catch (event) {
-      window.alert('Error in sign up');
-      console.log(event);
+      // Parse the error message
+      const errorResponse = JSON.parse(event.message);
+
+      //If username already exists
+      if (errorResponse && errorResponse.title === 'Duplicate User') {
+        setUsernameError(errorResponse.detail);
+      } else {
+        // Handles other general errors
+        setUsernameError('An unexpected error occurred. Please try again.');
+      }
+      console.error('Error in sign up:', errorResponse);
     }
   };
 
@@ -73,6 +87,8 @@ export default function SignUp() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                error={!!usernameError}
+                helperText={usernameError}
                 required
                 fullWidth
                 id="username"
@@ -84,6 +100,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={!!passwordError}
+                helperText={passwordError}
                 required
                 fullWidth
                 name="password"
@@ -95,6 +113,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={!!passwordError}
+                helperText={passwordError}
                 required
                 fullWidth
                 name="confirmPassword"
