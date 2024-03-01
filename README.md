@@ -4,11 +4,11 @@ Read our [wiki](https://github.com/SCCapstone/PalmettoProgrammers/wiki/Project-D
 
 ## External Requirements
 In order to build this project you first have to install:
-* [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-7.0)
+* [ASP.NET Core 7](https://learn.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-7.0)
 * [npm](https://www.npmjs.com/package/npm)
 * [Docker](https://www.docker.com/get-started/)
 * [PostgreSQL](https://www.postgresql.org/download/)
-* [Entity Framework Core tools](https://learn.microsoft.com/en-us/ef/core/cli/)
+* [Entity Framework Core tools for .NET 7](https://learn.microsoft.com/en-us/ef/core/cli/)
 
 ### Backend Environment Setup
 Config settings are loaded from the environment variables. To automatically load the environment variable from a file, create a `.env` file in the `FU.API` parent folder.
@@ -33,7 +33,7 @@ Alternatively, install and start a PostgreSQL database manually.
 Run the following command to apply the latest database changes.
 Make sure you have the Entity Framework tool installed.
 ```
-dotnet tool install --global dotnet-ef
+dotnet tool install --global dotnet-ef --version 7.0.16
 dotnet ef database update
 ```
 
