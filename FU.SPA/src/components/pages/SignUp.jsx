@@ -88,6 +88,13 @@ export default function SignUp() {
       //If username already exists
       if (errorResponse && errorResponse.title === 'Duplicate User') {
         setUsernameError(errorResponse.detail);
+      } // Check if there is a specific error message for Username
+      else if (
+        errorResponse &&
+        errorResponse.errors &&
+        errorResponse.errors.Username
+      ) {
+        setUsernameError(errorResponse.errors.Username[0]);
       } else {
         // Handles other general errors
         setUsernameError('An unexpected error occurred. Please try again.');
