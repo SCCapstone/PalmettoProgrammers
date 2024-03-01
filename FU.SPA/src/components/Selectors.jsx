@@ -33,17 +33,20 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
         
     //   }
     // }
+    
+    GameService.searchGames('').then((games) => setGameOptions(games));
     if (gameOptions) {
       console.log(`Selected gameOption: ${gameOptions.values}`);
     }
-    GameService.searchGames('').then((games) => setGameOptions(games));
   }, []);
 
   return (
     <Autocomplete
+      autoSelect
       multiple
       value={value}
       onChange={onChange}
+      
       //onKeyDown={keydown}
       options={gameOptions}
       disableCloseOnSelect
@@ -65,6 +68,14 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
             console.log(event.target.value);
+            GameService.searchGames('').then((games) => setGameOptions(games));
+            // for(var i = 0; i < params.size; i++) {
+            //   if (event.target.value === params[i]) {
+            //     GameService.searchGames(event.target.value).then((games) => setGameOptions(games));
+            //   }
+            // }
+            // GameService.searchGames(onChange).then((games) => setGameOptions(games));
+            // GameService.searchGames(event.target.value).then((games) => setGameOptions(games));
           }
         }}/>
       )}
