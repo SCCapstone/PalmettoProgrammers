@@ -9,8 +9,11 @@ import {
   Grid,
   TextField,
   Alert,
+  IconButton,
+  InputAdornment
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
@@ -23,6 +26,14 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    // Showing passwords when user wants
+    const handleClickShowPassword = () => {
+      setShowPassword(!showPassword);
+      setShowConfirmPassword(!showConfirmPassword);
+    };
 
     // Update state for each field
     const handleUsernameChange = (event) => {
@@ -128,9 +139,22 @@ export default function SignUp() {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="new-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -142,7 +166,7 @@ export default function SignUp() {
                 fullWidth
                 name="confirmPassword"
                 label="Confirm Password"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
                 autoComplete="new-password"
               />
