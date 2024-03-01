@@ -18,15 +18,24 @@ const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 export const GamesSelector = ({ value, onChange, keydown}) => {
   const [gameOptions, setGameOptions] = useState([]);
 
-  const handleKeyEnter = (e) => {
-    if(e.keyCode == 13) {
-      //console.log('value: ', e.target.value);
-      //GameService.searchGames('').then((games) => setGameOptions(games));
-    }
-  }
+  // const handleKeyEnter = (e) => {
+  //   if(e.keyCode == 13) {
+  //     console.log('value: ', e.onKeyDown);
+  //     GameService.searchGames('').then((games) => setGameOptions(games));
+  //   }
+  // }
 
   useEffect(() => {
     //document.addEventListener('keydown', handleKeyEnter, true);
+    // const handleKeyDown = (event) => {
+    //   if (event.key === "Enter") {
+    //     event.preventDefault();
+        
+    //   }
+    // }
+    if (gameOptions) {
+      console.log(`Selected gameOption: ${gameOptions.values}`);
+    }
     GameService.searchGames('').then((games) => setGameOptions(games));
   }, []);
 
@@ -35,7 +44,7 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
       multiple
       value={value}
       onChange={onChange}
-      onKeyDown={handleKeyEnter}
+      //onKeyDown={keydown}
       options={gameOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
@@ -52,7 +61,12 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Games" placeholder="" />
+        <TextField {...params} label="Games" placeholder="" onKeyDown={ (event) => {
+          if (event.key === 'Enter') {
+            // Handle Enter key press
+            console.log(event.target.value);
+          }
+        }}/>
       )}
     />
   );
