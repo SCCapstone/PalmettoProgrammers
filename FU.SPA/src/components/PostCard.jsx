@@ -7,6 +7,7 @@ import {
   Chip,
   Avatar,
   Divider,
+  Tooltip,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './PostCard.css';
@@ -91,12 +92,16 @@ const PostCard = ({ post, showActions }) => {
             </div>
           </Typography>
         </div>
-        <Typography variant="h6" noWrap sx={{ whiteSpace: 'nowrap' }}>
-          {post.title}
-        </Typography>
-        <Typography variant="subtitle1" noWrap sx={{ whiteSpace: 'nowrap' }}>
-          {post.game}
-        </Typography>
+        <Tooltip title={post.title}>
+          <Typography variant="h6" noWrap sx={{ whiteSpace: 'nowrap' }}>
+            {post.title}
+          </Typography>
+        </Tooltip>
+        <Tooltip title={post.game}>
+          <Typography variant="subtitle1" noWrap sx={{ whiteSpace: 'nowrap' }}>
+            {post.game}
+          </Typography>
+        </Tooltip>
         <Typography variant="body2" noWrap>
           {dateTimeString}
         </Typography>
