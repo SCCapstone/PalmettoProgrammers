@@ -42,7 +42,7 @@ export default function Edit({ postId }) {
           navigate(`/discover`);
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     };
 
@@ -64,7 +64,7 @@ export default function Edit({ postId }) {
       var findGame = await GameService.findOrCreateGameByTitle(game.name);
     } catch (e) {
       alert(e);
-      console.log(e);
+      console.error(e);
     }
 
     const updatedPost = {
@@ -78,12 +78,11 @@ export default function Edit({ postId }) {
 
     try {
       const newPost = await PostService.updatePost(updatedPost, postId);
-      console.log(newPost);
       alert('Post updated successfully!');
       navigate(`/posts/${postId}`);
     } catch (e) {
       window.alert(e);
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -185,9 +184,6 @@ const GameSelector = ({ onChange }) => {
   }, []);
 
   const onInputChange = (event, newValue) => {
-    console.log('newValue');
-    console.log(newValue);
-
     setValue(newValue);
     onChange(newValue);
   };

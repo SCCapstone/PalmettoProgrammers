@@ -13,7 +13,7 @@ export const startConnection = async () => {
     // Only start if connection is not in the Connected state
     if (hubConnection.state === signalR.HubConnectionState.Disconnected) {
       await hubConnection.start();
-      console.log('SignalR connection started.');
+      // console.log('SignalR connection started.');
     }
   } catch (err) {
     console.error('Error starting SignalR connection:', err);
@@ -25,10 +25,10 @@ export const stopConnection = async () => {
     // Only stop if connection is not in the Disconnected state
     if (hubConnection.state === signalR.HubConnectionState.Connected) {
       await hubConnection.stop();
-      console.log('SignalR connection stopped.');
+      // console.log('SignalR connection stopped.');
     }
   } catch (err) {
-    console.error('Error stopping SignalR connection:', err);
+    // console.error('Error stopping SignalR connection:', err);
   }
 };
 
@@ -38,7 +38,7 @@ export const joinChatGroup = async (chatId) => {
     // await hubConnection.start();
     chatId = parseInt(chatId);
     await hubConnection.invoke('JoinChatGroup', chatId);
-    console.log(`Joined chat group: ${chatId}`);
+    // console.log(`Joined chat group: ${chatId}`);
   } catch (err) {
     console.error('Error joining chat group:', err);
   }
@@ -49,7 +49,7 @@ export const leaveChatGroup = async (chatId) => {
     // parse chatId to int
     chatId = parseInt(chatId);
     await hubConnection.invoke('LeaveChatGroup', chatId);
-    console.log(`Left chat group: ${chatId}`);
+    // console.log(`Left chat group: ${chatId}`);
   } catch (err) {
     console.error('Error leaving chat group:', err);
   }

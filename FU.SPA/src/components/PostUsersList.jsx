@@ -13,7 +13,7 @@ export default function PostUsersList({ postId }) {
     const fetchUsers = async () => {
       try {
         const users = await PostService.getPostUsers(postId);
-        console.log('users:', users);
+        // console.log('users:', users);
         setUsers(users);
       } catch (error) {
         console.error('Error fetching post users:', error);

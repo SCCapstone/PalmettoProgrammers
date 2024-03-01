@@ -159,9 +159,6 @@ const GameSelector = ({ onChange }) => {
   }, []);
 
   const onInputChange = (event, newValue) => {
-    console.log('newValue');
-    console.log(newValue);
-
     setValue(newValue);
     onChange(newValue);
   };
