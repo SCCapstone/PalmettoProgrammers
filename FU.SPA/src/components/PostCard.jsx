@@ -11,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import './PostCard.css';
 import Theme from '../Theme';
+import dayjs from 'dayjs';
 
 const PostCard = ({ post, showActions }) => {
   const navigate = useNavigate();
@@ -22,16 +23,32 @@ const PostCard = ({ post, showActions }) => {
 
   // If we have a start time, then we also have an end time
   if (post.startTime) {
+    let startOfToday = dayjs().startOf('day');
+    let postStartDateTime = dayjs(post.startTime);
+
+    let startDate = dayjs(post.startTime).format('MMM D, YYYY');
+    if (postStartDateTime < startOfToday) {
+      // Use default
+    } else if (postStartDateTime < startOfToday.add(1, 'day')) {
+      startDate = 'Today';
+    } else if (postStartDateTime < startOfToday.add(2, 'day')) {
+      startDate = 'Tomorrow';
+    } else if (postStartDateTime < startOfToday.add(6, 'day')) {
+      startDate = dayjs(post.startTime).format('ddd');
+    } else if (postStartDateTime < startOfToday.add(1, 'year')) {
+      startDate = dayjs(post.startTime).format('MMM D');
+    }
+
     var startTime = new Date(post.startTime).toLocaleString('en-US', {
-      dateStyle: 'medium',
       timeStyle: 'short',
     });
     var endTime = new Date(post.endTime).toLocaleString('en-US', {
       timeStyle: 'short',
     });
-    dateTimeString = `${startTime} - ${endTime}`;
+
+    dateTimeString = `${startDate}, ${startTime} - ${endTime}`;
   } else {
-    dateTimeString = 'Unspecified time';
+    dateTimeString = 'No time';
   }
 
   const stringToColor = (string) => {
