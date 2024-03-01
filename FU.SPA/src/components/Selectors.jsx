@@ -35,14 +35,14 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
     // }
     
     GameService.searchGames('').then((games) => setGameOptions(games));
-    if (gameOptions) {
-      console.log(`Selected gameOption: ${gameOptions.values}`);
-    }
+    // if (gameOptions) {
+    //   console.log(`Selected gameOption: ${gameOptions.values}`);
+    // }
   }, []);
 
   return (
     <Autocomplete
-      autoSelect
+      autoSelect= {true}//may need to remove
       multiple
       value={value}
       onChange={onChange}
