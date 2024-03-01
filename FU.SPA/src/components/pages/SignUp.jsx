@@ -9,7 +9,7 @@ import {
   Grid,
   TextField,
   IconButton,
-  InputAdornment
+  InputAdornment,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -28,30 +28,31 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    // Showing passwords when user wants
-    const handleClickShowPassword = () => {
-      setShowPassword(!showPassword);
-      setShowConfirmPassword(!showConfirmPassword);
-    };
+  // Showing passwords when user wants
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
-    // Update state for each field
-    const handleUsernameChange = (event) => {
-      setUsername(event.target.value);
-      setUsernameError('');
-    };
-  
-    const handlePasswordChange = (event) => {
-      setPassword(event.target.value);
-      setPasswordError('');
-    };
-  
-    const handleConfirmPasswordChange = (event) => {
-      setConfirmPassword(event.target.value);
-      setPasswordError('');
-    };
+  // Update state for each field
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+    setUsernameError('');
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+    setPasswordError('');
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+    setPasswordError('');
+  };
 
   // Check if all fields are filled
-  const isEnabled = username.length > 0 && password.length > 0 && confirmPassword.length > 0;
+  const isEnabled =
+    username.length > 0 && password.length > 0 && confirmPassword.length > 0;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
@@ -138,7 +139,7 @@ export default function SignUp() {
                 fullWidth
                 name="password"
                 label="Password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="new-password"
                 InputProps={{
@@ -165,7 +166,7 @@ export default function SignUp() {
                 fullWidth
                 name="confirmPassword"
                 label="Confirm Password"
-                type={showConfirmPassword ? "text" : "password"}
+                type={showConfirmPassword ? 'text' : 'password'}
                 id="confirmPassword"
                 autoComplete="new-password"
               />
