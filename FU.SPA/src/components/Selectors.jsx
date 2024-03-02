@@ -38,10 +38,6 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
       )}
       renderInput={(params) => (
         <TextField {...params} label="Games" placeholder="" 
-        // inputProps={{
-        //   ...params.inputProps,
-        //   autoComplete: 'new-game' //disable autcomplete and autofill.
-        // }}
         onKeyDown={ (event) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
