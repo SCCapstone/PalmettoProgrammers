@@ -31,7 +31,9 @@ const signUp = async (credentials) => {
   });
 
   if (!response.ok) {
-    throw new Error('Error in sign up');
+    // Get the error message
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in sign up');
   }
 };
 
