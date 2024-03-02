@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({ value, onChange, keydown}) => {
+export const GamesSelector = ({ value, onChange}) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
