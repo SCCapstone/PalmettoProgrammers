@@ -8,38 +8,11 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-// const handleKeyEnter = (e) => {
-//   if(e.keyCode == 13) {
-//     console.log('value', e.target.value);
-
-//   }
-// }
-
 export const GamesSelector = ({ value, onChange, keydown}) => {
   const [gameOptions, setGameOptions] = useState([]);
 
-  // const handleKeyEnter = (e) => {
-  //   if(e.keyCode == 13) {
-  //     console.log('value: ', e.onKeyDown);
-  //     GameService.searchGames('').then((games) => setGameOptions(games));
-  //   }
-  // }
-
   useEffect(() => {
-    //document.addEventListener('keydown', handleKeyEnter, true);
-    // const handleKeyDown = (event) => {
-    //   if (event.key === "Enter") {
-    //     event.preventDefault();
-        
-    //   }
-    // }
-    // if () {
-
-    // }
     GameService.searchGames('').then((games) => setGameOptions(games));
-    // if (gameOptions) {
-    //   console.log(`Selected gameOption: ${gameOptions.values}`);
-    // }
   }, []);
 
   return (
@@ -49,8 +22,6 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
       multiple
       value={value}
       onChange={onChange}
-      
-      //onKeyDown={keydown}
       options={gameOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
@@ -77,19 +48,6 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
             // Handle Enter key press
             console.log(event.target.value);
             GameService.searchGames('').then((games) => setGameOptions(games));
-            // var gs = GameService.searchGames(event.target.value).then((games) => setGameOptions(games));
-            // GameService.searchGames('').then((games) => setGameOptions(games));
-            // if (event.target.value === gs) {
-              
-            // }
-
-            // for(var i = 0; i < params.size; i++) {
-            //   if (event.target.value === params[i]) {
-            //     GameService.searchGames(event.target.value).then((games) => setGameOptions(games));
-            //   }
-            // }
-            // GameService.searchGames(onChange).then((games) => setGameOptions(games));
-            // GameService.searchGames(event.target.value).then((games) => setGameOptions(games));
           }
         }}/>
       )}
@@ -106,6 +64,8 @@ export const TagsSelector = ({ value, onChange}) => {
 
   return (
     <Autocomplete
+      autoSelect = {true}
+      autoHighlight
       multiple
       value={value}
       onChange={onChange}
@@ -126,7 +86,16 @@ export const TagsSelector = ({ value, onChange}) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Tags" placeholder="" />
+        <TextField {...params} label="Tags" inputProps={{
+          ...params.inputProps,
+          autoComplete: 'new-password' //disable autcomplete and autofill.
+        }} onKeyDown={ (event) => {
+          if (event.key === 'Enter') {
+            // Handle Enter key press
+            console.log(event.target.value);
+            TagService.searchTags('').then((tags) => setTagOptions(tags));
+          }
+        }} placeholder="" />
       )}
     />
   );
