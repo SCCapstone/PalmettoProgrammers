@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({ value, onChange, keydown}) => {
+export const GamesSelector = ({ value, onChange} ) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
@@ -41,7 +41,6 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
         onKeyDown={ (event) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
-            console.log(event.target.value);
             GameService.searchGames('').then((games) => setGameOptions(games));
           }
         }}/>
@@ -50,7 +49,7 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
   );
 };
 
-export const TagsSelector = ({ value, onChange}) => {
+export const TagsSelector = ({ value, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
@@ -85,7 +84,6 @@ export const TagsSelector = ({ value, onChange}) => {
         }} onKeyDown={ (event) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
-            console.log(event.target.value);
             TagService.searchTags('').then((tags) => setTagOptions(tags));
           }
         }} placeholder="" />
