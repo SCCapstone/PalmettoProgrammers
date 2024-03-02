@@ -33,7 +33,9 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
         
     //   }
     // }
-    
+    // if () {
+
+    // }
     GameService.searchGames('').then((games) => setGameOptions(games));
     // if (gameOptions) {
     //   console.log(`Selected gameOption: ${gameOptions.values}`);
@@ -43,6 +45,7 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
   return (
     <Autocomplete
       autoSelect= {true}//may need to remove
+      autoHighlight
       multiple
       value={value}
       onChange={onChange}
@@ -64,11 +67,22 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Games" placeholder="" onKeyDown={ (event) => {
+        <TextField {...params} label="Games" placeholder="" 
+        inputProps={{
+          ...params.inputProps,
+          autoComplete: 'new-password' //disable autcomplete and autofill.
+        }}
+        onKeyDown={ (event) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
             console.log(event.target.value);
             GameService.searchGames('').then((games) => setGameOptions(games));
+            // var gs = GameService.searchGames(event.target.value).then((games) => setGameOptions(games));
+            // GameService.searchGames('').then((games) => setGameOptions(games));
+            // if (event.target.value === gs) {
+              
+            // }
+
             // for(var i = 0; i < params.size; i++) {
             //   if (event.target.value === params[i]) {
             //     GameService.searchGames(event.target.value).then((games) => setGameOptions(games));
