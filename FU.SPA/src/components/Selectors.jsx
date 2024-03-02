@@ -9,7 +9,6 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
 export const GamesSelector = ({ value, onChange }) => {
-export const GamesSelector = ({ value, onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
@@ -57,7 +56,7 @@ export const GamesSelector = ({ value, onChange }) => {
 };
 
 export const TagsSelector = ({ value, onChange }) => {
-export const TagsSelector = ({ value, onChange }) => {
+
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
