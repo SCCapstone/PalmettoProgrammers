@@ -17,7 +17,7 @@ export const GamesSelector = ({ value, onChange }) => {
 
   return (
     <Autocomplete
-      autoSelect= {true}//may need to remove
+      autoSelect= {true}
       autoHighlight
       multiple
       value={value}
