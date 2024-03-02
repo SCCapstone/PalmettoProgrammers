@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({ value, onChange, keydown}) => {
+export const GamesSelector = ({ value, onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
@@ -37,24 +37,25 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Games" placeholder="" 
-        // inputProps={{
-        //   ...params.inputProps,
-        //   autoComplete: 'new-game' //disable autcomplete and autofill.
-        // }}
-        onKeyDown={ (event) => {
-          if (event.key === 'Enter') {
-            // Handle Enter key press
-            console.log(event.target.value);
-            GameService.searchGames('').then((games) => setGameOptions(games));
-          }
-        }}/>
+        <TextField
+          {...params}
+          label="Games"
+          placeholder=""
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              // Handle Enter key press
+              GameService.searchGames('').then((games) =>
+                setGameOptions(games),
+              );
+            }
+          }}
+        />
       )}
     />
   );
 };
 
-export const TagsSelector = ({ value, onChange}) => {
+export const TagsSelector = ({ value, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
@@ -83,16 +84,21 @@ export const TagsSelector = ({ value, onChange}) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Tags" inputProps={{
-          ...params.inputProps,
-          autoComplete: 'new-tag' //disable autcomplete and autofill.
-        }} onKeyDown={ (event) => {
-          if (event.key === 'Enter') {
-            // Handle Enter key press
-            console.log(event.target.value);
-            TagService.searchTags('').then((tags) => setTagOptions(tags));
-          }
-        }} placeholder="" />
+        <TextField
+          {...params}
+          label="Tags"
+          inputProps={{
+            ...params.inputProps,
+            autoComplete: 'new-tag', //disable autcomplete and autofill.
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              // Handle Enter key press
+              TagService.searchTags('').then((tags) => setTagOptions(tags));
+            }
+          }}
+          placeholder=""
+        />
       )}
     />
   );
