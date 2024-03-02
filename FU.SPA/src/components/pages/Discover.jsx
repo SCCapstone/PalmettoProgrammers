@@ -359,6 +359,13 @@ export default function Discover() {
                 setPage(1);
                 setGames(newGames);
               }}
+              onKeyDown={(event, newGames) => {
+                if (event.key === 'Enter') {
+                  event.defaultMuiprevented = true;
+                  setPage(1);
+                  setGames(newGames);
+                }
+              }}
               options={gameOptions}
             />
             <TagsSelector
@@ -366,6 +373,10 @@ export default function Discover() {
               onChange={(_, newTags) => {
                 setPage(1);
                 setTags(newTags);
+              }}
+              onKeyDown={(event, newTags) => {
+                if (event.key === 'Enter') setPage(1);
+                setGames(newTags);
               }}
             />
             <SelectDateRangeFilter

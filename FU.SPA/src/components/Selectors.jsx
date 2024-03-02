@@ -17,6 +17,7 @@ export const GamesSelector = ({ value, onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       multiple
       value={value}
       onChange={onChange}
@@ -36,7 +37,19 @@ export const GamesSelector = ({ value, onChange }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Games" placeholder="" />
+        <TextField
+          {...params}
+          label="Games"
+          placeholder=""
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              // Handle Enter key press
+              GameService.searchGames('').then((games) =>
+                setGameOptions(games),
+              );
+            }
+          }}
+        />
       )}
     />
   );
@@ -51,6 +64,7 @@ export const TagsSelector = ({ value, onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       multiple
       value={value}
       onChange={onChange}
@@ -70,7 +84,21 @@ export const TagsSelector = ({ value, onChange }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Tags" placeholder="" />
+        <TextField
+          {...params}
+          label="Tags"
+          inputProps={{
+            ...params.inputProps,
+            autoComplete: 'new-tag', //disable autcomplete and autofill.
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              // Handle Enter key press
+              TagService.searchTags('').then((tags) => setTagOptions(tags));
+            }
+          }}
+          placeholder=""
+        />
       )}
     />
   );
