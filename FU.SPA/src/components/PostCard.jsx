@@ -69,7 +69,16 @@ const PostCard = ({ post, showActions }) => {
   return (
     <Card sx={{ width: 250 }}>
       <CardContent sx={{ textAlign: 'left', height: 300 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <div
+          className="user-header"
+          onClick={() => navigate(`/profile/${user.id}`)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            color: Theme.palette.primary.main,
+          }}
+        >
           <Avatar
             alt={user?.username}
             src={user?.pfpUrl}
@@ -79,18 +88,7 @@ const PostCard = ({ post, showActions }) => {
               bgcolor: stringToColor(user?.username),
             }}
           />
-          <Typography
-            variant="subtitle2"
-            style={{ display: 'flex', color: Theme.palette.primary.main }}
-          >
-            by&nbsp;
-            <div
-              className="user-name"
-              onClick={() => navigate(`/profile/${user.id}`)}
-            >
-              {user.username}
-            </div>
-          </Typography>
+          <Typography variant="subtitle2">{`by ${user.username}`}</Typography>
         </div>
         <Tooltip title={post.title}>
           <Typography variant="h6" noWrap sx={{ whiteSpace: 'nowrap' }}>
