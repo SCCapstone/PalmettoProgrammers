@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({ value, onChange }) => {
+export const GamesSelector = ({ value, onChange, keydown}) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,6 @@ export const GamesSelector = ({ value, onChange }) => {
 
   return (
     <Autocomplete
-      autoSelect= {true}
       autoHighlight
       multiple
       value={value}
@@ -39,10 +38,10 @@ export const GamesSelector = ({ value, onChange }) => {
       )}
       renderInput={(params) => (
         <TextField {...params} label="Games" placeholder="" 
-        inputProps={{
-          ...params.inputProps,
-          autoComplete: 'new-password' //disable autcomplete and autofill.
-        }}
+        // inputProps={{
+        //   ...params.inputProps,
+        //   autoComplete: 'new-game' //disable autcomplete and autofill.
+        // }}
         onKeyDown={ (event) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
@@ -55,7 +54,7 @@ export const GamesSelector = ({ value, onChange }) => {
   );
 };
 
-export const TagsSelector = ({ value, onChange }) => {
+export const TagsSelector = ({ value, onChange}) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
@@ -64,12 +63,10 @@ export const TagsSelector = ({ value, onChange }) => {
 
   return (
     <Autocomplete
-      autoSelect = {true}
       autoHighlight
       multiple
       value={value}
       onChange={onChange}
-      //onKeyDown={keydown}
       options={tagOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
@@ -88,7 +85,7 @@ export const TagsSelector = ({ value, onChange }) => {
       renderInput={(params) => (
         <TextField {...params} label="Tags" inputProps={{
           ...params.inputProps,
-          autoComplete: 'new-password' //disable autcomplete and autofill.
+          autoComplete: 'new-tag' //disable autcomplete and autofill.
         }} onKeyDown={ (event) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
