@@ -55,7 +55,7 @@ export const GamesSelector = ({ value, onChange }) => {
   );
 };
 
-export const TagsSelector = ({ value, onChange}) => {
+export const TagsSelector = ({ value, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
