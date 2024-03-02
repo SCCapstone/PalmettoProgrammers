@@ -8,7 +8,7 @@ const config = {
       ? 'https://fuapi.azurewebsites.net/chathub'
       : import.meta.env.VITE_API_URL.replace(/\/api$/, '') + '/chathub',
   WAIT_TIME:
-    import.meta.env.VITE_WAIT_TIME === undefined
+    import.meta.env.VITE_WAIT_TIME !== undefined
       ? import.meta.env.VITE_WAIT_TIME
       : 80,
 };
