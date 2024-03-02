@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({ value, onChange, keydown}) => {
+export const GamesSelector = ({ value, onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
 
   return (
     <Autocomplete
-      autoSelect= {true}//may need to remove
+      autoSelect= {true}
       autoHighlight
       multiple
       value={value}
@@ -55,7 +55,7 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
   );
 };
 
-export const TagsSelector = ({ value, onChange}) => {
+export const TagsSelector = ({ value, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
