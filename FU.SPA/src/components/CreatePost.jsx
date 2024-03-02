@@ -119,11 +119,6 @@ export default function CreatePost() {
               display: 'flex',
             }}
           >
-            <Typography component="h1" variant="h6">
-              {' '}
-              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
-              Description
-            </Typography>
           </Box>
           <TextField
             label="Description"
