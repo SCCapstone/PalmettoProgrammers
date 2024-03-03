@@ -64,8 +64,8 @@ export default function CreatePost() {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 1,
-          m: 4,
+          marginTop: 0,
+          m: 0,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -84,8 +84,8 @@ export default function CreatePost() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            mt: 3,
-            gap: 2,
+            mt: 0,
+            gap: 1,
           }}
         >
           <TextField
@@ -97,7 +97,7 @@ export default function CreatePost() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <Grid item xs={12}>
+          <Grid item xs={0}>
             <GameSelector onChange={setGame} />
           </Grid>
           <br />
@@ -131,7 +131,7 @@ export default function CreatePost() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 0, mb: 0 }}
           >
             Create Post
           </Button>
