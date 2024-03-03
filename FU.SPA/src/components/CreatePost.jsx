@@ -29,6 +29,7 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const [error, setError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,6 +42,9 @@ export default function CreatePost() {
     }
 
     var findGame = await GameService.findOrCreateGameByTitle(game.name);
+    if (findGame === null) {
+      setError(true);
+    }
 
     const post = {
       title: title,
@@ -52,15 +56,102 @@ export default function CreatePost() {
     };
 
     try {
+      if (game.useState === null || tags.useState === null || title.useState === null) {
+        setError(true);
+      }
       const newPost = await PostService.createPost(post);
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
+      setError(true);
       window.alert('Error creating post');
       console.log(e);
     }
   };
-
+  
   return (
+    <>
+    {error? //if there's an error
+    <div>
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 0,
+          m: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Create Post
+        </Typography>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.preventDefault();
+          }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 0,
+            gap: 1,
+          }}
+        >
+          <TextField
+            error
+            required //may want to get rid of this and just check if it's empty when clicking create button.
+            fullWidth
+            id="searchGames"
+            label="Title" //might want to put a Search icon in front, if we can figure it out.
+            autoFocus
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Grid item xs={0}>
+            <GameSelector onChange={setGame} />
+          </Grid>
+          <br />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+            />
+            <DateTimePicker
+              label="End Time"
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+            />
+          </LocalizationProvider>
+          <TagsSelector onChange={setTags} />
+          <Box
+            sx={{
+              display: 'flex',
+            }}
+          >
+          </Box>
+          <TextField
+            error
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            multiline
+          ></TextField>
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 0, mb: 0 }}
+          >
+            Create Post
+          </Button>
+        </Box>
+      </Box>
+    </Container>
+    </div> : //if there's no error
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
@@ -137,7 +228,8 @@ export default function CreatePost() {
           </Button>
         </Box>
       </Box>
-    </Container>
+    </Container>}
+    </>
   );
 }
 
@@ -148,6 +240,7 @@ const filter = createFilterOptions();
 const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     GameService.searchGames('').then((games) => setGameOptions(games));
@@ -156,7 +249,15 @@ const GameSelector = ({ onChange }) => {
   const onInputChange = (event, newValue) => {
     console.log('newValue');
     console.log(newValue);
-
+    try {
+      if(gameOptions === null || value === null || newValue === null) {
+        setError(true);
+      }
+      setValue(newValue);
+      onChange(newValue);
+    } catch (err) {
+      if (err) setError((err.target.value));
+    }
     setValue(newValue);
     onChange(newValue);
   };
@@ -178,8 +279,35 @@ const GameSelector = ({ onChange }) => {
     return filtered;
   };
 
+  
   return (
+    <>
+    {error? //if there's an error display this
+    <div>
     <Autocomplete
+      autoHighlight
+      clearOnBlur
+      value={value}
+      onChange={onInputChange}
+      options={gameOptions}
+      disableCloseOnSelect
+      filterOptions={onFilterOptions}
+      getOptionLabel={(o) => (o ? o.name : '')}
+      isOptionEqualToValue={(option, value) => option.name === value.name}
+      renderOption={(props, option) => <li {...props}>{option.name}</li>}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Game"
+          required
+          error
+          placeholder="Select or create a game"
+          helperText="Incorrect Entry"
+        />
+      )}
+    />
+    </div>: 
+    <Autocomplete //if there's no error display this
       autoHighlight
       clearOnBlur
       value={value}
@@ -198,7 +326,7 @@ const GameSelector = ({ onChange }) => {
           placeholder="Select or create a game"
         />
       )}
-    />
+    />} </>
   );
 };
 
