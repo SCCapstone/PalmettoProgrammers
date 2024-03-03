@@ -146,7 +146,7 @@ const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
 const GameSelector = ({ onChange }) => {
-  const [gammeOptions, setGameOptions] = useState([]);
+  const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -180,10 +180,11 @@ const GameSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       clearOnBlur
       value={value}
       onChange={onInputChange}
-      options={gammeOptions}
+      options={gameOptions}
       disableCloseOnSelect
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
@@ -243,6 +244,7 @@ const TagsSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       multiple
       clearOnBlur
       value={value}

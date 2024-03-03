@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 
-export const GamesSelector = ({ value, onChange, keydown}) => {
+export const GamesSelector = ({ value, onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,6 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
 
   return (
     <Autocomplete
-      autoSelect= {true}//may need to remove
       autoHighlight
       multiple
       value={value}
@@ -41,12 +40,11 @@ export const GamesSelector = ({ value, onChange, keydown}) => {
         <TextField {...params} label="Games" placeholder="" 
         inputProps={{
           ...params.inputProps,
-          autoComplete: 'new-password' //disable autcomplete and autofill.
+          autoComplete: 'new-games' //disable autcomplete and autofill.
         }}
         onKeyDown={ (event) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
-            console.log(event.target.value);
             GameService.searchGames('').then((games) => setGameOptions(games));
           }
         }}/>
@@ -64,12 +62,10 @@ export const TagsSelector = ({ value, onChange}) => {
 
   return (
     <Autocomplete
-      autoSelect = {true}
       autoHighlight
       multiple
       value={value}
       onChange={onChange}
-      //onKeyDown={keydown}
       options={tagOptions}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
@@ -88,11 +84,10 @@ export const TagsSelector = ({ value, onChange}) => {
       renderInput={(params) => (
         <TextField {...params} label="Tags" inputProps={{
           ...params.inputProps,
-          autoComplete: 'new-password' //disable autcomplete and autofill.
+          autoComplete: 'new-tags' //disable autcomplete and autofill.
         }} onKeyDown={ (event) => {
           if (event.key === 'Enter') {
             // Handle Enter key press
-            console.log(event.target.value);
             TagService.searchTags('').then((tags) => setTagOptions(tags));
           }
         }} placeholder="" />
