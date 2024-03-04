@@ -60,6 +60,12 @@ export default function CreatePost() {
     };
 
     try {
+      /*
+       * TODO: Code is sending error for the title, even if the game is the blank textbox.
+       * need to create an if statement for the error/helpertext. I might break down the 
+       * return statement to only create some of the textboxes, which would allow me to split up
+       * when the error is popping up and for which one.
+       */
       //shorten these, after finding the problem.
       if (game.useEffect === null || findGame.id === null || gameId == null ||game.useState === null || title.useState === null) {
         setError(true);
