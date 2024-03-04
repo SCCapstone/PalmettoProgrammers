@@ -41,10 +41,14 @@ export default function CreatePost() {
       tagIds.push(newTag.id);
     }
 
-    var findGame = await GameService.findOrCreateGameByTitle(game.name);
-    if (findGame === null || findGame.value === null || game === "" || game === null) {
+    if (game === "" || game === null || game.name === null || game.name === "") {
+      setGame("not");
+      //game.name = "not";
       setError(true);
     }
+
+    var findGame = await GameService.findOrCreateGameByTitle(game.name);
+    
 
     const post = {
       title: title,
@@ -57,12 +61,13 @@ export default function CreatePost() {
 
     try {
       //shorten these, after finding the problem.
-      if (game.useEffect === null || findGame.id === null || gameId == null ||game.useState === null || tags.useState === null || title.useState === null) {
+      if (game.useEffect === null || findGame.id === null || gameId == null ||game.useState === null || title.useState === null) {
         setError(true);
       }
       const newPost = await PostService.createPost(post);
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
+      setGame("not");
       setError(true);
       //window.alert('Error creating post');
       console.log(e);
@@ -249,8 +254,14 @@ const GameSelector = ({ onChange }) => {
           
           setError(true);
       }
+      var test = GameService.searchGames('').then((games) => setGameOptions(games));
+      console.log(test);
       GameService.searchGames('').then((games) => setGameOptions(games));
     } catch (err) {
+      var test = GameService.searchGames('').then((games) => setGameOptions(games));
+      console.log(test);
+      //setGameOptions("not");
+      setGameOptions("not");
       setError(true);
     }
   }, []);
@@ -259,12 +270,14 @@ const GameSelector = ({ onChange }) => {
     console.log('newValue');
     console.log(newValue);
     try {
-      if(gameOptions === null || value === null || newValue === null || newValue === "") {
+      if(gameOptions === null || value === null || newValue === null || newValue === "" || newValue.value === null || newValue.value === "") {
+        //newValue = "not";
         setError(true);
       }
       setValue(newValue);
       onChange(newValue);
     } catch (err) {
+      //newValue = "not";
       setError((true));
     }
     // setValue(newValue);
@@ -309,6 +322,7 @@ const GameSelector = ({ onChange }) => {
           {...params}
           error
           label="Game"
+          defaultValue="not"
           //required
           //placeholder="Select or create a game"
           helperText="Incorrect Entry"
@@ -330,6 +344,7 @@ const GameSelector = ({ onChange }) => {
       renderInput={(params) => (
         <TextField
           {...params}
+          defaultValue={"not"}
           label="Game*"
           //required
           //placeholder="Select or create a game"
