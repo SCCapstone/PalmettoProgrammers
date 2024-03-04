@@ -106,10 +106,13 @@ export default function CreatePost() {
           }}
         >
           <TextField
-            error
              //may want to get rid of this and just check if it's empty when clicking create button.
+            error
             fullWidth
             id="searchGames"
+            helperText="Must be at least 3 characters"
+            minLength = {3}
+            maxLength = {25}
             label="Title*" //might want to put a Search icon in front, if we can figure it out.
             autoFocus
             value={title}
@@ -321,11 +324,13 @@ const GameSelector = ({ onChange }) => {
         <TextField
           {...params}
           error
+          minLength = {3}
+          maxLength = {25}
           label="Game"
           defaultValue="not"
           //required
           //placeholder="Select or create a game"
-          helperText="Incorrect Entry"
+          helperText="Must be at least 3 characters"
         />
       )}
     />
