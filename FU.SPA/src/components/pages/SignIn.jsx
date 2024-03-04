@@ -75,7 +75,6 @@ export default function SignIn() {
     } catch (event) {
       setCredentialsError('Incorrect credentails');
       console.error('Error in sign in:', event);
-      // window.alert('Error signing in');
     }
   };
 
