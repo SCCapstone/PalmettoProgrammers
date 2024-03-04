@@ -42,7 +42,7 @@ export default function CreatePost() {
     }
 
     var findGame = await GameService.findOrCreateGameByTitle(game.name);
-    if (findGame === null) {
+    if (findGame === null || findGame.value === null || findGame.target.value === null) {
       setError(true);
     }
 
@@ -56,7 +56,7 @@ export default function CreatePost() {
     };
 
     try {
-      if (game.useState === null || tags.useState === null || title.useState === null) {
+      if (game.useEffect === null || game.useState === null || tags.useState === null || title.useState === null) {
         setError(true);
       }
       const newPost = await PostService.createPost(post);
@@ -101,7 +101,7 @@ export default function CreatePost() {
         >
           <TextField
             error
-            required //may want to get rid of this and just check if it's empty when clicking create button.
+             //may want to get rid of this and just check if it's empty when clicking create button.
             fullWidth
             id="searchGames"
             label="Title" //might want to put a Search icon in front, if we can figure it out.
@@ -180,7 +180,7 @@ export default function CreatePost() {
           }}
         >
           <TextField
-            required //may want to get rid of this and just check if it's empty when clicking create button.
+             //may want to get rid of this and just check if it's empty when clicking create button.
             fullWidth
             id="searchGames"
             label="Title" //might want to put a Search icon in front, if we can figure it out.
@@ -256,10 +256,10 @@ const GameSelector = ({ onChange }) => {
       setValue(newValue);
       onChange(newValue);
     } catch (err) {
-      if (err) setError((err.target.value));
+      setError((true));
     }
-    setValue(newValue);
-    onChange(newValue);
+    // setValue(newValue);
+    // onChange(newValue);
   };
 
   const onFilterOptions = (options, params) => {
