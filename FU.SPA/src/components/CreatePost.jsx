@@ -42,7 +42,7 @@ export default function CreatePost() {
     }
 
     var findGame = await GameService.findOrCreateGameByTitle(game.name);
-    if (findGame === null || findGame.value === null || findGame.target.value === null) {
+    if (findGame === null || findGame.value === null || game === "" || game === null) {
       setError(true);
     }
 
@@ -56,14 +56,15 @@ export default function CreatePost() {
     };
 
     try {
-      if (game.useEffect === null || game.useState === null || tags.useState === null || title.useState === null) {
+      //shorten these, after finding the problem.
+      if (game.useEffect === null || findGame.id === null || gameId == null ||game.useState === null || tags.useState === null || title.useState === null) {
         setError(true);
       }
       const newPost = await PostService.createPost(post);
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
       setError(true);
-      window.alert('Error creating post');
+      //window.alert('Error creating post');
       console.log(e);
     }
   };
@@ -104,7 +105,7 @@ export default function CreatePost() {
              //may want to get rid of this and just check if it's empty when clicking create button.
             fullWidth
             id="searchGames"
-            label="Title" //might want to put a Search icon in front, if we can figure it out.
+            label="Title*" //might want to put a Search icon in front, if we can figure it out.
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -133,7 +134,6 @@ export default function CreatePost() {
           >
           </Box>
           <TextField
-            error
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -183,7 +183,7 @@ export default function CreatePost() {
              //may want to get rid of this and just check if it's empty when clicking create button.
             fullWidth
             id="searchGames"
-            label="Title" //might want to put a Search icon in front, if we can figure it out.
+            label="Title*" //might want to put a Search icon in front, if we can figure it out.
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -243,14 +243,23 @@ const GameSelector = ({ onChange }) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
+    try {
+      if (GameService.searchGames('').then((games) => 
+                  setGameOptions(games)) === null) {
+          
+          setError(true);
+      }
+      GameService.searchGames('').then((games) => setGameOptions(games));
+    } catch (err) {
+      setError(true);
+    }
   }, []);
 
   const onInputChange = (event, newValue) => {
     console.log('newValue');
     console.log(newValue);
     try {
-      if(gameOptions === null || value === null || newValue === null) {
+      if(gameOptions === null || value === null || newValue === null || newValue === "") {
         setError(true);
       }
       setValue(newValue);
@@ -298,10 +307,10 @@ const GameSelector = ({ onChange }) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Game"
-          required
           error
-          placeholder="Select or create a game"
+          label="Game"
+          //required
+          //placeholder="Select or create a game"
           helperText="Incorrect Entry"
         />
       )}
@@ -321,9 +330,9 @@ const GameSelector = ({ onChange }) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Game"
-          required
-          placeholder="Select or create a game"
+          label="Game*"
+          //required
+          //placeholder="Select or create a game"
         />
       )}
     />} </>
