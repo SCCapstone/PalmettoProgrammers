@@ -102,7 +102,6 @@ export default function CreatePost() {
           }}
         >
           <TextField
-             //may want to get rid of this and just check if it's empty when clicking create button.
             error
             id="searchGames"
             helperText="Must be at least 3 characters"
@@ -184,6 +183,8 @@ export default function CreatePost() {
         >
           <TextField
             fullWidth
+            minLength={3}
+            maxLength={25}
             id="searchGames"
             label="Title*" //might want to put a Search icon in front, if we can figure it out.
             autoFocus
