@@ -73,7 +73,7 @@ export default function CreatePost() {
       const newPost = await PostService.createPost(post);
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
-      setGame("not");
+      //setGame("not");
       setError(true);
       //window.alert('Error creating post');
       console.log(e);
@@ -114,7 +114,7 @@ export default function CreatePost() {
           <TextField
              //may want to get rid of this and just check if it's empty when clicking create button.
             error
-            fullWidth
+            //fullWidth
             id="searchGames"
             helperText="Must be at least 3 characters"
             minLength = {3}
@@ -125,7 +125,7 @@ export default function CreatePost() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={0}>
-            <GameSelector onChange={setGame} />
+            <GameSelectorError onChange={setGame} />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -251,6 +251,8 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
+
+// may need to add a boolean value based on whether the error above is true or false. if error === true pass true here
 const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
@@ -269,9 +271,8 @@ const GameSelector = ({ onChange }) => {
     } catch (err) {
       var test = GameService.searchGames('').then((games) => setGameOptions(games));
       console.log(test);
-      //setGameOptions("not");
-      setGameOptions("not");
       setError(true);
+      setGameOptions("not");
     }
   }, []);
 
@@ -332,8 +333,8 @@ const GameSelector = ({ onChange }) => {
           error
           minLength = {3}
           maxLength = {25}
-          label="Game"
-          defaultValue="not"
+          label="Game*"
+          //defaultValue="not"
           //required
           //placeholder="Select or create a game"
           helperText="Must be at least 3 characters"
@@ -355,8 +356,10 @@ const GameSelector = ({ onChange }) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          defaultValue={"not"}
+          //defaultValue={"not"}
           label="Game*"
+          minLength = {3}
+          maxLength = {25}
           //required
           //placeholder="Select or create a game"
         />
@@ -364,6 +367,100 @@ const GameSelector = ({ onChange }) => {
     />} </>
   );
 };
+
+
+
+const GameSelectorError = ({ onChange }) => {
+  const [gameOptions, setGameOptions] = useState([]);
+  const [value, setValue] = useState('');
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (GameService.searchGames('').then((games) => 
+                  setGameOptions(games)) === null) {
+          
+          setError(true);
+      }
+      var test = GameService.searchGames('').then((games) => setGameOptions(games));
+      console.log(test);
+      GameService.searchGames('').then((games) => setGameOptions(games));
+    } catch (err) {
+      var test = GameService.searchGames('').then((games) => setGameOptions(games));
+      console.log(test);
+      setError(true);
+      setGameOptions("not");
+    }
+  }, []);
+
+  const onInputChange = (event, newValue) => {
+    console.log('newValue');
+    console.log(newValue);
+    try {
+      if(gameOptions === null || value === null || newValue === null || newValue === "" || newValue.value === null || newValue.value === "") {
+        //newValue = "not";
+        setError(true);
+      }
+      setValue(newValue);
+      onChange(newValue);
+    } catch (err) {
+      //newValue = "not";
+      setError((true));
+    }
+    // setValue(newValue);
+    // onChange(newValue);
+  };
+
+  const onFilterOptions = (options, params) => {
+    const filtered = filter(options, params);
+
+    const { inputValue } = params;
+    // Suggest the creation of a new value
+    const isExisting = options.some((option) => inputValue === option.name);
+    if (inputValue !== '' && !isExisting) {
+      filtered.push({
+        // inputValue,
+        id: null,
+        name: inputValue,
+      });
+    }
+
+    return filtered;
+  };
+
+  
+  return (
+    <>
+    <Autocomplete
+      autoHighlight
+      clearOnBlur
+      value={value}
+      onChange={onInputChange}
+      options={gameOptions}
+      disableCloseOnSelect
+      filterOptions={onFilterOptions}
+      getOptionLabel={(o) => (o ? o.name : '')}
+      isOptionEqualToValue={(option, value) => option.name === value.name}
+      renderOption={(props, option) => <li {...props}>{option.name}</li>}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          error
+          minLength = {3}
+          maxLength = {25}
+          label="Game*"
+          //defaultValue="not"
+          //required
+          //placeholder="Select or create a game"
+          helperText="Must be at least 3 characters"
+        />
+      )}
+    />
+ </>
+  );
+};
+
+
 
 const TagsSelector = ({ onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
