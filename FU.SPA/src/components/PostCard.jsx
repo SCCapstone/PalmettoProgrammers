@@ -5,39 +5,51 @@ import {
   CardContent,
   Typography,
   Chip,
-  CardHeader,
   Avatar,
+  Divider,
+  Tooltip,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './PostCard.css';
 import Theme from '../Theme';
+import dayjs from 'dayjs';
 
 const PostCard = ({ post, showActions }) => {
   const navigate = useNavigate();
   const user = post.creator;
-  const defaultPfp =
-    !user.pfpUrl ||
-    (user.pfpUrl !== null &&
-      user.pfpUrl.includes(
-        'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-      ));
-  let dateTimeString = 'Unspecified time';
+  let dateTimeString = 'No time';
   if (showActions === undefined) {
     showActions = true;
   }
 
   // If we have a start time, then we also have an end time
   if (post.startTime) {
+    let startOfToday = dayjs().startOf('day');
+    let postStartDateTime = dayjs(post.startTime);
+
+    let startDate = dayjs(post.startTime).format('MMM D, YYYY');
+    if (postStartDateTime < startOfToday) {
+      // Use default
+    } else if (postStartDateTime < startOfToday.add(1, 'day')) {
+      startDate = 'Today';
+    } else if (postStartDateTime < startOfToday.add(2, 'day')) {
+      startDate = 'Tomorrow';
+    } else if (postStartDateTime < startOfToday.add(6, 'day')) {
+      startDate = dayjs(post.startTime).format('ddd');
+    } else if (postStartDateTime < startOfToday.add(1, 'year')) {
+      startDate = dayjs(post.startTime).format('MMM D');
+    }
+
     var startTime = new Date(post.startTime).toLocaleString('en-US', {
-      dateStyle: 'medium',
       timeStyle: 'short',
     });
     var endTime = new Date(post.endTime).toLocaleString('en-US', {
       timeStyle: 'short',
     });
-    dateTimeString = `${startTime} - ${endTime}`;
+
+    dateTimeString = `${startDate}, ${startTime} - ${endTime}`;
   } else {
-    dateTimeString = 'Unspecified time';
+    dateTimeString = 'No time';
   }
 
   const stringToColor = (string) => {
@@ -54,107 +66,77 @@ const PostCard = ({ post, showActions }) => {
     return color;
   };
 
-  const initials = (name) => {
-    // split  name by spaces and filter empty entries
-    let nameParts = name.split(' ').filter(Boolean);
-    // get the first letter of the first part
-    let initials = nameParts[0][0];
-    // if there is a second part to name
-    if (nameParts.length > 1) {
-      initials += nameParts[1][0];
-    }
-
-    return initials;
-  };
-
-  const renderPfp = () => {
-    return defaultPfp ? (
-      <Avatar
-        sx={{
-          bgcolor: stringToColor(user.username),
-          width: 30,
-          height: 30,
-        }}
-      >
-        {initials(user.username)}
-      </Avatar>
-    ) : (
-      <Avatar
-        alt={user.username}
-        src={user.pfpUrl}
-        sx={{ width: 30, height: 30 }}
-      />
-    );
-  };
-
   return (
-    <Card
-      style={{
-        textAlign: 'left',
-        width: '250px',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <CardHeader
-        title={
-          <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              {renderPfp()}
-              <Typography
-                variant="h6"
-                style={{
-                  fontSize: 'medium',
-                  display: 'flex',
-                  gap: '5px',
-                }}
-              >
-                by
-                <div
-                  className="user-name"
-                  onClick={() => navigate(`/profile/${user.id}`)}
-                >
-                  {user.username}
-                </div>
-              </Typography>
-            </div>
-            <Typography variant="h5" style={{ color: '#FFF' }}>
-              {post.title}
-            </Typography>
-            <Typography variant="h6" style={{ color: '#FFF' }}>
-              {post.game}
-            </Typography>
-            <Typography variant="body1" style={{ color: '#FFF' }}>
-              {dateTimeString}
-            </Typography>
-            <div
-              style={{
-                borderTop: `2px solid ${Theme.palette.primary.main}`,
-                marginTop: '5px',
-              }}
-            ></div>
-          </>
-        }
-      />
-      <CardContent
-        style={{
-          width: 'auto',
-          paddingTop: '0px',
-          flex: 1,
-          display: 'flex',
-          flexGrow: 1,
-          flexDirection: 'column',
-        }}
-      >
-        <Typography variant="body2">{post.description}</Typography>
-        <div style={{ paddingTop: '10px' }}>
+    <Card sx={{ width: 250 }}>
+      <CardContent sx={{ textAlign: 'left', height: 300 }}>
+        <div
+          className="user-header"
+          onClick={() => navigate(`/profile/${user.id}`)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            color: Theme.palette.primary.main,
+          }}
+        >
+          <Avatar
+            alt={user?.username}
+            src={user?.pfpUrl}
+            sx={{
+              width: 18,
+              height: 18,
+              bgcolor: stringToColor(user?.username),
+            }}
+          />
+          <Typography variant="subtitle2">{`by ${user.username}`}</Typography>
+        </div>
+        <Tooltip title={post.title}>
+          <Typography variant="h6" noWrap sx={{ whiteSpace: 'nowrap' }}>
+            {post.title}
+          </Typography>
+        </Tooltip>
+        <Tooltip title={post.game}>
+          <Typography variant="subtitle1" noWrap sx={{ whiteSpace: 'nowrap' }}>
+            {post.game}
+          </Typography>
+        </Tooltip>
+        <Typography variant="body2" noWrap>
+          {dateTimeString}
+        </Typography>
+        <Divider
+          sx={{
+            borderColor: Theme.palette.primary.main,
+            borderWidth: 1,
+            margin: '5px 0',
+          }}
+        />
+        <Typography
+          variant="body2"
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            height: 80,
+          }}
+        >
+          {post.description}
+        </Typography>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            paddingTop: '10px',
+            gap: '5px',
+            maxHeight: 80,
+            overflow: 'hidden',
+          }}
+        >
           {post.tags.map((t) => (
             <Chip key={t} label={'# ' + t} />
           ))}
         </div>
       </CardContent>
       {showActions && (
-        <CardActions style={{ justifyContent: 'flex-end' }}>
+        <CardActions>
           <Button
             variant="contained"
             style={{ width: '100%' }}
