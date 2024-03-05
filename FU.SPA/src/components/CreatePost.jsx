@@ -65,15 +65,15 @@ export default function CreatePost() {
     try {
       if (
         game.useEffect === null ||
-        findGame.id === null ||
-        gameId == null ||
         game.useState === null ||
-        title.useState === null
+        title.useState === null ||
+        title === "" || title === null
       ) {
         setError(true);
+      } else {
+        const newPost = await PostService.createPost(post);
+        navigate(`/posts/${newPost.id}`);
       }
-      const newPost = await PostService.createPost(post);
-      navigate(`/posts/${newPost.id}`);
     } catch (e) {
       setError(true);
       console.log(e);
