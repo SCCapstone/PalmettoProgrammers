@@ -17,7 +17,6 @@ import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import Theme from '../../Theme';
-import './SignUp.css';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -200,6 +199,8 @@ export default function SignUp() {
                 variant="body2"
                 style={{
                   color: Theme.palette.primary.main,
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
                 }}
               >
                 Already have an account? Sign in

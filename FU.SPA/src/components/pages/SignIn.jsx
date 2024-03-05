@@ -17,7 +17,6 @@ import { useContext, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Theme from '../../Theme';
-import './SignIn.css';
 
 export default function SignIn() {
   const { login } = useContext(UserContext);
@@ -154,6 +153,8 @@ export default function SignIn() {
             variant="body2"
             style={{
               color: Theme.palette.primary.main,
+              textDecoration: 'underline',
+              cursor: 'pointer',
             }}
           >
             Sign Up
