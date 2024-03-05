@@ -43,7 +43,6 @@ export default function CreatePost() {
 
     if (game === "" || game === null || game.name === null || game.name === "") {
       setGame("not");
-      //game.name = "not";
       setError(true);
     }
 
@@ -73,9 +72,7 @@ export default function CreatePost() {
       const newPost = await PostService.createPost(post);
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
-      //setGame("not");
       setError(true);
-      //window.alert('Error creating post');
       console.log(e);
     }
   };
@@ -114,12 +111,11 @@ export default function CreatePost() {
           <TextField
              //may want to get rid of this and just check if it's empty when clicking create button.
             error
-            //fullWidth
             id="searchGames"
             helperText="Must be at least 3 characters"
             minLength = {3}
             maxLength = {25}
-            label="Title*" //might want to put a Search icon in front, if we can figure it out.
+            label="Title*" 
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -194,7 +190,6 @@ export default function CreatePost() {
           }}
         >
           <TextField
-             //may want to get rid of this and just check if it's empty when clicking create button.
             fullWidth
             id="searchGames"
             label="Title*" //might want to put a Search icon in front, if we can figure it out.
@@ -251,8 +246,6 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-
-// may need to add a boolean value based on whether the error above is true or false. if error === true pass true here
 const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
@@ -280,18 +273,16 @@ const GameSelector = ({ onChange }) => {
     console.log('newValue');
     console.log(newValue);
     try {
-      if(gameOptions === null || value === null || newValue === null || newValue === "" || newValue.value === null || newValue.value === "") {
-        //newValue = "not";
+      if(gameOptions === null || value === null || newValue === null || 
+        newValue === "" || newValue.value === null || newValue.value === "") {
+        
         setError(true);
       }
       setValue(newValue);
       onChange(newValue);
     } catch (err) {
-      //newValue = "not";
       setError((true));
     }
-    // setValue(newValue);
-    // onChange(newValue);
   };
 
   const onFilterOptions = (options, params) => {
@@ -334,9 +325,6 @@ const GameSelector = ({ onChange }) => {
           minLength = {3}
           maxLength = {25}
           label="Game*"
-          //defaultValue="not"
-          //required
-          //placeholder="Select or create a game"
           helperText="Must be at least 3 characters"
         />
       )}
@@ -356,12 +344,9 @@ const GameSelector = ({ onChange }) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          //defaultValue={"not"}
           label="Game*"
           minLength = {3}
           maxLength = {25}
-          //required
-          //placeholder="Select or create a game"
         />
       )}
     />} </>
@@ -398,17 +383,13 @@ const GameSelectorError = ({ onChange }) => {
     console.log(newValue);
     try {
       if(gameOptions === null || value === null || newValue === null || newValue === "" || newValue.value === null || newValue.value === "") {
-        //newValue = "not";
         setError(true);
       }
       setValue(newValue);
       onChange(newValue);
     } catch (err) {
-      //newValue = "not";
       setError((true));
     }
-    // setValue(newValue);
-    // onChange(newValue);
   };
 
   const onFilterOptions = (options, params) => {
@@ -449,9 +430,6 @@ const GameSelectorError = ({ onChange }) => {
           minLength = {3}
           maxLength = {25}
           label="Game*"
-          //defaultValue="not"
-          //required
-          //placeholder="Select or create a game"
           helperText="Must be at least 3 characters"
         />
       )}
