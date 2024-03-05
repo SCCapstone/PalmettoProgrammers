@@ -37,23 +37,29 @@ export const GamesSelector = ({ value, onChange }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Games" placeholder="" 
-        inputProps={{
-          ...params.inputProps,
-          autoComplete: 'new-games' //disable autcomplete and autofill.
-        }}
-        onKeyDown={ (event) => {
-          if (event.key === 'Enter') {
-            // Handle Enter key press
-            GameService.searchGames('').then((games) => setGameOptions(games));
-          }
-        }}/>
+        <TextField
+          {...params}
+          label="Games"
+          placeholder=""
+          inputProps={{
+            ...params.inputProps,
+            autoComplete: 'new-games', //disable autcomplete and autofill.
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              // Handle Enter key press
+              GameService.searchGames('').then((games) =>
+                setGameOptions(games),
+              );
+            }
+          }}
+        />
       )}
     />
   );
 };
 
-export const TagsSelector = ({ value, onChange}) => {
+export const TagsSelector = ({ value, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
@@ -82,15 +88,21 @@ export const TagsSelector = ({ value, onChange}) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Tags" inputProps={{
-          ...params.inputProps,
-          autoComplete: 'new-tags' //disable autcomplete and autofill.
-        }} onKeyDown={ (event) => {
-          if (event.key === 'Enter') {
-            // Handle Enter key press
-            TagService.searchTags('').then((tags) => setTagOptions(tags));
-          }
-        }} placeholder="" />
+        <TextField
+          {...params}
+          label="Tags"
+          inputProps={{
+            ...params.inputProps,
+            autoComplete: 'new-tags', //disable autcomplete and autofill.
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              // Handle Enter key press
+              TagService.searchTags('').then((tags) => setTagOptions(tags));
+            }
+          }}
+          placeholder=""
+        />
       )}
     />
   );

@@ -375,8 +375,7 @@ export default function Discover() {
                 setTags(newTags);
               }}
               onKeyDown={(event, newTags) => {
-                if (event.key === 'Enter')
-                setPage(1);
+                if (event.key === 'Enter') setPage(1);
                 setGames(newTags);
               }}
             />

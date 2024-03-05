@@ -41,13 +41,17 @@ export default function CreatePost() {
       tagIds.push(newTag.id);
     }
 
-    if (game === "" || game === null || game.name === null || game.name === "") {
-      setGame("not");
+    if (
+      game === '' ||
+      game === null ||
+      game.name === null ||
+      game.name === ''
+    ) {
+      setGame('not');
       setError(true);
     }
 
     var findGame = await GameService.findOrCreateGameByTitle(game.name);
-    
 
     const post = {
       title: title,
@@ -59,7 +63,13 @@ export default function CreatePost() {
     };
 
     try {
-      if (game.useEffect === null || findGame.id === null || gameId == null ||game.useState === null || title.useState === null) {
+      if (
+        game.useEffect === null ||
+        findGame.id === null ||
+        gameId == null ||
+        game.useState === null ||
+        title.useState === null
+      ) {
         setError(true);
       }
       const newPost = await PostService.createPost(post);
@@ -69,169 +79,169 @@ export default function CreatePost() {
       console.log(e);
     }
   };
-  
+
   return (
     <>
-    {error? //if there's an error
-    <div>
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 0,
-          m: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Create Post
-        </Typography>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') e.preventDefault();
-          }}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            mt: 0,
-            gap: 1,
-          }}
-        >
-          <TextField
-            error
-            id="searchGames"
-            helperText="Must be at least 3 characters"
-            minLength = {3}
-            maxLength = {25}
-            label="Title*" 
-            autoFocus
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Grid item xs={0}>
-            <GameSelectorError onChange={setGame} />
-          </Grid>
-          <br />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker
-              label="Start Time"
-              value={startTime}
-              onChange={(newValue) => setStartTime(newValue)}
-            />
-            <DateTimePicker
-              label="End Time"
-              value={endTime}
-              onChange={(newValue) => setEndTime(newValue)}
-            />
-          </LocalizationProvider>
-          <TagsSelector onChange={setTags} />
+      {error ? ( //if there's an error
+        <div>
+          <Container component="main" maxWidth="xs">
+            <Box
+              sx={{
+                marginTop: 0,
+                m: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography component="h1" variant="h5">
+                Create Post
+              </Typography>
+              <Box
+                component="form"
+                noValidate
+                onSubmit={handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') e.preventDefault();
+                }}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  mt: 0,
+                  gap: 1,
+                }}
+              >
+                <TextField
+                  error
+                  id="searchGames"
+                  helperText="Must be at least 3 characters"
+                  minLength={3}
+                  maxLength={25}
+                  label="Title*"
+                  autoFocus
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <Grid item xs={0}>
+                  <GameSelectorError onChange={setGame} />
+                </Grid>
+                <br />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    label="Start Time"
+                    value={startTime}
+                    onChange={(newValue) => setStartTime(newValue)}
+                  />
+                  <DateTimePicker
+                    label="End Time"
+                    value={endTime}
+                    onChange={(newValue) => setEndTime(newValue)}
+                  />
+                </LocalizationProvider>
+                <TagsSelector onChange={setTags} />
+                <Box
+                  sx={{
+                    display: 'flex',
+                  }}
+                ></Box>
+                <TextField
+                  label="Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  multiline
+                ></TextField>
+
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 0, mb: 0 }}
+                >
+                  Create Post
+                </Button>
+              </Box>
+            </Box>
+          </Container>
+        </div> //if there's no error
+      ) : (
+        <Container component="main" maxWidth="xs">
           <Box
             sx={{
+              marginTop: 0,
+              m: 0,
               display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
-          </Box>
-          <TextField
-            label="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            multiline
-          ></TextField>
+            <Typography component="h1" variant="h5">
+              Create Post
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') e.preventDefault();
+              }}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                mt: 0,
+                gap: 1,
+              }}
+            >
+              <TextField
+                fullWidth
+                minLength={3}
+                maxLength={25}
+                id="searchGames"
+                label="Title*" //might want to put a Search icon in front, if we can figure it out.
+                autoFocus
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <Grid item xs={0}>
+                <GameSelector onChange={setGame} />
+              </Grid>
+              <br />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  label="Start Time"
+                  value={startTime}
+                  onChange={(newValue) => setStartTime(newValue)}
+                />
+                <DateTimePicker
+                  label="End Time"
+                  value={endTime}
+                  onChange={(newValue) => setEndTime(newValue)}
+                />
+              </LocalizationProvider>
+              <TagsSelector onChange={setTags} />
+              <Box
+                sx={{
+                  display: 'flex',
+                }}
+              ></Box>
+              <TextField
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                multiline
+              ></TextField>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 0, mb: 0 }}
-          >
-            Create Post
-          </Button>
-        </Box>
-      </Box>
-    </Container>
-    </div> : //if there's no error
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 0,
-          m: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Create Post
-        </Typography>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') e.preventDefault();
-          }}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            mt: 0,
-            gap: 1,
-          }}
-        >
-          <TextField
-            fullWidth
-            minLength={3}
-            maxLength={25}
-            id="searchGames"
-            label="Title*" //might want to put a Search icon in front, if we can figure it out.
-            autoFocus
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Grid item xs={0}>
-            <GameSelector onChange={setGame} />
-          </Grid>
-          <br />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker
-              label="Start Time"
-              value={startTime}
-              onChange={(newValue) => setStartTime(newValue)}
-            />
-            <DateTimePicker
-              label="End Time"
-              value={endTime}
-              onChange={(newValue) => setEndTime(newValue)}
-            />
-          </LocalizationProvider>
-          <TagsSelector onChange={setTags} />
-          <Box
-            sx={{
-              display: 'flex',
-            }}
-          >
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 0, mb: 0 }}
+              >
+                Create Post
+              </Button>
+            </Box>
           </Box>
-          <TextField
-            label="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            multiline
-          ></TextField>
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 0, mb: 0 }}
-          >
-            Create Post
-          </Button>
-        </Box>
-      </Box>
-    </Container>}
+        </Container>
+      )}
     </>
   );
 }
@@ -247,19 +257,24 @@ const GameSelector = ({ onChange }) => {
 
   useEffect(() => {
     try {
-      if (GameService.searchGames('').then((games) => 
-                  setGameOptions(games)) === null) {
-          
-          setError(true);
+      if (
+        GameService.searchGames('').then((games) => setGameOptions(games)) ===
+        null
+      ) {
+        setError(true);
       }
-      var test = GameService.searchGames('').then((games) => setGameOptions(games));
+      var test = GameService.searchGames('').then((games) =>
+        setGameOptions(games),
+      );
       console.log(test);
       GameService.searchGames('').then((games) => setGameOptions(games));
     } catch (err) {
-      var test = GameService.searchGames('').then((games) => setGameOptions(games));
+      var test = GameService.searchGames('').then((games) =>
+        setGameOptions(games),
+      );
       console.log(test);
       setError(true);
-      setGameOptions("not");
+      setGameOptions('not');
     }
   }, []);
 
@@ -267,15 +282,20 @@ const GameSelector = ({ onChange }) => {
     console.log('newValue');
     console.log(newValue);
     try {
-      if(gameOptions === null || value === null || newValue === null || 
-        newValue === "" || newValue.value === null || newValue.value === "") {
-        
+      if (
+        gameOptions === null ||
+        value === null ||
+        newValue === null ||
+        newValue === '' ||
+        newValue.value === null ||
+        newValue.value === ''
+      ) {
         setError(true);
       }
       setValue(newValue);
       onChange(newValue);
     } catch (err) {
-      setError((true));
+      setError(true);
     }
   };
 
@@ -296,58 +316,53 @@ const GameSelector = ({ onChange }) => {
     return filtered;
   };
 
-  
   return (
     <>
-    {error? //if there's an error display this
-    <div>
-    <Autocomplete
-      autoHighlight
-      clearOnBlur
-      value={value}
-      onChange={onInputChange}
-      options={gameOptions}
-      disableCloseOnSelect
-      filterOptions={onFilterOptions}
-      getOptionLabel={(o) => (o ? o.name : '')}
-      isOptionEqualToValue={(option, value) => option.name === value.name}
-      renderOption={(props, option) => <li {...props}>{option.name}</li>}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          error
-          minLength = {3}
-          maxLength = {25}
-          label="Game*"
-          helperText="Must be at least 3 characters"
+      {error ? ( //if there's an error display this
+        <div>
+          <Autocomplete
+            autoHighlight
+            clearOnBlur
+            value={value}
+            onChange={onInputChange}
+            options={gameOptions}
+            disableCloseOnSelect
+            filterOptions={onFilterOptions}
+            getOptionLabel={(o) => (o ? o.name : '')}
+            isOptionEqualToValue={(option, value) => option.name === value.name}
+            renderOption={(props, option) => <li {...props}>{option.name}</li>}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error
+                minLength={3}
+                maxLength={25}
+                label="Game*"
+                helperText="Must be at least 3 characters"
+              />
+            )}
+          />
+        </div>
+      ) : (
+        <Autocomplete //if there's no error display this
+          autoHighlight
+          clearOnBlur
+          value={value}
+          onChange={onInputChange}
+          options={gameOptions}
+          disableCloseOnSelect
+          filterOptions={onFilterOptions}
+          getOptionLabel={(o) => (o ? o.name : '')}
+          isOptionEqualToValue={(option, value) => option.name === value.name}
+          renderOption={(props, option) => <li {...props}>{option.name}</li>}
+          renderInput={(params) => (
+            <TextField {...params} label="Game*" minLength={3} maxLength={25} />
+          )}
         />
-      )}
-    />
-    </div>: 
-    <Autocomplete //if there's no error display this
-      autoHighlight
-      clearOnBlur
-      value={value}
-      onChange={onInputChange}
-      options={gameOptions}
-      disableCloseOnSelect
-      filterOptions={onFilterOptions}
-      getOptionLabel={(o) => (o ? o.name : '')}
-      isOptionEqualToValue={(option, value) => option.name === value.name}
-      renderOption={(props, option) => <li {...props}>{option.name}</li>}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Game*"
-          minLength = {3}
-          maxLength = {25}
-        />
-      )}
-    />} </>
+      )}{' '}
+    </>
   );
 };
-
-
 
 const GameSelectorError = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
@@ -356,19 +371,24 @@ const GameSelectorError = ({ onChange }) => {
 
   useEffect(() => {
     try {
-      if (GameService.searchGames('').then((games) => 
-                  setGameOptions(games)) === null) {
-          
-          setError(true);
+      if (
+        GameService.searchGames('').then((games) => setGameOptions(games)) ===
+        null
+      ) {
+        setError(true);
       }
-      var test = GameService.searchGames('').then((games) => setGameOptions(games));
+      var test = GameService.searchGames('').then((games) =>
+        setGameOptions(games),
+      );
       console.log(test);
       GameService.searchGames('').then((games) => setGameOptions(games));
     } catch (err) {
-      var test = GameService.searchGames('').then((games) => setGameOptions(games));
+      var test = GameService.searchGames('').then((games) =>
+        setGameOptions(games),
+      );
       console.log(test);
       setError(true);
-      setGameOptions("not");
+      setGameOptions('not');
     }
   }, []);
 
@@ -376,13 +396,20 @@ const GameSelectorError = ({ onChange }) => {
     console.log('newValue');
     console.log(newValue);
     try {
-      if(gameOptions === null || value === null || newValue === null || newValue === "" || newValue.value === null || newValue.value === "") {
+      if (
+        gameOptions === null ||
+        value === null ||
+        newValue === null ||
+        newValue === '' ||
+        newValue.value === null ||
+        newValue.value === ''
+      ) {
         setError(true);
       }
       setValue(newValue);
       onChange(newValue);
     } catch (err) {
-      setError((true));
+      setError(true);
     }
   };
 
@@ -403,36 +430,33 @@ const GameSelectorError = ({ onChange }) => {
     return filtered;
   };
 
-  
   return (
     <>
-    <Autocomplete
-      autoHighlight
-      clearOnBlur
-      value={value}
-      onChange={onInputChange}
-      options={gameOptions}
-      disableCloseOnSelect
-      filterOptions={onFilterOptions}
-      getOptionLabel={(o) => (o ? o.name : '')}
-      isOptionEqualToValue={(option, value) => option.name === value.name}
-      renderOption={(props, option) => <li {...props}>{option.name}</li>}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          error
-          minLength = {3}
-          maxLength = {25}
-          label="Game*"
-          helperText="Must be at least 3 characters"
-        />
-      )}
-    />
- </>
+      <Autocomplete
+        autoHighlight
+        clearOnBlur
+        value={value}
+        onChange={onInputChange}
+        options={gameOptions}
+        disableCloseOnSelect
+        filterOptions={onFilterOptions}
+        getOptionLabel={(o) => (o ? o.name : '')}
+        isOptionEqualToValue={(option, value) => option.name === value.name}
+        renderOption={(props, option) => <li {...props}>{option.name}</li>}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            error
+            minLength={3}
+            maxLength={25}
+            label="Game*"
+            helperText="Must be at least 3 characters"
+          />
+        )}
+      />
+    </>
   );
 };
-
-
 
 const TagsSelector = ({ onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
