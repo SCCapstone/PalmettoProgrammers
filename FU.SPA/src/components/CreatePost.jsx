@@ -30,6 +30,7 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
+  const [titleError, setTitleError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +49,7 @@ export default function CreatePost() {
       game.name === ''
     ) {
       setGame('not');
-      setError(true);
+      setError(true); //change to setGameError(true); or add setGameError(true) with setError(true);
     }
 
     var findGame = await GameService.findOrCreateGameByTitle(game.name);
@@ -63,14 +64,14 @@ export default function CreatePost() {
     };
 
     try {
-      if (
-        game.useEffect === null ||
-        game.useState === null ||
-        title.useState === null ||
-        title === "" || title === null
-      ) {
-        setError(true);
-      } else {
+      if (game.useEffect === null || game.useState === null) {
+        setError(true); //change to setGameError(true);
+      } 
+      if (title.useState === null || title === "" || title === null) { 
+        //setTitleError(true);
+      } 
+      
+      else {
         const newPost = await PostService.createPost(post);
         navigate(`/posts/${newPost.id}`);
       }
@@ -80,9 +81,13 @@ export default function CreatePost() {
     }
   };
 
+
+
+
+
   return (
     <>
-      {error ? ( //if there's an error
+      {error ? ( //if there's an error with title but not game
         <div>
           <Container component="main" maxWidth="xs">
             <Box
@@ -162,6 +167,14 @@ export default function CreatePost() {
               </Box>
             </Box>
           </Container>
+
+                  
+
+
+
+
+
+
         </div> //if there's no error
       ) : (
         <Container component="main" maxWidth="xs">
@@ -245,6 +258,8 @@ export default function CreatePost() {
     </>
   );
 }
+
+
 
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
