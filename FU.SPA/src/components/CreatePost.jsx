@@ -31,12 +31,13 @@ export default function CreatePost() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [titleError, setTitleError] = useState(false);
-
+  const [helperTextErr, setHelperTextErr] = useState(false);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let tagIds = [];
-
+    
     for (const tag of tags) {
       const newTag = await TagService.findOrCreateTagByName(tag.name);
       tagIds.push(newTag.id);
@@ -48,7 +49,7 @@ export default function CreatePost() {
       game.name === null ||
       game.name === ''
     ) {
-      setGame('not');
+      setGame('default');
       setError(true); //change to setGameError(true); or add setGameError(true) with setError(true);
     }
 
@@ -64,19 +65,29 @@ export default function CreatePost() {
     };
 
     try {
+
+      useEffect(() => {
+        if (title.length < 3) {
+          setHelperTextErr(true);
+          setTitleError(true);
+        }
+      }, []); 
+
       if (game.useEffect === null || game.useState === null) {
-        setError(true); //change to setGameError(true);
+        setError(true); //change to setGameError(true) or leave setError as the gameError
       } 
-      if (title.useState === null || title === "" || title === null) { 
-        //setTitleError(true);
+      if (title.useState === null || title === "" || title === null || title.length < 3) { 
+        setTitleError(true);
       } 
       
       else {
         const newPost = await PostService.createPost(post);
         navigate(`/posts/${newPost.id}`);
       }
+      setTitleError(true);
     } catch (e) {
-      setError(true);
+      setError(true); //game and title errors
+      setTitleError(true);
       console.log(e);
     }
   };
@@ -87,95 +98,106 @@ export default function CreatePost() {
 
   return (
     <>
-      {error ? ( //if there's an error with title but not game
+      {error ? ( //if there's an error with game
         <div>
-          <Container component="main" maxWidth="xs">
-            <Box
-              sx={{
-                marginTop: 0,
-                m: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Typography component="h1" variant="h5">
-                Create Post
-              </Typography>
+          {/* {titleError? ( */}
+          <div> {/* If there's an error with title and game*/}
+            <Container component="main" maxWidth="xs">
               <Box
-                component="form"
-                noValidate
-                onSubmit={handleSubmit}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') e.preventDefault();
-                }}
                 sx={{
+                  marginTop: 0,
+                  m: 0,
                   display: 'flex',
                   flexDirection: 'column',
-                  mt: 0,
-                  gap: 1,
+                  alignItems: 'center',
                 }}
               >
-                <TextField
-                  error
-                  id="searchGames"
-                  helperText="Must be at least 3 characters"
-                  minLength={3}
-                  maxLength={25}
-                  label="Title*"
-                  autoFocus
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-                <Grid item xs={0}>
-                  <GameSelectorError onChange={setGame} />
-                </Grid>
-                <br />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateTimePicker
-                    label="Start Time"
-                    value={startTime}
-                    onChange={(newValue) => setStartTime(newValue)}
-                  />
-                  <DateTimePicker
-                    label="End Time"
-                    value={endTime}
-                    onChange={(newValue) => setEndTime(newValue)}
-                  />
-                </LocalizationProvider>
-                <TagsSelector onChange={setTags} />
+                <Typography component="h1" variant="h5">
+                  Create Post
+                </Typography>
                 <Box
+                  component="form"
+                  noValidate
+                  onSubmit={handleSubmit}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') e.preventDefault();
+                  }}
                   sx={{
                     display: 'flex',
+                    flexDirection: 'column',
+                    mt: 0,
+                    gap: 1,
                   }}
-                ></Box>
-                <TextField
-                  label="Description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  multiline
-                ></TextField>
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 0, mb: 0 }}
                 >
-                  Create Post
-                </Button>
+                  {title.length < 3? //if title does have an error of a length too short 
+                  (<div>
+                  <TextField
+                    fullWidth
+                    error
+                    id="searchGames"
+                    helperText="Must be at least 3 characters"
+                    minLength={3}
+                    maxLength={25}
+                    label="Title*"
+                    autoFocus
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  /> 
+                  </div>) : (<div>
+                  <TextField
+                    fullWidth
+                    id="searchGames"
+                    minLength={3}
+                    maxLength={25}
+                    label="Title*"
+                    autoFocus
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  </div>) 
+                  }
+                  <Grid item xs={0}>
+                    <GameSelectorError onChange={setGame} />
+                  </Grid>
+                  <br />
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateTimePicker
+                      label="Start Time"
+                      value={startTime}
+                      onChange={(newValue) => setStartTime(newValue)}
+                    />
+                    <DateTimePicker
+                      label="End Time"
+                      value={endTime}
+                      onChange={(newValue) => setEndTime(newValue)}
+                    />
+                  </LocalizationProvider>
+                  <TagsSelector onChange={setTags} />
+                  <Box
+                    sx={{
+                      display: 'flex',
+                    }}
+                  ></Box>
+                  <TextField
+                    label="Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    multiline
+                  ></TextField>
+
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 0, mb: 0 }}
+                  >
+                    Create Post
+                  </Button>
+                </Box>
               </Box>
-            </Box>
-          </Container>
-
-                  
-
-
-
-
-
-
-        </div> //if there's no error
+            </Container>
+          </div>
+        </div> //if there's no game error
       ) : (
         <Container component="main" maxWidth="xs">
           <Box
@@ -289,7 +311,7 @@ const GameSelector = ({ onChange }) => {
       );
       console.log(test);
       setError(true);
-      setGameOptions('not');
+      setGameOptions('default');
     }
   }, []);
 
@@ -387,23 +409,22 @@ const GameSelectorError = ({ onChange }) => {
   useEffect(() => {
     try {
       if (
-        GameService.searchGames('').then((games) => setGameOptions(games)) ===
-        null
-      ) {
+        GameService.searchGames('').then((games) => setGameOptions(games)) === null) {
         setError(true);
       }
       var test = GameService.searchGames('').then((games) =>
         setGameOptions(games),
       );
       console.log(test);
+      console.log(error);
       GameService.searchGames('').then((games) => setGameOptions(games));
     } catch (err) {
       var test = GameService.searchGames('').then((games) =>
         setGameOptions(games),
       );
       console.log(test);
-      setError(true);
-      setGameOptions('not');
+      setError(true);//may want to remove setError from the whole gameerrorselector
+      setGameOptions('default');
     }
   }, []);
 
