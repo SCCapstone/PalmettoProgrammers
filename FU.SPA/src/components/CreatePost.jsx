@@ -501,27 +501,6 @@ const GameSelectorError = ({ onChange }) => {
             label="Game*"
             helperText="Must be at least 3 characters"
           />
-          {/* {value.length < 3? //if title does have an error of a length too short 
-            (<div>
-            <TextField //if title does not have an error of a length too short
-              {...params}
-              error
-              minLength={3}
-              maxLength={25}
-              label="Game*"
-              helperText="Must be at least 3 characters"
-            />
-            </div>) : (<div>
-            <TextField //if title does not have an error of a length too short
-              {...params}
-              //error
-              minLength={3}
-              maxLength={25}
-              label="Game*"
-              helperText="Must be at least 3 characters"
-            />
-            </div>) 
-          } */}
         </div>
         )}
       />
