@@ -30,8 +30,6 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const [titleError, setTitleError] = useState(false);
-  const [helperTextErr, setHelperTextErr] = useState(false);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +48,7 @@ export default function CreatePost() {
       game.name === ''
     ) {
       setGame('default');
-      setError(true); //change to setGameError(true); or add setGameError(true) with setError(true);
+      setError(true);
     }
 
     var findGame = await GameService.findOrCreateGameByTitle(game.name);
@@ -66,18 +64,8 @@ export default function CreatePost() {
 
     try {
 
-      useEffect(() => {
-        if (title.length < 3) {
-          setHelperTextErr(true);
-          setTitleError(true);
-        }
-      }, []); 
-
       if (game.useEffect === null || game.useState === null) {
-        setError(true); //change to setGameError(true) or leave setError as the gameError
-      } 
-      if (title.useState === null || title === "" || title === null || title.length < 3) { 
-        setTitleError(true);
+        setError(true); 
       } 
       
       else {
@@ -87,7 +75,6 @@ export default function CreatePost() {
       setTitleError(true);
     } catch (e) {
       setError(true); //game and title errors
-      setTitleError(true);
       console.log(e);
     }
   };
@@ -100,8 +87,7 @@ export default function CreatePost() {
     <>
       {error ? ( //if there's an error with game
         <div>
-          {/* {titleError? ( */}
-          <div> {/* If there's an error with title and game*/}
+          <div>
             <Container component="main" maxWidth="xs">
               <Box
                 sx={{
@@ -467,7 +453,9 @@ const GameSelectorError = ({ onChange }) => {
   };
 
   return (
-    <>
+    //<>
+      (value.length < 3?
+      (<div>
       <Autocomplete
         autoHighlight
         clearOnBlur
@@ -490,7 +478,25 @@ const GameSelectorError = ({ onChange }) => {
           />
         )}
       />
-    </>
+       </div>) :
+       (<div>
+        <Autocomplete //if there's no error display this
+          autoHighlight
+          clearOnBlur
+          value={value}
+          onChange={onInputChange}
+          options={gameOptions}
+          disableCloseOnSelect
+          filterOptions={onFilterOptions}
+          getOptionLabel={(o) => (o ? o.name : '')}
+          isOptionEqualToValue={(option, value) => option.name === value.name}
+          renderOption={(props, option) => <li {...props}>{option.name}</li>}
+          renderInput={(params) => (
+            <TextField {...params} label="Game*" minLength={3} maxLength={25} />
+          )}
+        />
+      </div>))
+    //</>
   );
 };
 
