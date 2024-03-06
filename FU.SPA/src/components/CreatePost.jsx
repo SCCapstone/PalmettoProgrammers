@@ -72,9 +72,8 @@ export default function CreatePost() {
         const newPost = await PostService.createPost(post);
         navigate(`/posts/${newPost.id}`);
       }
-      setTitleError(true);
     } catch (e) {
-      setError(true); //game and title errors
+      setError(true); 
       console.log(e);
     }
   };
@@ -212,7 +211,7 @@ export default function CreatePost() {
                 gap: 1,
               }}
             >
-              <TextField
+              {/* <TextField
                 fullWidth
                 minLength={3}
                 maxLength={25}
@@ -221,7 +220,33 @@ export default function CreatePost() {
                 autoFocus
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-              />
+              /> */}
+              {title.length < 3? //if title does have an error of a length too short 
+                  (<div>
+                  <TextField
+                    fullWidth
+                    id="searchGames"
+                    helperText="Must be at least 3 characters"
+                    minLength={3}
+                    maxLength={25}
+                    label="Title*"
+                    autoFocus
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  /> 
+                  </div>) : (<div>
+                  <TextField
+                    fullWidth
+                    id="searchGames"
+                    minLength={3}
+                    maxLength={25}
+                    label="Title*"
+                    autoFocus
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  </div>) 
+                  }
               <Grid item xs={0}>
                 <GameSelector onChange={setGame} />
               </Grid>
@@ -357,7 +382,7 @@ const GameSelector = ({ onChange }) => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                error
+                //error
                 minLength={3}
                 maxLength={25}
                 label="Game*"
@@ -379,10 +404,10 @@ const GameSelector = ({ onChange }) => {
           isOptionEqualToValue={(option, value) => option.name === value.name}
           renderOption={(props, option) => <li {...props}>{option.name}</li>}
           renderInput={(params) => (
-            <TextField {...params} label="Game*" minLength={3} maxLength={25} />
+            <TextField {...params} label="Game*" minLength={3} maxLength={25} helperText="Must be at least 3 characters" />
           )}
         />
-      )}{' '}
+      )}
     </>
   );
 };
@@ -409,7 +434,7 @@ const GameSelectorError = ({ onChange }) => {
         setGameOptions(games),
       );
       console.log(test);
-      setError(true);//may want to remove setError from the whole gameerrorselector
+      setError(true);
       setGameOptions('default');
     }
   }, []);
@@ -453,7 +478,6 @@ const GameSelectorError = ({ onChange }) => {
   };
 
   return (
-    //<>
       (value.length < 3?
       (<div>
       <Autocomplete
@@ -468,6 +492,7 @@ const GameSelectorError = ({ onChange }) => {
         isOptionEqualToValue={(option, value) => option.name === value.name}
         renderOption={(props, option) => <li {...props}>{option.name}</li>}
         renderInput={(params) => (
+        <div>
           <TextField
             {...params}
             error
@@ -476,6 +501,28 @@ const GameSelectorError = ({ onChange }) => {
             label="Game*"
             helperText="Must be at least 3 characters"
           />
+          {/* {value.length < 3? //if title does have an error of a length too short 
+            (<div>
+            <TextField //if title does not have an error of a length too short
+              {...params}
+              error
+              minLength={3}
+              maxLength={25}
+              label="Game*"
+              helperText="Must be at least 3 characters"
+            />
+            </div>) : (<div>
+            <TextField //if title does not have an error of a length too short
+              {...params}
+              //error
+              minLength={3}
+              maxLength={25}
+              label="Game*"
+              helperText="Must be at least 3 characters"
+            />
+            </div>) 
+          } */}
+        </div>
         )}
       />
        </div>) :
@@ -492,11 +539,10 @@ const GameSelectorError = ({ onChange }) => {
           isOptionEqualToValue={(option, value) => option.name === value.name}
           renderOption={(props, option) => <li {...props}>{option.name}</li>}
           renderInput={(params) => (
-            <TextField {...params} label="Game*" minLength={3} maxLength={25} />
+            <TextField {...params} label="Game*" minLength={3} maxLength={25} helperText="Must be at least 3 characters" />
           )}
         />
       </div>))
-    //</>
   );
 };
 
