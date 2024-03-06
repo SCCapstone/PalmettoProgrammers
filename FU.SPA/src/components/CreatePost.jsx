@@ -30,12 +30,12 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let tagIds = [];
-    
+
     for (const tag of tags) {
       const newTag = await TagService.findOrCreateTagByName(tag.name);
       tagIds.push(newTag.id);
@@ -63,24 +63,17 @@ export default function CreatePost() {
     };
 
     try {
-
       if (game.useEffect === null || game.useState === null) {
-        setError(true); 
-      } 
-      
-      else {
+        setError(true);
+      } else {
         const newPost = await PostService.createPost(post);
         navigate(`/posts/${newPost.id}`);
       }
     } catch (e) {
-      setError(true); 
+      setError(true);
       console.log(e);
     }
   };
-
-
-
-
 
   return (
     <>
@@ -114,33 +107,35 @@ export default function CreatePost() {
                     gap: 1,
                   }}
                 >
-                  {title.length < 3? //if title does have an error of a length too short 
-                  (<div>
-                  <TextField
-                    fullWidth
-                    error
-                    id="searchGames"
-                    helperText="Must be at least 3 characters"
-                    minLength={3}
-                    maxLength={25}
-                    label="Title*"
-                    autoFocus
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  /> 
-                  </div>) : (<div>
-                  <TextField
-                    fullWidth
-                    id="searchGames"
-                    minLength={3}
-                    maxLength={25}
-                    label="Title*"
-                    autoFocus
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  </div>) 
-                  }
+                  {title.length < 3 ? ( //if title does have an error of a length too short
+                    <div>
+                      <TextField
+                        fullWidth
+                        error
+                        id="searchGames"
+                        helperText="Must be at least 3 characters"
+                        minLength={3}
+                        maxLength={25}
+                        label="Title*"
+                        autoFocus
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <TextField
+                        fullWidth
+                        id="searchGames"
+                        minLength={3}
+                        maxLength={25}
+                        label="Title*"
+                        autoFocus
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                    </div>
+                  )}
                   <Grid item xs={0}>
                     <GameSelectorError onChange={setGame} />
                   </Grid>
@@ -221,8 +216,8 @@ export default function CreatePost() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               /> */}
-              {title.length < 3? //if title does have an error of a length too short 
-                  (<div>
+              {title.length < 3 ? ( //if title does have an error of a length too short
+                <div>
                   <TextField
                     fullWidth
                     id="searchGames"
@@ -233,8 +228,10 @@ export default function CreatePost() {
                     autoFocus
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                  /> 
-                  </div>) : (<div>
+                  />
+                </div>
+              ) : (
+                <div>
                   <TextField
                     fullWidth
                     id="searchGames"
@@ -245,8 +242,8 @@ export default function CreatePost() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
-                  </div>) 
-                  }
+                </div>
+              )}
               <Grid item xs={0}>
                 <GameSelector onChange={setGame} />
               </Grid>
@@ -291,8 +288,6 @@ export default function CreatePost() {
     </>
   );
 }
-
-
 
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
@@ -404,7 +399,13 @@ const GameSelector = ({ onChange }) => {
           isOptionEqualToValue={(option, value) => option.name === value.name}
           renderOption={(props, option) => <li {...props}>{option.name}</li>}
           renderInput={(params) => (
-            <TextField {...params} label="Game*" minLength={3} maxLength={25} helperText="Must be at least 3 characters" />
+            <TextField
+              {...params}
+              label="Game*"
+              minLength={3}
+              maxLength={25}
+              helperText="Must be at least 3 characters"
+            />
           )}
         />
       )}
@@ -420,7 +421,9 @@ const GameSelectorError = ({ onChange }) => {
   useEffect(() => {
     try {
       if (
-        GameService.searchGames('').then((games) => setGameOptions(games)) === null) {
+        GameService.searchGames('').then((games) => setGameOptions(games)) ===
+        null
+      ) {
         setError(true);
       }
       var test = GameService.searchGames('').then((games) =>
@@ -477,9 +480,8 @@ const GameSelectorError = ({ onChange }) => {
     return filtered;
   };
 
-  return (
-      (value.length < 3?
-      (<div>
+  return value.length < 3 ? (
+    <div>
       <Autocomplete
         autoHighlight
         clearOnBlur
@@ -492,36 +494,43 @@ const GameSelectorError = ({ onChange }) => {
         isOptionEqualToValue={(option, value) => option.name === value.name}
         renderOption={(props, option) => <li {...props}>{option.name}</li>}
         renderInput={(params) => (
-        <div>
-          <TextField
-            {...params}
-            error
-            minLength={3}
-            maxLength={25}
-            label="Game*"
-            helperText="Must be at least 3 characters"
-          />
-        </div>
+          <div>
+            <TextField
+              {...params}
+              error
+              minLength={3}
+              maxLength={25}
+              label="Game*"
+              helperText="Must be at least 3 characters"
+            />
+          </div>
         )}
       />
-       </div>) :
-       (<div>
-        <Autocomplete //if there's no error display this
-          autoHighlight
-          clearOnBlur
-          value={value}
-          onChange={onInputChange}
-          options={gameOptions}
-          disableCloseOnSelect
-          filterOptions={onFilterOptions}
-          getOptionLabel={(o) => (o ? o.name : '')}
-          isOptionEqualToValue={(option, value) => option.name === value.name}
-          renderOption={(props, option) => <li {...props}>{option.name}</li>}
-          renderInput={(params) => (
-            <TextField {...params} label="Game*" minLength={3} maxLength={25} helperText="Must be at least 3 characters" />
-          )}
-        />
-      </div>))
+    </div>
+  ) : (
+    <div>
+      <Autocomplete //if there's no error display this
+        autoHighlight
+        clearOnBlur
+        value={value}
+        onChange={onInputChange}
+        options={gameOptions}
+        disableCloseOnSelect
+        filterOptions={onFilterOptions}
+        getOptionLabel={(o) => (o ? o.name : '')}
+        isOptionEqualToValue={(option, value) => option.name === value.name}
+        renderOption={(props, option) => <li {...props}>{option.name}</li>}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Game*"
+            minLength={3}
+            maxLength={25}
+            helperText="Must be at least 3 characters"
+          />
+        )}
+      />
+    </div>
   );
 };
 
