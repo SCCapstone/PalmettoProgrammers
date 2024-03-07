@@ -63,7 +63,7 @@ export default function CreatePost() {
     };
 
     try {
-      if (game.useEffect === null || game.useState === null) {
+      if (game.useEffect === null || game.useState === null || game.length < 3) {
         setError(true);
       } else {
         const newPost = await PostService.createPost(post);
@@ -244,9 +244,11 @@ export default function CreatePost() {
                   />
                 </div>
               )}
+              <div>
               <Grid item xs={0}>
                 <GameSelector onChange={setGame} />
               </Grid>
+              </div>
               <br />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
@@ -300,6 +302,9 @@ const GameSelector = ({ onChange }) => {
 
   useEffect(() => {
     try {
+      if (value.length < 3) {
+        setError(true);
+      }
       if (
         GameService.searchGames('').then((games) => setGameOptions(games)) ===
         null
@@ -312,6 +317,9 @@ const GameSelector = ({ onChange }) => {
       console.log(test);
       GameService.searchGames('').then((games) => setGameOptions(games));
     } catch (err) {
+      if (value.length < 3) {
+        setError(true);
+      }
       var test = GameService.searchGames('').then((games) =>
         setGameOptions(games),
       );
@@ -361,7 +369,7 @@ const GameSelector = ({ onChange }) => {
 
   return (
     <>
-      {error ? ( //if there's an error display this
+      {error === true || value.length < 3? ( //if there's an error display this
         <div>
           <Autocomplete
             autoHighlight
@@ -480,7 +488,9 @@ const GameSelectorError = ({ onChange }) => {
     return filtered;
   };
 
-  return value.length < 3 ? (
+  return (
+    <>
+    {value.length < 3 || error === true? (
     <div>
       <Autocomplete
         autoHighlight
@@ -497,7 +507,7 @@ const GameSelectorError = ({ onChange }) => {
           <div>
             <TextField
               {...params}
-              error
+              error={value.length < 3}
               minLength={3}
               maxLength={25}
               label="Game*"
@@ -523,6 +533,7 @@ const GameSelectorError = ({ onChange }) => {
         renderInput={(params) => (
           <TextField
             {...params}
+            error={value.length < 3}
             label="Game*"
             minLength={3}
             maxLength={25}
@@ -530,7 +541,8 @@ const GameSelectorError = ({ onChange }) => {
           />
         )}
       />
-    </div>
+    </div>)}
+  </>
   );
 };
 
