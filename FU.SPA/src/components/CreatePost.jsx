@@ -63,7 +63,11 @@ export default function CreatePost() {
     };
 
     try {
-      if (game.useEffect === null || game.useState === null || game.length < 3) {
+      if (
+        game.useEffect === null ||
+        game.useState === null ||
+        game.length < 3
+      ) {
         setError(true);
       } else {
         const newPost = await PostService.createPost(post);
@@ -245,9 +249,9 @@ export default function CreatePost() {
                 </div>
               )}
               <div>
-              <Grid item xs={0}>
-                <GameSelector onChange={setGame} />
-              </Grid>
+                <Grid item xs={0}>
+                  <GameSelector onChange={setGame} />
+                </Grid>
               </div>
               <br />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -369,7 +373,7 @@ const GameSelector = ({ onChange }) => {
 
   return (
     <>
-      {error === true || value.length < 3? ( //if there's an error display this
+      {error === true || value.length < 3 ? ( //if there's an error display this
         <div>
           <Autocomplete
             autoHighlight
@@ -490,59 +494,60 @@ const GameSelectorError = ({ onChange }) => {
 
   return (
     <>
-    {value.length < 3 || error === true? (
-    <div>
-      <Autocomplete
-        autoHighlight
-        clearOnBlur
-        value={value}
-        onChange={onInputChange}
-        options={gameOptions}
-        disableCloseOnSelect
-        filterOptions={onFilterOptions}
-        getOptionLabel={(o) => (o ? o.name : '')}
-        isOptionEqualToValue={(option, value) => option.name === value.name}
-        renderOption={(props, option) => <li {...props}>{option.name}</li>}
-        renderInput={(params) => (
-          <div>
-            <TextField
-              {...params}
-              error={value.length < 3}
-              minLength={3}
-              maxLength={25}
-              label="Game*"
-              helperText="Must be at least 3 characters"
-            />
-          </div>
-        )}
-      />
-    </div>
-  ) : (
-    <div>
-      <Autocomplete //if there's no error display this
-        autoHighlight
-        clearOnBlur
-        value={value}
-        onChange={onInputChange}
-        options={gameOptions}
-        disableCloseOnSelect
-        filterOptions={onFilterOptions}
-        getOptionLabel={(o) => (o ? o.name : '')}
-        isOptionEqualToValue={(option, value) => option.name === value.name}
-        renderOption={(props, option) => <li {...props}>{option.name}</li>}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            error={value.length < 3}
-            label="Game*"
-            minLength={3}
-            maxLength={25}
-            helperText="Must be at least 3 characters"
+      {value.length < 3 || error === true ? (
+        <div>
+          <Autocomplete
+            autoHighlight
+            clearOnBlur
+            value={value}
+            onChange={onInputChange}
+            options={gameOptions}
+            disableCloseOnSelect
+            filterOptions={onFilterOptions}
+            getOptionLabel={(o) => (o ? o.name : '')}
+            isOptionEqualToValue={(option, value) => option.name === value.name}
+            renderOption={(props, option) => <li {...props}>{option.name}</li>}
+            renderInput={(params) => (
+              <div>
+                <TextField
+                  {...params}
+                  error={value.length < 3}
+                  minLength={3}
+                  maxLength={25}
+                  label="Game*"
+                  helperText="Must be at least 3 characters"
+                />
+              </div>
+            )}
           />
-        )}
-      />
-    </div>)}
-  </>
+        </div>
+      ) : (
+        <div>
+          <Autocomplete //if there's no error display this
+            autoHighlight
+            clearOnBlur
+            value={value}
+            onChange={onInputChange}
+            options={gameOptions}
+            disableCloseOnSelect
+            filterOptions={onFilterOptions}
+            getOptionLabel={(o) => (o ? o.name : '')}
+            isOptionEqualToValue={(option, value) => option.name === value.name}
+            renderOption={(props, option) => <li {...props}>{option.name}</li>}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={value.length < 3}
+                label="Game*"
+                minLength={3}
+                maxLength={25}
+                helperText="Must be at least 3 characters"
+              />
+            )}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
