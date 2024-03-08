@@ -45,9 +45,12 @@ export default function Edit({ postId }) {
         //setDetails(postDetails);
         setTitle(postDetails.title);
         setDescription(postDetails.description);
-        if (postDetails.game) {
-          setGame(postDetails.game);
-        }
+        // if (postDetails.game) {
+        //   setGame(postDetails.game);
+        // }
+        postDetails.games
+        console.log(postDetails.game);
+        setGame(postDetails.game);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
@@ -138,7 +141,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             <GameSelector 
-            //value = {game}
+            value = {game}
             onChange={setGame} />
           </Grid>
           <br />
@@ -190,22 +193,25 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
+//const GameSelector = ({ value: defaultVal, onChange }) => {
 const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
+  //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
   const [game, setGame] = useState('');
 
   useEffect(() => {
     GameService.searchGames('').then((games) => setGameOptions(games));
-    const init = async () => {
-    const postDetails = await PostService.getPostDetails(postId);
-      if (user.id !== postDetails.creator.id) {
-        alert('You are not authorized to edit this post');
-        navigate(`/discover`);
-      }
-      setGame(postDetails.game);
-    }
-    init();
+    // const init = async () => {
+    // const postDetails = await PostService.getPostDetails(postId);
+    //   if (user.id !== postDetails.creator.id) {
+    //     alert('You are not authorized to edit this post');
+    //     navigate(`/discover`);
+    //   }
+    //   console.log(postDetails.game);
+    //   setGame(postDetails.game);
+    // }
+    // init();
   }, []);
 
   const onInputChange = (event, newValue) => {
@@ -239,11 +245,12 @@ const GameSelector = ({ onChange }) => {
       clearOnBlur
       //value={game? game : game}
       //value={game? game : null}
+      //value={game}
       value={value}
       //defaultValue={value}
       onChange={onInputChange}
       options={gameOptions}
-      disableCloseOnSelect
+      //disableCloseOnSelect
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
       isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -254,6 +261,7 @@ const GameSelector = ({ onChange }) => {
           autoHighlight
           //value={game? game: game}
           //value={game? game: null}
+          //value={game}
           value={value}
           //defaultValue={value}
           label="Game"
@@ -307,18 +315,20 @@ const TagsSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       multiple
       clearOnBlur
       value={value}
       onChange={onInputChange}
       options={tagOptions}
-      disableCloseOnSelect
+      //disableCloseOnSelect
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => o.name}
       isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
+            autoHighlight
             icon={checkboxIconBlank}
             checkedIcon={checkboxIconChecked}
             style={{ marginRight: 8 }}
