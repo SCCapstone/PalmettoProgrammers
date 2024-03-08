@@ -29,7 +29,7 @@ export default function Edit({ postId }) {
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
-  const [details, setDetails] = useState(null);
+  //const [details, setDetails] = useState(null);
   const navigate = useNavigate();
 
   const { user } = useContext(UserContext);
@@ -45,10 +45,12 @@ export default function Edit({ postId }) {
         //setDetails(postDetails);
         setTitle(postDetails.title);
         setDescription(postDetails.description);
-        setGame(postDetails.gameOptions);
+        // if (postDetails.game) {
+        //   setGame(postDetails.game);
+        // }
         // setStartTime(details.startTime); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
         // setEndTime(details.endTime);
-        setTags(postDetails.tagOptions);
+        //setTags(postDetails.tags);
       } catch (e) {
         console.log(e);
       }
@@ -185,11 +187,20 @@ const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
 const GameSelector = ({ onChange }) => {
-  const [gammeOptions, setGameOptions] = useState([]);
+  const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
 
   useEffect(() => {
     GameService.searchGames('').then((games) => setGameOptions(games));
+    const init = async () => {
+    const postDetails = await PostService.getPostDetails(postId);
+      if (user.id !== postDetails.creator.id) {
+        alert('You are not authorized to edit this post');
+        navigate(`/discover`);
+      }
+      setValue(postDetails.game);
+    }
+    init();
   }, []);
 
   const onInputChange = (event, newValue) => {
@@ -222,7 +233,7 @@ const GameSelector = ({ onChange }) => {
       clearOnBlur
       value={value}
       onChange={onInputChange}
-      options={gammeOptions}
+      options={gameOptions}
       disableCloseOnSelect
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
