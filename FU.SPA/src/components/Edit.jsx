@@ -29,6 +29,7 @@ export default function Edit({ postId }) {
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
+  const [details, setDetails] = useState(null);
   const navigate = useNavigate();
 
   const { user } = useContext(UserContext);
@@ -41,6 +42,13 @@ export default function Edit({ postId }) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
+        setDetails(postDetails);
+        setTitle(details.title);
+        setDescription(details.description);
+        setGame(details.game);
+        // setStartTime(details.startTime);
+        // setEndTime(details.endTime);
+        setTags(details.tags);
       } catch (e) {
         console.log(e);
       }
