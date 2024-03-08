@@ -48,8 +48,10 @@ export default function Edit({ postId }) {
         if (postDetails.game) {
           setGame(postDetails.game);
         }
-        // setStartTime(details.startTime); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
-        // setEndTime(details.endTime);
+        // setStartTime(postDetails.startTime);
+        // setEndTime(postDetails.endTime);
+        // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
+        // setEndTime(postDetails.endTime.toISOString);
         //setTags(postDetails.tags);
       } catch (e) {
         console.log(e);
@@ -191,18 +193,19 @@ const filter = createFilterOptions();
 const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
+  const [game, setGame] = useState('');
 
   useEffect(() => {
     GameService.searchGames('').then((games) => setGameOptions(games));
-    // const init = async () => {
-    // const postDetails = await PostService.getPostDetails(postId);
-    //   if (user.id !== postDetails.creator.id) {
-    //     alert('You are not authorized to edit this post');
-    //     navigate(`/discover`);
-    //   }
-    //   setValue(postDetails.game);
-    // }
-    // init();
+    const init = async () => {
+    const postDetails = await PostService.getPostDetails(postId);
+      if (user.id !== postDetails.creator.id) {
+        alert('You are not authorized to edit this post');
+        navigate(`/discover`);
+      }
+      setGame(postDetails.game);
+    }
+    init();
   }, []);
 
   const onInputChange = (event, newValue) => {
@@ -234,6 +237,8 @@ const GameSelector = ({ onChange }) => {
     <Autocomplete
       autoHighlight
       clearOnBlur
+      //value={game? game : game}
+      //value={game? game : null}
       value={value}
       //defaultValue={value}
       onChange={onInputChange}
@@ -247,6 +252,8 @@ const GameSelector = ({ onChange }) => {
         <TextField
           {...params}
           autoHighlight
+          //value={game? game: game}
+          //value={game? game: null}
           value={value}
           //defaultValue={value}
           label="Game"
