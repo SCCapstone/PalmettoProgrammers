@@ -49,8 +49,8 @@ export default function Edit({ postId }) {
         //   setGame(postDetails.game);
         // }
         postDetails.games
-        console.log(postDetails.game);
-        setGame(postDetails.game);
+        //console.log(postDetails.game);
+        //setGame(postDetails.game);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
@@ -141,7 +141,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             <GameSelector 
-            value = {game}
+            //value = {game}
             onChange={setGame} />
           </Grid>
           <br />
@@ -202,16 +202,16 @@ const GameSelector = ({ onChange }) => {
 
   useEffect(() => {
     GameService.searchGames('').then((games) => setGameOptions(games));
-    // const init = async () => {
-    // const postDetails = await PostService.getPostDetails(postId);
-    //   if (user.id !== postDetails.creator.id) {
-    //     alert('You are not authorized to edit this post');
-    //     navigate(`/discover`);
-    //   }
-    //   console.log(postDetails.game);
-    //   setGame(postDetails.game);
-    // }
-    // init();
+    const init = async () => {
+    const postDetails = await PostService.getPostDetails(postId);
+      if (user.id !== postDetails.creator.id) {
+        alert('You are not authorized to edit this post');
+        navigate(`/discover`);
+      }
+      console.log(postDetails.game);
+      setGame(postDetails.game);
+    }
+    init();
   }, []);
 
   const onInputChange = (event, newValue) => {
@@ -246,7 +246,7 @@ const GameSelector = ({ onChange }) => {
       //value={game? game : game}
       //value={game? game : null}
       //value={game}
-      value={value}
+      value={game}
       //defaultValue={value}
       onChange={onInputChange}
       options={gameOptions}
