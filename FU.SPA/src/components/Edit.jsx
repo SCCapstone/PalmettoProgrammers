@@ -42,20 +42,20 @@ export default function Edit({ postId }) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
-        setDetails(postDetails);
-        setTitle(details.title);
-        setDescription(details.description);
-        setGame(details.game);
-        // setStartTime(details.startTime);
+        //setDetails(postDetails);
+        setTitle(postDetails.title);
+        setDescription(postDetails.description);
+        setGame(postDetails.gameOptions);
+        // setStartTime(details.startTime); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
         // setEndTime(details.endTime);
-        setTags(details.tags);
+        setTags(postDetails.tagOptions);
       } catch (e) {
         console.log(e);
       }
     };
-
+    
     init();
-  });
+  }, []);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
