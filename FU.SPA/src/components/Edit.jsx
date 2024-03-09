@@ -148,6 +148,7 @@ export default function Edit({ postId }) {
           <Grid item xs={12}>
             <GameSelector 
             value = {globalDetails}
+            // onChange={setGame(globalDetails)} />
             onChange={setGame} />
           </Grid>
           <br />
@@ -208,6 +209,7 @@ const GameSelector = ({ onChange }) => {
 
   useEffect(() => {
     GameService.searchGames('').then((games) => setGameOptions(games));
+    //setGame(defaultVal);
     // const init = async () => {
     // const postDetails = await PostService.getPostDetails(postId);
     //   if (user.id !== postDetails.creator.id) {
@@ -253,7 +255,7 @@ const GameSelector = ({ onChange }) => {
       //value={game? game : null}
       //value={game}
       value={value}
-      //defaultValue={game}
+      //defaultValue={defaultVal}
       //defaultValue={value}
       onChange={onInputChange}
       options={gameOptions}
