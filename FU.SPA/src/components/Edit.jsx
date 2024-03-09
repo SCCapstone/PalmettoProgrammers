@@ -22,6 +22,8 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
 
+window.gameDetails = "";
+
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
   const [title, setTitle] = useState('');
@@ -29,7 +31,8 @@ export default function Edit({ postId }) {
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
-  //const [details, setDetails] = useState(null);
+  //const [details, setDetails] = useState('');
+  const [globalDetails, setGlobalDetails] = useState('');
   const navigate = useNavigate();
 
   const { user } = useContext(UserContext);
@@ -51,6 +54,9 @@ export default function Edit({ postId }) {
         //postDetails.games
         console.log(postDetails.game);
         setGame(postDetails.game);
+        gameDetails = postDetails.game;
+        setGlobalDetails(gameDetails);
+        console.log(gameDetails);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
@@ -141,7 +147,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             <GameSelector 
-            //value = {game}
+            value = {globalDetails}
             onChange={setGame} />
           </Grid>
           <br />
@@ -198,20 +204,20 @@ const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
-  const [game, setGame] = useState('');
+  //const [game, setGame] = useState('');
 
   useEffect(() => {
     GameService.searchGames('').then((games) => setGameOptions(games));
-    const init = async () => {
-    const postDetails = await PostService.getPostDetails(postId);
-      if (user.id !== postDetails.creator.id) {
-        alert('You are not authorized to edit this post');
-        navigate(`/discover`);
-      }
-      console.log(postDetails.game);
-      setGame(postDetails.game);
-    }
-    init();
+    // const init = async () => {
+    // const postDetails = await PostService.getPostDetails(postId);
+    //   if (user.id !== postDetails.creator.id) {
+    //     alert('You are not authorized to edit this post');
+    //     navigate(`/discover`);
+    //   }
+    //   console.log(postDetails.game);
+    //   setGame(postDetails.game);
+    // }
+    // init();
   }, []);
 
   const onInputChange = (event, newValue) => {
@@ -247,7 +253,7 @@ const GameSelector = ({ onChange }) => {
       //value={game? game : null}
       //value={game}
       value={value}
-      defaultValue={game}
+      //defaultValue={game}
       //defaultValue={value}
       onChange={onInputChange}
       options={gameOptions}
