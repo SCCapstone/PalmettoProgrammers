@@ -48,9 +48,9 @@ export default function Edit({ postId }) {
         // if (postDetails.game) {
         //   setGame(postDetails.game);
         // }
-        postDetails.games
-        //console.log(postDetails.game);
-        //setGame(postDetails.game);
+        //postDetails.games
+        console.log(postDetails.game);
+        setGame(postDetails.game);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
@@ -246,7 +246,8 @@ const GameSelector = ({ onChange }) => {
       //value={game? game : game}
       //value={game? game : null}
       //value={game}
-      value={game}
+      value={value}
+      defaultValue={game}
       //defaultValue={value}
       onChange={onInputChange}
       options={gameOptions}
@@ -263,6 +264,7 @@ const GameSelector = ({ onChange }) => {
           //value={game? game: null}
           //value={game}
           value={value}
+          //defaultValue={game}
           //defaultValue={value}
           label="Game"
           required
