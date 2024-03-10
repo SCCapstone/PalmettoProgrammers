@@ -134,8 +134,6 @@ export default function Chat({ chatId }) {
         height: '90vh',
         display: 'flex',
         flexDirection: 'column',
-        // position: 'fixed',
-        // bottom: '0',
         right: '5%',
         animation: isNewMessageReceived
           ? 'sparkle 1s ease-in-out infinite'

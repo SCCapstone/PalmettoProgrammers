@@ -147,7 +147,6 @@ const UserProfile = () => {
 
   if (userProfile && !loading) {
     return (
-      // If own profile no styling, else styling
       <div style={isOwnProfile ? {} : { display: 'flex', gap: '20px' }}>
         <div className="profile-wrapper">
           <div
