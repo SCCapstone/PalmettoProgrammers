@@ -12,7 +12,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Label, Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
@@ -27,6 +27,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   // Showing passwords when user wants
   const handleClickShowPassword = () => {
@@ -74,12 +75,12 @@ export default function SignUp() {
     // errors in signup, and redirect to signin/last page if there are no errors
     try {
       await AuthService.signUp(creds);
-      navigate('/SignIn');
+      setSignUpSuccess(true);
       var returnUrl = searchParams.get('returnUrl');
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
       } else {
-        navigate('/SignIn');
+        setSignUpSuccess(true);
       }
     } catch (event) {
       // Parse the error message
@@ -105,6 +106,14 @@ export default function SignUp() {
 
   // Display component
   return (
+    <>
+    {signUpSuccess? //if signup was successful
+      <Grid>
+        <Typography component="h1" variant="h5">Sign Up Successful!</Typography>
+        <Link href="/SignIn">Sign In</Link>
+      </Grid>
+      : "" //if signup was not successful
+    }
     <Container component="main" maxWidth="xs" height="100%">
       <CssBaseline />
       <Box
@@ -180,23 +189,24 @@ export default function SignUp() {
             </Grid>
           </Grid>
           <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            disabled={!isEnabled}
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/SignIn" variant="body2">
-                Already have an account? Sign in
-              </Link>
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={!isEnabled}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="/SignIn" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>
+  </>
   );
 }
