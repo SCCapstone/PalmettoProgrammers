@@ -19,11 +19,14 @@ export default function Navbar() {
 
   const renderProfile = () => (
     <>
-      <Tooltip title="Open settings">
-        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt={user?.username} src={user?.pfpUrl} />
-        </IconButton>
-      </Tooltip>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <Typography textAlign="center">{user?.username}</Typography>
+        <Tooltip title="Open settings">
+          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Avatar alt={user?.username} src={user?.pfpUrl} />
+          </IconButton>
+        </Tooltip>
+      </div>
       <Menu
         sx={{ mt: '45px' }}
         id="menu-appbar"

@@ -155,7 +155,7 @@ const UserProfile = () => {
             transition: 'width 0.3s ease',
           }}
         >
-          <div className="left-content">
+          <div className="left-content" style={{ display: 'flex' }}>
             {renderPfp()}
             <div className="userInfo">
               <p className="userName">{userProfile.username}</p>
