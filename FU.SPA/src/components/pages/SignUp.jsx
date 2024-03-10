@@ -51,14 +51,14 @@ export default function SignUp() {
     setPasswordError('');
   };
 
-  const displaySuccess = () => {
-    return (
-      <Grid>
-        <Typography component={h1} variant={h5}>Sign Up Successful!</Typography>
-        <Link href="/SignIn">Sign In</Link>
-      </Grid>
-    )
-  }
+  // const displaySuccess = () => {
+  //   return (
+  //     <Grid>
+  //       <Typography component={h1} variant={h5}>Sign Up Successful!</Typography>
+  //       <Link href="/SignIn">Sign In</Link>
+  //     </Grid>
+  //   )
+  // };
 
   // Check if all fields are filled
   const isEnabled =
@@ -85,17 +85,19 @@ export default function SignUp() {
     try {
       await AuthService.signUp(creds);
       //navigate('/SignIn');
-      displaySuccess();
+      //displaySuccess();
+      setSignUpSuccess(true);
       var returnUrl = searchParams.get('returnUrl');
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
       } else {
+        setSignUpSuccess(true);
         // if (signUpSuccess === true) {
           //navigate('/SignIn');
           // return (<Typography>Sign Up Successful!</Typography>)
           //navigate('/SignIn');
         // }
-        displaySuccess();
+        //displaySuccess();
         // <Grid>
         //   <Typography>Sign Up Successful!</Typography>
         //   <Button href="/SignIn">Sign In</Button>
@@ -125,6 +127,18 @@ export default function SignUp() {
 
   // Display component
   return (
+    /*
+     * Create a {displaySuccess? : ""}
+     * then in the above areas for the try catch, setsignupsuccess to true/false.
+     */
+    <>
+    {signUpSuccess? //if signup was successful
+      <Grid>
+        <Typography component="h1" variant="h5">Sign Up Successful!</Typography>
+        <Link href="/SignIn">Sign In</Link>
+      </Grid>
+      : "" //if signup was not successful
+    }
     <Container component="main" maxWidth="xs" height="100%">
       <CssBaseline />
       <Box
@@ -257,5 +271,6 @@ export default function SignUp() {
         </Box>
       </Box>
     </Container>
+  </>
   );
 }
