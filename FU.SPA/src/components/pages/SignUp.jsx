@@ -51,15 +51,6 @@ export default function SignUp() {
     setPasswordError('');
   };
 
-  // const displaySuccess = () => {
-  //   return (
-  //     <Grid>
-  //       <Typography component={h1} variant={h5}>Sign Up Successful!</Typography>
-  //       <Link href="/SignIn">Sign In</Link>
-  //     </Grid>
-  //   )
-  // };
-
   // Check if all fields are filled
   const isEnabled =
     username.length > 0 && password.length > 0 && confirmPassword.length > 0;
@@ -84,24 +75,12 @@ export default function SignUp() {
     // errors in signup, and redirect to signin/last page if there are no errors
     try {
       await AuthService.signUp(creds);
-      //navigate('/SignIn');
-      //displaySuccess();
       setSignUpSuccess(true);
       var returnUrl = searchParams.get('returnUrl');
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
       } else {
         setSignUpSuccess(true);
-        // if (signUpSuccess === true) {
-          //navigate('/SignIn');
-          // return (<Typography>Sign Up Successful!</Typography>)
-          //navigate('/SignIn');
-        // }
-        //displaySuccess();
-        // <Grid>
-        //   <Typography>Sign Up Successful!</Typography>
-        //   <Button href="/SignIn">Sign In</Button>
-        // </Grid>
       }
     } catch (event) {
       // Parse the error message
@@ -127,10 +106,6 @@ export default function SignUp() {
 
   // Display component
   return (
-    /*
-     * Create a {displaySuccess? : ""}
-     * then in the above areas for the try catch, setsignupsuccess to true/false.
-     */
     <>
     {signUpSuccess? //if signup was successful
       <Grid>
@@ -229,45 +204,6 @@ export default function SignUp() {
                 </Link>
               </Grid>
             </Grid>
-          {/* {signUpSuccess? //if signup is a success do this
-          <div>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              disabled={!isEnabled}
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/SignIn" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </div>
-          : //if signup isn't successful do this
-          <div>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              disabled={!isEnabled}
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/SignIn" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </div>
-          } */}
         </Box>
       </Box>
     </Container>
