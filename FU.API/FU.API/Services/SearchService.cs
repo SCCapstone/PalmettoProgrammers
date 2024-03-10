@@ -38,7 +38,7 @@ public class SearchService : CommonService, ISearchService
         orderedDbQuery = orderedDbQuery.ThenBy(u => u.UserId);
 
         List<ApplicationUser> applicationUsers = await orderedDbQuery
-            .Skip(query.Offset)
+            .Skip(query.Offset * query.Limit)
             .Take(query.Limit)
             .ToListAsync();
 
@@ -155,7 +155,7 @@ public class SearchService : CommonService, ISearchService
         orderedDbQuery = orderedDbQuery.ThenBy(p => p.Id);
 
         var posts = await orderedDbQuery
-                .Skip(query.Offset)
+                .Skip(query.Offset * query.Limit)
                 .Take(query.Limit)
                 .Include(p => p.Creator)
                 .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
