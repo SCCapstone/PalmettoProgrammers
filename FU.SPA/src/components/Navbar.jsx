@@ -91,7 +91,7 @@ export default function Navbar() {
             color: 'inherit',
             textDecoration: 'none',
             fontSize: '1.7rem',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Forces Unite
