@@ -89,8 +89,14 @@ public class RelationsController : ControllerBase
         query.RelationStatus = status;
         query.UserId = userId;
 
-        var relatedUsers = await _searchService.SearchUsers(query);
+        (var relatedUsers, var totalResults) = await _searchService.SearchUsers(query);
 
-        return Ok(relatedUsers);
+        var response = new
+        {
+            Users = relatedUsers,
+            TotalResults = totalResults
+        };
+
+        return Ok(response);
     }
 }
