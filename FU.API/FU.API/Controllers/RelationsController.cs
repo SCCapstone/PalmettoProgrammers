@@ -91,12 +91,8 @@ public class RelationsController : ControllerBase
 
         (var relatedUsers, var totalResults) = await _searchService.SearchUsers(query);
 
-        var response = new
-        {
-            Users = relatedUsers,
-            TotalResults = totalResults
-        };
+        Response.Headers.Add("Total-Results", totalResults.ToString());
 
-        return Ok(response);
+        return Ok(relatedUsers);
     }
 }

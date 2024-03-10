@@ -48,13 +48,9 @@ public class SearchController : ControllerBase
             postDtos = posts.ToDtos().ToList();
         }
 
-        var response = new
-        {
-            Posts = postDtos,
-            TotalResults = totalResults,
-        };
+        Response.Headers.Add("Total-Results", totalResults.ToString());
 
-        return Ok(response);
+        return Ok(postDtos);
     }
 
     [HttpGet]
@@ -63,12 +59,8 @@ public class SearchController : ControllerBase
     {
         (var users, var totalResults) = await _searchService.SearchUsers(request.ToUserQuery());
 
-        var response = new
-        {
-            Users = users,
-            TotalResults = totalResults,
-        };
+        Response.Headers.Add("Total-Results", totalResults.ToString());
 
-        return Ok(response);
+        return Ok(users);
     }
 }

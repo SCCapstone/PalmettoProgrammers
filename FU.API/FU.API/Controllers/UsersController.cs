@@ -94,13 +94,9 @@ public class UsersController : ControllerBase
             postDtos.Add(post.ToDto(hasJoined: true));
         }
 
-        var response = new
-        {
-            Posts = postDtos,
-            TotalResults = totalResults,
-        };
+        Response.Headers.Add("Total-Results", totalResults.ToString());
 
-        return Ok(response);
+        return Ok(postDtos);
     }
 
     [HttpGet]
