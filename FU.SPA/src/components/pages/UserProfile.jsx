@@ -147,27 +147,30 @@ const UserProfile = () => {
 
   if (userProfile && !loading) {
     return (
-      <div className="page-wrapper">
-        <div
-          className="header"
-          style={{
-            width: isOwnProfile ? '100%' : '55%',
-            transition: 'width 0.3s ease',
-          }}
-        >
-          <div className="left-content" style={{ display: 'flex' }}>
-            {renderPfp()}
-            <div className="userInfo">
-              <p className="userName">{userProfile.username}</p>
-              <p>Online Status: {renderOnlineStatus(userProfile.isOnline)}</p>
-              {userProfile.dob && <p>Age: {age} years old</p>}
+      // If own profile no styling, else styling
+      <div style={isOwnProfile ? {} : { display: 'flex', gap: '20px' }}>
+        <div className="profile-wrapper">
+          <div
+            className="header"
+            style={{
+              minWidth: '700px',
+              transition: 'width 0.3s ease',
+            }}
+          >
+            <div className="left-content" style={{ display: 'flex' }}>
+              {renderPfp()}
+              <div className="userInfo">
+                <p className="userName">{userProfile.username}</p>
+                <p>Online Status: {renderOnlineStatus(userProfile.isOnline)}</p>
+                {userProfile.dob && <p>Age: {age} years old</p>}
+              </div>
+            </div>
+            <div className="right-content" style={{ marginRight: '20px' }}>
+              <SocialRelationActionButton requesteeId={userProfile?.id} />
             </div>
           </div>
-          <div className="right-content">
-            <SocialRelationActionButton requesteeId={userProfile?.id} />
-          </div>
+          <div className="body">{renderBio()}</div>
         </div>
-        <div className="body">{renderBio()}</div>
         {renderChat()}
       </div>
     );
