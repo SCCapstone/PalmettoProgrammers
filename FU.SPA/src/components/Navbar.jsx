@@ -82,7 +82,7 @@ export default function Navbar() {
         <Typography
           noWrap
           component="a"
-          href="/"
+          onClick={() => navigate('/')}
           sx={{
             mr: 2,
             fontFamily:
@@ -91,6 +91,7 @@ export default function Navbar() {
             color: 'inherit',
             textDecoration: 'none',
             fontSize: '1.7rem',
+            cursor: 'pointer',
           }}
         >
           Forces Unite
