@@ -12,7 +12,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Label, Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
@@ -27,6 +27,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   // Showing passwords when user wants
   const handleClickShowPassword = () => {
@@ -49,6 +50,15 @@ export default function SignUp() {
     setConfirmPassword(event.target.value);
     setPasswordError('');
   };
+
+  const displaySuccess = () => {
+    return (
+      <Grid>
+        <Typography component={h1} variant={h5}>Sign Up Successful!</Typography>
+        <Link href="/SignIn">Sign In</Link>
+      </Grid>
+    )
+  }
 
   // Check if all fields are filled
   const isEnabled =
@@ -74,12 +84,22 @@ export default function SignUp() {
     // errors in signup, and redirect to signin/last page if there are no errors
     try {
       await AuthService.signUp(creds);
-      navigate('/SignIn');
+      //navigate('/SignIn');
+      displaySuccess();
       var returnUrl = searchParams.get('returnUrl');
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
       } else {
-        navigate('/SignIn');
+        // if (signUpSuccess === true) {
+          //navigate('/SignIn');
+          // return (<Typography>Sign Up Successful!</Typography>)
+          //navigate('/SignIn');
+        // }
+        displaySuccess();
+        // <Grid>
+        //   <Typography>Sign Up Successful!</Typography>
+        //   <Button href="/SignIn">Sign In</Button>
+        // </Grid>
       }
     } catch (event) {
       // Parse the error message
@@ -180,21 +200,60 @@ export default function SignUp() {
             </Grid>
           </Grid>
           <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            disabled={!isEnabled}
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/SignIn" variant="body2">
-                Already have an account? Sign in
-              </Link>
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={!isEnabled}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="/SignIn" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          {/* {signUpSuccess? //if signup is a success do this
+          <div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={!isEnabled}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="/SignIn" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </div>
+          : //if signup isn't successful do this
+          <div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={!isEnabled}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="/SignIn" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </div>
+          } */}
         </Box>
       </Box>
     </Container>
