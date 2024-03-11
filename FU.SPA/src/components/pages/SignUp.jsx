@@ -107,88 +107,98 @@ export default function SignUp() {
   // Display component
   return (
     <>
-    {signUpSuccess? //if signup was successful
-      <Grid>
-        <Typography component="h1" variant="h5">Sign Up Successful!</Typography>
-        <Link href="/SignIn">Sign In</Link>
-      </Grid>
-      : "" //if signup was not successful
-    }
-    <Container component="main" maxWidth="xs" height="100%">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5" style={{ color: '#FFF' }}>
-          Sign up
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                error={!!usernameError}
-                helperText={usernameError}
-                onChange={handleUsernameChange}
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                type="username"
-                name="username"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                error={!!passwordError}
-                helperText={passwordError}
-                onChange={handlePasswordChange}
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                autoComplete="new-password"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                error={!!passwordError}
-                helperText={passwordError}
-                onChange={handleConfirmPasswordChange}
-                required
-                fullWidth
-                name="confirmPassword"
-                label="Confirm Password"
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="confirmPassword"
-                autoComplete="new-password"
-              />
-            </Grid>
+      {
+        signUpSuccess ? ( //if signup was successful
+          <Grid>
+            <Typography component="h1" variant="h5">
+              Sign Up Successful!
+            </Typography>
+            <Link href="/SignIn">Sign In</Link>
           </Grid>
-          <Button
+        ) : (
+          ''
+        ) //if signup was not successful
+      }
+      <Container component="main" maxWidth="xs" height="100%">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5" style={{ color: '#FFF' }}>
+            Sign up
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  error={!!usernameError}
+                  helperText={usernameError}
+                  onChange={handleUsernameChange}
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  type="username"
+                  name="username"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  error={!!passwordError}
+                  helperText={passwordError}
+                  onChange={handlePasswordChange}
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  autoComplete="new-password"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  error={!!passwordError}
+                  helperText={passwordError}
+                  onChange={handleConfirmPasswordChange}
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                />
+              </Grid>
+            </Grid>
+            <Button
               type="submit"
               fullWidth
               variant="contained"
@@ -204,9 +214,9 @@ export default function SignUp() {
                 </Link>
               </Grid>
             </Grid>
+          </Box>
         </Box>
-      </Box>
-    </Container>
-  </>
+      </Container>
+    </>
   );
 }
