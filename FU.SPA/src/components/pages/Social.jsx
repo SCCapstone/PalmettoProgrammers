@@ -38,7 +38,7 @@ export default function Social() {
   const initialTab = searchParams.get(paramKey.tabOption) || tabOptions.Posts;
   const initialRelation =
     searchParams.get(paramKey.relationOption) || relationOptions.Friends;
-  const initialPage = searchParams.get(paramKey.page) || 1;
+  const initialPage = parseInt(searchParams.get(paramKey.page), 10) || 1;
 
   const queryLimit = 10;
   const [totalResults, setTotalResults] = useState(0);
@@ -85,11 +85,6 @@ export default function Social() {
     }
   }, [tabOption, relationOption, setSearchParams, page]);
 
-  // Go to page 1 when we change the tab option
-  useEffect(() => {
-    setPage(1);
-  }, [tabOption]);
-
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
       return <Posts posts={posts} />;
@@ -107,7 +102,10 @@ export default function Social() {
             labelId="social-option-label"
             value={tabOption}
             label="Social"
-            onChange={(e) => setTabOption(e.target.value)}
+            onChange={(e) => {
+              setTabOption(e.target.value);
+              setPage(1);
+            }}
           >
             {Object.keys(tabOptions).map((option, index) => (
               <MenuItem key={index} value={tabOptions[option]}>
@@ -123,7 +121,10 @@ export default function Social() {
               labelId="status-selector-label"
               label="Relation Status"
               value={relationOption}
-              onChange={(e) => setRelationOption(e.target.value)}
+              onChange={(e) => {
+                setRelationOption(e.target.value);
+                setPage(1);
+              }}
               style={{ minWidth: '150px', textAlign: 'left' }}
             >
               {Object.keys(relationOptions).map((option, index) => (
