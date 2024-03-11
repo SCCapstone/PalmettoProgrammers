@@ -88,10 +88,10 @@ const getStatus = async (userId) => {
  * Use this function to get the relations of a user with other users
  *
  * @param {number} userId Id of the user to get the relations with
- * @param {string} relationStatus The status of the relation {pending|requested|friends|blocked}
+ * @param {object} query query parameters object {limit: number, page: number, relation: string}
  * @returns {List<object>} UserProfiles: UserProfiles of the users with the given relation status
  */
-const getRelations = async (userId, relationStatus) => {
+const getRelations = async (userId, query) => {
   let authHeader = null;
   try {
     authHeader = AuthService.getAuthHeader();
@@ -99,8 +99,18 @@ const getRelations = async (userId, relationStatus) => {
     // Nothing
   }
 
+  let queryString = '';
+  // Limit
+  if (query.limit) {
+    queryString += '&limit=' + query.limit;
+  }
+  // Page
+  if (query.page) {
+    queryString += '&offset=' + (query.page - 1);
+  }
+
   const response = await fetch(
-    `${API_BASE_URL}/relations/${userId}/${relationStatus}`,
+    `${API_BASE_URL}/relations/${userId}/${query.relation}?${queryString}`,
     {
       method: 'GET',
       headers: {
@@ -113,7 +123,9 @@ const getRelations = async (userId, relationStatus) => {
     throw new Error('Error in getting relation status');
   }
 
-  return await response.json();
+  const totalCount = parseInt(response.headers.get('x-total-count'));
+  const responseData = await response.json();
+  return { data: responseData, totalCount: totalCount };
 };
 
 const RelationService = {

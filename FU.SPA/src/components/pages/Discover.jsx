@@ -120,6 +120,7 @@ export default function Discover() {
     timeRangeRadioValue,
     startTime,
     endTime,
+    tabOption,
   ]);
 
   useEffect(() => {
