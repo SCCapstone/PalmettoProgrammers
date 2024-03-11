@@ -36,8 +36,7 @@ const buildPostQueryString = (query) => {
 
   // Page
   if (query.page) {
-    // subtract 1 from page number to make it 0-indexed
-    queryString += '&offset=' + (query.page - 1);
+    queryString += '&page=' + query.page;
   }
   // Limit
   if (query.limit) {
@@ -56,8 +55,7 @@ const buildUserQueryString = (query) => {
 
   // Page
   if (query.page) {
-    // subtract 1 from page number to make it 0-indexed
-    queryString += '&offset=' + (query.page - 1);
+    queryString += '&page=' + query.page;
   }
   // Limit
   if (query.limit) {

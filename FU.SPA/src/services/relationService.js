@@ -1,4 +1,5 @@
 import AuthService from './authService';
+import RequestBuilder from '../helpers/requestBuilder';
 
 import config from '../config';
 const API_BASE_URL = config.API_URL;
@@ -88,7 +89,7 @@ const getStatus = async (userId) => {
  * Use this function to get the relations of a user with other users
  *
  * @param {number} userId Id of the user to get the relations with
- * @param {object} query query parameters object {limit: number, page: number, relation: string}
+ * @param {object} query the query parameters object {limit: number, page: number, relation: string}
  * @returns {List<object>} UserProfiles: UserProfiles of the users with the given relation status
  */
 const getRelations = async (userId, query) => {
@@ -99,15 +100,7 @@ const getRelations = async (userId, query) => {
     // Nothing
   }
 
-  let queryString = '';
-  // Limit
-  if (query.limit) {
-    queryString += '&limit=' + query.limit;
-  }
-  // Page
-  if (query.page) {
-    queryString += '&offset=' + (query.page - 1);
-  }
+  var queryString = RequestBuilder.buildUserQueryString(query);
 
   const response = await fetch(
     `${API_BASE_URL}/relations/${userId}/${query.relation}?${queryString}`,
