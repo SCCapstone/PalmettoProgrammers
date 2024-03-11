@@ -220,7 +220,7 @@ export default function CreatePost() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               /> */}
-              {title.length < 3 ? ( //if title does have an error of a length too short
+              {title.length < 3 || error? ( //if title does have an error of a length too short
                 <div>
                   <TextField
                     fullWidth
