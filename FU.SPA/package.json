@@ -19,6 +19,7 @@
     "@mui/icons-material": "^5.14.15",
     "@mui/material": "^5.14.17",
     "@mui/x-date-pickers": "^6.18.3",
+    "axios": "^1.6.7",
     "chromedriver": "^121.0.0",
     "dayjs": "^1.11.10",
     "eslint-config-prettier": "^9.0.0",

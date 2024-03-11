@@ -48,7 +48,7 @@ public class SearchController : ControllerBase
             postDtos = posts.ToDtos().ToList();
         }
 
-        Response.Headers.Add("Total-Results", totalResults.ToString());
+        Response.Headers.Add("X-total-count", totalResults.ToString());
 
         return Ok(postDtos);
     }
@@ -59,7 +59,7 @@ public class SearchController : ControllerBase
     {
         (var users, var totalResults) = await _searchService.SearchUsers(request.ToUserQuery());
 
-        Response.Headers.Add("Total-Results", totalResults.ToString());
+        Response.Headers.Add("X-total-count", totalResults.ToString());
 
         return Ok(users);
     }

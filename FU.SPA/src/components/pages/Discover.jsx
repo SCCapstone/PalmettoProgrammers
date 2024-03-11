@@ -50,8 +50,8 @@ export default function Discover() {
     Users: 'Users',
   };
 
-  const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
-  const userPerPage = 10;
+  const queryLimit = 10;
+  const [totalResults, setTotalResults] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('o') || tabOptions.Posts;
 
@@ -77,19 +77,6 @@ export default function Discover() {
   );
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
-
-  // index of the last post
-  const lastPost = page * postsPerPage;
-  // index of first
-  const firstPost = lastPost - postsPerPage;
-
-  // each page has correct number of posts
-  const currentPosts = posts.slice(firstPost, lastPost);
-
-  const lastUser = page * userPerPage;
-  const firstUser = lastPost - userPerPage;
-
-  const currentPlayers = players.slice(firstUser, lastUser);
 
   const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
     const paramValue = searchParams.get(paramKey.dateRadio);
@@ -203,6 +190,8 @@ export default function Discover() {
           keywords: searchText,
           games: games,
           tags: tags,
+          limit: queryLimit,
+          page: page,
         };
 
         if (startDate) query.startDate = startDate;
@@ -228,13 +217,17 @@ export default function Discover() {
         }
 
         const response = await SearchService.searchPosts(query);
-        setPosts(response);
+        setPosts(response.data);
+        setTotalResults(response.totalCount);
       } else {
         const query = {
           keywords: searchText,
+          limit: queryLimit,
+          page: page,
         };
         const response = await SearchService.searchUsers(query);
-        setPlayers(response);
+        setPlayers(response.data);
+        setTotalResults(response.totalCount);
       }
     };
 
@@ -308,9 +301,9 @@ export default function Discover() {
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
-      return <Posts posts={currentPosts} />;
+      return <Posts posts={posts} />;
     } else if (tabOption === tabOptions.Users) {
-      return <Users users={currentPlayers} />;
+      return <Users users={players} />;
     }
   };
 
@@ -417,11 +410,7 @@ export default function Discover() {
           <Stack spacing={2}>
             <Typography>Page: {page}</Typography>
             <Pagination
-              count={
-                tabOption === tabOptions.Posts
-                  ? Math.ceil(posts.length / postsPerPage)
-                  : Math.ceil(players.length / userPerPage)
-              }
+              count={Math.ceil(totalResults / queryLimit)}
               page={page}
               onChange={(_, value) => setPage(value)}
               color="secondary"
