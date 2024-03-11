@@ -109,20 +109,6 @@ export default function Discover() {
     paramToDayjs(searchParams, paramKey.endTime),
   );
 
-  // useEffect(() => {
-  //   setPage(1);
-  // }, [
-  //   // games and tags reset the page at their component callbacks
-  //   searchText,
-  //   dateRangeRadioValue,
-  //   startDate,
-  //   endDate,
-  //   timeRangeRadioValue,
-  //   startTime,
-  //   endTime,
-  //   tabOption,
-  // ]);
-
   useEffect(() => {
     const updateSearchParams = async () => {
       setSearchParams(
