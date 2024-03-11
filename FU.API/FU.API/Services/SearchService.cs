@@ -24,7 +24,7 @@ public class SearchService : CommonService, ISearchService
 
         dbQuery = dbQuery.Where(UserContainsKeywords(query.Keywords));
 
-        // Count the number of results before applying limit and offset
+        // Count the total number of results so that the UI can display the correct number of pages
         var totalResults = await dbQuery.CountAsync();
 
         // Sort results
@@ -141,7 +141,7 @@ public class SearchService : CommonService, ISearchService
             }
         }
 
-        // Count the number of results before applying limit and offset
+        // Count the total number of results so that the UI can display the correct number of pages
         var totalResults = await dbQuery.CountAsync();
 
         // Sort results
