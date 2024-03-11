@@ -386,6 +386,7 @@ export default function Discover() {
                 setStartDate(newValues.startDate);
                 setEndDate(newValues.endDate);
                 setDateRangeRadioValue(newValues.radioValue);
+                setPage(1);
               }}
             />
             <SelectTimeRangeFilter
@@ -396,6 +397,7 @@ export default function Discover() {
                 setStartTime(newValues.startTime);
                 setEndTime(newValues.endTime);
                 setTimeRangeRadioValue(newValues.radioValue);
+                setPage(1);
               }}
             />
           </>
