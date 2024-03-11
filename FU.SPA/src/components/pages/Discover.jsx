@@ -109,19 +109,19 @@ export default function Discover() {
     paramToDayjs(searchParams, paramKey.endTime),
   );
 
-  useEffect(() => {
-    setPage(1);
-  }, [
-    // games and tags reset the page at their component callbacks
-    searchText,
-    dateRangeRadioValue,
-    startDate,
-    endDate,
-    timeRangeRadioValue,
-    startTime,
-    endTime,
-    tabOption,
-  ]);
+  // useEffect(() => {
+  //   setPage(1);
+  // }, [
+  //   // games and tags reset the page at their component callbacks
+  //   searchText,
+  //   dateRangeRadioValue,
+  //   startDate,
+  //   endDate,
+  //   timeRangeRadioValue,
+  //   startTime,
+  //   endTime,
+  //   tabOption,
+  // ]);
 
   useEffect(() => {
     const updateSearchParams = async () => {
@@ -226,6 +226,7 @@ export default function Discover() {
           limit: queryLimit,
           page: page,
         };
+
         const response = await SearchService.searchUsers(query);
         setPlayers(response.data);
         setTotalResults(response.totalCount);
@@ -238,10 +239,11 @@ export default function Discover() {
       // if values haven't been loaded don't search
       // this prevents an erronious search from occuring and causing flicker on the initial page load
       if (
-        startDate === undefined ||
-        endDate === undefined ||
-        startTime === undefined ||
-        endTime === undefined
+        (startDate === undefined ||
+          endDate === undefined ||
+          startTime === undefined ||
+          endTime === undefined) &&
+        tabOption === tabOptions.Posts
       )
         return;
 
@@ -317,7 +319,10 @@ export default function Discover() {
             labelId="social-option-label"
             value={tabOption}
             label="Discover"
-            onChange={(e) => setTabOption(e.target.value)}
+            onChange={(e) => {
+              setTabOption(e.target.value);
+              setPage(1);
+            }}
           >
             {Object.keys(tabOptions).map((option, index) => (
               <MenuItem key={index} value={tabOptions[option]}>
