@@ -152,7 +152,7 @@ const UserProfile = () => {
           <div
             className="header"
             style={{
-              minWidth: '700px',
+              minWidth: '400px',
               transition: 'width 0.3s ease',
             }}
           >
@@ -164,11 +164,11 @@ const UserProfile = () => {
                 {userProfile.dob && <p>Age: {age} years old</p>}
               </div>
             </div>
-            <div className="right-content" style={{ marginRight: '20px' }}>
-              <SocialRelationActionButton requesteeId={userProfile?.id} />
-            </div>
           </div>
-          <div className="body">{renderBio()}</div>
+          <div className="body">
+            <SocialRelationActionButton requesteeId={userProfile?.id} />
+            {renderBio()}
+          </div>
         </div>
         {renderChat()}
       </div>
@@ -237,7 +237,7 @@ const SocialRelationActionButton = ({ requesteeId }) => {
     <Button
       onClick={handleClick}
       variant="contained"
-      className="socialRelationActionButton"
+      style={{ margin: 'auto' }}
     >
       {buttonText}
     </Button>
