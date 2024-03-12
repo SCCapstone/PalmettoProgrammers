@@ -60,7 +60,7 @@ export default function Edit({ postId }) {
         // postDetails.game = Counter-Strike 2
         let tempGame = await GameService.findGameByTitle(postDetails.game);
         // tempGame = { id: 4, name: "Counter-Strike 2", imageUrl: "" }
-        setGame([tempGame]);
+        setGame([tempGame.name]);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
@@ -201,7 +201,7 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ value: defaultVal, onChange }) => {
+const GameSelector = ({ value: game, onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
@@ -254,7 +254,7 @@ const GameSelector = ({ value: defaultVal, onChange }) => {
       //value={game? game : game}
       //value={game? game : null}
       //value={game}
-      value={value}
+      value={game}
       //defaultValue={defaultVal}
       //defaultValue={value}
       onChange={onInputChange}
