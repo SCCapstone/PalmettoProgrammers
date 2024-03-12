@@ -153,6 +153,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             <GameSelector value={game} onChange={setGame} />
+            {/* <GameSelector onChange={setGame(game)} /> */}
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
