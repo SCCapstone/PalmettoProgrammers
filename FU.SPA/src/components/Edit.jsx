@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
 
-window.gameDetails = "";
+//window.gameDetails = "";
 
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
@@ -32,7 +32,7 @@ export default function Edit({ postId }) {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   //const [details, setDetails] = useState('');
-  const [globalDetails, setGlobalDetails] = useState('');
+  //const [globalDetails, setGlobalDetails] = useState('');
   const navigate = useNavigate();
 
   const { user } = useContext(UserContext);
@@ -52,15 +52,17 @@ export default function Edit({ postId }) {
         //   setGame(postDetails.game);
         // }
         //postDetails.games
-        console.log(postDetails.game);
+        //console.log(postDetails.game);
         setGame(postDetails.game);
-        gameDetails = postDetails.game;
-        setGlobalDetails(gameDetails);
-        console.log(gameDetails);
+        //gameDetails = postDetails.game;
+        //setGlobalDetails(gameDetails);
+        //console.log(gameDetails);
         // postDetails.game = Counter-Strike 2
         let tempGame = await GameService.findGameByTitle(postDetails.game);
         // tempGame = { id: 4, name: "Counter-Strike 2", imageUrl: "" }
         setGame([tempGame.name]);
+        console.log(game);
+        console.log(tempGame.name);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
@@ -204,6 +206,7 @@ const filter = createFilterOptions();
 const GameSelector = ({ value: game, onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
+  //const [value, setValue] = useState(game || '');
   const [value, setValue] = useState('');
   //const [game, setGame] = useState('');
 
@@ -254,7 +257,8 @@ const GameSelector = ({ value: game, onChange }) => {
       //value={game? game : game}
       //value={game? game : null}
       //value={game}
-      value={game}
+      value={value}
+      //defaultValue={game}
       //defaultValue={defaultVal}
       //defaultValue={value}
       onChange={onInputChange}
@@ -268,10 +272,11 @@ const GameSelector = ({ value: game, onChange }) => {
         <TextField
           {...params}
           autoHighlight
+          //defaultValue={game}
           //value={game? game: game}
           //value={game? game: null}
-          //value={game}
           value={value}
+          //value={game}
           //defaultValue={game}
           //defaultValue={value}
           label="Game"
