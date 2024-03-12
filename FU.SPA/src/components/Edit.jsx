@@ -57,6 +57,10 @@ export default function Edit({ postId }) {
         gameDetails = postDetails.game;
         setGlobalDetails(gameDetails);
         console.log(gameDetails);
+        // postDetails.game = Counter-Strike 2
+        let tempGame = await GameService.findGameByTitle(postDetails.game);
+        // tempGame = { id: 4, name: "Counter-Strike 2", imageUrl: "" }
+        setGame([tempGame]);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
@@ -146,10 +150,7 @@ export default function Edit({ postId }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector 
-            value = {globalDetails}
-            // onChange={setGame(globalDetails)} />
-            onChange={setGame} />
+            <GameSelector value={game} onChange={setGame} />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -200,8 +201,7 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-//const GameSelector = ({ value: defaultVal, onChange }) => {
-const GameSelector = ({ onChange }) => {
+const GameSelector = ({ value: defaultVal, onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
