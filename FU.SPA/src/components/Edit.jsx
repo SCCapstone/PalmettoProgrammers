@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
 
-//window.gameDetails = "";
+window.gameDetails = "";
 
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
@@ -61,6 +61,7 @@ export default function Edit({ postId }) {
         let tempGame = await GameService.findGameByTitle(postDetails.game);
         // tempGame = { id: 4, name: "Counter-Strike 2", imageUrl: "" }
         setGame([tempGame.name]);
+        gameDetails = tempGame.name;
         console.log(game);
         console.log(tempGame.name);
         // setStartTime(postDetails.startTime);
@@ -153,7 +154,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             <GameSelector value={game} onChange={setGame} />
-            {/* <GameSelector onChange={setGame(game)} /> */}
+            {/* <GameSelector onChange={setGame(gameDetails)} />  */}
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -204,7 +205,9 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ value: game, onChange }) => {
+// const GameSelector = ({ value: game, onChange }) => {
+  // const GameSelector = ({ game, onChange }) => {
+  const GameSelector = ({ onChange })   => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
   //const [value, setValue] = useState(game || '');
@@ -257,7 +260,7 @@ const GameSelector = ({ value: game, onChange }) => {
       clearOnBlur
       //value={game? game : game}
       //value={game? game : null}
-      //value={game}
+      // value={game}
       value={value}
       //defaultValue={game}
       //defaultValue={defaultVal}
@@ -277,7 +280,7 @@ const GameSelector = ({ value: game, onChange }) => {
           //value={game? game: game}
           //value={game? game: null}
           value={value}
-          //value={game}
+          // value={game}
           //defaultValue={game}
           //defaultValue={value}
           label="Game"
