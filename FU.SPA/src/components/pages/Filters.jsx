@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 
 export const DateFilterRadioValues = {
@@ -26,26 +26,36 @@ export const SelectDateRangeFilter = ({
   const [startDate, setStartDate] = useState(initialStartDateValue);
   const [endDate, setEndDate] = useState(initialEndDateValue);
 
-  // decides when and how to call onDateRangeChange
-  useEffect(() => {
-    const values = {
-      startDate: null,
-      endDate: null,
-      radioValue: radioValue,
-    };
-
-    if (radioValue === DateFilterRadioValues.upcoming) {
-      values.startDate = dayjs();
-    } else {
-      if (startDate?.isValid()) values.startDate = startDate;
-      if (endDate?.isValid()) values.endDate = endDate;
+  /**
+   * Change handler for the DateRange filter
+   *
+   * @param {string} type the type of value being changed
+   * @param {Object} newValues the new values for the filter {startDate, endDate, radioValue}
+   */
+  const handleFormControlChange = (type, newValues) => {
+    // Set the new value based on the type being changed
+    if (type === 'radio') {
+      setRadioValue(newValues.radioValue);
+    } else if (type === 'startDate') {
+      setStartDate(newValues.startDate);
+    } else if (type === 'endDate') {
+      setEndDate(newValues.endDate);
     }
 
-    if (onChange) onChange(values);
+    // Make sure the dates are valid
+    if (radioValue === DateFilterRadioValues.upcoming) {
+      // When looking for upcoming posts, the start date should be today
+      newValues.startDate = dayjs();
+      newValues.endDate = null;
+    } else {
+      // When looking for a date range, make sure the dates are valid
+      if (!startDate?.isValid()) newValues.startDate = null;
+      if (!endDate?.isValid()) newValues.endDate = null;
+    }
 
-    // ignore onChange
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDate, endDate, radioValue, DateFilterRadioValues.upcoming]);
+    // Call the parent onChange handler
+    if (onChange) onChange(newValues);
+  };
 
   return (
     <FormControl className="section">
@@ -56,7 +66,12 @@ export const SelectDateRangeFilter = ({
         defaultValue={DateFilterRadioValues.upcoming}
         value={radioValue}
         onChange={(event) => {
-          setRadioValue(event.target.value);
+          const newValue = event.target.value;
+          handleFormControlChange('radio', {
+            startDate: startDate,
+            endDate: endDate,
+            radioValue: newValue,
+          });
         }}
       >
         <FormControlLabel
@@ -77,7 +92,11 @@ export const SelectDateRangeFilter = ({
           value={startDate}
           onChange={(newValue) => {
             if (endDate && newValue && newValue > endDate) setEndDate(null);
-            setStartDate(newValue);
+            handleFormControlChange('startDate', {
+              startDate: newValue,
+              endDate: endDate,
+              radioValue: radioValue,
+            });
           }}
           slotProps={{ field: { clearable: true } }}
         />
@@ -87,8 +106,16 @@ export const SelectDateRangeFilter = ({
           value={endDate}
           onChange={(newValue) => {
             if (startDate && newValue && newValue < startDate)
-              setStartDate(null);
-            setEndDate(newValue);
+              handleFormControlChange('startDate', {
+                startDate: null,
+                endDate: endDate,
+                radioValue: radioValue,
+              });
+            handleFormControlChange('endDate', {
+              startDate: startDate,
+              endDate: newValue,
+              radioValue: radioValue,
+            });
           }}
           slotProps={{ field: { clearable: true } }}
         />
@@ -110,24 +137,31 @@ export function SelectTimeRangeFilter({
   const [startTime, setStartTime] = useState(initialStartTimeValue);
   const [endTime, setEndTime] = useState(initialEndTimeValue);
 
-  // decides when and how to call onTimeRangeChange
-  useEffect(() => {
-    const values = {
-      startTime: null,
-      endTime: null,
-      radioValue: radioValue,
-    };
-
-    if (radioValue === SelectTimeRangeRadioValues.between) {
-      if (startTime?.isValid()) values.startTime = startTime;
-      if (endTime?.isValid()) values.endTime = endTime;
+  /**
+   * The change handler for the TimeRange filter
+   *
+   * @param {string} type the type of value being changed
+   * @param {Object} newValues the new values for the filter {startTime, endTime, radioValue}
+   */
+  const handleFormControlChange = (type, newValues) => {
+    // Set the new value based on the type being changed
+    if (type === 'radio') {
+      setRadioValue(newValues.radioValue);
+    } else if (type === 'startTime') {
+      setStartTime(newValues.startTime);
+    } else if (type === 'endTime') {
+      setEndTime(newValues.endTime);
     }
 
-    if (onChange) onChange(values);
+    // Make sure the times are valid
+    if (radioValue === SelectTimeRangeRadioValues.between) {
+      if (!startTime?.isValid()) newValues.startTime = null;
+      if (!endTime?.isValid()) newValues.endTime = null;
+    }
 
-    // ignore onChange
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startTime, endTime, radioValue, SelectTimeRangeRadioValues.any]);
+    // Call the parent onChange handler
+    if (onChange) onChange(newValues);
+  };
 
   return (
     <FormControl className="section">
@@ -138,7 +172,12 @@ export function SelectTimeRangeFilter({
         defaultValue={SelectTimeRangeRadioValues.any}
         value={radioValue}
         onChange={(event) => {
-          setRadioValue(event.target.value);
+          const newValue = event.target.value;
+          handleFormControlChange('radio', {
+            startTime: startTime,
+            endTime: endTime,
+            radioValue: newValue,
+          });
         }}
       >
         <FormControlLabel
@@ -157,14 +196,26 @@ export function SelectTimeRangeFilter({
           label="Start Time"
           disabled={radioValue !== SelectTimeRangeRadioValues.between}
           value={startTime}
-          onChange={(newValue) => setStartTime(newValue)}
+          onChange={(newValue) =>
+            handleFormControlChange('startTime', {
+              startTime: newValue,
+              endTime: endTime,
+              radioValue: radioValue,
+            })
+          }
           slotProps={{ field: { clearable: false } }}
         />
         <TimePicker
           label="End Time"
           disabled={radioValue !== SelectTimeRangeRadioValues.between}
           value={endTime}
-          onChange={(newValue) => setEndTime(newValue)}
+          onChange={(newValue) =>
+            handleFormControlChange('endTime', {
+              startTime: startTime,
+              endTime: newValue,
+              radioValue: radioValue,
+            })
+          }
           slotProps={{ field: { clearable: false } }}
         />
       </LocalizationProvider>

@@ -184,22 +184,29 @@ export default function Discover() {
         if (startDate) query.startDate = startDate;
         if (endDate) query.endDate = endDate;
 
-        if (startTime?.isValid()) {
-          query.startTime = startTime;
+        // Set start date to today if upcoming is selected
+        if (dateRangeRadioValue === DateFilterRadioValues.upcoming)
+          query.startDate = dayjs();
 
-          if (!endTime?.isValid()) {
-            // set end time to 23:59:59 if unset
-            query.endTime = new Date();
-            query.endTime.setHours(23, 59, 59);
+        // We only care about start/end time if radio value is 'between'
+        if (timeRangeRadioValue === SelectTimeRangeRadioValues.between) {
+          if (startTime?.isValid()) {
+            query.startTime = startTime;
+
+            if (!endTime?.isValid()) {
+              // set end time to 23:59:59 if unset
+              query.endTime = new Date();
+              query.endTime.setHours(23, 59, 59);
+            }
           }
-        }
-        if (endTime?.isValid()) {
-          query.endTime = endTime;
+          if (endTime?.isValid()) {
+            query.endTime = endTime;
 
-          if (!startTime?.isValid()) {
-            // set start time to 00:00:00 if unset
-            query.startTime = new Date();
-            query.startTime.setHours(0, 0, 0);
+            if (!startTime?.isValid()) {
+              // set start time to 00:00:00 if unset
+              query.startTime = new Date();
+              query.startTime.setHours(0, 0, 0);
+            }
           }
         }
 
@@ -221,18 +228,6 @@ export default function Discover() {
 
     const submitSearch = async () => {
       updateSearchParams();
-
-      // if values haven't been loaded don't search
-      // this prevents an erronious search from occuring and causing flicker on the initial page load
-      if (
-        (startDate === undefined ||
-          endDate === undefined ||
-          startTime === undefined ||
-          endTime === undefined) &&
-        tabOption === tabOptions.Posts
-      )
-        return;
-
       updateSearchResults();
     };
 
