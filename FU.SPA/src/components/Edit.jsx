@@ -21,8 +21,21 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
+import { useSearchParams } from 'react-router-dom';
 
 window.gameDetails = "";
+
+const paramKey = {
+  endDate: 'endDate',
+  startDate: 'startDate',
+  dateRadio: 'dateRadio',
+  endTime: 'endTime',
+  startTime: 'startTime',
+  timeRadio: 'timeRadio',
+  games: 'games',
+  tags: 'tags',
+  page: 'page',
+};
 
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
@@ -30,12 +43,45 @@ export default function Edit({ postId }) {
   const [startTime, setStartTime] = useState(dayjs());
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
-  const [tags, setTags] = useState([]);
+  //const [tags, setTags] = useState([]);
   //const [details, setDetails] = useState('');
   //const [globalDetails, setGlobalDetails] = useState('');
   const navigate = useNavigate();
-
+  // const [startDate, setStartDate] = useState(
+  //   paramToDayjs(searchParams, paramKey.startDate) || null,
+  // );
+  // const [endDate, setEndDate] = useState(
+  //   paramToDayjs(searchParams, paramKey.endDate) || null,
+  // );
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useContext(UserContext);
+  const [searchText, setSearchText] = useState(searchParams.get('q') || '');
+  const [games, setGames] = useState(
+    searchParams
+      .get(paramKey.games)
+      ?.split(',')
+      .map((id) => ({ id })) ?? [],
+  );
+  const [tags, setTags] = useState(
+    searchParams
+      .get(paramKey.tags)
+      ?.split(',')
+      .map((id) => ({ id })) ?? [],
+  );
+  const [gameOptions, setGameOptions] = useState([]);
+  const [tagOptions, setTagOptions] = useState([]);
+
+  useEffect(() => {
+    // Fetch games and tags for selectors
+    const fetchOptions = async () => {
+      const games = await GameService.searchGames('');
+      const tags = await TagService.searchTags('');
+      setGameOptions(games);
+      setTagOptions(tags);
+    };
+
+    fetchOptions();
+  }, []);
 
   useEffect(() => {
     const init = async () => {
@@ -54,6 +100,8 @@ export default function Edit({ postId }) {
         //postDetails.games
         //console.log(postDetails.game);
         setGame(postDetails.game);
+
+        
         //gameDetails = postDetails.game;
         //setGlobalDetails(gameDetails);
         //console.log(gameDetails);
@@ -76,6 +124,14 @@ export default function Edit({ postId }) {
     
     init();
   }, []);
+
+  // const paramToDayjs = (searchParams, paramKey) => {
+  //   let paramValue = searchParams.get(paramKey);
+  //   if (!paramValue || !dayjs(paramValue).isValid()) return undefined;
+  //   return dayjs(paramValue);
+  // };
+
+  
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
