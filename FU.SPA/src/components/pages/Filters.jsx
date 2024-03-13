@@ -43,14 +43,14 @@ export const SelectDateRangeFilter = ({
     }
 
     // Make sure the dates are valid
-    if (radioValue === DateFilterRadioValues.upcoming) {
+    if (newValues.radioValue === DateFilterRadioValues.upcoming) {
       // When looking for upcoming posts, the start date should be today
       newValues.startDate = dayjs();
       newValues.endDate = null;
     } else {
       // When looking for a date range, make sure the dates are valid
-      if (!startDate?.isValid()) newValues.startDate = null;
-      if (!endDate?.isValid()) newValues.endDate = null;
+      if (!newValues.startDate?.isValid()) newValues.startDate = null;
+      if (!newValues.endDate?.isValid()) newValues.endDate = null;
     }
 
     // Call the parent onChange handler
@@ -154,9 +154,9 @@ export function SelectTimeRangeFilter({
     }
 
     // Make sure the times are valid
-    if (radioValue === SelectTimeRangeRadioValues.between) {
-      if (!startTime?.isValid()) newValues.startTime = null;
-      if (!endTime?.isValid()) newValues.endTime = null;
+    if (newValues.radioValue === SelectTimeRangeRadioValues.between) {
+      if (!newValues.startTime?.isValid()) newValues.startTime = null;
+      if (!newValues.endTime?.isValid()) newValues.endTime = null;
     }
 
     // Call the parent onChange handler
