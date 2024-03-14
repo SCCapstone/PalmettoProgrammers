@@ -1,6 +1,31 @@
 .selectors-wrapper {
   display: flex;
-  padding-top: 15px;
   padding-bottom: 15px;
   gap: 20px;
+  flex-basis: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+}
+
+#search-bar {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  flex-basis: auto; 
+  flex-grow: 0.5;
+  gap: 20px;
+  
+}
+
+.page-content {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20pt;
+}
+
+.page-content > div:nth-child(2) {
+  flex-grow: 1;
 }
