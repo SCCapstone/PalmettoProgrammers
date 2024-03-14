@@ -300,11 +300,14 @@ export default function Discover() {
       return (
         <SortOptionsSelector
           options={config.POST_SORT_OPTIONS}
-          onChange={setSortOption}
+          onChange={(newValue) => {
+            setSortOption(newValue);
+            setPage(1);
+          }}
         />
       );
     }
-  }
+  };
 
   const renderTabSelectors = () => {
     return (
