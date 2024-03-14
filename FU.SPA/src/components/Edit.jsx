@@ -24,6 +24,15 @@ import UserContext from '../context/userContext';
 
 window.gameDetails = "";
 
+// globalGameDetails = (value) => {
+//   if (gameDetails === null) {
+//     gameDetails = "";
+//     console.log(gameDetails);
+//   }
+//   gameDetails = value;
+//   console.log(gameDetails);
+// }
+
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
   const [title, setTitle] = useState('');
@@ -32,7 +41,7 @@ export default function Edit({ postId }) {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   //const [details, setDetails] = useState('');
-  const [globalDetails, setGlobalDetails] = useState('');
+  //const [globalDetails, setGlobalDetails] = useState('');
   const navigate = useNavigate();
 
   const { user } = useContext(UserContext);
@@ -46,25 +55,27 @@ export default function Edit({ postId }) {
           navigate(`/discover`);
         }
         //setDetails(postDetails);
-        setTitle(postDetails.title);
-        setDescription(postDetails.description);
+        setTitle(postDetails.title); //works
+        setDescription(postDetails.description); //works
         // if (postDetails.game) {
         //   setGame(postDetails.game);
         // }
         //postDetails.games
-        console.log(postDetails.game);
-        setGame(postDetails.game);
-        gameDetails = postDetails.game;
-        setGlobalDetails(gameDetails);
-        console.log(gameDetails);
-        setStartTime(dayjs(postDetails.startTime));
-        setEndTime(dayjs(postDetails.endTime));
-        console.log(startTime);
+        
+        //setGame(postDetails.game);
+        //console.log(game);
+        //gameDetails = postDetails.game;
+        //globalGameDetails(game);
+        //console.log(gameDetails);
+        setStartTime(dayjs(postDetails.startTime)); //works
+        setEndTime(dayjs(postDetails.endTime)); //works
+        //console.log(startTime);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
         // setEndTime(postDetails.endTime.toISOString);
-        //setTags(postDetails.tags);
+        setTags(postDetails.tags);
+        console.log(tags);
       } catch (e) {
         console.log(e);
       }
@@ -150,7 +161,8 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             <GameSelector 
-            value = {globalDetails}
+            //value = {globalDetails}
+            //inputValue = {game}
             // onChange={setGame(globalDetails)} />
             onChange={setGame} />
           </Grid>
@@ -204,7 +216,8 @@ const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
 //const GameSelector = ({ value: defaultVal, onChange }) => {
-const GameSelector = ({ onChange }) => {
+// const GameSelector = ({ inputValue: game, onChange }) => {
+  const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
@@ -257,7 +270,10 @@ const GameSelector = ({ onChange }) => {
       //value={game? game : game}
       //value={game? game : null}
       //value={game}
+      //value={String(gameDetails)}
       value={value}
+      //defaultValue={gameDetails}
+      //inputValue = {game}
       //defaultValue={defaultVal}
       //defaultValue={value}
       onChange={onInputChange}
@@ -274,6 +290,7 @@ const GameSelector = ({ onChange }) => {
           //value={game? game: game}
           //value={game? game: null}
           //value={game}
+          //value={String(gameDetails)}
           value={value}
           //defaultValue={game}
           //defaultValue={value}
