@@ -15,7 +15,9 @@ const getConnectedPosts = async (query) => {
     throw new Error('Error getting posts');
   }
 
-  return await response.json();
+  const totalCount = parseInt(response.headers.get('x-total-count'));
+  const responseData = await response.json();
+  return { data: responseData, totalCount: totalCount };
 };
 
 const getConnectedGroups = async () => {

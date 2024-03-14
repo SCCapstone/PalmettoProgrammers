@@ -48,7 +48,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         });
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery());
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery());
 
         // Assert
         Assert.Single(posts);
@@ -79,7 +79,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         });
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             StartOnOrAfterTime = searchTime,
         });
@@ -113,7 +113,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         });
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             EndOnOrBeforeTime = searchTime,
         });
@@ -147,7 +147,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         });
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             StartOnOrAfterDate = searchDate,
         });
@@ -181,7 +181,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         });
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             EndOnOrBeforeDate = searchDate,
         });
@@ -214,7 +214,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         });
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             StartOnOrAfterDate = DateOnly.FromDateTime(DateTime.UtcNow),
         });
