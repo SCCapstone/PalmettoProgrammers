@@ -84,17 +84,19 @@ public class UsersController : ControllerBase
         var query = request.ToPostQuery();
         query.UserId = user.UserId;
 
-        var posts = await _searchService.SearchPosts(query);
+        (var posts, var totalResults) = await _searchService.SearchPosts(query);
 
-        var response = new List<PostResponseDTO>(posts.Count());
+        var postDtos = new List<PostResponseDTO>(posts.Count());
 
         // for each resonse set has joined to true
         foreach (var post in posts)
         {
-            response.Add(post.ToDto(hasJoined: true));
+            postDtos.Add(post.ToDto(hasJoined: true));
         }
 
-        return Ok(response);
+        Response.Headers.Add("X-total-count", totalResults.ToString());
+
+        return Ok(postDtos);
     }
 
     [HttpGet]

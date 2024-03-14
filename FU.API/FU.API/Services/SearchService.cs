@@ -18,11 +18,14 @@ public class SearchService : CommonService, ISearchService
         _dbContext = dbContext;
     }
 
-    public async Task<List<UserProfile>> SearchUsers(UserQuery query)
+    public async Task<(List<UserProfile>, int TotalResults)> SearchUsers(UserQuery query)
     {
         var dbQuery = GetUsersDbQuery(query);
 
         dbQuery = dbQuery.Where(UserContainsKeywords(query.Keywords));
+
+        // Count the total number of results so that the UI can display the correct number of pages
+        var totalResults = await dbQuery.CountAsync();
 
         // Sort results
         IOrderedQueryable<ApplicationUser> orderedDbQuery = query.SortDirection == SortDirection.Ascending
@@ -35,14 +38,14 @@ public class SearchService : CommonService, ISearchService
         orderedDbQuery = orderedDbQuery.ThenBy(u => u.UserId);
 
         List<ApplicationUser> applicationUsers = await orderedDbQuery
-            .Skip(query.Offset)
+            .Skip((query.Page - 1) * query.Limit)
             .Take(query.Limit)
             .ToListAsync();
 
-        return applicationUsers.ToProfiles().ToList();
+        return (applicationUsers.ToProfiles().ToList(), totalResults);
     }
 
-    public async Task<List<Post>> SearchPosts(PostQuery query)
+    public async Task<(List<Post>, int TotalResults)> SearchPosts(PostQuery query)
     {
         var dbQuery = GetPostsDbQuery(query);
 
@@ -138,6 +141,9 @@ public class SearchService : CommonService, ISearchService
             }
         }
 
+        // Count the total number of results so that the UI can display the correct number of pages
+        var totalResults = await dbQuery.CountAsync();
+
         // Sort results
         IOrderedQueryable<Post> orderedDbQuery = query.SortDirection == SortDirection.Ascending
             ? dbQuery.OrderBy(
@@ -148,13 +154,15 @@ public class SearchService : CommonService, ISearchService
         // Always end ordering by Id to ensure order is unique. This ensures order is consistent across calls.
         orderedDbQuery = orderedDbQuery.ThenBy(p => p.Id);
 
-        return await orderedDbQuery
-                .Skip(query.Offset)
+        var posts = await orderedDbQuery
+                .Skip((query.Page - 1) * query.Limit)
                 .Take(query.Limit)
                 .Include(p => p.Creator)
                 .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
                 .Include(p => p.Game)
                 .ToListAsync();
+
+        return (posts, totalResults);
     }
 
     // Determines if a keyword is a user's username or bio
