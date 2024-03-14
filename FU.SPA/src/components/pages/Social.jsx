@@ -42,10 +42,11 @@ export default function Social() {
   useEffect(() => {
     const loadContent = async () => {
       if (tabOption === tabOptions.Posts) {
-        // Pass in empty object for later query parameters
         var query = {
           limit: 100,
+          keyword: searchText,
         };
+ 
         UserService.getConnectedPosts(query).then(setPosts);
       } else {
         RelationService.getRelations(user.id, relationOption).then(setUsers);
@@ -61,7 +62,41 @@ export default function Social() {
     } else {
       setSearchParams({ o: tabOption, r: relationOption });
     }
-  }, [tabOption, relationOption, tabOptions.Posts, setSearchParams]);
+    const updateSearchParams = async () => {
+      setSearchParams(
+        (params) => {
+          if (searchText) params.set('q', searchText);
+          return params;
+        },
+        { replace: true },
+      );
+    };
+
+    const updateSearchResults = async () => {
+      if (tabOption === tabOptions.Posts) {
+        const query = {
+          keywords: searchText,
+        };
+
+        const response = await UserService.getConnectedPosts(query);
+        setPosts(response);
+      } else {
+        const query = {
+          keywords: searchText,
+        };
+        const response = await RelationService.getRelations(query);
+        setPlayers(response);
+      }
+    };
+
+    const submitSearch = async () => {
+      updateSearchParams();
+
+      updateSearchResults();
+    };
+
+    submitSearch();
+  }, [tabOption, relationOption, tabOptions.Posts, searchText, setSearchParams]);
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
