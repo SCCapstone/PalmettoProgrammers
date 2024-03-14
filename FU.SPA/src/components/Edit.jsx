@@ -21,21 +21,8 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
-import { useSearchParams } from 'react-router-dom';
 
 window.gameDetails = "";
-
-const paramKey = {
-  endDate: 'endDate',
-  startDate: 'startDate',
-  dateRadio: 'dateRadio',
-  endTime: 'endTime',
-  startTime: 'startTime',
-  timeRadio: 'timeRadio',
-  games: 'games',
-  tags: 'tags',
-  page: 'page',
-};
 
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
@@ -43,45 +30,12 @@ export default function Edit({ postId }) {
   const [startTime, setStartTime] = useState(dayjs());
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
-  //const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState([]);
   //const [details, setDetails] = useState('');
-  //const [globalDetails, setGlobalDetails] = useState('');
+  const [globalDetails, setGlobalDetails] = useState('');
   const navigate = useNavigate();
-  // const [startDate, setStartDate] = useState(
-  //   paramToDayjs(searchParams, paramKey.startDate) || null,
-  // );
-  // const [endDate, setEndDate] = useState(
-  //   paramToDayjs(searchParams, paramKey.endDate) || null,
-  // );
-  const [searchParams, setSearchParams] = useSearchParams();
+
   const { user } = useContext(UserContext);
-  const [searchText, setSearchText] = useState(searchParams.get('q') || '');
-  const [games, setGames] = useState(
-    searchParams
-      .get(paramKey.games)
-      ?.split(',')
-      .map((id) => ({ id })) ?? [],
-  );
-  const [tags, setTags] = useState(
-    searchParams
-      .get(paramKey.tags)
-      ?.split(',')
-      .map((id) => ({ id })) ?? [],
-  );
-  const [gameOptions, setGameOptions] = useState([]);
-  const [tagOptions, setTagOptions] = useState([]);
-
-  useEffect(() => {
-    // Fetch games and tags for selectors
-    const fetchOptions = async () => {
-      const games = await GameService.searchGames('');
-      const tags = await TagService.searchTags('');
-      setGameOptions(games);
-      setTagOptions(tags);
-    };
-
-    fetchOptions();
-  }, []);
 
   useEffect(() => {
     const init = async () => {
@@ -98,20 +52,14 @@ export default function Edit({ postId }) {
         //   setGame(postDetails.game);
         // }
         //postDetails.games
-        //console.log(postDetails.game);
+        console.log(postDetails.game);
         setGame(postDetails.game);
-
-        
-        //gameDetails = postDetails.game;
-        //setGlobalDetails(gameDetails);
-        //console.log(gameDetails);
-        // postDetails.game = Counter-Strike 2
-        let tempGame = await GameService.findGameByTitle(postDetails.game);
-        // tempGame = { id: 4, name: "Counter-Strike 2", imageUrl: "" }
-        setGame([tempGame.name]);
-        gameDetails = tempGame.name;
-        console.log(game);
-        console.log(tempGame.name);
+        gameDetails = postDetails.game;
+        setGlobalDetails(gameDetails);
+        console.log(gameDetails);
+        setStartTime(dayjs(postDetails.startTime));
+        setEndTime(dayjs(postDetails.endTime));
+        console.log(startTime);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
@@ -124,14 +72,6 @@ export default function Edit({ postId }) {
     
     init();
   }, []);
-
-  // const paramToDayjs = (searchParams, paramKey) => {
-  //   let paramValue = searchParams.get(paramKey);
-  //   if (!paramValue || !dayjs(paramValue).isValid()) return undefined;
-  //   return dayjs(paramValue);
-  // };
-
-  
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
@@ -209,8 +149,10 @@ export default function Edit({ postId }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector value={game} onChange={setGame} />
-            {/* <GameSelector onChange={setGame(gameDetails)} />  */}
+            <GameSelector 
+            value = {globalDetails}
+            // onChange={setGame(globalDetails)} />
+            onChange={setGame} />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -261,12 +203,10 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-// const GameSelector = ({ value: game, onChange }) => {
-  // const GameSelector = ({ game, onChange }) => {
-  const GameSelector = ({ onChange })   => {
+//const GameSelector = ({ value: defaultVal, onChange }) => {
+const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
-  //const [value, setValue] = useState(game || '');
   const [value, setValue] = useState('');
   //const [game, setGame] = useState('');
 
@@ -316,9 +256,8 @@ const filter = createFilterOptions();
       clearOnBlur
       //value={game? game : game}
       //value={game? game : null}
-      // value={game}
+      //value={game}
       value={value}
-      //defaultValue={game}
       //defaultValue={defaultVal}
       //defaultValue={value}
       onChange={onInputChange}
@@ -332,11 +271,10 @@ const filter = createFilterOptions();
         <TextField
           {...params}
           autoHighlight
-          //defaultValue={game}
           //value={game? game: game}
           //value={game? game: null}
+          //value={game}
           value={value}
-          // value={game}
           //defaultValue={game}
           //defaultValue={value}
           label="Game"
