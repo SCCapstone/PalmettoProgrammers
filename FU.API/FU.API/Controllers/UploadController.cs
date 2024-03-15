@@ -25,20 +25,22 @@ public class UploadController : ControllerBase
 
         bitmap = CropToCenteredSquare(bitmap);
         bitmap = ResizeToAvatarSize(bitmap);
-
-        using (MemoryStream memStream = new MemoryStream())
-        {
-            using SKManagedWStream wstream = new SKManagedWStream(memStream);
-
-            int quality = 80; // from 0-100
-            bool encodeSuccess = bitmap.Encode(wstream, SKEncodedImageFormat.Jpeg, quality);
-
-            memStream.Seek(0, SeekOrigin.Begin);
-
-            await SaveToTempFileAsync(memStream);
-        }
+        await SaveToTempStorageAsync(bitmap);
 
         return Ok();
+    }
+
+    private static async Task SaveToTempStorageAsync(SKBitmap bitmap)
+    {
+        using MemoryStream memStream = new MemoryStream();
+        using SKManagedWStream wstream = new SKManagedWStream(memStream);
+
+        int quality = 80; // from 0-100
+        bool encodeSuccess = bitmap.Encode(wstream, SKEncodedImageFormat.Jpeg, quality);
+
+        memStream.Seek(0, SeekOrigin.Begin);
+
+        await SaveToTempFileAsync(memStream);
     }
 
     private static SKBitmap ResizeToAvatarSize(in SKBitmap bitmap)
