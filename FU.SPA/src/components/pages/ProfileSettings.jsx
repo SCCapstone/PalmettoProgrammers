@@ -87,11 +87,7 @@ export default function ProfileSettings() {
               onChange={(newValue) => setDateOfBirth(newValue)}
             />
           </LocalizationProvider>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-          >
+          <Button type="submit" fullWidth variant="contained">
             Update Profile
           </Button>
         </Box>
