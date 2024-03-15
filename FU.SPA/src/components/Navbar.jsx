@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import UserContext from '../context/userContext';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,6 +16,37 @@ export default function Navbar() {
   const { user, logout } = useContext(UserContext);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const [previousPath, setPreviousPath] = useState(location.pathname);
+  const [currentPath, setCurrentPath] = useState(location.pathname);
+
+  useEffect(() => {
+    setPreviousPath(currentPath);
+    setCurrentPath(location.pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
+
+  const isActiveMenuItem = (menuItemTitle) => {
+    // If the current path contains the menuItemTitle and it's not the post page, then it is active
+    const containsMatch =
+      currentPath.includes(menuItemTitle) && !currentPath.includes('post');
+
+    const isPostPage = currentPath.includes('post');
+    var postMatch = isPostPage && previousPath.includes(menuItemTitle);
+
+    // Discover active if post page, checking for discover, and previous path is a post
+    // This is a special case for when the post page is refreshed
+    if (
+      isPostPage &&
+      menuItemTitle === 'discover' &&
+      previousPath.includes('post')
+    ) {
+      postMatch = true;
+    }
+
+    return containsMatch || postMatch;
+  };
 
   const renderProfile = () => (
     <>
@@ -97,16 +128,35 @@ export default function Navbar() {
           Forces Unite
         </Typography>
 
-        <Box sx={{ display: 'flex', flexGrow: 1, flexWrap: 'nowrap' }}>
-          <Button color="inherit" onClick={() => navigate('/discover')}>
+        <Box
+          sx={{
+            height: '64px',
+            display: 'flex',
+            flexGrow: 1,
+            flexWrap: 'nowrap',
+          }}
+        >
+          <Button
+            className={isActiveMenuItem('discover') ? 'active' : ''}
+            color="inherit"
+            onClick={() => navigate('/discover')}
+          >
             Discover
           </Button>
           {user && (
             <>
-              <Button color="inherit" onClick={() => navigate('/social')}>
+              <Button
+                color="inherit"
+                className={isActiveMenuItem('social') ? 'active' : ''}
+                onClick={() => navigate('/social')}
+              >
                 Social
               </Button>
-              <Button color="inherit" onClick={() => navigate('/create')}>
+              <Button
+                color="inherit"
+                className={isActiveMenuItem('create') ? 'active' : ''}
+                onClick={() => navigate('/create')}
+              >
                 Create
               </Button>
             </>
