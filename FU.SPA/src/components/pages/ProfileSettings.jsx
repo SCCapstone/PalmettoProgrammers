@@ -7,6 +7,7 @@ import {
   Avatar,
   Stack,
   Paper,
+  Alert,
 } from '@mui/material';
 import { useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -126,9 +127,11 @@ const UploadAvatar = () => {
   const [file, setFile] = useState();
   const [uploadedImageId, setUploadedAvatarId] = useState();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
 
   const handleFileChange = async (event) => {
     event.preventDefault();
+    setError();
 
     if (!event.target.files) {
       setFile();
@@ -138,9 +141,15 @@ const UploadAvatar = () => {
     setLoading(true);
     setFile(event.target.files[0]);
 
-    const response = await AvatarService.upload(event.target.files[0]);
+    try {
+      const response = await AvatarService.upload(event.target.files[0]);
+      setUploadedAvatarId(response.id);
+    } catch (error) {
+      setError(error.message);
+      setUploadedAvatarId();
+      setFile();
+    }
 
-    setUploadedAvatarId(response.id);
     setLoading(false);
   };
 
@@ -179,6 +188,7 @@ const UploadAvatar = () => {
           </Stack>
         </Paper>
       )}
+      {error && <Alert severity="error">{error}</Alert>}
     </>
   );
 };
