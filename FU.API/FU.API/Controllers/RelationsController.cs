@@ -89,7 +89,9 @@ public class RelationsController : ControllerBase
         query.RelationStatus = status;
         query.UserId = userId;
 
-        var relatedUsers = await _searchService.SearchUsers(query);
+        (var relatedUsers, var totalResults) = await _searchService.SearchUsers(query);
+
+        Response.Headers.Add("X-total-count", totalResults.ToString());
 
         return Ok(relatedUsers);
     }

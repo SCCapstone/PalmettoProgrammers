@@ -42,7 +42,7 @@ public class SearchServiceSearchUsersTests : IDisposable
         await TestsHelper.CreateUserAsync(_dbContext);
 
         // Act
-        var userProfiles = await _searchService.SearchUsers(new UserQuery());
+        (var userProfiles, var totalResults) = await _searchService.SearchUsers(new UserQuery());
 
         // Assert
         Assert.Single(userProfiles);
@@ -70,7 +70,7 @@ public class SearchServiceSearchUsersTests : IDisposable
         await _userService.UpdateUserProfile(new UserProfile() { Bio = "Bio3", Id = user3.UserId });
 
         // Act
-        var userProfiles = await _searchService.SearchUsers(new UserQuery() { Keywords = new() { "user2", "bio3" } });
+        (var userProfiles, var totalResults) = await _searchService.SearchUsers(new UserQuery() { Keywords = new() { "user2", "bio3" } });
 
         // Assert
         Assert.Equal(2, userProfiles.Count);

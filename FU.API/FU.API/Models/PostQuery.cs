@@ -13,7 +13,7 @@ public record PostQuery
     public SortDirection? SortDirection { get; set; } = null;
     public PostSortType? SortType { get; set; } = null;
     public int Limit { get; set; } = 20;
-    public int Offset { get; set; } = 0;
+    public int Page { get; set; } = 1;
 
     // For user related posts
     public int? UserId { get; set; } = null;

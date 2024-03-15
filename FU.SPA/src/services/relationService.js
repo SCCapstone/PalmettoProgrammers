@@ -1,5 +1,6 @@
 import AuthService from './authService';
 import RequestBuilder from '../helpers/requestBuilder';
+import RequestBuilder from '../helpers/requestBuilder';
 
 import config from '../config';
 const API_BASE_URL = config.API_URL;
@@ -89,7 +90,7 @@ const getStatus = async (userId) => {
  * Use this function to get the relations of a user with other users
  *
  * @param {number} userId Id of the user to get the relations with
- * @param {string} relationStatus The status of the relation {pending|requested|friends|blocked}
+ * @param {object} query the query parameters object {limit: number, page: number, relation: string}
  * @returns {List<object>} UserProfiles: UserProfiles of the users with the given relation status
  */
 const getRelations = async (userId, relationStatus, query) => {
@@ -99,9 +100,11 @@ const getRelations = async (userId, relationStatus, query) => {
   } catch {
     // Nothing
   }
-  const queryString = RequestBuilder.buildUserQueryString(query);
+
+  var queryString = RequestBuilder.buildUserQueryString(query);
+
   const response = await fetch(
-    `${API_BASE_URL}/relations/${userId}/${relationStatus}?${queryString}`,
+    `${API_BASE_URL}/relations/${userId}/${query.relation}?${queryString}`,
     {
       method: 'GET',
       headers: {
@@ -114,7 +117,9 @@ const getRelations = async (userId, relationStatus, query) => {
     throw new Error('Error in getting relation status');
   }
 
-  return await response.json();
+  const totalCount = parseInt(response.headers.get('x-total-count'));
+  const responseData = await response.json();
+  return { data: responseData, totalCount: totalCount };
 };
 
 const RelationService = {
