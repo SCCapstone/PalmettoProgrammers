@@ -5,15 +5,14 @@ using FU.API.Services;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UploadController : ControllerBase
+public class AvatarController : ControllerBase
 {
     [HttpPost]
-    [Route("avatar")]
-    public async Task<IActionResult> UploadAvatar(IFormFile formFile)
+    public async Task<IActionResult> UploadAvatar(IFormFile avatarFile)
     {
-        using var stream = formFile.OpenReadStream();
+        using var stream = avatarFile.OpenReadStream();
         using Stream avatarFileStream = AvatarService.ConvertToAvatarImageFile(stream);
-        await StorageService.SaveToTempFileAsync(avatarFileStream);
+        Guid fileId = await TemporaryStorageService.SaveToFileAsync(avatarFileStream);
 
         return Ok();
     }

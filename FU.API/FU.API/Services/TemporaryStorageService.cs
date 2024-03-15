@@ -2,12 +2,12 @@ namespace FU.API.Services;
 
 using System.IO;
 
-public static class StorageService
+public static class TemporaryStorageService
 {
-    public static async Task<Guid> SaveToTempFileAsync(Stream stream)
+    public static async Task<Guid> SaveToFileAsync(Stream stream)
     {
         Guid fileId = Guid.NewGuid();
-        string fileDirectory = GetTempDirectory();
+        string fileDirectory = GetTemporaryDirectory();
 
         if (!Directory.Exists(fileDirectory))
         {
@@ -24,7 +24,7 @@ public static class StorageService
         return fileId;
     }
 
-    public static void DeleteTempFile(Guid fileId)
+    public static void DeleteFile(Guid fileId)
     {
         string filePath = GetFilePath(fileId);
 
@@ -36,9 +36,9 @@ public static class StorageService
         File.Delete(filePath);
     }
 
-    public static void DeleteOldTempFiles()
+    public static void DeleteOldFiles()
     {
-        foreach (string filePath in Directory.GetFiles(GetTempDirectory()))
+        foreach (string filePath in Directory.GetFiles(GetTemporaryDirectory()))
         {
             // If file is older than 1 hour
             if (File.GetLastWriteTimeUtc(filePath).AddHours(1) < DateTime.UtcNow)
@@ -48,7 +48,7 @@ public static class StorageService
         }
     }
 
-    private static string GetTempDirectory() => $"{Path.GetTempPath()}/ForcesUnite/";
+    private static string GetTemporaryDirectory() => $"{Path.GetTempPath()}/ForcesUnite/";
 
-    private static string GetFilePath(Guid id) => $"{GetTempDirectory()}/{id.ToString()}";
+    private static string GetFilePath(Guid id) => $"{GetTemporaryDirectory()}/{id.ToString()}";
 }

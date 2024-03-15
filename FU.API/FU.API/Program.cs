@@ -76,7 +76,7 @@ builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IRelationService, RelationService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
 
-builder.Services.AddHostedService<PeriodicTempStorageCleanupHostedService>();
+builder.Services.AddHostedService<PeriodicTemporaryStorageCleanupHostedService>();
 
 // Add SignalR
 builder.Services.AddSignalR(options =>
