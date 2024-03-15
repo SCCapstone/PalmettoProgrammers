@@ -179,6 +179,24 @@ public class BadRequestException : ExceptionWithResponse
     }
 }
 
+public class UnprocessableException : ExceptionWithResponse
+{
+    public override string Description { get; } = "The request was unprocessable.";
+
+    public override string Title { get; } = "Unprocessable request";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.UnprocessableEntity;
+
+    public UnprocessableException()
+    {
+    }
+
+    public UnprocessableException(string description)
+    {
+        Description = description;
+    }
+}
+
 public class ServerError : ExceptionWithResponse
 {
     public override string Description { get; } = "Conflict exception";
