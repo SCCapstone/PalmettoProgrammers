@@ -57,19 +57,19 @@ export default function Social() {
 
   // use effect to update search params
   useEffect(() => {
-    if (tabOption === tabOptions.Posts) {
-      setSearchParams({ o: tabOption });
-    } else {
-      setSearchParams({ o: tabOption, r: relationOption });
-    }
-    const updateSearchParams = async () => {
-      setSearchParams(
-        (params) => {
-          if (searchText) params.set('q', searchText);
-          return params;
-        },
-        { replace: true },
-      );
+    const updateSearchParams = () => {
+      setSearchParams((params) => {
+        if (searchText) {
+          params.set('q', searchText);
+        }
+        params.set('o', tabOption);
+        if (tabOption === tabOptions.Posts) {
+          params.delete('r');
+        } else {
+          params.set('r', relationOption);
+        }
+        return params;
+      }, { replace: true });
     };
 
     const updateSearchResults = async () => {
@@ -85,13 +85,12 @@ export default function Social() {
           keywords: searchText,
         };
         const response = await RelationService.getRelations(query);
-        setPlayers(response);
+        setUsers(response);
       }
     };
-
+    
     const submitSearch = async () => {
       updateSearchParams();
-
       updateSearchResults();
     };
 
