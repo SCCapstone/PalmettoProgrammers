@@ -14,11 +14,10 @@ public class AvatarController : ControllerBase
         using Stream avatarFileStream = AvatarService.ConvertToAvatarImageFile(stream);
         Guid fileId = await TemporaryStorageService.SaveToFileAsync(avatarFileStream);
 
-        return Ok();
+        return CreatedAtRoute("Get", new { id = fileId }, new { id = fileId });
     }
 
-    [HttpGet]
-    [Route("{id}.jpg")]
+    [HttpGet("{id}.jpg", Name = "Get")]
     public IActionResult GetAvatarPreview(Guid id)
     {
         Stream? stream = TemporaryStorageService.GetFileStream(id);
