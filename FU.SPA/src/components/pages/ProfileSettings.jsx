@@ -48,7 +48,6 @@ export default function ProfileSettings() {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 1,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -67,8 +66,9 @@ export default function ProfileSettings() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            mt: 1,
+            mt: 2,
             gap: 2,
+            width: 270,
           }}
         >
           <TextField
@@ -79,7 +79,6 @@ export default function ProfileSettings() {
             multiline
             onChange={(e) => setBio(e.target.value)}
           />
-          <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Date of Birth"
@@ -92,9 +91,8 @@ export default function ProfileSettings() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
           >
-            Update Information
+            Update Profile
           </Button>
         </Box>
       </Box>
