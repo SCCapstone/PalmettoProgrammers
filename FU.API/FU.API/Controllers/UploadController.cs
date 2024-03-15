@@ -10,7 +10,7 @@ public class UploadController : ControllerBase
 {
     [HttpPost]
     [Route("avatar")]
-    public async Task<IActionResult> UploadProfileImage(IFormFile formFile)
+    public async Task<IActionResult> UploadAvatar(IFormFile formFile)
     {
         SKBitmap bitmap;
         using (var stream = formFile.OpenReadStream())
