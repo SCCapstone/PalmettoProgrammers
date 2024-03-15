@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router';
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
-  const [pfpUrl, setPfpUrl] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,7 +21,6 @@ export default function ProfileSettings() {
       // Form request payload
       const data = {
         id: idJson.userId,
-        pfpUrl: pfpUrl !== '' ? pfpUrl : null,
         bio: bio !== '' ? bio : null,
         // if the date of birth is the same as today, ignore and set as null
         // if not same day, update
@@ -90,13 +88,6 @@ export default function ProfileSettings() {
               onChange={(newValue) => setDateOfBirth(newValue)}
             />
           </LocalizationProvider>
-          <TextField
-            fullWidth
-            id="setPfpUrl"
-            label="Update Profile Picture (Insert link)"
-            value={pfpUrl}
-            onChange={(e) => setPfpUrl(e.target.value)}
-          />
           <Button
             type="submit"
             fullWidth
