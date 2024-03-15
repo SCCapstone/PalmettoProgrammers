@@ -4,7 +4,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import UserService from '../../services/userService';
-// import { TagsSelector, GamesSelector } from "../Selectors";
 import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router';
 
@@ -12,8 +11,6 @@ export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [pfpUrl, setPfpUrl] = useState('');
-  // const [favoriteGames, setFavoriteGames] = useState([]);
-  // const [favoriteTags, setFavoriteTags] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,9 +18,6 @@ export default function ProfileSettings() {
 
     try {
       const idJson = await UserService.getUserIdJson();
-
-      // console.log(favoriteGames);
-      // console.log(favoriteTags);
 
       // Form request payload
       const data = {
@@ -37,8 +31,6 @@ export default function ProfileSettings() {
           dayjs().toISOString().substring(0, 10)
             ? dateOfBirth.toISOString().substring(0, 10)
             : null,
-        //favoriteGames: favoriteGames,
-        //favoriteTags: favoriteTags
       };
 
       const response = await UserService.updateUserProfile(data);
@@ -105,14 +97,6 @@ export default function ProfileSettings() {
             value={pfpUrl}
             onChange={(e) => setPfpUrl(e.target.value)}
           />
-          {/* TODO(epadams) make this work once the backend gets fixed
-            <GamesSelector
-              onChange={(e) => setFavoriteGames(e.target.value)}
-            />
-            <TagsSelector
-              onChange={(e) => setFavoriteTags(e.target.value)}
-            />
-            */}
           <Button
             type="submit"
             fullWidth
