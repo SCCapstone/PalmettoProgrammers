@@ -1,4 +1,13 @@
-import { Container, Box, Typography, Button, TextField } from '@mui/material';
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Avatar,
+  Stack,
+  Paper,
+} from '@mui/material';
 import { useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -6,6 +15,10 @@ import dayjs from 'dayjs';
 import UserService from '../../services/userService';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+import AvatarService from '../../services/avatarService';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
@@ -87,6 +100,7 @@ export default function ProfileSettings() {
               onChange={(newValue) => setDateOfBirth(newValue)}
             />
           </LocalizationProvider>
+          <UploadAvatar />
           <Button type="submit" fullWidth variant="contained">
             Update Profile
           </Button>
@@ -95,3 +109,76 @@ export default function ProfileSettings() {
     </Container>
   );
 }
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
+const UploadAvatar = () => {
+  const [file, setFile] = useState();
+  const [uploadedImageId, setUploadedAvatarId] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const handleFileChange = async (event) => {
+    event.preventDefault();
+
+    if (!event.target.files) {
+      setFile();
+      return;
+    }
+
+    setLoading(true);
+    setFile(event.target.files[0]);
+
+    const response = await AvatarService.upload(event.target.files[0]);
+
+    setUploadedAvatarId(response.id);
+    setLoading(false);
+  };
+
+  const handleClearFile = () => {
+    setUploadedAvatarId();
+    setFile();
+  };
+
+  return (
+    <>
+      <Button
+        component="label"
+        role={undefined}
+        variant="outlined"
+        tabIndex={-1}
+        startIcon={<CloudUploadIcon />}
+      >
+        Upload avatar
+        <VisuallyHiddenInput
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+      </Button>
+      {file && (
+        <Paper variant="outlined" sx={{ padding: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ pr: 1 }}>
+            <Avatar
+              sx={{ width: 60, height: 60 }}
+              src={loading ? null : AvatarService.getUrl(uploadedImageId)}
+            />
+            <Typography sx={{ flexGrow: 99, textAlign: 'left' }} noWrap>
+              {file?.name}
+            </Typography>
+            <ClearIcon sx={{ cursor: 'pointer' }} onClick={handleClearFile} />
+          </Stack>
+        </Paper>
+      )}
+    </>
+  );
+};
