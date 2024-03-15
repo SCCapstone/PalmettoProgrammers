@@ -283,9 +283,18 @@ export default function Discover() {
     setTags(restoredTags);
   }, [searchParams, gameOptions, tagOptions]);
 
+  // Method for adding a tag id to the search
+  const onTagClick = (tagTitle) => {
+    const tag = tagOptions.find((tag) => tag.name === tagTitle);
+    if (tag) {
+      setTags([...tags, tag]);
+      setPage(1);
+    }
+  };
+
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
-      return <Posts posts={posts} />;
+      return <Posts posts={posts} onTagClick={onTagClick} />;
     } else if (tabOption === tabOptions.Users) {
       return <Users users={players} />;
     }

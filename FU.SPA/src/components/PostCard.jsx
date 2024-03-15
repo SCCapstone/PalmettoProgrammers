@@ -14,13 +14,19 @@ import './PostCard.css';
 import Theme from '../Theme';
 import dayjs from 'dayjs';
 
-const PostCard = ({ post, showActions }) => {
+const PostCard = ({ post, showActions, onTagClick }) => {
   const navigate = useNavigate();
   const user = post.creator;
   let dateTimeString = 'No time';
   if (showActions === undefined) {
     showActions = true;
   }
+
+  const handleTagClick = (tag) => {
+    if (onTagClick) {
+      onTagClick(tag);
+    }
+  };
 
   // If we have a start time, then we also have an end time
   if (post.startTime) {
@@ -131,7 +137,11 @@ const PostCard = ({ post, showActions }) => {
           }}
         >
           {post.tags.map((t) => (
-            <Chip key={t} label={'# ' + t} />
+            <Chip
+              key={t}
+              label={'# ' + t}
+              onClick={showActions ? () => handleTagClick(t) : null}
+            />
           ))}
         </div>
       </CardContent>
