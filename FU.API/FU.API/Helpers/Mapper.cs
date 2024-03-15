@@ -16,7 +16,7 @@ public static class Mapper
         return new UserProfile()
         {
             Id = appUser.UserId,
-            Username = appUser.Username,
+            Username = appUser.Username == string.Empty ? "Deleted User" : appUser.Username,
             Bio = appUser.Bio,
             DOB = appUser.DOB,
             PfpUrl = appUser.PfpUrl,

@@ -67,6 +67,20 @@ public class AccountsService : CommonService
         return queryUser.First();
     }
 
+    /// <summary>
+    /// Deletes a user account.
+    /// </summary>
+    /// <param name="userId">The id of the user to delete.</param>
+    /// <returns>Task.</returns>
+    /// <exception cref="NotFoundException">Exception thrown to the UI if the user is not found.</exception>
+    public async Task DeleteAccount(int userId)
+    {
+        var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task UpdatePassword(int userId, string newPassword)
     {
         ApplicationUser user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
