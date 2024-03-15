@@ -31,19 +31,6 @@ const getConnectedGroups = async () => {
   return await response.json();
 };
 
-const getConnectedPlayers = async () => {
-  const response = await fetch(
-    `${API_BASE_URL}/users/current/connected/players`,
-    { headers: { ...AuthService.getAuthHeader() } },
-  );
-
-  if (!response.ok) {
-    throw new Error('Error getting players');
-  }
-
-  return await response.json();
-};
-
 const getUserprofile = async (userString) => {
   const response = await fetch(`${API_BASE_URL}/users/${userString}`, {
     headers: { ...AuthService.getAuthHeader() },
@@ -109,7 +96,6 @@ const updateAccountInfo = async (data) => {
 const UserService = {
   getConnectedPosts,
   getConnectedGroups,
-  getConnectedPlayers,
   getUserprofile,
   getUserIdJson,
   updateUserProfile,
