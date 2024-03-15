@@ -73,7 +73,7 @@ public class UploadController : ControllerBase
 
         // Convert SKPixmap back to SKBitmap
         SKBitmap newBitmap = new();
-        bool installSuccess = newBitmap.InstallPixels(croppedPixmap);
+        newBitmap.InstallPixels(croppedPixmap);
 
         return newBitmap;
     }
