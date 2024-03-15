@@ -24,6 +24,18 @@ public static class TemporaryStorageService
         return fileId;
     }
 
+    public static Stream? GetFileStream(Guid id)
+    {
+        string filePath = GetFilePath(id);
+
+        if (!File.Exists(filePath))
+        {
+            return null;
+        }
+
+        return File.OpenRead(filePath);
+    }
+
     public static void DeleteFile(Guid fileId)
     {
         string filePath = GetFilePath(fileId);

@@ -16,4 +16,18 @@ public class AvatarController : ControllerBase
 
         return Ok();
     }
+
+    [HttpGet]
+    [Route("{id}.jpg")]
+    public IActionResult GetAvatarPreview(Guid id)
+    {
+        Stream? stream = TemporaryStorageService.GetFileStream(id);
+
+        if (stream is null)
+        {
+            return NotFound();
+        }
+
+        return File(stream, "image/jpeg", "avatar.jpg");
+    }
 }
