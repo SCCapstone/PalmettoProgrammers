@@ -15,8 +15,12 @@ public class UploadController : ControllerBase
         SKBitmap bitmap;
         using (var stream = formFile.OpenReadStream())
         {
-            // TODO handle error
             bitmap = SKBitmap.Decode(stream);
+        }
+
+        if (bitmap is null)
+        {
+            return UnprocessableEntity("Filetype not supported.");
         }
 
         bitmap = CropToCenteredSquare(bitmap);
