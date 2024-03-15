@@ -10,6 +10,8 @@ using FU.API.Helpers;
 
 public class SearchService : CommonService, ISearchService
 {
+    private static readonly DateTime DefaultStartTime = DateTime.MinValue;
+
     private readonly AppDbContext _dbContext;
 
     public SearchService(AppDbContext dbContext)
@@ -205,7 +207,7 @@ public class SearchService : CommonService, ISearchService
         {
             PostSortType.NewestCreated => (post) => post.CreatedAt,
             PostSortType.Title => (post) => post.NormalizedTitle,
-            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? post.CreatedAt,
+            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? DefaultStartTime,
             _ => (post) => post.CreatedAt,
         };
     }

@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
-import { TagsSelector, GamesSelector } from '../Selectors';
+import { TagsSelector, GamesSelector, SortOptionsSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import GameService from '../../services/gameService';
 import TagService from '../../services/tagService';
@@ -25,6 +25,7 @@ import {
   SelectTimeRangeRadioValues,
 } from './Filters';
 import './Discover.css';
+import config from '../../config';
 
 const paramKey = {
   endDate: 'endDate',
@@ -77,6 +78,7 @@ export default function Discover() {
   );
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
+  const [sortOption, setSortOption] = useState(null);
 
   const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
     const paramValue = searchParams.get(paramKey.dateRadio);
@@ -179,6 +181,7 @@ export default function Discover() {
           tags: tags,
           limit: queryLimit,
           page: page,
+          sort: sortOption,
         };
 
         if (startDate) query.startDate = startDate;
@@ -246,6 +249,7 @@ export default function Discover() {
     startTime,
     endTime,
     tabOption,
+    sortOption,
   ]);
 
   useEffect(() => {
@@ -297,6 +301,20 @@ export default function Discover() {
       return <Posts posts={posts} onTagClick={onTagClick} />;
     } else if (tabOption === tabOptions.Users) {
       return <Users users={players} />;
+    }
+  };
+
+  const renderSortSelector = () => {
+    if (tabOption === tabOptions.Posts) {
+      return (
+        <SortOptionsSelector
+          options={config.POST_SORT_OPTIONS}
+          onChange={(newValue) => {
+            setSortOption(newValue);
+            setPage(1);
+          }}
+        />
+      );
     }
   };
 
@@ -394,7 +412,10 @@ export default function Discover() {
         )}
       </div>
       <div>
-        <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
+        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
+          <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
+          {renderSortSelector()}
+        </div>
         {renderTabContent()}
         <div
           style={{
@@ -438,7 +459,7 @@ function SearchBar({ searchText, onSearchSubmit }) {
   }
 
   return (
-    <div id="search-bar">
+    <div className="search-bar">
       <TextField
         id="outlined-basic"
         label="Search"
