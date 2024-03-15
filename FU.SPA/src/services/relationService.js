@@ -1,4 +1,5 @@
 import AuthService from './authService';
+import RequestBuilder from '../helpers/requestBuilder';
 
 import config from '../config';
 const API_BASE_URL = config.API_URL;
@@ -91,16 +92,16 @@ const getStatus = async (userId) => {
  * @param {string} relationStatus The status of the relation {pending|requested|friends|blocked}
  * @returns {List<object>} UserProfiles: UserProfiles of the users with the given relation status
  */
-const getRelations = async (userId, relationStatus) => {
+const getRelations = async (userId, relationStatus, query) => {
   let authHeader = null;
   try {
     authHeader = AuthService.getAuthHeader();
   } catch {
     // Nothing
   }
-
+  const queryString = RequestBuilder.buildUserQueryString(query);
   const response = await fetch(
-    `${API_BASE_URL}/relations/${userId}/${relationStatus}`,
+    `${API_BASE_URL}/relations/${userId}/${relationStatus}?${queryString}`,
     {
       method: 'GET',
       headers: {

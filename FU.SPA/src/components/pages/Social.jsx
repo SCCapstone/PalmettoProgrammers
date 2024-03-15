@@ -84,7 +84,7 @@ export default function Social() {
         const query = {
           keywords: searchText,
         };
-        const response = await RelationService.getRelations(query);
+        const response = await RelationService.getRelations(user.id, relationOption, query);
         setUsers(response);
       }
     };
