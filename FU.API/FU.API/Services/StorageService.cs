@@ -1,5 +1,7 @@
 namespace FU.API.Services;
 
+using System.IO;
+
 public static class StorageService
 {
     public static async Task<Guid> SaveToTempFileAsync(Stream stream)
@@ -14,7 +16,7 @@ public static class StorageService
 
         string filePath = GetFilePath(fileId);
 
-        using (var fileStream = System.IO.File.Create(filePath))
+        using (var fileStream = File.Create(filePath))
         {
             await stream.CopyToAsync(fileStream);
         }
@@ -32,6 +34,18 @@ public static class StorageService
         }
 
         File.Delete(filePath);
+    }
+
+    public static void DeleteOldTempFiles()
+    {
+        foreach (string filePath in Directory.GetFiles(GetTempDirectory()))
+        {
+            // If file is older than 1 hour
+            if (File.GetLastWriteTimeUtc(filePath).AddHours(1) < DateTime.UtcNow)
+            {
+                File.Delete(filePath);
+            }
+        }
     }
 
     private static string GetTempDirectory() => $"{Path.GetTempPath()}/ForcesUnite/";
