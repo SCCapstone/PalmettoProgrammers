@@ -5,14 +5,14 @@ public static class StorageService
     public static async Task<Guid> SaveToTempFileAsync(Stream stream)
     {
         Guid fileId = Guid.NewGuid();
-        string fileDirectory = $"{Path.GetTempPath()}/ForcesUnite/";
+        string fileDirectory = GetTempDirectory();
 
         if (!Directory.Exists(fileDirectory))
         {
             Directory.CreateDirectory(fileDirectory);
         }
 
-        string filePath = $"{fileDirectory}/{fileId.ToString()}";
+        string filePath = GetFilePath(fileId);
 
         using (var fileStream = System.IO.File.Create(filePath))
         {
@@ -21,4 +21,20 @@ public static class StorageService
 
         return fileId;
     }
+
+    public static void DeleteTempFile(Guid fileId)
+    {
+        string filePath = GetFilePath(fileId);
+
+        if (!File.Exists(filePath))
+        {
+            return;
+        }
+
+        File.Delete(filePath);
+    }
+
+    private static string GetTempDirectory() => $"{Path.GetTempPath()}/ForcesUnite/";
+
+    private static string GetFilePath(Guid id) => $"{GetTempDirectory()}/{id.ToString()}";
 }
