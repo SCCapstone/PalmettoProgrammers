@@ -1,16 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-.container {
-  margin: 1rem;
-  text-align: center;
-}
-
 .MuiButton-root.active {
   > span {
     border-radius: 0px;

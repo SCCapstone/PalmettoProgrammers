@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
+import './Navbar.css';
 
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
