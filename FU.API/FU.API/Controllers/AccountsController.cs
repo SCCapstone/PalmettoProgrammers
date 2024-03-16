@@ -117,11 +117,11 @@ public class AccountsController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteAccount()
+    public async Task<IActionResult> DeleteAccount([FromBody] Credentials credentials)
     {
         var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        await _accountService.DeleteAccount(user.UserId);
+        await _accountService.DeleteAccount(user.UserId, credentials);
 
         return Ok();
     }

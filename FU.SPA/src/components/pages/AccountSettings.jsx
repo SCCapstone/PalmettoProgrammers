@@ -1,4 +1,15 @@
-import { Container, Box, Typography, Button, TextField } from '@mui/material';
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
 import { useState } from 'react';
 import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
@@ -6,11 +17,12 @@ import UserContext from '../../context/userContext';
 import { useContext } from 'react';
 
 export default function AccountSettings() {
-  const { logout } = useContext(UserContext);
+  const { logout, user } = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -51,6 +63,70 @@ export default function AccountSettings() {
       alert(e);
       console.log(e);
     }
+  };
+
+  /**
+   * The dialog to confirm the deletion of the account
+   * We want to ensure that the user is sure they want to delete their account
+   * We don't want to accidentally delete an account
+   *
+   * @returns The dialog to confirm the deletion of the account
+   */
+  const DeleteAccountDialog = () => {
+    const [password, setPassword] = useState('');
+    const [credentialsError, setCredentialsError] = useState('');
+
+    const handleClose = () => {
+      setDeleteDialogOpen(false);
+    };
+
+    const handleDelete = async () => {
+      var creds = {
+        username: user.username,
+        password: password,
+      };
+      try {
+        await UserService.deleteAccount(creds);
+        setDeleteDialogOpen(false);
+        // logout and navigate to the home page
+        localStorage.clear();
+        logout();
+        navigate('/');
+      } catch (event) {
+        setCredentialsError('Incorrect credentails');
+        console.error('Error in deleting account', event);
+      }
+    };
+
+    return (
+      <Dialog open={deleteDialogOpen} onClose={handleClose}>
+        <DialogTitle>Are you sure you want to delete your account?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action is irreversible and will revoke all access to your
+            account.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <TextField
+            autoFocus
+            error={!!credentialsError}
+            helperText={credentialsError}
+            margin="dense"
+            id="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+          ></TextField>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleDelete} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   };
 
   // Display component
@@ -123,6 +199,27 @@ export default function AccountSettings() {
             Update Information
           </Button>
         </Box>
+        <Button
+          className="delete-button"
+          variant="contained error"
+          onClick={() => {
+            console.log('Delete Account');
+            setDeleteDialogOpen(true);
+          }}
+          sx={{
+            mt: 3,
+            mb: 2,
+            position: 'absolute',
+            bottom: '0',
+            backgroundColor: 'red',
+            '&:hover': {
+              backgroundColor: 'darkred',
+            },
+          }}
+        >
+          Delete Account
+        </Button>
+        <DeleteAccountDialog />
       </Box>
     </Container>
   );

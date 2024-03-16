@@ -70,12 +70,24 @@ public class AccountsService : CommonService
     /// <summary>
     /// Deletes a user account.
     /// </summary>
-    /// <param name="userId">The id of the user to delete.</param>
+    /// <param name="userId">The user to delete.</param>
+    /// /// <param name="credentials">Credentials of the user to delete.</param>
     /// <returns>Task.</returns>
     /// <exception cref="NotFoundException">Exception thrown to the UI if the user is not found.</exception>
-    public async Task DeleteAccount(int userId)
+    public async Task DeleteAccount(int userId, Credentials credentials)
     {
         var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        // Make sure the usernames match
+        if (!string.Equals(user.Username, credentials.Username, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new UnauthorizedException("The username in the request does not match the user's username");
+        }
+
+        if (user.PasswordHash != HashPassword(credentials.Password))
+        {
+            throw new UnauthorizedException("The password in the request does not match the user's password");
+        }
 
         _dbContext.Users.Remove(user);
         await _dbContext.SaveChangesAsync();
