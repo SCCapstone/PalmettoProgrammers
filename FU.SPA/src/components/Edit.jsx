@@ -62,11 +62,11 @@ export default function Edit({ postId }) {
         // }
         //postDetails.games
         
-        //setGame(postDetails.game);
-        //console.log(game);
-        //gameDetails = postDetails.game;
+        setGame(postDetails.game);
+        console.log(game);
+        gameDetails = postDetails.game;
         //globalGameDetails(game);
-        //console.log(gameDetails);
+        console.log(gameDetails);
         setStartTime(dayjs(postDetails.startTime)); //works
         setEndTime(dayjs(postDetails.endTime)); //works
         //console.log(startTime);
@@ -217,7 +217,7 @@ const filter = createFilterOptions();
 
 //const GameSelector = ({ value: defaultVal, onChange }) => {
 // const GameSelector = ({ inputValue: game, onChange }) => {
-  const GameSelector = ({ onChange }) => {
+const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
