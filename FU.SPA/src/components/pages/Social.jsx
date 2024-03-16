@@ -136,8 +136,8 @@ export default function Social() {
   }, [
     tabOption,
     relationOption,
-    tabOptions.Posts,
     searchText,
+    user.id,
     setSearchParams,
     page,
   ]);
