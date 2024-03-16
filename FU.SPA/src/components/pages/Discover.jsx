@@ -411,7 +411,7 @@ export default function Discover() {
         )}
       </div>
       <div>
-        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '50px', justifyContent: 'center'}}>
           <TextSearch.SearchBar
             searchText={searchText}
             onSearchSubmit={setSearchText}

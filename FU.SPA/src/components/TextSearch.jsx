@@ -19,7 +19,7 @@ function SearchBar({ searchText, onSearchSubmit }) {
   }
 
   return (
-    <div id="search-bar">
+    <div id="search-bar" style={{ marginBottom: '20px'}}>
       <TextField
         id="outlined-basic"
         label="Search"
