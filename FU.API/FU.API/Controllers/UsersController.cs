@@ -7,6 +7,7 @@ using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using FU.API.Models;
+using FU.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,11 +17,13 @@ public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly ISearchService _searchService;
+    private readonly IRemoteStorageService _remoteStorageService;
 
-    public UsersController(IUserService userService, ISearchService searchService)
+    public UsersController(IUserService userService, ISearchService searchService, IRemoteStorageService remoteStorageService)
     {
         _userService = userService;
         _searchService = searchService;
+        _remoteStorageService = remoteStorageService;
     }
 
     [HttpGet]
@@ -77,7 +80,28 @@ public class UsersController : ControllerBase
             IsOnline = profileChanges.IsOnline,
         };
 
+        if (profileChanges.AvatarId is not null)
+        {
+            using Stream? stream = TemporaryStorageService.GetFileStream((Guid)profileChanges.AvatarId);
+            if (stream is null)
+            {
+                return NotFound("Avatar not found");
+            }
+
+            try
+            {
+                Uri uri = await _remoteStorageService.UploadAsync(stream, (Guid)profileChanges.AvatarId);
+
+                userProfile.PfpUrl = uri.AbsoluteUri;
+            }
+            catch (ConflictException)
+            {
+                userProfile.PfpUrl = _remoteStorageService.GetUri((Guid)profileChanges.AvatarId).AbsoluteUri;
+            }
+        }
+
         var newProfile = await _userService.UpdateUserProfile(userProfile);
+
         return Ok(newProfile);
     }
 
