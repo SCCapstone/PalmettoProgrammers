@@ -125,7 +125,7 @@ const VisuallyHiddenInput = styled('input')({
 
 const UploadAvatar = () => {
   const [file, setFile] = useState();
-  const [uploadedImageId, setUploadedAvatarId] = useState();
+  const [uploadedAvatarId, setUploadedAvatarId] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
@@ -146,8 +146,7 @@ const UploadAvatar = () => {
       setUploadedAvatarId(response.id);
     } catch (error) {
       setError(error.message);
-      setUploadedAvatarId();
-      setFile();
+      handleClearFile();
     }
 
     setLoading(false);
@@ -179,7 +178,7 @@ const UploadAvatar = () => {
           <Stack direction="row" alignItems="center" spacing={1} sx={{ pr: 1 }}>
             <Avatar
               sx={{ width: 60, height: 60 }}
-              src={loading ? null : AvatarService.getUrl(uploadedImageId)}
+              src={loading ? null : AvatarService.getUrl(uploadedAvatarId)}
             />
             <Typography sx={{ flexGrow: 99, textAlign: 'left' }} noWrap>
               {file?.name}
