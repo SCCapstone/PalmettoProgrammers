@@ -74,6 +74,11 @@ public class PostService : CommonService, IPostService
             });
         }
 
+        if (post.Creator is null)
+        {
+            throw new PostException("Creator is null", HttpStatusCode.UnprocessableEntity);
+        }
+
         var chat = await _chatService.CreateChat(post.Creator, ChatType.Post, post.Title);
 
         post.Chat = chat;
