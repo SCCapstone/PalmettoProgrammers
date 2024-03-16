@@ -38,7 +38,7 @@ export default function ProfileSettings() {
         //favoriteTags: favoriteTags
       };
 
-      const response = await UserService.updateUserProfile(data);
+      await UserService.updateUserProfile(data);
       alert('Info updated successfully!');
 
       // Redirect to user profile

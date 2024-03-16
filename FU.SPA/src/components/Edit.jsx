@@ -77,7 +77,7 @@ export default function Edit({ postId }) {
     };
 
     try {
-      const newPost = await PostService.updatePost(updatedPost, postId);
+      await PostService.updatePost(updatedPost, postId);
       alert('Post updated successfully!');
       navigate(`/posts/${postId}`);
     } catch (e) {

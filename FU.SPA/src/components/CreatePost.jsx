@@ -56,7 +56,7 @@ export default function CreatePost() {
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
       window.alert('Error creating post');
-      console.log(e);
+      console.error(e);
     }
   };
 

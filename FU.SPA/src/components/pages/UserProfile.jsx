@@ -166,7 +166,9 @@ const UserProfile = () => {
             </div>
           </div>
           <div className="body">
-            <SocialRelationActionButton requesteeId={userProfile?.id} />
+            {isOwnProfile && (
+              <SocialRelationActionButton requesteeId={userProfile?.id} />
+            )}
             {renderBio()}
           </div>
         </div>
@@ -184,7 +186,7 @@ const SocialRelationActionButton = ({ requesteeId }) => {
   const [relationStatus, setRelationStatus] = useState();
 
   const UpdateStatus = () => {
-    if (requesteeId)
+    if (requesteeId && currentUser && currentUser.id !== requesteeId)
       RelationService.getStatus(requesteeId).then((s) => setRelationStatus(s));
   };
 

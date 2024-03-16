@@ -49,7 +49,7 @@ export default function AccountSettings() {
       //navigate('/profile/' + idJson.userId);
     } catch (e) {
       alert(e);
-      console.log(e);
+      console.error(e);
     }
   };
 

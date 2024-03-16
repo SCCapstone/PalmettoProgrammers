@@ -18,7 +18,6 @@ const createPost = async (params) => {
   }
   const jsonResponse = await response.json();
 
-
   return jsonResponse;
 };
 
