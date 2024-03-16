@@ -18,7 +18,6 @@ import UserContext from '../context/userContext';
 import config from '../config';
 
 export default function Chat({ chatId }) {
-  // const [chat, setChat] = useState(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [offset, setOffset] = useState(1);
@@ -33,15 +32,9 @@ export default function Chat({ chatId }) {
       try {
         const messages = await getMessages(chatId, 1, limit);
         setMessages(messages);
-        // const chat = await getChat(chatId);
-        // setChat(chat);
-        console.log('messages', messages);
         // See #281: We need to wait for the signalR connection to be started before joining the chat
         await new Promise((resolve) => setTimeout(resolve, config.WAIT_TIME));
-        console.log('waited for ' + config.WAIT_TIME + 'ms');
         await joinChatGroup(chatId);
-        // const messages = await getMessages(chatId, 1, limit);
-        // setMessages(messages);
       } catch (error) {
         console.error(error);
         setMessages(null);
