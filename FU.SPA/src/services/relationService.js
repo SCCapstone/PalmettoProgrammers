@@ -1,6 +1,5 @@
 import AuthService from './authService';
 import RequestBuilder from '../helpers/requestBuilder';
-import RequestBuilder from '../helpers/requestBuilder';
 
 import config from '../config';
 const API_BASE_URL = config.API_URL;
@@ -93,7 +92,7 @@ const getStatus = async (userId) => {
  * @param {object} query the query parameters object {limit: number, page: number, relation: string}
  * @returns {List<object>} UserProfiles: UserProfiles of the users with the given relation status
  */
-const getRelations = async (userId, relationStatus, query) => {
+const getRelations = async (userId, query) => {
   let authHeader = null;
   try {
     authHeader = AuthService.getAuthHeader();
