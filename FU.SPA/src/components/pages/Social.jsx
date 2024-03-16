@@ -80,20 +80,23 @@ export default function Social() {
   // use effect to update search params
   useEffect(() => {
     const updateSearchParams = () => {
-      setSearchParams((params) => {
-        if (searchText) {
-          params.set('q', searchText);
-        }
-        params.set('o', tabOption);
-        params.set('page', page);
+      setSearchParams(
+        (params) => {
+          if (searchText) {
+            params.set('q', searchText);
+          }
+          params.set('o', tabOption);
+          params.set('page', page);
 
-        if (tabOption === tabOptions.Posts) {
-          params.delete('r');
-        } else {
-          params.set('r', relationOption);
-        }
-        return params;
-      }, { replace: true });
+          if (tabOption === tabOptions.Posts) {
+            params.delete('r');
+          } else {
+            params.set('r', relationOption);
+          }
+          return params;
+        },
+        { replace: true },
+      );
     };
 
     const updateSearchResults = async () => {
@@ -101,13 +104,13 @@ export default function Social() {
         const query = {
           keywords: searchText,
         };
-    
+
         try {
           const response = await UserService.getConnectedPosts(query);
           setPosts(response.data);
           setTotalResults(response.totalCount || 0);
         } catch (error) {
-          console.error("Error", error);
+          console.error('Error', error);
         }
       } else {
         const query = {
@@ -119,19 +122,25 @@ export default function Social() {
           setUsers(response.data);
           setTotalResults(response.totalCount || 0);
         } catch (error) {
-          console.error("Error", error);
+          console.error('Error', error);
         }
       }
     };
-    
+
     const submitSearch = async () => {
-      
       updateSearchParams();
       updateSearchResults();
     };
 
     submitSearch();
-  }, [tabOption, relationOption,tabOptions.Posts, searchText, setSearchParams, page]);
+  }, [
+    tabOption,
+    relationOption,
+    tabOptions.Posts,
+    searchText,
+    setSearchParams,
+    page,
+  ]);
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
@@ -200,7 +209,10 @@ export default function Social() {
         {renderTabSelectors()}
       </div>
       <div>
-      <TextSearch.SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
+        <TextSearch.SearchBar
+          searchText={searchText}
+          onSearchSubmit={setSearchText}
+        />
         {renderTabContent()}
         <div
           style={{

@@ -412,7 +412,10 @@ export default function Discover() {
       </div>
       <div>
         <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
-          <TextSearch.SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
+          <TextSearch.SearchBar
+            searchText={searchText}
+            onSearchSubmit={setSearchText}
+          />
           {renderSortSelector()}
         </div>
         {renderTabContent()}
