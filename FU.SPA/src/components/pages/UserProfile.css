@@ -9,7 +9,7 @@
   .userImage {
     width: 100px;
     height: 100px;
-    margin-left: 75px;
+    margin-left: 25px;
   }
 
   .userInfo {
@@ -36,14 +36,8 @@
   }
 
   .buttons {
-    display: flex;
-    flex-direction: column;
-    margin-right: 75px;
-    height: 100px;
-    justify-content: space-between;
-
     button {
-      width: 233px;
+      /* width: 233px; */
       background-color: #e340dcdc;
       color: #fff;
       padding: 15px;
@@ -60,10 +54,11 @@
 
 .body {
   display: flex;
-  flex: row;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
 
   .bio {
-    margin-top: 20px;
     background-color: #31084a;
     color: #fff;
     display: flex;
