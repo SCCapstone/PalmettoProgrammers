@@ -8,21 +8,60 @@ import {
   Avatar,
   Grid,
   TextField,
+  IconButton,
+  InputAdornment,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import Theme from '../../Theme';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Showing passwords when user wants
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  // Update state for username
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+    setUsernameError('');
+  };
+
+  // Update state for password
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+    setPasswordError('');
+  };
+
+  // Update state for confirmed password
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+    setPasswordError('');
+  };
+
+  // Check if all fields are filled
+  const isEnabled =
+    username.length > 0 && password.length > 0 && confirmPassword.length > 0;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    // Need to look into incorporating email address
     const creds = {
       username: data.get('username'),
       password: data.get('password'),
@@ -30,7 +69,7 @@ export default function SignUp() {
 
     // Checking if passwords are identical
     if (creds.password !== data.get('confirmPassword')) {
-      alert('Passwords do not match');
+      setPasswordError('Passwords do not match');
       return;
     }
 
@@ -46,8 +85,24 @@ export default function SignUp() {
         navigate('/SignIn');
       }
     } catch (event) {
-      window.alert('Error in sign up');
-      console.log(event);
+      // Parse the error message
+      const errorResponse = JSON.parse(event.message);
+
+      //If username already exists
+      if (errorResponse && errorResponse.title === 'Duplicate User') {
+        setUsernameError(errorResponse.detail);
+      } // Check if there is a specific error message for Username
+      else if (
+        errorResponse &&
+        errorResponse.errors &&
+        errorResponse.errors.Username
+      ) {
+        setUsernameError(errorResponse.errors.Username[0]);
+      } else {
+        // Handles other general errors
+        setUsernameError('An unexpected error occurred. Please try again.');
+      }
+      console.error('Error in sign up:', errorResponse);
     }
   };
 
@@ -73,6 +128,9 @@ export default function SignUp() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                error={!!usernameError}
+                helperText={usernameError}
+                onChange={handleUsernameChange}
                 required
                 fullWidth
                 id="username"
@@ -84,32 +142,41 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
+                error={!!passwordError}
+                helperText={passwordError}
+                onChange={handlePasswordChange}
                 required
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="new-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={!!passwordError}
+                helperText={passwordError}
+                onChange={handleConfirmPasswordChange}
                 required
                 fullWidth
                 name="confirmPassword"
                 label="Confirm Password"
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'}
                 id="confirmPassword"
                 autoComplete="new-password"
               />
@@ -119,13 +186,23 @@ export default function SignUp() {
             type="submit"
             fullWidth
             variant="contained"
+            disabled={!isEnabled}
             sx={{ mt: 3, mb: 2 }}
           >
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/SignIn" variant="body2">
+              <Link
+                class="signin-link"
+                onClick={() => navigate(`/SignIn`)}
+                variant="body2"
+                style={{
+                  color: Theme.palette.primary.main,
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                }}
+              >
                 Already have an account? Sign in
               </Link>
             </Grid>

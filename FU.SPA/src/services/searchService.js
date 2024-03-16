@@ -24,7 +24,9 @@ const searchPosts = async (query) => {
     },
   });
 
-  return await response.json();
+  const totalCount = parseInt(response.headers.get('x-total-count'));
+  const responseData = await response.json();
+  return { data: responseData, totalCount: totalCount };
 };
 
 const searchUsers = async (query) => {
@@ -43,7 +45,9 @@ const searchUsers = async (query) => {
     },
   });
 
-  return await response.json();
+  const totalCount = parseInt(response.headers.get('x-total-count'));
+  const responseData = await response.json();
+  return { data: responseData, totalCount: totalCount };
 };
 
 const SearchService = { searchPosts, searchUsers };

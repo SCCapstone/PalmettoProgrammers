@@ -34,6 +34,20 @@ const buildPostQueryString = (query) => {
       query.endTime.toISOString().split('T')[1].split('.')[0];
   }
 
+  // Page
+  if (query.page) {
+    queryString += '&page=' + query.page;
+  }
+  // Limit
+  if (query.limit) {
+    // Default in the api is 20
+    queryString += '&limit=' + query.limit;
+  }
+
+  if (query.sort) {
+    queryString += '&sort=' + query.sort;
+  }
+
   return queryString;
 };
 
@@ -41,6 +55,16 @@ const buildUserQueryString = (query) => {
   let queryString = '';
   if (query.keywords) {
     queryString += `keywords=${encodeURIComponent(query.keywords.trim())}`;
+  }
+
+  // Page
+  if (query.page) {
+    queryString += '&page=' + query.page;
+  }
+  // Limit
+  if (query.limit) {
+    // Default in the api is 20
+    queryString += '&limit=' + query.limit;
   }
 
   return queryString;

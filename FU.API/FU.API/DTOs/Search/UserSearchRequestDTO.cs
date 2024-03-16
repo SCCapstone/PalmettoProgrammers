@@ -14,5 +14,5 @@ public record UserSearchRequestDTO
     public int? Limit { get; set; }
 
     [FromQuery]
-    public int? Offset { get; set; }
+    public int? Page { get; set; }
 }

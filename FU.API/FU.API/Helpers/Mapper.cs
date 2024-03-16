@@ -88,9 +88,9 @@ public static class Mapper
         var query = new UserQuery()
         {
             Limit = dto.Limit ?? 20,
-            Offset = dto.Offset ?? 0,
             SortType = new(),
             SortDirection = new(),
+            Page = dto.Page ?? 1,
         };
 
         if (dto.Keywords is not null)
@@ -131,9 +131,9 @@ public static class Mapper
             EndOnOrBeforeTime = dto.EndOnOrBeforeTime,
             MinimumRequiredPlayers = dto.MinPlayers ?? 0,
             Limit = dto.Limit ?? 20,
-            Offset = dto.Offset ?? 0,
             SortType = new(),
             SortDirection = new(),
+            Page = dto.Page ?? 1
         };
 
         if (dto.Keywords is not null)

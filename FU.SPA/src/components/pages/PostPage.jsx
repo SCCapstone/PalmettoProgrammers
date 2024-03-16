@@ -8,7 +8,6 @@ import ChatLocked from '../ChatLocked';
 import NoPage from './NoPage';
 import PostUsersList from '../PostUsersList';
 import PostCard from '../PostCard';
-import './PostPage.css';
 import { useNavigate } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -142,13 +141,15 @@ const PostPage = () => {
 
   if (post && !loading) {
     return (
-      <div className="post-page-wrapper">
-        <PostCard post={post} showActions={false} />
-        {renderLeaveButton()}
-        <PostUsersList postId={post.id} />
+      <div style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <PostCard post={post} showActions={false} />
+          {renderLeaveButton()}
+          <PostUsersList postId={post.id} />
+          {renderEditButton()}
+          <ConfirmLeaveDialog />
+        </div>
         {renderChat()}
-        {renderEditButton()}
-        <ConfirmLeaveDialog />
       </div>
     );
   } else if (!post && !loading) {

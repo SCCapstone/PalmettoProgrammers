@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
-import { TagsSelector, GamesSelector } from '../Selectors';
+import { TagsSelector, GamesSelector, SortOptionsSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
 import GameService from '../../services/gameService';
 import TagService from '../../services/tagService';
@@ -25,6 +25,7 @@ import {
   SelectTimeRangeRadioValues,
 } from './Filters';
 import './Discover.css';
+import config from '../../config';
 
 const paramKey = {
   endDate: 'endDate',
@@ -50,8 +51,8 @@ export default function Discover() {
     Users: 'Users',
   };
 
-  const postsPerPage = 10; // limit of posts on a page(increase later, low for testing)
-  const userPerPage = 10;
+  const queryLimit = 10;
+  const [totalResults, setTotalResults] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('o') || tabOptions.Posts;
 
@@ -77,19 +78,7 @@ export default function Discover() {
   );
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
-
-  // index of the last post
-  const lastPost = page * postsPerPage;
-  // index of first
-  const firstPost = lastPost - postsPerPage;
-
-  // each page has correct number of posts
-  const currentPosts = posts.slice(firstPost, lastPost);
-
-  const lastUser = page * userPerPage;
-  const firstUser = lastPost - userPerPage;
-
-  const currentPlayers = players.slice(firstUser, lastUser);
+  const [sortOption, setSortOption] = useState(null);
 
   const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
     const paramValue = searchParams.get(paramKey.dateRadio);
@@ -121,19 +110,6 @@ export default function Discover() {
   const [endTime, setEndTime] = useState(
     paramToDayjs(searchParams, paramKey.endTime),
   );
-
-  useEffect(() => {
-    setPage(1);
-  }, [
-    // games and tags reset the page at their component callbacks
-    searchText,
-    dateRangeRadioValue,
-    startDate,
-    endDate,
-    timeRangeRadioValue,
-    startTime,
-    endTime,
-  ]);
 
   useEffect(() => {
     const updateSearchParams = async () => {
@@ -203,54 +179,58 @@ export default function Discover() {
           keywords: searchText,
           games: games,
           tags: tags,
+          limit: queryLimit,
+          page: page,
+          sort: sortOption,
         };
 
         if (startDate) query.startDate = startDate;
         if (endDate) query.endDate = endDate;
 
-        if (startTime?.isValid()) {
-          query.startTime = startTime;
+        // Set start date to today if upcoming is selected
+        if (dateRangeRadioValue === DateFilterRadioValues.upcoming)
+          query.startDate = dayjs();
 
-          if (!endTime?.isValid()) {
-            // set end time to 23:59:59 if unset
-            query.endTime = new Date();
-            query.endTime.setHours(23, 59, 59);
+        // We only care about start/end time if radio value is 'between'
+        if (timeRangeRadioValue === SelectTimeRangeRadioValues.between) {
+          if (startTime?.isValid()) {
+            query.startTime = startTime;
+
+            if (!endTime?.isValid()) {
+              // set end time to 23:59:59 if unset
+              query.endTime = new Date();
+              query.endTime.setHours(23, 59, 59);
+            }
           }
-        }
-        if (endTime?.isValid()) {
-          query.endTime = endTime;
+          if (endTime?.isValid()) {
+            query.endTime = endTime;
 
-          if (!startTime?.isValid()) {
-            // set start time to 00:00:00 if unset
-            query.startTime = new Date();
-            query.startTime.setHours(0, 0, 0);
+            if (!startTime?.isValid()) {
+              // set start time to 00:00:00 if unset
+              query.startTime = new Date();
+              query.startTime.setHours(0, 0, 0);
+            }
           }
         }
 
         const response = await SearchService.searchPosts(query);
-        setPosts(response);
+        setPosts(response.data);
+        setTotalResults(response.totalCount);
       } else {
         const query = {
           keywords: searchText,
+          limit: queryLimit,
+          page: page,
         };
+
         const response = await SearchService.searchUsers(query);
-        setPlayers(response);
+        setPlayers(response.data);
+        setTotalResults(response.totalCount);
       }
     };
 
     const submitSearch = async () => {
       updateSearchParams();
-
-      // if values haven't been loaded don't search
-      // this prevents an erronious search from occuring and causing flicker on the initial page load
-      if (
-        startDate === undefined ||
-        endDate === undefined ||
-        startTime === undefined ||
-        endTime === undefined
-      )
-        return;
-
       updateSearchResults();
     };
 
@@ -269,6 +249,7 @@ export default function Discover() {
     startTime,
     endTime,
     tabOption,
+    sortOption,
   ]);
 
   useEffect(() => {
@@ -306,11 +287,34 @@ export default function Discover() {
     setTags(restoredTags);
   }, [searchParams, gameOptions, tagOptions]);
 
+  // Method for adding a tag id to the search
+  const onTagClick = (tagTitle) => {
+    const tag = tagOptions.find((tag) => tag.name === tagTitle);
+    if (tag) {
+      setTags([...tags, tag]);
+      setPage(1);
+    }
+  };
+
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
-      return <Posts posts={currentPosts} />;
+      return <Posts posts={posts} onTagClick={onTagClick} />;
     } else if (tabOption === tabOptions.Users) {
-      return <Users users={currentPlayers} />;
+      return <Users users={players} />;
+    }
+  };
+
+  const renderSortSelector = () => {
+    if (tabOption === tabOptions.Posts) {
+      return (
+        <SortOptionsSelector
+          options={config.POST_SORT_OPTIONS}
+          onChange={(newValue) => {
+            setSortOption(newValue);
+            setPage(1);
+          }}
+        />
+      );
     }
   };
 
@@ -323,7 +327,10 @@ export default function Discover() {
             labelId="social-option-label"
             value={tabOption}
             label="Discover"
-            onChange={(e) => setTabOption(e.target.value)}
+            onChange={(e) => {
+              setTabOption(e.target.value);
+              setPage(1);
+            }}
           >
             {Object.keys(tabOptions).map((option, index) => (
               <MenuItem key={index} value={tabOptions[option]}>
@@ -359,6 +366,13 @@ export default function Discover() {
                 setPage(1);
                 setGames(newGames);
               }}
+              onKeyDown={(event, newGames) => {
+                if (event.key === 'Enter') {
+                  event.defaultMuiprevented = true;
+                  setPage(1);
+                  setGames(newGames);
+                }
+              }}
               options={gameOptions}
             />
             <TagsSelector
@@ -366,6 +380,10 @@ export default function Discover() {
               onChange={(_, newTags) => {
                 setPage(1);
                 setTags(newTags);
+              }}
+              onKeyDown={(event, newTags) => {
+                if (event.key === 'Enter') setPage(1);
+                setGames(newTags);
               }}
             />
             <SelectDateRangeFilter
@@ -376,6 +394,7 @@ export default function Discover() {
                 setStartDate(newValues.startDate);
                 setEndDate(newValues.endDate);
                 setDateRangeRadioValue(newValues.radioValue);
+                setPage(1);
               }}
             />
             <SelectTimeRangeFilter
@@ -386,13 +405,17 @@ export default function Discover() {
                 setStartTime(newValues.startTime);
                 setEndTime(newValues.endTime);
                 setTimeRangeRadioValue(newValues.radioValue);
+                setPage(1);
               }}
             />
           </>
         )}
       </div>
       <div>
-        <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
+        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
+          <SearchBar searchText={searchText} onSearchSubmit={setSearchText} />
+          {renderSortSelector()}
+        </div>
         {renderTabContent()}
         <div
           style={{
@@ -406,11 +429,7 @@ export default function Discover() {
           <Stack spacing={2}>
             <Typography>Page: {page}</Typography>
             <Pagination
-              count={
-                tabOption === tabOptions.Posts
-                  ? Math.ceil(posts.length / postsPerPage)
-                  : Math.ceil(players.length / userPerPage)
-              }
+              count={Math.ceil(totalResults / queryLimit)}
               page={page}
               onChange={(_, value) => setPage(value)}
               color="secondary"
@@ -440,7 +459,7 @@ function SearchBar({ searchText, onSearchSubmit }) {
   }
 
   return (
-    <div id="search-bar">
+    <div className="search-bar">
       <TextField
         id="outlined-basic"
         label="Search"
