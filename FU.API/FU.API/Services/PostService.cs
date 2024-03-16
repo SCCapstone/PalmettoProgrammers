@@ -37,6 +37,20 @@ public class PostService : CommonService, IPostService
             throw new PostException("Start and end times must both be present", HttpStatusCode.UnprocessableEntity);
         }
 
+        // Make sure the post is not in the past
+        bool isPostInPast = post.StartTime < DateTime.UtcNow;
+        if (isPostInPast)
+        {
+            throw new PostException("Post cannot be in the past", HttpStatusCode.UnprocessableEntity);
+        }
+
+        // Make sure the post is not too far in the future
+        bool isPostTooFarInFuture = post.StartTime > DateTime.UtcNow.AddYears(1);
+        if (isPostTooFarInFuture)
+        {
+            throw new PostException("Post cannot be more than 7 days in the future", HttpStatusCode.UnprocessableEntity);
+        }
+
         // Check if start time is after end time
         bool isStartTimeAfterEndTime = (post.StartTime is not null) && (post.EndTime is not null) && (post.StartTime > post.EndTime);
         if (isStartTimeAfterEndTime)
@@ -48,9 +62,9 @@ public class PostService : CommonService, IPostService
         if (post.StartTime is not null && post.EndTime is not null)
         {
             var duration = post.EndTime - post.StartTime;
-            if (duration.Value.TotalMinutes < 30)
+            if (duration.Value.TotalMinutes < 5)
             {
-                throw new PostException("Post must last at least 30 minutes", HttpStatusCode.UnprocessableEntity);
+                throw new PostException("Post must last at least 5 minutes", HttpStatusCode.UnprocessableEntity);
             }
 
             if (duration.Value.TotalHours > 24)

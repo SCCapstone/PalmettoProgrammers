@@ -1,10 +1,13 @@
 namespace FU.API.Tests;
 
 using FU.API.Data;
+using FU.API.Exceptions;
+using FU.API.Interfaces;
 using FU.API.Models;
 using FU.API.Services;
 using FU.API.Tests.Helpers;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 public class PostServiceTests
 {
@@ -122,5 +125,36 @@ public class PostServiceTests
 
         // Assert
         Assert.Equal(createdPost.Description, updatedPost.Description);
+    }
+
+    [Theory]
+    [InlineData("2022-01-01T00:00:00", "2022-01-01T00:00:00")] // Date in the past
+    [InlineData("2025-01-01T00:00:01", "2025-01-01T00:00:00")] // End time before start time
+    [InlineData("9999-01-01T00:00:00", "9999-01-01T00:00:01")] // Date far in the future
+    // Date far in the future
+    public async void CreatePost_InvalidDate(DateTime startTime, DateTime endTime)
+    {
+        // Arrange
+        using var context = CreateContext();
+        var gameService = new GameService(context);
+        var chatService = new ChatService(context);
+        var postService = new PostService(context, chatService);
+        ApplicationUser user = await TestsHelper.CreateUserAsync(context);
+
+        // Act
+        Game game = await gameService.CreateGame("Game Title");
+        Post post = new()
+        {
+            Title = "Title Text",
+            Description = "Description Text",
+            GameId = game.Id,
+            Creator = user,
+            CreatorId = user.UserId,
+            StartTime = startTime,
+            EndTime = endTime,
+        };
+
+        // Calling create post should throw a PostException
+        await Assert.ThrowsAsync<PostException>(async () => await postService.CreatePost(post));
     }
 }
