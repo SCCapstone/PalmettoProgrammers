@@ -40,6 +40,7 @@ export default function Edit({ postId }) {
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
+  const [count, setCount] = useState(0);
   //const [details, setDetails] = useState('');
   //const [globalDetails, setGlobalDetails] = useState('');
   const navigate = useNavigate();
@@ -55,18 +56,22 @@ export default function Edit({ postId }) {
           navigate(`/discover`);
         }
         //setDetails(postDetails);
-        setTitle(postDetails.title); //works
+        //if(title !== postDetails.title && count === 0) {
+          setTitle(postDetails.title); //works
+        //}
+        
         setDescription(postDetails.description); //works
         // if (postDetails.game) {
         //   setGame(postDetails.game);
         // }
         //postDetails.games
-        
         setGame(postDetails.game);
-        console.log(game);
+        //console.log(game);
         gameDetails = postDetails.game;
         //globalGameDetails(game);
+        //console.log(gameDetails);
         console.log(gameDetails);
+        console.log(postDetails.game);
         setStartTime(dayjs(postDetails.startTime)); //works
         setEndTime(dayjs(postDetails.endTime)); //works
         //console.log(startTime);
@@ -75,14 +80,18 @@ export default function Edit({ postId }) {
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
         // setEndTime(postDetails.endTime.toISOString);
         setTags(postDetails.tags);
-        console.log(tags);
+        console.log(postDetails.tags);
+        //setCount(count + 1);
       } catch (e) {
         console.log(e);
       }
     };
     
     init();
+  //}, [title, description, startTime, endTime]);
+  //}, [title, description, startTime, endTime, count]);
   }, []);
+  //}, [game, tags]);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
@@ -161,10 +170,13 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             <GameSelector 
-            //value = {globalDetails}
+            value = {game}
             //inputValue = {game}
             // onChange={setGame(globalDetails)} />
-            onChange={setGame} />
+            //onChange={(newValue) => setGame(newValue)}
+            //onChange={(gameDetails) => setGame(gameDetails)}
+            onChange={setGame} 
+            />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -215,9 +227,10 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-//const GameSelector = ({ value: defaultVal, onChange }) => {
+const GameSelector = ({ value: defaultVal, onChange }) => {
 // const GameSelector = ({ inputValue: game, onChange }) => {
-const GameSelector = ({ onChange }) => {
+//const GameSelector = ({ newValue, onChange}) => {
+//const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
@@ -291,7 +304,7 @@ const GameSelector = ({ onChange }) => {
           //value={game? game: null}
           //value={game}
           //value={String(gameDetails)}
-          value={value}
+          value={defaultVal}
           //defaultValue={game}
           //defaultValue={value}
           label="Game"
