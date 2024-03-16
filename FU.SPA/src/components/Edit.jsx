@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
 
-window.gameDetails = "";
+window.gameDetails = '';
 
 // globalGameDetails = (value) => {
 //   if (gameDetails === null) {
@@ -57,9 +57,9 @@ export default function Edit({ postId }) {
         }
         //setDetails(postDetails);
         //if(title !== postDetails.title && count === 0) {
-          setTitle(postDetails.title); //works
+        setTitle(postDetails.title); //works
         //}
-        
+
         setDescription(postDetails.description); //works
         // if (postDetails.game) {
         //   setGame(postDetails.game);
@@ -87,10 +87,10 @@ export default function Edit({ postId }) {
         console.log(e);
       }
     };
-    
+
     init();
-  //}, [title, description, startTime, endTime]);
-  //}, [title, description, startTime, endTime, count]);
+    //}, [title, description, startTime, endTime]);
+    //}, [title, description, startTime, endTime, count]);
   }, []);
   //}, [game, tags]);
 
@@ -170,13 +170,13 @@ export default function Edit({ postId }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector 
-            value = {gameDetails}
-            //inputValue = {game}
-            // onChange={setGame(globalDetails)} />
-            //onChange={(newValue) => setGame(newValue)}
-            //onChange={(gameDetails) => setGame(gameDetails)}
-            onChange={setGame} 
+            <GameSelector
+              value={gameDetails}
+              //inputValue = {game}
+              // onChange={setGame(globalDetails)} />
+              //onChange={(newValue) => setGame(newValue)}
+              //onChange={(gameDetails) => setGame(gameDetails)}
+              onChange={setGame}
             />
           </Grid>
           <br />
@@ -192,10 +192,7 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector 
-            value={tags}
-            onChange={setTags} 
-          />
+          <TagsSelector value={tags} onChange={setTags} />
           <Box
             sx={{
               display: 'flex',
@@ -232,9 +229,9 @@ const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
 const GameSelector = ({ value: gameDetails, onChange }) => {
-// const GameSelector = ({ inputValue: game, onChange }) => {
-//const GameSelector = ({ newValue, onChange}) => {
-//const GameSelector = ({ onChange }) => {
+  // const GameSelector = ({ inputValue: game, onChange }) => {
+  //const GameSelector = ({ newValue, onChange}) => {
+  //const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
@@ -310,7 +307,7 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
           //value={game? game: null}
           //value={game}
           //value={String(gameDetails)}
-          value={"test2"}
+          value={'test2'}
           //defaultValue={game}
           //defaultValue={value}
           label="Game"
@@ -323,7 +320,7 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
 };
 
 //const TagsSelector = ({ onChange }) => {
-const TagsSelector = ({ value: prevTags, onChange}) => {
+const TagsSelector = ({ value: prevTags, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
 
