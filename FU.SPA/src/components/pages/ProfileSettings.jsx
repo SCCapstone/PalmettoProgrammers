@@ -9,7 +9,7 @@ import {
   Paper,
   Alert,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -24,6 +24,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
+  const [newAvatarId, setNewAvatarId] = useState();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -34,6 +35,7 @@ export default function ProfileSettings() {
 
       // Form request payload
       const data = {
+        avatarId: newAvatarId,
         id: idJson.userId,
         bio: bio !== '' ? bio : null,
         // if the date of birth is the same as today, ignore and set as null
@@ -55,6 +57,11 @@ export default function ProfileSettings() {
       alert(e);
       console.log(e);
     }
+  };
+
+  const handleNewAvatar = (avatarId) => {
+    setNewAvatarId(avatarId);
+    console.log(avatarId);
   };
 
   // Display component
@@ -101,7 +108,7 @@ export default function ProfileSettings() {
               onChange={(newValue) => setDateOfBirth(newValue)}
             />
           </LocalizationProvider>
-          <UploadAvatar />
+          <UploadAvatar onNewAvatar={handleNewAvatar} />
           <Button type="submit" fullWidth variant="contained">
             Update Profile
           </Button>
@@ -123,11 +130,16 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-const UploadAvatar = () => {
+const UploadAvatar = ({ onNewAvatar }) => {
   const [file, setFile] = useState();
   const [uploadedAvatarId, setUploadedAvatarId] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+
+  useEffect(() => {
+    if (onNewAvatar) onNewAvatar(uploadedAvatarId);
+    console.log('updating avatar');
+  }, [onNewAvatar, uploadedAvatarId]);
 
   const handleFileChange = async (event) => {
     event.preventDefault();
