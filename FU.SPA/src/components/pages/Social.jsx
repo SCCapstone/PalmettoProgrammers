@@ -133,14 +133,7 @@ export default function Social() {
     };
 
     submitSearch();
-  }, [
-    tabOption,
-    relationOption,
-    searchText,
-    user.id,
-    setSearchParams,
-    page,
-  ]);
+  }, [tabOption, relationOption, searchText, user.id, setSearchParams, page]);
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
