@@ -1,5 +1,6 @@
 namespace FU.API.Controllers;
 
+using FU.API.DTOs.User;
 using FU.API.DTOs.Post;
 using FU.API.DTOs.Search;
 using FU.API.Exceptions;
@@ -58,7 +59,7 @@ public class UsersController : ControllerBase
     [Authorize]
     [HttpPatch]
     [Route("current")] // Will never change anyone else's profile
-    public async Task<IActionResult> UpdateProfile([FromBody] UserProfile profileChanges)
+    public async Task<IActionResult> UpdateProfile([FromBody] UserProfileChangesDTO profileChanges)
     {
         // Check if the user to update is the authenticated user
         bool isParseSuccess = int.TryParse((string?)HttpContext.Items[CustomContextItems.UserId], out int userId);
@@ -67,11 +68,16 @@ public class UsersController : ControllerBase
             return Unauthorized();
         }
 
-        // Allows updateUserProfile to find the user to update
-        // Overrides any client given id that may differ from userId.
-        profileChanges.Id = userId;
+        UserProfile userProfile = new()
+        {
+            // Using userId from context because DTO id may be incorrect
+            Id = userId,
+            Bio = profileChanges.Bio,
+            DOB = profileChanges.DOB,
+            IsOnline = profileChanges.IsOnline,
+        };
 
-        var newProfile = await _userService.UpdateUserProfile(profileChanges);
+        var newProfile = await _userService.UpdateUserProfile(userProfile);
         return Ok(newProfile);
     }
 
