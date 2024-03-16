@@ -1,5 +1,4 @@
 import {
-    InputLabel,
     TextField,
     InputAdornment,
   } from '@mui/material';
