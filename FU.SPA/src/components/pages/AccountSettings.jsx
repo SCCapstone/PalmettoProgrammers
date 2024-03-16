@@ -15,6 +15,7 @@ import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
+import { Store } from 'react-notifications-component';
 
 export default function AccountSettings() {
   const { logout, user } = useContext(UserContext);
@@ -92,6 +93,19 @@ export default function AccountSettings() {
         localStorage.clear();
         logout();
         navigate('/');
+        Store.addNotification({
+          title: 'Account Deletion Confirmation',
+          message: 'Your account has been successfully deleted.',
+          type: 'success',
+          insert: 'top',
+          container: 'top-center',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
       } catch (event) {
         setCredentialsError('Incorrect credentails');
         console.error('Error in deleting account', event);
