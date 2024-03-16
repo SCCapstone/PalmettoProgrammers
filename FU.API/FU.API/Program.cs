@@ -20,9 +20,19 @@ var builder = WebApplication.CreateBuilder(args);
 DotNetEnv.Env.TraversePath().Load();
 builder.Configuration.AddEnvironmentVariables();
 string connectionString = builder.Configuration[ConfigKey.ConnectionString]
-    ?? throw new Exception("No connection string found from env var " + ConfigKey.ConnectionString);
+    ?? throw new Exception($"Database connection string is not configured. Missing {ConfigKey.ConnectionString}. See README for adding.");
 string jwtSecret = builder.Configuration[ConfigKey.JwtSecret]
-    ?? throw new Exception("No jwt secret found from env var " + ConfigKey.JwtSecret);
+    ?? throw new Exception($"JWT secret is not configured. Missing {ConfigKey.AvatarContainerName}. See README for adding.");
+
+if (builder.Configuration[ConfigKey.AvatarContainerName] is null)
+{
+    throw new Exception($"Avatar container name is not configured. Missing {ConfigKey.AvatarContainerName}. See README for adding.");
+}
+
+if (builder.Configuration[ConfigKey.StorageConnectionString] is null)
+{
+    throw new Exception($"Storage connection string is not configured. Missing {ConfigKey.StorageConnectionString}. See README for adding.");
+}
 
 // Setup the database
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
