@@ -147,27 +147,29 @@ const UserProfile = () => {
 
   if (userProfile && !loading) {
     return (
-      <div className="page-wrapper">
-        <div
-          className="header"
-          style={{
-            width: isOwnProfile ? '100%' : '55%',
-            transition: 'width 0.3s ease',
-          }}
-        >
-          <div className="left-content">
-            {renderPfp()}
-            <div className="userInfo">
-              <p className="userName">{userProfile.username}</p>
-              <p>Online Status: {renderOnlineStatus(userProfile.isOnline)}</p>
-              {userProfile.dob && <p>Age: {age} years old</p>}
+      <div style={isOwnProfile ? {} : { display: 'flex', gap: '20px' }}>
+        <div className="profile-wrapper">
+          <div
+            className="header"
+            style={{
+              minWidth: '400px',
+              transition: 'width 0.3s ease',
+            }}
+          >
+            <div className="left-content" style={{ display: 'flex' }}>
+              {renderPfp()}
+              <div className="userInfo">
+                <p className="userName">{userProfile.username}</p>
+                <p>Online Status: {renderOnlineStatus(userProfile.isOnline)}</p>
+                {userProfile.dob && <p>Age: {age} years old</p>}
+              </div>
             </div>
           </div>
-          <div className="right-content">
+          <div className="body">
             <SocialRelationActionButton requesteeId={userProfile?.id} />
+            {renderBio()}
           </div>
         </div>
-        <div className="body">{renderBio()}</div>
         {renderChat()}
       </div>
     );
@@ -235,7 +237,7 @@ const SocialRelationActionButton = ({ requesteeId }) => {
     <Button
       onClick={handleClick}
       variant="contained"
-      className="socialRelationActionButton"
+      style={{ margin: 'auto' }}
     >
       {buttonText}
     </Button>

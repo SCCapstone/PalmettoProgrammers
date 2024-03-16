@@ -29,8 +29,8 @@ public class SearchController : ControllerBase
             return UnprocessableEntity("Start and end time must both be set, or both be null");
         }
 
-        var posts = await _searchService.SearchPosts(request.ToPostQuery());
-        var response = new List<PostResponseDTO>(posts.Count);
+        (var posts, var totalResults) = await _searchService.SearchPosts(request.ToPostQuery());
+        var postDtos = new List<PostResponseDTO>(posts.Count);
 
         // Go through each post and check if the user has joined the post
         var user = await _searchService.GetCurrentUser(User);
@@ -40,23 +40,27 @@ public class SearchController : ControllerBase
             foreach (var post in posts)
             {
                 var joined = await _searchService.HasJoinedPost(user.UserId, post.Id);
-                response.Add(post.ToDto(hasJoined: joined));
+                postDtos.Add(post.ToDto(hasJoined: joined));
             }
         }
         else
         {
-            response = posts.ToDtos().ToList();
+            postDtos = posts.ToDtos().ToList();
         }
 
-        return Ok(response);
+        Response.Headers.Add("X-total-count", totalResults.ToString());
+
+        return Ok(postDtos);
     }
 
     [HttpGet]
     [Route("users")]
     public async Task<IActionResult> SearchUsers([FromQuery] UserSearchRequestDTO request)
     {
-        List<UserProfile> userProfiles = await _searchService.SearchUsers(request.ToUserQuery());
+        (var users, var totalResults) = await _searchService.SearchUsers(request.ToUserQuery());
 
-        return Ok(userProfiles);
+        Response.Headers.Add("X-total-count", totalResults.ToString());
+
+        return Ok(users);
     }
 }

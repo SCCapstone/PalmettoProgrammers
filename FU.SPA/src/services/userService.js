@@ -15,7 +15,9 @@ const getConnectedPosts = async (query) => {
     throw new Error('Error getting posts');
   }
 
-  return await response.json();
+  const totalCount = parseInt(response.headers.get('x-total-count'));
+  const responseData = await response.json();
+  return { data: responseData, totalCount: totalCount };
 };
 
 const getConnectedGroups = async () => {
@@ -26,19 +28,6 @@ const getConnectedGroups = async () => {
 
   if (!response.ok) {
     throw new Error('Error getting groups');
-  }
-
-  return await response.json();
-};
-
-const getConnectedPlayers = async () => {
-  const response = await fetch(
-    `${API_BASE_URL}/users/current/connected/players`,
-    { headers: { ...AuthService.getAuthHeader() } },
-  );
-
-  if (!response.ok) {
-    throw new Error('Error getting players');
   }
 
   return await response.json();
@@ -109,7 +98,6 @@ const updateAccountInfo = async (data) => {
 const UserService = {
   getConnectedPosts,
   getConnectedGroups,
-  getConnectedPlayers,
   getUserprofile,
   getUserIdJson,
   updateUserProfile,
