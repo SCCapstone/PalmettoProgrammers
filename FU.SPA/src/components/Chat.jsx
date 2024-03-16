@@ -129,12 +129,11 @@ export default function Chat({ chatId }) {
       className="chat-card"
       style={{
         textAlign: 'left',
-        width: '700px',
-        height: '90%',
+        minWidth: '300px',
+        width: '100%',
+        height: '90vh',
         display: 'flex',
         flexDirection: 'column',
-        position: 'fixed',
-        bottom: '0',
         right: '5%',
         animation: isNewMessageReceived
           ? 'sparkle 1s ease-in-out infinite'

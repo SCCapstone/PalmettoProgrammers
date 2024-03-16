@@ -1,10 +1,10 @@
 import PostCard from './PostCard';
 
-const Posts = ({ posts }) => {
+const Posts = ({ posts, onTagClick }) => {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} onTagClick={onTagClick} />
       ))}
     </div>
   );

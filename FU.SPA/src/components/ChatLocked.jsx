@@ -36,7 +36,7 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
     return (
       <Button
         variant="contained"
-        style={{ width: '95%' }}
+        style={{ width: '95%', maxWidth: '300px' }}
         onClick={() => {
           if (reason === 'no-user') {
             navigate('/signin?returnUrl=' + encodeURIComponent(path));
@@ -56,17 +56,16 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
     <Card
       style={{
         textAlign: 'left',
-        width: '700px',
-        height: '90%',
         minHeight: '100px',
         display: 'flex',
         flexDirection: 'column',
-        position: 'fixed',
-        bottom: '0',
         right: '5%',
         alignItems: 'center',
         justifyContent: 'center',
         paddingBottom: '40px',
+        minWidth: '300px',
+        width: '100%',
+        height: '90vh',
       }}
     >
       {renderMessage()}
