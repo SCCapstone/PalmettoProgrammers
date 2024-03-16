@@ -131,7 +131,6 @@ public class PostServiceTests
     [InlineData("2022-01-01T00:00:00", "2022-01-01T00:00:00")] // Date in the past
     [InlineData("2025-01-01T00:00:01", "2025-01-01T00:00:00")] // End time before start time
     [InlineData("9999-01-01T00:00:00", "9999-01-01T00:00:01")] // Date far in the future
-    // Date far in the future
     public async void CreatePost_InvalidDate(DateTime startTime, DateTime endTime)
     {
         // Arrange
