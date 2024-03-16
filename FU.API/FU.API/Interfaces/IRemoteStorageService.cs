@@ -6,5 +6,7 @@ public interface IRemoteStorageService
 
     public Task<bool> DeleteFileAsync(Guid fileId);
 
+    public Task DeleteOldUnusedFilesAsync();
+
     public Uri GetUri(Guid fileId);
 }
