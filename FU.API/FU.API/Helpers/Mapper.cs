@@ -36,7 +36,7 @@ public static class Mapper
             Id = message.Id,
             CreatedAt = message.CreatedAt,
             Content = message.Content,
-            Sender = message.Sender.ToProfile(),
+            Sender = message.Sender == null ? new UserProfile { Username = "Deleted User" } : message.Sender.ToProfile(),
         };
     }
 
@@ -203,7 +203,7 @@ public static class Mapper
             EndTime = post.EndTime,
             MaxPlayers = post.MaxPlayers,
             ChatId = post.ChatId,
-            Creator = post.Creator.ToProfile(),
+            Creator = post.Creator == null ? new UserProfile { Username = "Deleted User" } : post.Creator.ToProfile(),
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
             HasJoined = hasJoined,
         };
