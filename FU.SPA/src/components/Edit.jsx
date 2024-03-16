@@ -40,7 +40,7 @@ export default function Edit({ postId }) {
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
-  const [count, setCount] = useState(0);
+  //const [count, setCount] = useState(0);
   //const [details, setDetails] = useState('');
   //const [globalDetails, setGlobalDetails] = useState('');
   const navigate = useNavigate();
@@ -66,12 +66,13 @@ export default function Edit({ postId }) {
         // }
         //postDetails.games
         setGame(postDetails.game);
+        //setGame(postDetails.game);
         //console.log(game);
         gameDetails = postDetails.game;
         //globalGameDetails(game);
         //console.log(gameDetails);
-        console.log(gameDetails);
-        console.log(postDetails.game);
+        //console.log(gameDetails);
+        //console.log(postDetails.game);
         setStartTime(dayjs(postDetails.startTime)); //works
         setEndTime(dayjs(postDetails.endTime)); //works
         //console.log(startTime);
@@ -80,7 +81,7 @@ export default function Edit({ postId }) {
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
         // setEndTime(postDetails.endTime.toISOString);
         setTags(postDetails.tags);
-        console.log(postDetails.tags);
+        //console.log(postDetails.tags);
         //setCount(count + 1);
       } catch (e) {
         console.log(e);
@@ -170,7 +171,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             <GameSelector 
-            value = {game}
+            value = {gameDetails}
             //inputValue = {game}
             // onChange={setGame(globalDetails)} />
             //onChange={(newValue) => setGame(newValue)}
@@ -191,7 +192,10 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector onChange={setTags} />
+          <TagsSelector 
+            value={tags}
+            onChange={setTags} 
+          />
           <Box
             sx={{
               display: 'flex',
@@ -227,7 +231,7 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ value: defaultVal, onChange }) => {
+const GameSelector = ({ value: gameDetails, onChange }) => {
 // const GameSelector = ({ inputValue: game, onChange }) => {
 //const GameSelector = ({ newValue, onChange}) => {
 //const GameSelector = ({ onChange }) => {
@@ -284,7 +288,8 @@ const GameSelector = ({ value: defaultVal, onChange }) => {
       //value={game? game : null}
       //value={game}
       //value={String(gameDetails)}
-      value={value}
+      //value={value}
+      value={gameDetails}
       //defaultValue={gameDetails}
       //inputValue = {game}
       //defaultValue={defaultVal}
@@ -293,7 +298,8 @@ const GameSelector = ({ value: defaultVal, onChange }) => {
       options={gameOptions}
       //disableCloseOnSelect
       filterOptions={onFilterOptions}
-      getOptionLabel={(o) => (o ? o.name : '')}
+      //getOptionLabel={(o) => (o ? o.name : '')}
+      //getOptionLabel={(o) => (o.name)}
       isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option) => <li {...props}>{option.name}</li>}
       renderInput={(params) => (
@@ -304,7 +310,7 @@ const GameSelector = ({ value: defaultVal, onChange }) => {
           //value={game? game: null}
           //value={game}
           //value={String(gameDetails)}
-          value={defaultVal}
+          value={"test2"}
           //defaultValue={game}
           //defaultValue={value}
           label="Game"
@@ -316,7 +322,8 @@ const GameSelector = ({ value: defaultVal, onChange }) => {
   );
 };
 
-const TagsSelector = ({ onChange }) => {
+//const TagsSelector = ({ onChange }) => {
+const TagsSelector = ({ value: prevTags, onChange}) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
 
@@ -361,12 +368,12 @@ const TagsSelector = ({ onChange }) => {
       autoHighlight
       multiple
       clearOnBlur
-      value={value}
+      value={prevTags}
       onChange={onInputChange}
       options={tagOptions}
       //disableCloseOnSelect
       filterOptions={onFilterOptions}
-      getOptionLabel={(o) => o.name}
+      //getOptionLabel={(o) => o.name}
       isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
