@@ -53,7 +53,7 @@ const buildPostQueryString = (query) => {
 
 const buildUserQueryString = (query) => {
   let queryString = '';
-  if (query.keywords) {
+  if (query && query.keywords) {
     queryString += `keywords=${encodeURIComponent(query.keywords.trim())}`;
   }
 

@@ -15,6 +15,7 @@ import Users from '../Users';
 import './Social.css';
 import { useSearchParams } from 'react-router-dom';
 import UserContext from '../../context/userContext';
+import TextSearch from '../TextSearch';
 
 const paramKey = {
   tabOption: 'o',
@@ -38,6 +39,7 @@ export default function Social() {
   const initialTab = searchParams.get(paramKey.tabOption) || tabOptions.Posts;
   const initialRelation =
     searchParams.get(paramKey.relationOption) || relationOptions.Friends;
+  const [searchText, setSearchText] = useState(searchParams.get('q') || '');
   const initialPage = parseInt(searchParams.get(paramKey.page), 10) || 1;
 
   const queryLimit = 10;
@@ -54,7 +56,6 @@ export default function Social() {
   useEffect(() => {
     const loadContent = async () => {
       if (tabOption === tabOptions.Posts) {
-        // Pass in empty object for later query parameters
         const query = {
           limit: queryLimit,
           page: page,
@@ -74,16 +75,65 @@ export default function Social() {
       }
     };
     loadContent();
-  }, [tabOption, relationOption, user.id, page]);
+  }, [tabOption, searchText, relationOption, user.id, page]);
 
   // use effect to update search params
   useEffect(() => {
-    if (tabOption === tabOptions.Posts) {
-      setSearchParams({ o: tabOption, page: page });
-    } else {
-      setSearchParams({ o: tabOption, r: relationOption, page: page });
-    }
-  }, [tabOption, relationOption, setSearchParams, page]);
+    const updateSearchParams = () => {
+      setSearchParams(
+        (params) => {
+          if (searchText) {
+            params.set('q', searchText);
+          }
+          params.set('o', tabOption);
+          params.set('page', page);
+
+          if (tabOption === tabOptions.Posts) {
+            params.delete('r');
+          } else {
+            params.set('r', relationOption);
+          }
+          return params;
+        },
+        { replace: true },
+      );
+    };
+
+    const updateSearchResults = async () => {
+      if (tabOption === tabOptions.Posts) {
+        const query = {
+          keywords: searchText,
+        };
+
+        try {
+          const response = await UserService.getConnectedPosts(query);
+          setPosts(response.data);
+          setTotalResults(response.totalCount || 0);
+        } catch (error) {
+          console.error('Error', error);
+        }
+      } else {
+        const query = {
+          keywords: searchText,
+          relation: relationOption,
+        };
+        try {
+          const response = await RelationService.getRelations(user.id, query);
+          setUsers(response.data);
+          setTotalResults(response.totalCount || 0);
+        } catch (error) {
+          console.error('Error', error);
+        }
+      }
+    };
+
+    const submitSearch = async () => {
+      updateSearchParams();
+      updateSearchResults();
+    };
+
+    submitSearch();
+  }, [tabOption, relationOption, searchText, user.id, setSearchParams, page]);
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
@@ -152,6 +202,10 @@ export default function Social() {
         {renderTabSelectors()}
       </div>
       <div>
+        <TextSearch.SearchBar
+          searchText={searchText}
+          onSearchSubmit={setSearchText}
+        />
         {renderTabContent()}
         <div
           style={{
