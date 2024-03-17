@@ -1,5 +1,5 @@
 import { Container, Box, Typography, Button, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -15,6 +15,21 @@ export default function ProfileSettings() {
   // const [favoriteGames, setFavoriteGames] = useState([]);
   // const [favoriteTags, setFavoriteTags] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchUserInfo() {
+      try {
+        const userInfo = await UserService.getProfileInfo();
+        setBio(userInfo.bio || '');
+        setDateOfBirth(userInfo.dob ? dayjs(userInfo.dob) : null);
+        setPfpUrl(userInfo.pfpUrl || '');
+      } catch (error) {
+        console.error("Failed to load profile info", error);
+      }
+    }
+
+    fetchUserInfo();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
