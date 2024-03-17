@@ -21,7 +21,7 @@ public class EmailService : IEmailService
     {
         _configuration = configuration;
 
-        string connectionString = "endpoint=https://communicationfu.unitedstates.communication.azure.com/;accesskey=PGEGlkGC8Beca/i87cymeDvvumi2xtxfI1L1HQH0V18SsMZ9czSnrh5SolroKUH8FN0Tyv2mYd4IDTnzgEmLMA==";
+        string connectionString = _configuration[ConfigKey.EmailConnectionString];
         _emailClient = new EmailClient(connectionString);
     }
 
@@ -34,8 +34,7 @@ public class EmailService : IEmailService
                 senderAddress: "DoNotReply@72e78c7f-bd50-4dee-b29d-3853bd1e3fa1.azurecomm.net",
                 recipientAddress: user.Email,
                 subject: "Test Email",
-                htmlContent: GenerateEmailContent(emailType, user),
-                plainTextContent: "Hello world via email.");
+                htmlContent: GenerateEmailContent(emailType, user));
         });
 
         return Task.CompletedTask;

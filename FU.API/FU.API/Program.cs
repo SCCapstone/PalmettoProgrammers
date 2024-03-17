@@ -24,6 +24,11 @@ string connectionString = builder.Configuration[ConfigKey.ConnectionString]
 string jwtSecret = builder.Configuration[ConfigKey.JwtSecret]
     ?? throw new Exception("No jwt secret found from env var " + ConfigKey.JwtSecret);
 
+if (builder.Configuration[ConfigKey.EmailConnectionString] is null)
+{
+    throw new Exception($"Email service connection string is not configured. Missing {ConfigKey.EmailConnectionString}. See README for adding.");
+}
+
 // Setup the database
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 

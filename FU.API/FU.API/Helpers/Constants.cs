@@ -36,4 +36,6 @@ public static class ConfigKey
     /// The connection string config key.
     /// </summary>
     public const string ConnectionString = "CONNECTION_STRING";
+
+    public const string EmailConnectionString = "EMAIL_CONNECTION_STRING";
 }
