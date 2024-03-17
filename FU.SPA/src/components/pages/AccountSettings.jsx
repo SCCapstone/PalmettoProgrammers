@@ -1,9 +1,10 @@
-import { Container, Box, Typography, Button, TextField } from '@mui/material';
+import { Container, Box, Typography, Button, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { useState } from 'react';
 import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
+
 
 export default function AccountSettings() {
   const { logout } = useContext(UserContext);
@@ -11,6 +12,7 @@ export default function AccountSettings() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [changeEmailDialogOpen, setChangeEmailDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -44,14 +46,68 @@ export default function AccountSettings() {
         logout();
         navigate('/signin');
       }
-      // Not the best way to do this but it'll do for now
-      //const idJson = await UserService.getUserIdJson();
-      //navigate('/profile/' + idJson.userId);
     } catch (e) {
       alert(e);
       console.log(e);
     }
   };
+
+  /***
+   * Dialog to change email
+   * We want to ensure that the user is sure they want to change their email
+   * TODO: look into password verification
+   * 
+   * @returns The dialog to confirm the email change
+   */
+  const ChangeEmailDialog = () => {
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
+
+    const handleClose = () => {
+      setChangeEmailDialogOpen(false);
+    }
+
+    const handleEmailChange = async () => {
+      try {
+        const data = {
+          email: email
+        }
+        console.log(data);
+        await UserService.updateAccountInfo(data);
+      } catch (e) {
+        setEmailError(e);
+        console.error('Error in changing email', e);
+      }
+    }
+
+    // Component details
+    return (
+      <Dialog open={changeEmailDialogOpen} onClose={handleClose}>
+        <DialogTitle>Email Change</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action will change the email of your account. Are you sure?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <TextField
+            autoFocus
+            error={!!emailError}
+            helperText={emailError}
+            margin="dense"
+            id="changeEmail"
+            label="Change Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+          />
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleEmailChange} autoFocus>Change Email</Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
 
   // Display component
   return (
@@ -123,6 +179,24 @@ export default function AccountSettings() {
             Update Information
           </Button>
         </Box>
+        <Button
+          className="change-email-button"
+          variant="contained error"
+          onClick={() => setChangeEmailDialogOpen(true)}
+          sx ={{
+            mt:3,
+            mb: 2,
+            position: 'absolute',
+            bottom: '0',
+            backgroundColor: 'red',
+            '&:hover': {
+              backgroundColor: 'darkred'
+            },
+          }}
+        >
+          Change Email
+        </Button>
+        <ChangeEmailDialog />
       </Box>
     </Container>
   );
