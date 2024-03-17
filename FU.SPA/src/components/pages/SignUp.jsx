@@ -98,7 +98,6 @@ export default function SignUp() {
       }
     } catch (event) {
       // Parse the error message
-      console.log(event);
       const errorResponse = JSON.parse(event.message);
 
       //If username already exists

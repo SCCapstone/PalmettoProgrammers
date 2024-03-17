@@ -83,20 +83,20 @@ export default function AccountSettings() {
       if (newEmail.trim() === '') {
         setEmailError('');
       }
-    };  
+    };
 
     const handleSubmit = async () => {
       try {
         const data = {
-          newEmail: email
-        }
+          newEmail: email,
+        };
         console.log(data);
         await UserService.updateAccountInfo(data);
         setChangeEmailDialogOpen(false);
-         // logout and navigate to the home page
-         localStorage.clear();
-         logout();
-         navigate('/');
+        // logout and navigate to the home page
+        localStorage.clear();
+        logout();
+        navigate('/');
       } catch (e) {
         setEmailError('Invalid email');
         console.error('Error in changing email', e);
@@ -109,7 +109,9 @@ export default function AccountSettings() {
         <DialogTitle>Email Change</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Proceeding with this action will update the email associated with your account and automatically log you out. Are you certain you wish to proceed?
+            Proceeding with this action will update the email associated with
+            your account and automatically log you out. Are you certain you wish
+            to proceed?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -126,7 +128,9 @@ export default function AccountSettings() {
             fullWidth
           />
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} autoFocus>Change Email</Button>
+          <Button onClick={handleSubmit} autoFocus>
+            Change Email
+          </Button>
         </DialogActions>
       </Dialog>
     );
@@ -203,15 +207,16 @@ export default function AccountSettings() {
           </Button>
           <ChangeEmailDialog />
           <Button
-          className="change-email-button"
-          variant="contained"
-          onClick={() => setChangeEmailDialogOpen(true)}
-          sx={{
-            mt: 3,
-            mb: 2,}}
-        >
-          Change Email
-        </Button>
+            className="change-email-button"
+            variant="contained"
+            onClick={() => setChangeEmailDialogOpen(true)}
+            sx={{
+              mt: 3,
+              mb: 2,
+            }}
+          >
+            Change Email
+          </Button>
         </Box>
       </Box>
     </Container>
