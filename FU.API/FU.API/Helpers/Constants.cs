@@ -38,4 +38,6 @@ public static class ConfigKey
     public const string ConnectionString = "CONNECTION_STRING";
 
     public const string EmailConnectionString = "EMAIL_CONNECTION_STRING";
+
+    public const string Environment = "ENVIRONMENT";
 }

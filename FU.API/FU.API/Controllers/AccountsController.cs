@@ -134,20 +134,22 @@ public class AccountsController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> ConfirmAccount(string token, [FromQuery] string? email = null)
     {
-        var user = await _accountService.ConfirmAccount(token);
+        var authInfo = await _accountService.ConfirmAccount(token);
 
-        // If user is null, then the token is bad
-        if (user is null)
+        // If authInfo is null, then the token is bad
+        if (authInfo is null)
         {
             // If token is bad and, but email is present then user is trying to resend the email
             if (email is not null)
             {
                 await _accountService.ResendConfirmationEmail(email);
+                return Ok();
             }
 
             return UnprocessableEntity("The token is invalid or expired.");
         }
 
-        return Ok();
+        // Account is confirmed
+        return Ok(authInfo);
     }
 }

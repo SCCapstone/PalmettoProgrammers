@@ -64,6 +64,10 @@ public class AccountsService : CommonService
             throw new DuplicateUserException();
         }
 
+        // Determine the environment
+        var env = _configuration[ConfigKey.Environment];
+        bool confirmAccount = string.Compare(env, "prod", ignoreCase: true) == 0;
+
         var duplicateEmail = _dbContext.Users.Where(u => u.NormalizedEmail == credentials.Email.ToUpper()).FirstOrDefault();
         if (duplicateEmail is not null)
         {
@@ -75,13 +79,17 @@ public class AccountsService : CommonService
             Username = credentials.Username,
             Email = credentials.Email,
             PasswordHash = HashPassword(credentials.Password),
+            AccountConfirmed = !confirmAccount,
         });
         await _dbContext.SaveChangesAsync();
 
         var createdUser = queryUser.First();
 
         // Send email
-        await _emailService.SendEmail(EmailType.ConfirmAccount, createdUser);
+        if (confirmAccount)
+        {
+            await _emailService.SendEmail(EmailType.ConfirmAccount, createdUser);
+        }
 
         return createdUser;
     }
@@ -127,19 +135,7 @@ public class AccountsService : CommonService
             return null;
         }
 
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty));
-        var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-        List<Claim> claims = new()
-        {
-            new (CustomClaimTypes.UserId, user.UserId.ToString())
-        };
-
-        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: DateTime.UtcNow.AddDays(1), claims: claims);
-
-        string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
-        return new AuthenticationInfo(token, tokenOptions.ValidTo);
+        return CreateAuthInfo(DateTime.UtcNow.AddDays(1), user);
     }
 
     /// <summary>
@@ -202,10 +198,30 @@ public class AccountsService : CommonService
 
     public async Task ResendConfirmationEmail(string email)
     {
-        throw new NotImplementedException();
+        // Find the user with the email
+        var user = _dbContext.Users.Where(u => u.NormalizedEmail == email.ToUpper()).FirstOrDefault() ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        // Make sure the account isn't already confirmed
+        if (user.AccountConfirmed)
+        {
+            throw new BadRequestException("Account already confirmed");
+        }
+
+        // Make sure the email is valid
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(email);
+        }
+        catch
+        {
+            throw new BadRequestException("Invalid email");
+        }
+
+        // Send the email
+        await _emailService.SendEmail(EmailType.ConfirmAccount, user);
     }
 
-    public async Task<ApplicationUser?> ConfirmAccount(string token)
+    public async Task<AuthenticationInfo?> ConfirmAccount(string token)
     {
         try
         {
@@ -225,12 +241,12 @@ public class AccountsService : CommonService
 
             var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
 
+            // Confirm the account
             user.AccountConfirmed = true;
             _dbContext.Update(user);
             await _dbContext.SaveChangesAsync();
 
-            // Confirm their account
-            return user;
+            return CreateAuthInfo(DateTime.UtcNow.AddDays(1), user);
         }
         catch (Exception)
         {
@@ -239,10 +255,33 @@ public class AccountsService : CommonService
         }
     }
 
+    public AuthenticationInfo CreateAuthInfo(DateTime expires, ApplicationUser user)
+    {
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty));
+        var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+        List<Claim> claims = new()
+        {
+            new (CustomClaimTypes.UserId, user.UserId.ToString())
+        };
+
+        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: expires, claims: claims);
+
+        string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+        return new AuthenticationInfo(token, tokenOptions.ValidTo);
+    }
+
     // Return user credentials so userId is accessable without a second db call
     private Task<ApplicationUser?> Authenticate(Credentials credentials)
     {
         ApplicationUser? user = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).FirstOrDefault();
+
+        // If user account not confirmed, then don't allow login
+        if (user is not null && !user.AccountConfirmed)
+        {
+            throw new UnauthorizedException("Account not confirmed");
+        }
 
         if (user?.PasswordHash == HashPassword(credentials.Password))
         {
