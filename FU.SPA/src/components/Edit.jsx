@@ -23,6 +23,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
 
 window.gameDetails = '';
+window.tagsDetails = '';
 
 // globalGameDetails = (value) => {
 //   if (gameDetails === null) {
@@ -69,6 +70,8 @@ export default function Edit({ postId }) {
         //setGame(postDetails.game);
         //console.log(game);
         gameDetails = postDetails.game;
+        //tagsDetails = postDetails.tags;
+        //console.log(tagsDetails);
         //globalGameDetails(game);
         //console.log(gameDetails);
         //console.log(gameDetails);
@@ -81,6 +84,10 @@ export default function Edit({ postId }) {
         // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
         // setEndTime(postDetails.endTime.toISOString);
         setTags(postDetails.tags);
+        console.log(tags); //not getting the value for some reason.
+        console.log(postDetails.tags);
+        tagsDetails = postDetails.tags;
+        console.log(tagsDetails);
         //console.log(postDetails.tags);
         //setCount(count + 1);
       } catch (e) {
@@ -192,7 +199,10 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector value={tags} onChange={setTags} />
+          <TagsSelector 
+            value={tagsDetails} 
+            onChange={setTags} 
+            />
           <Box
             sx={{
               display: 'flex',
@@ -312,18 +322,30 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
   );
 };
 
+
+
+
+
+
 //const TagsSelector = ({ onChange }) => {
-const TagsSelector = ({ value: prevTags, onChange }) => {
+const TagsSelector = ({ value: tagsDetails, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
-  const [tags, setTags] = useState([]);
+  //const [tags, setTags] = useState([]);
   const [value, setValue] = useState('');
-  const [count, setCount] = useState(0);
+  //const [count, setCount] = useState(0);
 
   useEffect(() => {
     TagService.searchTags('').then((tags) => setTagOptions(tags));
-    if(count === 0) {
-      setValue(prevTags);
-    }
+    //setValue(tagsDetails);
+    // try {
+    //   console.log(tagsDetails);
+    // } catch (error) {
+    //   console.log(error);  
+    // }
+    
+    // if(count === 0) {
+    //   setValue(prevTags);
+    // }
     //const tagOps = tagOptions.find((object) => object.name === prevTags);
     // tagOps.forEach(element => {
     //   if(prevTags[element] === tagOps[element]) {
@@ -340,8 +362,9 @@ const TagsSelector = ({ value: prevTags, onChange }) => {
       //   alert("Tags in tags selector not the same");
       // }
     //}
-    setCount(count + 1);
-  }, [count]);
+    // setCount(count + 1);
+  //}, [count]);
+  }, []);
 
   const onInputChange = (event, newValues) => {
     for (const newValue of newValues) {
@@ -380,15 +403,47 @@ const TagsSelector = ({ value: prevTags, onChange }) => {
       autoHighlight
       multiple
       clearOnBlur
-      value={value}
+      value={tagsDetails}
       onChange={onInputChange}
       options={tagOptions}
       //disableCloseOnSelect
       filterOptions={onFilterOptions}
-      //getOptionLabel={(o) => o.name}
-      //getOptionLabel={(option) => typeof option === "string" ? prevTags : option.name}
+      //option needs to be "string" not "object", even though object is kind of working.
+      //getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option} //half-way working
+      
+      //need to make tagsDetails into a string. The below optionlabel causes a double. Ex: "tag1, tag2" "tag1, tag2"
+      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails) : option}
+      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails.name : option}
+      // The below option label causes a double similar to one of those above, but causes them to stack tag1 on top of tag 2 in the same in cases tag.
+      // getOptionLabel={(option) => typeof option === "string" ? tagsDetails.map(item => (
+      //   <div key={item}>
+      //     {item}
+      //   </div>
+      // )) : option}
+      // The below option label causes a double of invisible tags, tag 1, and tag2, depending on which tag you click.  
+      //getOptionLabel={(option) => typeof option === "string" ? value : option}
       getOptionLabel={(option) => typeof option === "string" ? value : option.name}
-      isOptionEqualToValue={(option, value) => option.name === value.name}
+      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails.name : option}
+      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}  
+      //getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option.name}
+      //getOptionLabel={(option) => typeof option === "string" ? String.split(tagsDetails) : option}
+      //getOptionLabel={(option) => option.name}
+      //getOptionLabel={(o) => o.name}
+      //getOptionLabel={(option) => typeof option === "string" ? prevTags : option.name} //prevTags is now tagsDetails
+      //getOptionLabel={(option) => typeof option === "string" ? prevTags : tagOptions}
+      //getOptionLabel={(option) => typeof option === "string" ? tagOptions : prevTags}
+      //getOptionLabel={(option) => typeof option === "string" ? option.name : tagOptions}
+      //getOptionLabel={(option) => typeof option === "string" ? tagOptions : option.name}
+      //getOptionLabel={(option) => typeof option === "string" ? option : option.name}
+      //getOptionLabel={(option) => typeof option === "string" ? gameDetails : option.name} //working for games
+      //getOptionLabel={(option) => typeof option === "object" ? value : option.name}
+      //getOptionLabel={(option) => typeof option === "object" ? tagOptions : option.name}
+      //getOptionLabel={(option) => typeof option === "object" ? option : option.name}
+      //getOptionLabel={(o) => (o ? option : o.name)}
+      //getOptionLabel={(o) => }
+      isOptionEqualToValue={(option, value) => (option.name === value.name)}
+      //isOptionEqualToValue={(option, value) => (tagsDetails.name === option.name)}
+      //isOptionEqualToValue={(option, value) => (o ? (option.name === value.name) : prevTags)}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -402,7 +457,7 @@ const TagsSelector = ({ value: prevTags, onChange }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Tags" placeholder="" />
+        <TextField {...params} value={value} label="Tags" placeholder="" />
       )}
     />
   );
