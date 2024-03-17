@@ -67,15 +67,28 @@ export default function AccountSettings() {
       setChangeEmailDialogOpen(false);
     }
 
-    const handleEmailChange = async () => {
+    const handleEmailChange = (e) => {
+      const newEmail = e.target.value;
+      setEmail(newEmail);
+      if (newEmail.trim() === '') {
+        setEmailError('');
+      }
+    };  
+
+    const handleSubmit = async () => {
       try {
         const data = {
-          email: email
+          newEmail: email
         }
         console.log(data);
         await UserService.updateAccountInfo(data);
+        setChangeEmailDialogOpen(false);
+         // logout and navigate to the home page
+         localStorage.clear();
+         logout();
+         navigate('/');
       } catch (e) {
-        setEmailError(e);
+        setEmailError('Invalid email');
         console.error('Error in changing email', e);
       }
     }
@@ -86,7 +99,7 @@ export default function AccountSettings() {
         <DialogTitle>Email Change</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            This action will change the email of your account. Are you sure?
+            Proceeding with this action will update the email associated with your account and automatically log you out. Are you certain you wish to proceed?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -99,11 +112,11 @@ export default function AccountSettings() {
             label="Change Email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             fullWidth
           />
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleEmailChange} autoFocus>Change Email</Button>
+          <Button onClick={handleSubmit} autoFocus>Change Email</Button>
         </DialogActions>
       </Dialog>
     )
@@ -178,24 +191,18 @@ export default function AccountSettings() {
           >
             Update Information
           </Button>
-        </Box>
-        <Button
+          <Button
           className="change-email-button"
-          variant="contained error"
+          variant="contained"
           onClick={() => setChangeEmailDialogOpen(true)}
           sx ={{
             mt:3,
             mb: 2,
-            position: 'absolute',
-            bottom: '0',
-            backgroundColor: 'red',
-            '&:hover': {
-              backgroundColor: 'darkred'
-            },
           }}
         >
           Change Email
         </Button>
+        </Box>
         <ChangeEmailDialog />
       </Box>
     </Container>
