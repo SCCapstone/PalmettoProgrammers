@@ -79,6 +79,23 @@ const updateUserProfile = async (data) => {
   return response.json();
 };
 
+const getProfileInfo = async (data) => {
+  const response = await fetch(`${API_BASE_URL}/Users/current`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      ...AuthService.getAuthHeader(),
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in getting information');
+  }
+
+  return response.json();
+};
+
 // Updates Account Information
 const updateAccountInfo = async (data) => {
   const response = await fetch(`${API_BASE_URL}/Accounts`, {
@@ -99,6 +116,7 @@ const UserService = {
   getConnectedPosts,
   getConnectedGroups,
   getUserprofile,
+  getProfileInfo,
   getUserIdJson,
   updateUserProfile,
   updateAccountInfo,
