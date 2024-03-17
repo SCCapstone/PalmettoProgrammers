@@ -75,6 +75,7 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IRelationService, RelationService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 // Add SignalR
 builder.Services.AddSignalR(options =>

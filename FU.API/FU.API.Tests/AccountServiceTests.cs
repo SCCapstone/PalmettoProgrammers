@@ -31,7 +31,7 @@ public class AccountServiceTests : IDisposable
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(configPairs)
             .Build();
-        _accountsService = new AccountsService(configuration, _dbContext);
+        _accountsService = new AccountsService(configuration, _dbContext, new EmailService(configuration));
     }
 
     public void Dispose()

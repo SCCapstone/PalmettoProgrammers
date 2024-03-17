@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Helpers;
 using FU.API.Exceptions;
+using FU.API.DTOs;
 
 /// <summary>
 /// Handles accounts endpoint requests.
@@ -29,13 +30,19 @@ public class AccountsController : ControllerBase
     /// <summary>
     /// Authenticates a user and gives them an access token.
     /// </summary>
-    /// <param name="credentials">Credentials to verify.</param>
+    /// <param name="loginDetails">Login details.</param>
     /// <returns>An object with a Jwt token and timeout.</returns>
     [HttpPost]
     [Route("auth")]
     [AllowAnonymous]
-    public async Task<IActionResult> Authenticate(Credentials credentials)
+    public async Task<IActionResult> Authenticate(LoginRequestDTO loginDetails)
     {
+        var credentials = new Credentials
+        {
+            Username = loginDetails.Username,
+            Password = loginDetails.Password
+        };
+
         var authInfo = await _accountService.GetUserAuthInfo(credentials);
 
         if (authInfo is null)
@@ -111,6 +118,27 @@ public class AccountsController : ControllerBase
             }
 
             await _accountService.UpdatePassword(user.UserId, newCredentials.NewPassword);
+        }
+
+        if (newCredentials.NewEmail is not null)
+        {
+            await _accountService.UpdateEmail(user.UserId, newCredentials.NewEmail);
+        }
+
+        return Ok();
+    }
+
+    // Confirm account
+    [HttpPost]
+    [Route("confirm/{token}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ConfirmAccount(string token)
+    {
+        var user = await _accountService.ConfirmAccount(token);
+
+        if (user is null)
+        {
+            return UnprocessableEntity("The token is invalid or expired.");
         }
 
         return Ok();

@@ -28,7 +28,7 @@ public static class TestsHelper
             .AddInMemoryCollection(configPairs)
             .Build();
 
-        var accountService = new AccountsService(configuration, context);
+        var accountService = new AccountsService(configuration, context, new EmailService(configuration));
 
         ApplicationUser user = await accountService.Register(credentials);
 

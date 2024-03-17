@@ -1,13 +1,16 @@
 namespace FU.API.Services;
 
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using FU.API.Data;
 using FU.API.Exceptions;
 using FU.API.Helpers;
+using FU.API.Interfaces;
 using FU.API.Models;
 using Konscious.Security.Cryptography;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 /// <summary>
@@ -17,17 +20,20 @@ public class AccountsService : CommonService
 {
     private readonly IConfiguration _configuration;
     private readonly AppDbContext _dbContext;
+    private readonly IEmailService _emailService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AccountsService"/> class.
     /// </summary>
     /// <param name="configuration">Allows access to the config.</param>
     /// <param name="dbContext">Allows access to the database.</param>
-    public AccountsService(IConfiguration configuration, AppDbContext dbContext)
+    /// /// <param name="emailService">The email service.</param>
+    public AccountsService(IConfiguration configuration, AppDbContext dbContext, IEmailService emailService)
         : base(dbContext)
     {
         _configuration = configuration;
         _dbContext = dbContext;
+        _emailService = emailService;
     }
 
     public static string HashPassword(string password)
@@ -52,19 +58,31 @@ public class AccountsService : CommonService
     public async Task<ApplicationUser> Register(Credentials credentials)
     {
         var queryUser = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper());
-        if (queryUser.FirstOrDefault() is not null)
+        if (queryUser.First() is not null)
         {
-            throw new DuplicateUserException();
+            throw new ConflictException("User with username and email already exists");
+        }
+
+        var duplicateEmail = _dbContext.Users.Where(u => u.NormalizedEmail == credentials.Email.ToUpper()).First();
+        if (duplicateEmail is not null)
+        {
+            throw new ConflictException("User with email already exists");
         }
 
         _dbContext.Users.Add(new ApplicationUser()
         {
             Username = credentials.Username,
+            Email = credentials.Email,
             PasswordHash = HashPassword(credentials.Password),
         });
         await _dbContext.SaveChangesAsync();
 
-        return queryUser.First();
+        var createdUser = queryUser.First();
+
+        // Send email
+        await _emailService.SendEmail(EmailType.ConfirmAccount, createdUser);
+
+        return createdUser;
     }
 
     public async Task UpdatePassword(int userId, string newPassword)
@@ -145,6 +163,36 @@ public class AccountsService : CommonService
         };
     }
 
+    public async Task UpdateEmail(int userId, string newEmail)
+    {
+        var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        // Find users with same email
+        var existingUserWithNewEmail = _dbContext.Users.Where(u => u.NormalizedEmail == newEmail.ToUpper()).FirstOrDefault();
+        if (existingUserWithNewEmail is not null)
+        {
+            throw new ConflictException("User with email already exists");
+        }
+
+        // Make sure new email is vaid
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(newEmail);
+        }
+        catch
+        {
+            throw new BadRequestException("Invalid email");
+        }
+
+        user.Email = newEmail;
+        user.AccountConfirmed = false;
+        _dbContext.Update(user);
+        await _dbContext.SaveChangesAsync();
+
+        // Then send a new confirmation email
+        await _emailService.SendEmail(EmailType.ConfirmAccount, user);
+    }
+
     // Return user credentials so userId is accessable without a second db call
     private Task<ApplicationUser?> Authenticate(Credentials credentials)
     {
@@ -157,6 +205,40 @@ public class AccountsService : CommonService
         else
         {
             return Task.FromResult<ApplicationUser?>(null);
+        }
+    }
+
+    public async Task<ApplicationUser?> ConfirmAccount(string token)
+    {
+        try
+        {
+            // Decode the token to get the user ID
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            }, out SecurityToken validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+            var userId = int.Parse(claimsPrincipal.FindFirstValue(CustomClaimTypes.UserId));
+
+            var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+            user.AccountConfirmed = true;
+            _dbContext.Update(user);
+            await _dbContext.SaveChangesAsync();
+
+            // Confirm their account
+            return user;
+        }
+        catch (Exception)
+        {
+            // Token is invalid or expired
+            return null;
         }
     }
 }
