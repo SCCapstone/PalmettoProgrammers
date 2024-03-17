@@ -185,6 +185,12 @@ public class AccountsService : CommonService
             throw new BadRequestException("Invalid email");
         }
 
+        // Make sure we're actually updating the email
+        if (user.NormalizedEmail == newEmail.ToUpper())
+        {
+            return;
+        }
+
         user.Email = newEmail;
         user.AccountConfirmed = false;
         _dbContext.Update(user);

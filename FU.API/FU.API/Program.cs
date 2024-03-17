@@ -150,6 +150,8 @@ else
     app.UseSwaggerUI();
 }
 
+// if dev mode auto confirm accounts
+
 // Allow any cors
 app.UseCors(x => x
     .WithOrigins("http://localhost:5173", "https://jolly-glacier-0ae92c40f.4.azurestaticapps.net")
