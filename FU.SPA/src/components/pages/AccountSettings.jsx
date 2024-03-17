@@ -201,25 +201,18 @@ export default function AccountSettings() {
           >
             Update Information
           </Button>
+          <ChangeEmailDialog />
           <Button
           className="change-email-button"
           variant="contained"
           onClick={() => setChangeEmailDialogOpen(true)}
           sx={{
             mt: 3,
-            mb: 2,
-            position: 'absolute',
-            bottom: '0',
-            backgroundColor: 'red',
-            '&:hover': {
-              backgroundColor: 'darkred'
-            },
-          }}
+            mb: 2,}}
         >
           Change Email
         </Button>
         </Box>
-        <ChangeEmailDialog />
       </Box>
     </Container>
   );
