@@ -200,6 +200,11 @@ public class AccountsService : CommonService
         await _emailService.SendEmail(EmailType.ConfirmAccount, user);
     }
 
+    public async Task ResendConfirmationEmail(string email)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<ApplicationUser?> ConfirmAccount(string token)
     {
         try
