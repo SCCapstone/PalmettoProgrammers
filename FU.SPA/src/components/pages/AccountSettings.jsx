@@ -126,7 +126,7 @@ export default function AccountSettings() {
             fullWidth
           />
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleEmailChange} autoFocus>Change Email</Button>
+          <Button onClick={handleSubmit} autoFocus>Change Email</Button>
         </DialogActions>
       </Dialog>
     );
