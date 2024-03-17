@@ -23,7 +23,11 @@ export default function Navbar() {
         <Typography textAlign="center">{user?.username}</Typography>
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt={user?.username} src={user?.pfpUrl} />
+            <Avatar alt={user?.username} src={user?.pfpUrl} 
+             sx={{
+              border: '2px solid #ffffff'
+            }}
+            />
           </IconButton>
         </Tooltip>
       </div>
