@@ -125,7 +125,7 @@ export const TagsSelector = ({ value, onChange }) => {
  * @param {Function} onChange The function to call when the user selects an option. The function should accept the new value as an argument.
  */
 export const SortOptionsSelector = ({ options, onChange }) => {
-  // Default sort order is descending in the api
+  // Default sort order in the api is descending
   const [ascSortOrder, setAscSortOrder] = useState(false);
   const [optionValue, setOptionValue] = useState(options[0].value);
 
