@@ -32,7 +32,6 @@ public class PeriodicTemporaryStorageCleanupHostedService : BackgroundService
         }
     }
 
-    // Could also be a async method, that can be awaited in ExecuteAsync above
     private void DoWork()
     {
         _logger.LogInformation("Temporary storage cleaner hosted service is working.");
