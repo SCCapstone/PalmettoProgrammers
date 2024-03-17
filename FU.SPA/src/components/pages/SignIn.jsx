@@ -73,8 +73,9 @@ export default function SignIn() {
       login(response.token);
       navigate(returnUrl ?? '/');
     } catch (event) {
-      /* For some reason, event isn't passing down as a JSON error, need to 
-      figure out why to proceed with better error handling
+      //For some reason, event isn't passing down as a JSON error, need to 
+      //figure out why to proceed with better error handling
+      console.log(event);
       const errorResponse = await JSON.parse(event.message);
       if (
         errorResponse &&
@@ -84,7 +85,7 @@ export default function SignIn() {
       } else {
         setCredentialsError('Incorrect credentails');
       }
-      */
+      
       setCredentialsError('Incorrect credentails');
       console.error('Error in sign in:', event);
     }
