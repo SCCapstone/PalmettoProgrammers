@@ -239,17 +239,6 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
 
   useEffect(() => {
     GameService.searchGames('').then((games) => setGameOptions(games));
-    //setGame(defaultVal);
-    // const init = async () => {
-    // const postDetails = await PostService.getPostDetails(postId);
-    //   if (user.id !== postDetails.creator.id) {
-    //     alert('You are not authorized to edit this post');
-    //     navigate(`/discover`);
-    //   }
-    //   console.log(postDetails.game);
-    //   setGame(postDetails.game);
-    // }
-    // init();
   }, []);
 
   const onInputChange = (event, newValue) => {
@@ -286,7 +275,7 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
       //value={game}
       //value={String(gameDetails)}
       //value={value}
-      value={gameDetails}
+      value={value}
       //defaultValue={gameDetails}
       //inputValue = {game}
       //defaultValue={defaultVal}
@@ -296,7 +285,11 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
       //disableCloseOnSelect
       filterOptions={onFilterOptions}
       //getOptionLabel={(o) => (o ? o.name : '')}
-      //getOptionLabel={(o) => (o.name)}
+      //getOptionLabel={(o) => (game)}
+      //getOptionLabel={(o) => (o ? game : "") }
+      //getOptionLabel={(o) => (o ? game : o.name)}
+      //getOptionLabel={(o) => (o ? o.name : game)}
+      getOptionLabel={(option) => typeof option === "string" ? gameDetails : option.name} //working
       isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option) => <li {...props}>{option.name}</li>}
       renderInput={(params) => (
@@ -307,7 +300,7 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
           //value={game? game: null}
           //value={game}
           //value={String(gameDetails)}
-          value={'test2'}
+          value={value}
           //defaultValue={game}
           //defaultValue={value}
           label="Game"
@@ -322,11 +315,33 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
 //const TagsSelector = ({ onChange }) => {
 const TagsSelector = ({ value: prevTags, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
-  const [value, setValue] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [value, setValue] = useState('');
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     TagService.searchTags('').then((tags) => setTagOptions(tags));
-  }, []);
+    if(count === 0) {
+      setValue(prevTags);
+    }
+    //const tagOps = tagOptions.find((object) => object.name === prevTags);
+    // tagOps.forEach(element => {
+    //   if(prevTags[element] === tagOps[element]) {
+    //     setTags(tagOps);
+    //   } else {
+    //     alert("Tags in tags selector not the same");
+    //   }
+    // });
+    //for(var i = 0; (i < prevTags.length); i++) {
+      //if(prevTags[i] === tagOps[i]) {
+      // if(tagOps) {
+      //   setTags(tagOps);
+      // } else {
+      //   alert("Tags in tags selector not the same");
+      // }
+    //}
+    setCount(count + 1);
+  }, [count]);
 
   const onInputChange = (event, newValues) => {
     for (const newValue of newValues) {
@@ -365,12 +380,14 @@ const TagsSelector = ({ value: prevTags, onChange }) => {
       autoHighlight
       multiple
       clearOnBlur
-      value={prevTags}
+      value={value}
       onChange={onInputChange}
       options={tagOptions}
       //disableCloseOnSelect
       filterOptions={onFilterOptions}
       //getOptionLabel={(o) => o.name}
+      //getOptionLabel={(option) => typeof option === "string" ? prevTags : option.name}
+      getOptionLabel={(option) => typeof option === "string" ? value : option.name}
       isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
