@@ -82,7 +82,7 @@ public class UsersController : ControllerBase
 
         if (profileChanges.AvatarId is not null)
         {
-            using Stream? stream = TemporaryStorageService.GetFileStream((Guid)profileChanges.AvatarId);
+            using Stream? stream = TemporaryStorageService.GetFileStream(profileChanges.AvatarId.Value);
             if (stream is null)
             {
                 return NotFound("Avatar not found");
@@ -90,13 +90,13 @@ public class UsersController : ControllerBase
 
             try
             {
-                Uri uri = await _remoteStorageService.UploadAsync(stream, (Guid)profileChanges.AvatarId);
+                Uri uri = await _remoteStorageService.UploadAsync(stream, profileChanges.AvatarId.Value);
 
                 userProfile.PfpUrl = uri.AbsoluteUri;
             }
             catch (ConflictException)
             {
-                userProfile.PfpUrl = _remoteStorageService.GetUri((Guid)profileChanges.AvatarId).AbsoluteUri;
+                userProfile.PfpUrl = _remoteStorageService.GetUri(profileChanges.AvatarId.Value).AbsoluteUri;
             }
         }
 
