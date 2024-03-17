@@ -331,7 +331,8 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
 const TagsSelector = ({ value: tagsDetails, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
   //const [tags, setTags] = useState([]);
-  const [value, setValue] = useState('');
+  //const [value, setValue] = useState('');
+  const [value, setValue] = useState(null);
   //const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -409,8 +410,8 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //disableCloseOnSelect
       filterOptions={onFilterOptions}
       //option needs to be "string" not "object", even though object is kind of working.
-      //getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option} //half-way working
-      
+      getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option} //half-way working
+      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}
       //need to make tagsDetails into a string. The below optionlabel causes a double. Ex: "tag1, tag2" "tag1, tag2"
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails) : option}
       //getOptionLabel={(option) => typeof option === "string" ? tagsDetails.name : option}
@@ -420,9 +421,14 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //     {item}
       //   </div>
       // )) : option}
+      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split('') : option}
+      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(', ') : option}
+      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(',') : option}
+      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(' ') : option}
+      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split('') : option}
       // The below option label causes a double of invisible tags, tag 1, and tag2, depending on which tag you click.  
       //getOptionLabel={(option) => typeof option === "string" ? value : option}
-      getOptionLabel={(option) => typeof option === "string" ? value : option.name}
+      //getOptionLabel={(option) => typeof option === "string" ? value : option.name}
       //getOptionLabel={(option) => typeof option === "string" ? tagsDetails.name : option}
       //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}  
       //getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option.name}
@@ -441,7 +447,7 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //getOptionLabel={(option) => typeof option === "object" ? option : option.name}
       //getOptionLabel={(o) => (o ? option : o.name)}
       //getOptionLabel={(o) => }
-      isOptionEqualToValue={(option, value) => (option.name === value.name)}
+      isOptionEqualToValue={(option, value) => (option.name === tagsDetails.name)}
       //isOptionEqualToValue={(option, value) => (tagsDetails.name === option.name)}
       //isOptionEqualToValue={(option, value) => (o ? (option.name === value.name) : prevTags)}
       renderOption={(props, option, { selected }) => (
