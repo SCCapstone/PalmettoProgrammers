@@ -69,9 +69,22 @@ export default function SignIn() {
 
     try {
       const response = await AuthService.signIn(creds);
+      console.log(response.status);
       login(response.token);
       navigate(returnUrl ?? '/');
     } catch (event) {
+      /* For some reason, event isn't passing down as a JSON error, need to 
+      figure out why to proceed with better error handling
+      const errorResponse = await JSON.parse(event.message);
+      if (
+        errorResponse &&
+        errorResponse.detail === 'Account not confirmed'
+      ) {
+        setCredentialsError('Account not yet verified');
+      } else {
+        setCredentialsError('Incorrect credentails');
+      }
+      */
       setCredentialsError('Incorrect credentails');
       console.error('Error in sign in:', event);
     }
