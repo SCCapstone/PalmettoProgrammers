@@ -11,7 +11,8 @@ const signIn = async (credentials) => {
   });
 
   if (!response.ok) {
-    throw new Error('Error in sign in');
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in sign in');
   }
 
   const jsonResponse = await response.json();

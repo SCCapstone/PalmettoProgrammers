@@ -1,10 +1,20 @@
-import { Container, Box, Typography, Button, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
 import { useState } from 'react';
 import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
-
 
 export default function AccountSettings() {
   const { logout } = useContext(UserContext);
@@ -56,7 +66,7 @@ export default function AccountSettings() {
    * Dialog to change email
    * We want to ensure that the user is sure they want to change their email
    * TODO: look into password verification
-   * 
+   *
    * @returns The dialog to confirm the email change
    */
   const ChangeEmailDialog = () => {
@@ -65,7 +75,7 @@ export default function AccountSettings() {
 
     const handleClose = () => {
       setChangeEmailDialogOpen(false);
-    }
+    };
 
     const handleEmailChange = (e) => {
       const newEmail = e.target.value;
@@ -91,7 +101,7 @@ export default function AccountSettings() {
         setEmailError('Invalid email');
         console.error('Error in changing email', e);
       }
-    }
+    };
 
     // Component details
     return (
@@ -116,11 +126,11 @@ export default function AccountSettings() {
             fullWidth
           />
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} autoFocus>Change Email</Button>
+          <Button onClick={handleEmailChange} autoFocus>Change Email</Button>
         </DialogActions>
       </Dialog>
-    )
-  }
+    );
+  };
 
   // Display component
   return (
@@ -195,9 +205,15 @@ export default function AccountSettings() {
           className="change-email-button"
           variant="contained"
           onClick={() => setChangeEmailDialogOpen(true)}
-          sx ={{
-            mt:3,
+          sx={{
+            mt: 3,
             mb: 2,
+            position: 'absolute',
+            bottom: '0',
+            backgroundColor: 'red',
+            '&:hover': {
+              backgroundColor: 'darkred'
+            },
           }}
         >
           Change Email
