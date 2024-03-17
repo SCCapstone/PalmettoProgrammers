@@ -11,6 +11,7 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using Konscious.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 /// <summary>
@@ -58,12 +59,12 @@ public class AccountsService : CommonService
     public async Task<ApplicationUser> Register(Credentials credentials)
     {
         var queryUser = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper());
-        if (queryUser.First() is not null)
+        if (queryUser.FirstOrDefault() is not null)
         {
-            throw new ConflictException("User with username and email already exists");
+            throw new DuplicateUserException();
         }
 
-        var duplicateEmail = _dbContext.Users.Where(u => u.NormalizedEmail == credentials.Email.ToUpper()).First();
+        var duplicateEmail = _dbContext.Users.Where(u => u.NormalizedEmail == credentials.Email.ToUpper()).FirstOrDefault();
         if (duplicateEmail is not null)
         {
             throw new ConflictException("User with email already exists");
@@ -193,21 +194,6 @@ public class AccountsService : CommonService
         await _emailService.SendEmail(EmailType.ConfirmAccount, user);
     }
 
-    // Return user credentials so userId is accessable without a second db call
-    private Task<ApplicationUser?> Authenticate(Credentials credentials)
-    {
-        ApplicationUser? user = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).FirstOrDefault();
-
-        if (user?.PasswordHash == HashPassword(credentials.Password))
-        {
-            return Task.FromResult<ApplicationUser?>(user);
-        }
-        else
-        {
-            return Task.FromResult<ApplicationUser?>(null);
-        }
-    }
-
     public async Task<ApplicationUser?> ConfirmAccount(string token)
     {
         try
@@ -239,6 +225,21 @@ public class AccountsService : CommonService
         {
             // Token is invalid or expired
             return null;
+        }
+    }
+
+    // Return user credentials so userId is accessable without a second db call
+    private Task<ApplicationUser?> Authenticate(Credentials credentials)
+    {
+        ApplicationUser? user = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).FirstOrDefault();
+
+        if (user?.PasswordHash == HashPassword(credentials.Password))
+        {
+            return Task.FromResult<ApplicationUser?>(user);
+        }
+        else
+        {
+            return Task.FromResult<ApplicationUser?>(null);
         }
     }
 }

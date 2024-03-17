@@ -20,28 +20,23 @@ public class EmailService : IEmailService
     public EmailService(IConfiguration configuration)
     {
         _configuration = configuration;
-        _emailClient = CreateEmailClient();
-    }
 
-    private static EmailClient CreateEmailClient()
-    {
         string connectionString = "endpoint=https://communicationfu.unitedstates.communication.azure.com/;accesskey=PGEGlkGC8Beca/i87cymeDvvumi2xtxfI1L1HQH0V18SsMZ9czSnrh5SolroKUH8FN0Tyv2mYd4IDTnzgEmLMA==";
-        return new EmailClient(connectionString);
+        _emailClient = new EmailClient(connectionString);
     }
-
 
     public Task SendEmail(EmailType emailType, ApplicationUser user)
     {
-        string connectionString = "endpoint=https://communicationfu.unitedstates.communication.azure.com/;accesskey=PGEGlkGC8Beca/i87cymeDvvumi2xtxfI1L1HQH0V18SsMZ9czSnrh5SolroKUH8FN0Tyv2mYd4IDTnzgEmLMA==";
-        var emailClient = new EmailClient(connectionString);
-
-        EmailSendOperation emailSendOperation = emailClient.Send(
-            WaitUntil.Completed,
-            senderAddress: "DoNotReply@72e78c7f-bd50-4dee-b29d-3853bd1e3fa1.azurecomm.net",
-            recipientAddress: user.Email,
-            subject: "Test Email",
-            htmlContent: GenerateEmailContent(emailType, user),
-            plainTextContent: "Hello world via email.");
+        _ = Task.Run(async () =>
+        {
+            var emailSendOperation = await _emailClient.SendAsync(
+                WaitUntil.Completed,
+                senderAddress: "DoNotReply@72e78c7f-bd50-4dee-b29d-3853bd1e3fa1.azurecomm.net",
+                recipientAddress: user.Email,
+                subject: "Test Email",
+                htmlContent: GenerateEmailContent(emailType, user),
+                plainTextContent: "Hello world via email.");
+        });
 
         return Task.CompletedTask;
     }
