@@ -35,7 +35,13 @@ public class RemoteStorageService : IRemoteStorageService
             throw new ConflictException("File already uploaded");
         }
 
-        await blob.UploadAsync(stream);
+        // Specify the content type as "image/jpeg"
+        BlobHttpHeaders headers = new BlobHttpHeaders
+        {
+            ContentType = "image/jpeg"
+        };
+
+        await blob.UploadAsync(stream, headers);
 
         return blob.Uri;
     }
