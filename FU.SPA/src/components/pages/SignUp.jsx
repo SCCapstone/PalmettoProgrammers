@@ -22,8 +22,10 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -41,6 +43,12 @@ export default function SignUp() {
     setUsernameError('');
   };
 
+  // Update state for email
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+    setEmailError('');
+  };
+
   // Update state for password
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -55,7 +63,10 @@ export default function SignUp() {
 
   // Check if all fields are filled
   const isEnabled =
-    username.length > 0 && password.length > 0 && confirmPassword.length > 0;
+    username.length > 0 &&
+    email.length > 0 &&
+    password.length > 0 &&
+    confirmPassword.length > 0;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
@@ -64,6 +75,7 @@ export default function SignUp() {
 
     const creds = {
       username: data.get('username'),
+      email: data.get('email'),
       password: data.get('password'),
     };
 
@@ -98,6 +110,18 @@ export default function SignUp() {
         errorResponse.errors.Username
       ) {
         setUsernameError(errorResponse.errors.Username[0]);
+      } else if (
+        errorResponse &&
+        errorResponse.title === 'Conflict exception'
+      ) {
+        // Duplicate email
+        setEmailError(errorResponse.detail);
+      } else if (
+        errorResponse &&
+        errorResponse.errors &&
+        errorResponse.errors.Email
+      ) {
+        setEmailError(errorResponse.errors.Email[0]);
       } else {
         // Handles other general errors
         setUsernameError('An unexpected error occurred. Please try again.');
@@ -138,6 +162,20 @@ export default function SignUp() {
                 type="username"
                 name="username"
                 autoFocus
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                error={!!emailError}
+                helperText={emailError}
+                onChange={handleEmailChange}
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                type="email"
+                name="email"
+                autoComplete="email"
               />
             </Grid>
             <Grid item xs={12}>
