@@ -26,7 +26,11 @@ public class AvatarController : ControllerBase
         var fileUri = await _storageService.UploadAsync(avatarFileStream, newFileName);
 
         var imageUrl = fileUri.AbsoluteUri;
+        var response = new
+        {
+            ImageUrl = imageUrl,
+        };
 
-        return Ok(imageUrl);
+        return Ok(response);
     }
 }
