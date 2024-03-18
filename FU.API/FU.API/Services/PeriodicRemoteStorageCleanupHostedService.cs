@@ -21,7 +21,7 @@ public class PeriodicRemoteStorageCleanerHostedService : BackgroundService
         // When the timer should have no due-time, then do the work once now.
         await DoWork();
 
-        using PeriodicTimer timer = new(TimeSpan.FromMinutes(60));
+        using PeriodicTimer timer = new(TimeSpan.FromHours(12));
 
         try
         {
@@ -41,7 +41,7 @@ public class PeriodicRemoteStorageCleanerHostedService : BackgroundService
         _logger.LogInformation("Remote storage cleaner service is working.");
 
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
-        IRemoteStorageService remoteStorageService = scope.ServiceProvider.GetRequiredService<IRemoteStorageService>();
+        IStorageService remoteStorageService = scope.ServiceProvider.GetRequiredService<IStorageService>();
 
         await remoteStorageService.DeleteOldUnusedFilesAsync();
     }

@@ -5,6 +5,7 @@ using FU.API.Models;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using FU.API.Exceptions;
 
 public class UserService : CommonService, IUserService
 {
@@ -40,6 +41,13 @@ public class UserService : CommonService, IUserService
 
         if (profileChanges.PfpUrl is not null)
         {
+            // Make sure its an image already in our blob storage
+            // Otherwise we are unure if the image is cropped and resized properly
+            if (!profileChanges.PfpUrl.Contains("storagefu.blob.core.windows.net/avatars"))
+            {
+                throw new UnprocessableException("Invalid profile picture. The image must be uploaded to our storage system");
+            }
+
             user.PfpUrl = profileChanges.PfpUrl;
         }
 

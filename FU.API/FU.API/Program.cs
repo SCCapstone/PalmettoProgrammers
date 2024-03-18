@@ -73,7 +73,6 @@ var loggedInPolicy = new AuthorizationPolicyBuilder()
     .AddRequirements(new IsLoggedInRequirement())
     .Build();
 
-builder.Services.AddHostedService<PeriodicTemporaryStorageCleanupHostedService>();
 builder.Services.AddHostedService<PeriodicRemoteStorageCleanerHostedService>();
 
 // used to get the context in IsLoggedInAuthenticationHandler
@@ -88,7 +87,7 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IRelationService, RelationService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
-builder.Services.AddScoped<IRemoteStorageService, RemoteStorageService>();
+builder.Services.AddScoped<IStorageService, AzureBlobStorageService>();
 
 // Add SignalR
 builder.Services.AddSignalR(options =>

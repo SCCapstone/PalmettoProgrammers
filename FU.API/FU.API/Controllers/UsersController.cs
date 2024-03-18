@@ -17,13 +17,11 @@ public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly ISearchService _searchService;
-    private readonly IRemoteStorageService _remoteStorageService;
 
-    public UsersController(IUserService userService, ISearchService searchService, IRemoteStorageService remoteStorageService)
+    public UsersController(IUserService userService, ISearchService searchService)
     {
         _userService = userService;
         _searchService = searchService;
-        _remoteStorageService = remoteStorageService;
     }
 
     [HttpGet]
@@ -62,7 +60,7 @@ public class UsersController : ControllerBase
     [Authorize]
     [HttpPatch]
     [Route("current")] // Will never change anyone else's profile
-    public async Task<IActionResult> UpdateProfile([FromBody] UserProfileChangesDTO profileChanges)
+    public async Task<IActionResult> UpdateProfile([FromBody] UserProfile profileChanges)
     {
         // Check if the user to update is the authenticated user
         bool isParseSuccess = int.TryParse((string?)HttpContext.Items[CustomContextItems.UserId], out int userId);
@@ -71,36 +69,11 @@ public class UsersController : ControllerBase
             return Unauthorized();
         }
 
-        UserProfile userProfile = new()
-        {
-            // Using userId from context because DTO id may be incorrect
-            Id = userId,
-            Bio = profileChanges.Bio,
-            DOB = profileChanges.DOB,
-            IsOnline = profileChanges.IsOnline,
-        };
+        // Allows updateUserProfile to find the user to update
+        // Overrides any client given id that may differ from userId.
+        profileChanges.Id = userId;
 
-        if (profileChanges.AvatarId is not null)
-        {
-            using Stream? stream = TemporaryStorageService.GetFileStream(profileChanges.AvatarId.Value);
-            if (stream is null)
-            {
-                return NotFound("Avatar not found");
-            }
-
-            try
-            {
-                Uri uri = await _remoteStorageService.UploadAsync(stream, profileChanges.AvatarId.Value);
-
-                userProfile.PfpUrl = uri.AbsoluteUri;
-            }
-            catch (ConflictException)
-            {
-                userProfile.PfpUrl = _remoteStorageService.GetUri(profileChanges.AvatarId.Value).AbsoluteUri;
-            }
-        }
-
-        var newProfile = await _userService.UpdateUserProfile(userProfile);
+        var newProfile = await _userService.UpdateUserProfile(profileChanges);
 
         return Ok(newProfile);
     }
