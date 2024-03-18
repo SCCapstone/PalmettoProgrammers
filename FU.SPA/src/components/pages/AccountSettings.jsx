@@ -120,8 +120,6 @@ export default function AccountSettings() {
             This action is irreversible and will revoke all access to your
             account.
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
           <TextField
             autoFocus
             error={!!credentialsError}
@@ -134,6 +132,8 @@ export default function AccountSettings() {
             onChange={(e) => setPassword(e.target.value)}
             fullWidth
           ></TextField>
+        </DialogContent>
+        <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleDelete} autoFocus>
             Delete
