@@ -273,23 +273,30 @@ public class AccountsService : CommonService
     }
 
     // Return user credentials so userId is accessable without a second db call
-    private Task<ApplicationUser?> Authenticate(Credentials credentials)
+    private async Task<ApplicationUser?> Authenticate(Credentials credentials)
     {
         ApplicationUser? user = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).FirstOrDefault();
 
-        // If user account not confirmed, then don't allow login
-        if (user is not null && !user.AccountConfirmed)
-        {
-            throw new UnauthorizedException("Account not confirmed");
-        }
-
         if (user?.PasswordHash == HashPassword(credentials.Password))
         {
-            return Task.FromResult<ApplicationUser?>(user);
+            // Check if the account is confirmed
+            if (!user.AccountConfirmed)
+            {
+                if (credentials.ReconfirmAccount)
+                {
+                    await _emailService.SendEmail(EmailType.ConfirmAccount, user);
+                }
+                else
+                {
+                    throw new UnauthorizedException("Account not confirmed");
+                }
+            }
+
+            return user;
         }
         else
         {
-            return Task.FromResult<ApplicationUser?>(null);
+            return null;
         }
     }
 }

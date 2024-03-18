@@ -18,4 +18,6 @@ public record Credentials
 
     [Email]
     public string Email { get; set; } = string.Empty;
+
+    public bool ReconfirmAccount { get; set; } = false;
 }
