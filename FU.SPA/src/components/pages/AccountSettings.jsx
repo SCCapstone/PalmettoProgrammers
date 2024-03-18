@@ -154,83 +154,94 @@ export default function AccountSettings() {
           alignItems: 'center',
         }}
       >
-        <Typography component="h1" variant="h5">
-          Account Settings
-        </Typography>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') e.preventDefault();
-          }}
-          sx={{
+        <div
+          style={{
             display: 'flex',
             flexDirection: 'column',
-            mt: 1,
-            gap: 2,
+            height: '90vh',
+            justifyContent: 'space-between',
           }}
         >
-          <TextField
-            fullWidth
-            id="setUsername"
-            label="New Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            id="oldPassword"
-            label="Old Password"
-            type="password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            id="newPassword"
-            label="New Password"
-            type="password"
-            value={newPassword}
-            autoComplete="new-password"
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            id="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            value={confirmPassword}
-            autoComplete="new-password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+          <div>
+            <Typography component="h1" variant="h5">
+              Account Settings
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') e.preventDefault();
+              }}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                mt: 1,
+                gap: 2,
+              }}
+            >
+              <TextField
+                fullWidth
+                id="setUsername"
+                label="New Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                id="oldPassword"
+                label="Old Password"
+                type="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                id="newPassword"
+                label="New Password"
+                type="password"
+                value={newPassword}
+                autoComplete="new-password"
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                id="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                value={confirmPassword}
+                autoComplete="new-password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Update Information
+              </Button>
+            </Box>
+          </div>
           <Button
-            type="submit"
-            fullWidth
+            className="delete-button"
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            color="error"
+            onClick={() => {
+              console.log('Delete Account');
+              setDeleteDialogOpen(true);
+            }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              // position: 'absolute',
+              // bottom: '0',
+            }}
           >
-            Update Information
+            Delete Account
           </Button>
-        </Box>
-        <Button
-          className="delete-button"
-          variant="contained"
-          color="error"
-          onClick={() => {
-            console.log('Delete Account');
-            setDeleteDialogOpen(true);
-          }}
-          sx={{
-            mt: 3,
-            mb: 2,
-            position: 'absolute',
-            bottom: '0',
-          }}
-        >
-          Delete Account
-        </Button>
-        <DeleteAccountDialog />
+          <DeleteAccountDialog />
+        </div>
       </Box>
     </Container>
   );
