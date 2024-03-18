@@ -215,7 +215,8 @@ export default function AccountSettings() {
         </Box>
         <Button
           className="delete-button"
-          variant="contained error"
+          variant="contained"
+          color="error"
           onClick={() => {
             console.log('Delete Account');
             setDeleteDialogOpen(true);
@@ -225,10 +226,6 @@ export default function AccountSettings() {
             mb: 2,
             position: 'absolute',
             bottom: '0',
-            backgroundColor: 'red',
-            '&:hover': {
-              backgroundColor: 'darkred',
-            },
           }}
         >
           Delete Account
