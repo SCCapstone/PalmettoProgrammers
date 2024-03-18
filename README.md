@@ -12,6 +12,14 @@ In order to build this project you first have to install:
 
 ### Backend Environment Setup
 Config settings are loaded from the environment variables. To automatically load the environment variable from a file, create a `.env` file in the `FU.API` parent folder.
+
+### Blob storage
+An azure storage account is needed with a storage container. Public anonymous access must be enabled. The `STORAGE_CONNECTION_STRING` and `AVATAR_CONTAINER_NAME` environment variables must be set.
+```
+STORAGE_CONNECTION_STRING="XXXXXXXX"
+AVATAR_CONTAINER_NAME="some-container-name"
+```
+
 ### Jwt Secret
 A random string of 32+ characters is required in the `JWT_SECRET` environment variable as a Jwt Secret.
 ```
