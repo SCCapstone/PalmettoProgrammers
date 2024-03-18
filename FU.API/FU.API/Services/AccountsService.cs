@@ -164,6 +164,12 @@ public class AccountsService : CommonService
     {
         var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
 
+        // Make sure we're actually updating the email
+        if (user.NormalizedEmail == newEmail.ToUpper())
+        {
+            return;
+        }
+
         // Find users with same email
         var existingUserWithNewEmail = _dbContext.Users.Where(u => u.NormalizedEmail == newEmail.ToUpper()).FirstOrDefault();
         if (existingUserWithNewEmail is not null)
@@ -179,12 +185,6 @@ public class AccountsService : CommonService
         catch
         {
             throw new BadRequestException("Invalid email");
-        }
-
-        // Make sure we're actually updating the email
-        if (user.NormalizedEmail == newEmail.ToUpper())
-        {
-            return;
         }
 
         user.Email = newEmail;
