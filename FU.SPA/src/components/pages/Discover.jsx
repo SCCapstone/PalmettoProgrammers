@@ -297,9 +297,11 @@ export default function Discover() {
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
-      return <Posts posts={posts} onTagClick={onTagClick} />;
+      return (
+        <Posts posts={posts} onTagClick={onTagClick} showJoinedStatus={true} />
+      );
     } else if (tabOption === tabOptions.Users) {
-      return <Users users={players} />;
+      return <Users users={players} showRelationStatus={true} />;
     }
   };
 

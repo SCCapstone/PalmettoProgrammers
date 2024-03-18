@@ -1,6 +1,7 @@
 ﻿namespace FU.API.Services;
 
 using FU.API.Data;
+using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using FU.API.Models;
@@ -14,6 +15,22 @@ public class CommonService : ICommonService
     public CommonService(AppDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public async Task<UserRelation?> GetRelation(int initiatedById, int otherUserId)
+    {
+        if (initiatedById == otherUserId)
+        {
+            throw new BadRequestException("You can't get your own relation");
+        }
+
+        // Make sure the users exist
+        var initiatedByUser = await _dbContext.Users.FindAsync(initiatedById) ?? throw new NotFoundException("User not found", "The requested user was not found");
+        var otherUser = await _dbContext.Users.FindAsync(otherUserId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        var relation = await _dbContext.UserRelations.Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId).FirstOrDefaultAsync();
+
+        return relation;
     }
 
     public async Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims)
