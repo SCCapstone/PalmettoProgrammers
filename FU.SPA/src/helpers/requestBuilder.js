@@ -44,12 +44,16 @@ const buildPostQueryString = (query) => {
     queryString += '&limit=' + query.limit;
   }
 
+  if (query.sort) {
+    queryString += '&sort=' + query.sort;
+  }
+
   return queryString;
 };
 
 const buildUserQueryString = (query) => {
   let queryString = '';
-  if (query.keywords) {
+  if (query && query.keywords) {
     queryString += `keywords=${encodeURIComponent(query.keywords.trim())}`;
   }
 

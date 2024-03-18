@@ -22,9 +22,6 @@ export default function ProfileSettings() {
     try {
       const idJson = await UserService.getUserIdJson();
 
-      // console.log(favoriteGames);
-      // console.log(favoriteTags);
-
       // Form request payload
       const data = {
         id: idJson.userId,
@@ -41,15 +38,14 @@ export default function ProfileSettings() {
         //favoriteTags: favoriteTags
       };
 
-      const response = await UserService.updateUserProfile(data);
-      console.log(response);
+      await UserService.updateUserProfile(data);
       alert('Info updated successfully!');
 
       // Redirect to user profile
       navigate('/profile/' + idJson.userId);
     } catch (e) {
       alert(e);
-      console.log(e);
+      console.error(e);
     }
   };
 
