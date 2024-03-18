@@ -48,7 +48,7 @@ public class PostService : CommonService, IPostService
         bool isPostTooFarInFuture = post.StartTime > DateTime.UtcNow.AddYears(1);
         if (isPostTooFarInFuture)
         {
-            throw new PostException("Post cannot be more than 7 days in the future", HttpStatusCode.UnprocessableEntity);
+            throw new PostException("Post cannot be more than 1 year in the future", HttpStatusCode.UnprocessableEntity);
         }
 
         // Check if start time is after end time
