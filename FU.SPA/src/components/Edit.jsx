@@ -447,7 +447,7 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //getOptionLabel={(option) => typeof option === "object" ? option : option.name}
       //getOptionLabel={(o) => (o ? option : o.name)}
       //getOptionLabel={(o) => }
-      isOptionEqualToValue={(option, value) => (option.name === tagsDetails.name)}
+      isOptionEqualToValue={(option, value) => (option.name === value)}
       //isOptionEqualToValue={(option, value) => (option.name === value.name)}
       //isOptionEqualToValue={(option, value) => (tagsDetails.name === option.name)}
       //isOptionEqualToValue={(option, value) => (o ? (option.name === value.name) : prevTags)}
