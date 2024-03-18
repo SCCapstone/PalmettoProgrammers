@@ -189,7 +189,7 @@ const UploadAvatar = ({ onNewPreview }) => {
           <Stack direction="row" alignItems="center" spacing={1} sx={{ pr: 1 }}>
             <Avatar
               sx={{ width: 60, height: 60 }}
-              src={loading ? null : uploadedImageUrl}
+              src={loading ? 'https://storagefu.blob.core.windows.net/avatars/spinner.gif' : uploadedImageUrl}
             />
             <Typography sx={{ flexGrow: 99, textAlign: 'left' }} noWrap>
               {file?.name}
