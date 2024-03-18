@@ -20,6 +20,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import PostCard from './PostCard';
 
 export default function CreatePost() {
   const [game, setGame] = useState(null);
@@ -142,6 +143,24 @@ export default function CreatePost() {
           </Button>
         </Box>
       </Box>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        {/* {posts.map((post) => ( //original mapping of posts
+              <PostCard key={post.id} post={post} />
+            ))} 
+            I need to use the postservice.js. Maybe*, create a function, which pulls
+            the last id index and then adds + 1 to it (will be the next id, but could cause a problem with pulling), 
+            which will let me, possibly, pull the card that is in the process of being created by the user.
+            Might need to create a post using const newPost = await PostService.createPost(post); so that I'm able
+            to pass the information and create the post. I may need to have default values for it, or I can 
+            try and pass default values somehow. Wrap it in a try catch.
+
+            May just create a preview card and copy a lot of the postcard.jsx code and remove what isn't necessary.
+        */}
+        {/* <PostCard key={parseInt(5)} post={parseInt(5)} /> */}
+        {/* <PostCard key={"5"} post={"5"} /> */}
+        {/* Passing the postcard information to const PostCard = ({ post, showActions }) => {
+            and in PostCard CardActions section onClick={() => navigate(`/posts/${post.id}`)} */}
+      </div>
     </Container>
   );
 }
