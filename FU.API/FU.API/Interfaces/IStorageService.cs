@@ -1,8 +1,8 @@
 namespace FU.API.Interfaces;
 
-public interface IRemoteStorageService
+public interface IStorageService
 {
-    public Task<Uri> UploadAsync(Stream stream, Guid fileId);
+    public Task<Uri> UploadAsync(Stream stream, string fileName);
 
     public Task<bool> DeleteFileAsync(Guid fileId);
 

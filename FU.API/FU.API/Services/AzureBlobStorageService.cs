@@ -8,22 +8,17 @@ using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 
-public class RemoteStorageService : IRemoteStorageService
+public class AzureBlobStorageService : IStorageService
 {
     private readonly IConfiguration _config;
     private readonly AppDbContext _dbContext;
-    private readonly ILogger<IRemoteStorageService> _logger;
+    private readonly ILogger<IStorageService> _logger;
 
-    public RemoteStorageService(IConfiguration config, AppDbContext dbContext, ILogger<IRemoteStorageService> logger)
+    public AzureBlobStorageService(IConfiguration config, AppDbContext dbContext, ILogger<IStorageService> logger)
     {
         _config = config;
         _dbContext = dbContext;
         _logger = logger;
-    }
-
-    public async Task<Uri> UploadAsync(Stream stream, Guid fileId)
-    {
-        return await UploadAsync(stream, GetFileName(fileId));
     }
 
     public async Task<Uri> UploadAsync(Stream stream, string fileName)

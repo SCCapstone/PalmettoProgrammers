@@ -1,5 +1,6 @@
 import config from '../config';
 const API_BASE_URL = config.API_URL;
+import AuthService from './authService';
 
 const upload = async (file) => {
   const formData = new FormData();
@@ -8,6 +9,9 @@ const upload = async (file) => {
   const response = await fetch(`${API_BASE_URL}/avatar`, {
     method: 'POST',
     body: formData,
+    headers: {
+      ...AuthService.getAuthHeader(),
+    },
   });
 
   if (response.status === 422) {
@@ -19,12 +23,7 @@ const upload = async (file) => {
   return await response.json();
 };
 
-const getUrl = (id) => {
-  return `${API_BASE_URL}/avatar/${id}.jpg`;
-};
-
 const AvatarService = {
   upload,
-  getUrl,
 };
 export default AvatarService;

@@ -24,7 +24,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
-  const [newAvatarId, setNewAvatarId] = useState();
+  const [newPfpUrl, setNewPfpUrl] = useState();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -35,7 +35,7 @@ export default function ProfileSettings() {
 
       // Form request payload
       const data = {
-        avatarId: newAvatarId,
+        pfpUrl: newPfpUrl,
         id: idJson.userId,
         bio: bio !== '' ? bio : null,
         // if the date of birth is the same as today, ignore and set as null
@@ -59,9 +59,9 @@ export default function ProfileSettings() {
     }
   };
 
-  const handleNewAvatar = (avatarId) => {
-    setNewAvatarId(avatarId);
-    console.log(avatarId);
+  const handlePreviewUrl = (imageUrl) => {
+    setNewPfpUrl(imageUrl);
+    console.log(imageUrl);
   };
 
   // Display component
@@ -108,7 +108,7 @@ export default function ProfileSettings() {
               onChange={(newValue) => setDateOfBirth(newValue)}
             />
           </LocalizationProvider>
-          <UploadAvatar onNewAvatar={handleNewAvatar} />
+          <UploadAvatar onNewPreview={handlePreviewUrl} />
           <Button type="submit" fullWidth variant="contained">
             Update Profile
           </Button>
@@ -130,16 +130,15 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-const UploadAvatar = ({ onNewAvatar }) => {
+const UploadAvatar = ({ onNewPreview }) => {
   const [file, setFile] = useState();
-  const [uploadedAvatarId, setUploadedAvatarId] = useState();
+  const [uploadedImageUrl, setUploadedImageUrl] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
   useEffect(() => {
-    if (onNewAvatar) onNewAvatar(uploadedAvatarId);
-    console.log('updating avatar');
-  }, [onNewAvatar, uploadedAvatarId]);
+    if (onNewPreview) onNewPreview(uploadedImageUrl);
+  }, [onNewPreview, uploadedImageUrl]);
 
   const handleFileChange = async (event) => {
     event.preventDefault();
@@ -155,7 +154,7 @@ const UploadAvatar = ({ onNewAvatar }) => {
 
     try {
       const response = await AvatarService.upload(event.target.files[0]);
-      setUploadedAvatarId(response.id);
+      setUploadedImageUrl(response.imageUrl);
     } catch (error) {
       setError(error.message);
       handleClearFile();
@@ -165,7 +164,7 @@ const UploadAvatar = ({ onNewAvatar }) => {
   };
 
   const handleClearFile = () => {
-    setUploadedAvatarId();
+    setUploadedImageUrl();
     setFile();
   };
 
@@ -190,7 +189,7 @@ const UploadAvatar = ({ onNewAvatar }) => {
           <Stack direction="row" alignItems="center" spacing={1} sx={{ pr: 1 }}>
             <Avatar
               sx={{ width: 60, height: 60 }}
-              src={loading ? null : AvatarService.getUrl(uploadedAvatarId)}
+              src={loading ? 'https://storagefu.blob.core.windows.net/icons/spinner.gif' : uploadedImageUrl}
             />
             <Typography sx={{ flexGrow: 99, textAlign: 'left' }} noWrap>
               {file?.name}
