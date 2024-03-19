@@ -10,18 +10,6 @@ import {
   DialogContentText,
   DialogActions,
 } from '@mui/material';
-import {
-  Container,
-  Box,
-  Typography,
-  Button,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from '@mui/material';
 import { useState } from 'react';
 import UserService from '../../services/userService';
 import { useNavigate } from 'react-router';
@@ -35,6 +23,8 @@ export default function AccountSettings() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [changeEmailDialogOpen, setChangeEmailDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -225,80 +215,6 @@ export default function AccountSettings() {
     );
   };
 
-  /***
-   * Dialog to change email
-   * We want to ensure that the user is sure they want to change their email
-   * TODO: look into password verification
-   *
-   * @returns The dialog to confirm the email change
-   */
-  const ChangeEmailDialog = () => {
-    const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
-
-    const handleClose = () => {
-      setChangeEmailDialogOpen(false);
-    };
-
-    const handleEmailChange = (e) => {
-      const newEmail = e.target.value;
-      setEmail(newEmail);
-      if (newEmail.trim() === '') {
-        setEmailError('');
-      }
-    };
-
-    const handleSubmit = async () => {
-      try {
-        const data = {
-          newEmail: email,
-        };
-        console.log(data);
-        await UserService.updateAccountInfo(data);
-        setChangeEmailDialogOpen(false);
-        // logout and navigate to the home page
-        localStorage.clear();
-        logout();
-        navigate('/');
-      } catch (e) {
-        setEmailError('Invalid email');
-        console.error('Error in changing email', e);
-      }
-    };
-
-    // Component details
-    return (
-      <Dialog open={changeEmailDialogOpen} onClose={handleClose}>
-        <DialogTitle>Email Change</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Proceeding with this action will update the email associated with
-            your account and automatically log you out. Are you certain you wish
-            to proceed?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <TextField
-            autoFocus
-            error={!!emailError}
-            helperText={emailError}
-            margin="dense"
-            id="changeEmail"
-            label="Change Email"
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
-            fullWidth
-          />
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} autoFocus>
-            Change Email
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
   // Display component
   return (
     <Container component="main" maxWidth="xs">
@@ -310,65 +226,106 @@ export default function AccountSettings() {
           alignItems: 'center',
         }}
       >
-        <Typography component="h1" variant="h5">
-          Account Settings
-        </Typography>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') e.preventDefault();
-          }}
-          sx={{
+        <div
+          style={{
             display: 'flex',
             flexDirection: 'column',
-            mt: 1,
-            gap: 2,
+            height: '90vh',
+            justifyContent: 'space-between',
           }}
         >
-          <TextField
-            fullWidth
-            id="setUsername"
-            label="New Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            id="oldPassword"
-            label="Old Password"
-            type="password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            id="newPassword"
-            label="New Password"
-            type="password"
-            value={newPassword}
-            autoComplete="new-password"
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            id="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            value={confirmPassword}
-            autoComplete="new-password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+          <div>
+            <Typography component="h1" variant="h5">
+              Account Settings
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') e.preventDefault();
+              }}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                mt: 1,
+                gap: 2,
+              }}
+            >
+              <TextField
+                fullWidth
+                id="setUsername"
+                label="New Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                id="oldPassword"
+                label="Old Password"
+                type="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                id="newPassword"
+                label="New Password"
+                type="password"
+                value={newPassword}
+                autoComplete="new-password"
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                id="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                value={confirmPassword}
+                autoComplete="new-password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Update Information
+              </Button>
+              <ChangeEmailDialog />
+              <Button
+                className="change-email-button"
+                variant="contained"
+                onClick={() => setChangeEmailDialogOpen(true)}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                }}
+              >
+                Change Email
+              </Button>
+            </Box>
+          </div>
           <Button
-            type="submit"
-            fullWidth
+            className="delete-button"
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            color="error"
+            onClick={() => {
+              console.log('Delete Account');
+              setDeleteDialogOpen(true);
+            }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              // position: 'absolute',
+              // bottom: '0',
+            }}
           >
-            Update Information
+            Delete Account
           </Button>
-        </Box>
+          <DeleteAccountDialog />
+        </div>
       </Box>
     </Container>
   );

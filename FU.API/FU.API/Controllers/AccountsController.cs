@@ -154,9 +154,14 @@ public class AccountsController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteAccount([FromBody] Credentials credentials)
+    public async Task<IActionResult> DeleteAccount([FromBody] LoginRequestDTO loginDetails)
     {
         var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var credentials = new Credentials
+        {
+            Username = loginDetails.Username,
+            Password = loginDetails.Password
+        };
 
         await _accountService.DeleteAccount(user.UserId, credentials);
 

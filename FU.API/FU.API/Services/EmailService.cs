@@ -21,7 +21,7 @@ public class EmailService : IEmailService
     {
         _configuration = configuration;
 
-        string connectionString = _configuration[ConfigKey.EmailConnectionString];
+        string? connectionString = _configuration[ConfigKey.EmailConnectionString];
         _emailClient = new EmailClient(connectionString);
     }
 
@@ -30,7 +30,7 @@ public class EmailService : IEmailService
         _ = Task.Run(async () =>
         {
             var emailSendOperation = await _emailClient.SendAsync(
-                WaitUntil.Completed,
+                WaitUntil.Started,
                 senderAddress: "DoNotReply@72e78c7f-bd50-4dee-b29d-3853bd1e3fa1.azurecomm.net",
                 recipientAddress: user.Email,
                 subject: "Test Email",
@@ -45,11 +45,24 @@ public class EmailService : IEmailService
         return emailType switch
         {
             EmailType.ConfirmAccount => GenerateConfirmAccountEmail(user),
+            EmailType.Welcome => GenerateWelcomeEmail(user),
             _ => string.Empty,
         };
     }
 
     private string GenerateConfirmAccountEmail(ApplicationUser user)
+    {
+        var token = GenerateJwtToken(user);
+        return token;
+    }
+
+    private string GenerateWelcomeEmail(ApplicationUser user)
+    {
+        var token = GenerateJwtToken(user);
+        return token;
+    }
+
+    private string GenerateJwtToken(ApplicationUser user)
     {
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -61,7 +74,6 @@ public class EmailService : IEmailService
 
         var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: DateTime.UtcNow.AddMinutes(30), claims: claims);
 
-        var ret = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-        return ret;
+        return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
     }
 }

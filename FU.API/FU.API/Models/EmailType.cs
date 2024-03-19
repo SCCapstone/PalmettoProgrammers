@@ -3,4 +3,5 @@
 public enum EmailType
 {
     ConfirmAccount,
+    Welcome,
 }
