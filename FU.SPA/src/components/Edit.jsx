@@ -49,8 +49,8 @@ export default function Edit({ postId }) {
         setDescription(postsDetails.description);
         setStartTime(dayjs(postsDetails.startTime));
         setEndTime(dayjs(postsDetails.endTime));
-        // setGame(postsDetails.game);
-        // setTags(postsDetails.tags);
+        //setGame(postsDetails.game);
+        //setTags(postsDetails.tags);
       } catch (e) {
         console.error(e);
       }
@@ -255,7 +255,7 @@ const TagsSelector = ({ onChange, initialValue }) => {
   useEffect(() => {
     const getTags = async () => {
       try {
-        const tags = TagService.searchTags('').then((tags) => setTagOptions(tags));
+        const tags = await TagService.searchTags('').then((tags) => setTagOptions(tags));
         setTagOptions(tags);
         //if tags aren't null and isn't empty string.
         if (initialValue && initialValue.length > 0) {
