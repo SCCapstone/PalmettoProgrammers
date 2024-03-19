@@ -55,15 +55,8 @@ public class RelationsController : ControllerBase
     {
         var currentUser = await _relationService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        var relation = await _relationService.GetRelation(currentUser.UserId, userId);
-
-        if (relation is null)
-        {
-            relation = new UserRelation
-            {
-                Status = UserRelationStatus.None
-            };
-        }
+        var relation = await _relationService.GetRelation(currentUser.UserId, userId)
+            ?? new UserRelation { Status = UserRelationStatus.None };
 
         var response = relation.ToDto();
         return Ok(response);

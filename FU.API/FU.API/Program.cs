@@ -67,12 +67,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-// https://stackoverflow.com/a/66628583
-var loggedInPolicy = new AuthorizationPolicyBuilder()
-    .RequireAuthenticatedUser()
-    .AddRequirements(new IsLoggedInRequirement())
-    .Build();
-
 builder.Services.AddHostedService<PeriodicRemoteStorageCleanerHostedService>();
 
 // used to get the context in IsLoggedInAuthenticationHandler
@@ -94,6 +88,12 @@ builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
 });
+
+// from https://stackoverflow.com/a/66628583
+var loggedInPolicy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .AddRequirements(new IsLoggedInRequirement())
+    .Build();
 
 builder.Services.AddAuthorization(options =>
 {

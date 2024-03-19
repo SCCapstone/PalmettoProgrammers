@@ -90,7 +90,7 @@ public class UsersController : ControllerBase
 
         (var posts, var totalResults) = await _searchService.SearchPosts(query);
 
-        var postDtos = new List<PostResponseDTO>(posts.Count());
+        var postDtos = new List<PostResponseDTO>(posts.Count);
 
         // for each resonse set has joined to true
         foreach (var post in posts)

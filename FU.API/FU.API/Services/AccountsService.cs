@@ -93,15 +93,7 @@ public class AccountsService : CommonService
 
         // When deleting a user all posts they made have the creator set to null automatically
         // But we need to manually remove posts if they were the only member
-        var posts = _dbContext.Posts.Where(p => p.CreatorId == userId).ToList();
-        foreach (var post in posts)
-        {
-            var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
-            if (chatMemberships.Count == 1)
-            {
-                _dbContext.Posts.Remove(post);
-            }
-        }
+        DeleteMemberlessPostsCreatedBy(userId);
 
         await _dbContext.SaveChangesAsync();
     }
@@ -196,6 +188,19 @@ public class AccountsService : CommonService
         else
         {
             return Task.FromResult<ApplicationUser?>(null);
+        }
+    }
+
+    private void DeleteMemberlessPostsCreatedBy(int userId)
+    {
+        var posts = _dbContext.Posts.Where(p => p.CreatorId == userId).ToList();
+        foreach (var post in posts)
+        {
+            var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
+            if (chatMemberships.Count == 1)
+            {
+                _dbContext.Posts.Remove(post);
+            }
         }
     }
 }
