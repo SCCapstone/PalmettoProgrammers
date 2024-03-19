@@ -38,6 +38,35 @@ const signUp = async (credentials) => {
   }
 };
 
+const confirmAccount = async(token) => {
+  console.log('confirmAccount', token);
+  const response = await fetch(`${API_BASE_URL}/Accounts/confirm`, {
+    method: 'POST',
+    headers: {
+      ...AuthService.getAuthHeader(),
+    },
+  });  
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in confirming account');
+  }
+
+  const jsonResponse = await response.json();
+  return jsonResponse;
+};
+
+const resendConfirmation = async(email) => {
+  const response = await fetch(`${API_BASE_URL}/Accounts/reconfirm/${email}`, {
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in resending confirmation');
+  }
+};
+
 const getToken = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
   return token;
@@ -48,5 +77,5 @@ const getAuthHeader = () => {
   return { Authorization: `Bearer ${token}` };
 };
 
-const AuthService = { signIn, signUp, getAuthHeader };
+const AuthService = { signIn, signUp, getAuthHeader, confirmAccount, resendConfirmation };
 export default AuthService;

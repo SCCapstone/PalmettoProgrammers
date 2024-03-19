@@ -263,38 +263,21 @@ public class AccountsService : CommonService
         await _emailService.SendEmail(EmailType.ConfirmAccount, user);
     }
 
-    public async Task<AuthenticationInfo?> ConfirmAccount(string token)
+    public async Task<AuthenticationInfo?> ConfirmAccount(int userId)
     {
-        try
+        // Find and update the user
+        var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        if (user.AccountConfirmed)
         {
-            // Decode the token to get the user ID
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty)),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero
-            }, out SecurityToken validatedToken);
-
-            var jwtToken = (JwtSecurityToken)validatedToken;
-            var userId = int.Parse(claimsPrincipal.FindFirstValue(CustomClaimTypes.UserId));
-
-            var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
-
-            // Confirm the account
-            user.AccountConfirmed = true;
-            _dbContext.Update(user);
-            await _dbContext.SaveChangesAsync();
-
-            return CreateAuthInfo(DateTime.UtcNow.AddDays(1), user);
+            throw new BadRequestException("Account already confirmed");
         }
-        catch (Exception)
-        {
-            // Token is invalid or expired
-            return null;
-        }
+
+        user.AccountConfirmed = true;
+        _dbContext.Update(user);
+        await _dbContext.SaveChangesAsync();
+
+        return CreateAuthInfo(DateTime.UtcNow.AddDays(1), user);
     }
 
     public AuthenticationInfo CreateAuthInfo(DateTime expires, ApplicationUser user)
