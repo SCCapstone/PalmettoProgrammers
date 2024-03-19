@@ -40,4 +40,14 @@ public static class ConfigKey
     public const string EmailConnectionString = "EMAIL_CONNECTION_STRING";
 
     public const string Environment = "ENVIRONMENT";
+
+    /// <summary>
+    /// The connection string for an azure storage account.
+    /// </summary>
+    public const string StorageConnectionString = "STORAGE_CONNECTION_STRING";
+
+    /// <summary>
+    /// The azure storage service container name for avatars.
+    /// </summary>
+    public const string AvatarContainerName = "AVATAR_CONTAINER_NAME";
 }

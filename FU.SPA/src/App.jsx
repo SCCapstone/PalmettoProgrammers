@@ -18,10 +18,13 @@ import './App.css';
 import ProfileSettings from './components/pages/ProfileSettings';
 import AccountSettings from './components/pages/AccountSettings';
 import EditPost from './components/pages/EditPost';
+import { ReactNotifications } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
 
 function App() {
   return (
     <ThemeProvider theme={Theme}>
+      <ReactNotifications />
       <CssBaseline />
       <UserProvider>
         <Navbar />

@@ -92,11 +92,6 @@ public class ChatController : ControllerBase
 
         var messages = await _chatService.GetChatMessages(chatId, offset, limit);
 
-        if (messages is null || !messages.Any())
-        {
-            return Ok();
-        }
-
         var response = messages.ToDtos();
 
         return Ok(response);

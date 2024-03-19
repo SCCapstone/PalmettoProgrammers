@@ -152,4 +152,14 @@ public class AccountsController : ControllerBase
         // Account is confirmed
         return Ok(authInfo);
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAccount([FromBody] Credentials credentials)
+    {
+        var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+
+        await _accountService.DeleteAccount(user.UserId, credentials);
+
+        return Ok();
+    }
 }

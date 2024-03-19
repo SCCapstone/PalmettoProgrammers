@@ -97,6 +97,22 @@ const updateAccountInfo = async (data) => {
   }
 };
 
+// Delete account
+const deleteAccount = async (credentials) => {
+  const response = await fetch(`${API_BASE_URL}/Accounts`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      ...AuthService.getAuthHeader(),
+    },
+    body: JSON.stringify(credentials),
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in deleting account');
+  }
+};
+
 const UserService = {
   getConnectedPosts,
   getConnectedGroups,
@@ -104,5 +120,6 @@ const UserService = {
   getUserIdJson,
   updateUserProfile,
   updateAccountInfo,
+  deleteAccount,
 };
 export default UserService;
