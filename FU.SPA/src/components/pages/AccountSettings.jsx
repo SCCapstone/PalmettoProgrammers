@@ -176,7 +176,22 @@ export default function AccountSettings() {
         localStorage.clear();
         logout();
         navigate('/');
+        Store.addNotification({
+          title: 'Email Change Confirmation',
+          message:
+            'Your email has been successfully changed. Please reconfirm your account using the new email.',
+          type: 'success',
+          insert: 'top',
+          container: 'top-center',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
       } catch (e) {
+        // need to handle the different errors (invalid email, user with email exists, this is their current email, etc)
         setEmailError('Invalid email');
         console.error('Error in changing email', e);
       }
@@ -188,9 +203,9 @@ export default function AccountSettings() {
         <DialogTitle>Email Change</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Proceeding with this action will update the email associated with
-            your account and automatically log you out. Are you certain you wish
-            to proceed?
+            Please note that updating your email will automatically log you out
+            and require reconfirmation of your account using the new email
+            address. Are you sure you wish to proceed?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

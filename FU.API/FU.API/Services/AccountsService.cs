@@ -240,15 +240,6 @@ public class AccountsService : CommonService
 
     public async Task ResendConfirmationEmail(string email)
     {
-        // Find the user with the email
-        var user = _dbContext.Users.Where(u => u.NormalizedEmail == email.ToUpper()).FirstOrDefault() ?? throw new NotFoundException("User not found", "The requested user was not found");
-
-        // Make sure the account isn't already confirmed
-        if (user.AccountConfirmed)
-        {
-            throw new BadRequestException("Account already confirmed");
-        }
-
         // Make sure the email is valid
         try
         {
@@ -257,6 +248,15 @@ public class AccountsService : CommonService
         catch
         {
             throw new BadRequestException("Invalid email");
+        }
+
+        // Find the user with the email
+        var user = _dbContext.Users.Where(u => u.NormalizedEmail == email.ToUpper()).FirstOrDefault() ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        // Make sure the account isn't already confirmed
+        if (user.AccountConfirmed)
+        {
+            throw new BadRequestException("Account already confirmed");
         }
 
         // Send the email

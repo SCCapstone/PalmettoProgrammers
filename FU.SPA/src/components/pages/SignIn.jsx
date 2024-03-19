@@ -18,7 +18,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import AuthService from '../../services/authService';
 import UserContext from '../../context/userContext';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Store } from 'react-notifications-component';
@@ -26,8 +26,9 @@ import Theme from '../../Theme';
 
 export default function SignIn() {
   const { login } = useContext(UserContext);
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [token] = useState(searchParams.get('token'));
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   /* We use a generic "credentials error" as a way to obfuscate wheter
@@ -41,6 +42,7 @@ export default function SignIn() {
 
   const [unconfirmedAccountDialogOpen, setUnconfirmedAccountDialogOpen] =
     useState(false);
+  const [invalidTokenDialogOpen, setInvalidTokenDialogOpen] = useState(false);
 
   // Display password when eye icon is clicked
   const handleClickShowPassword = () => {
@@ -53,6 +55,44 @@ export default function SignIn() {
     : '/SignUp';
 
   const isEnabled = username.length > 0 && password.length > 0;
+
+  // use effect to call when the token is set
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Validate token
+        // lock this piece of code
+
+        const response = await AuthService.confirmAccount(token);
+        console.log('Response:', response);
+        // Show success banner
+        Store.addNotification({
+          title: 'Account Confirmed',
+          message:
+            'Your account has been confirmed. You are now signed in. Welcome to Forces Unite!',
+          type: 'success',
+          insert: 'top',
+          container: 'top-center',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+        // Navigate to home
+        login(response.token);
+        navigate('/discover');
+      } catch (error) {
+        // Show error dialog
+        setInvalidTokenDialogOpen(true);
+      }
+    };
+
+    if (token && token.length > 10) {
+      fetchData(); // Call the asynchronous function immediately
+    }
+  }, [token, login, navigate]);
 
   // Update state for username
   const handleUsernameChange = (event) => {
@@ -92,11 +132,96 @@ export default function SignIn() {
     }
   };
 
+  const InvalidTokenDialog = () => {
+    const [email, setEmail] = useState('');
+    const [error, setCredentialsError] = useState('');
+
+    const handleClose = () => {
+      setInvalidTokenDialogOpen(false);
+    };
+
+    const handleSubmit = async () => {
+      try {
+        await AuthService.resendConfirmation(email);
+        Store.addNotification({
+          title: 'Email Sent',
+          message:
+            'A new confirmation email has been sent. Please check your email.',
+          type: 'success',
+          insert: 'top',
+          container: 'top-center',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+        // navigate to home
+        navigate('/');
+      } catch (event) {
+        // This means the email is not in the system
+        const errorResponse = await JSON.parse(event.message);
+        if (errorResponse.status === 404) {
+          setCredentialsError(
+            'No account with that email exists. Please sign up.',
+          );
+        } else if (errorResponse.detail) {
+          setCredentialsError(errorResponse.detail);
+        } else {
+          Store.addNotification({
+            title: 'Error Sending Email',
+            message:
+              'There was an error sending the confirmation email. Please try again later.',
+            type: 'warning',
+            insert: 'top',
+            container: 'top-center',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              onScreen: true,
+            },
+          });
+        }
+      }
+    };
+
+    return (
+      <Dialog open={invalidTokenDialogOpen} onClose={handleClose}>
+        <DialogTitle>Invalid Token</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            The token you have entered is invalid. Please enter your email to
+            receive a new token.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            error={!!error}
+            helperText={error}
+            margin="dense"
+            id="sendemail"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+          ></TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleSubmit} autoFocus>
+            Send
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
   /**
    * The unconfirmed account dialog
    * When a user signs in and their account is not confirmed, this dialog will appear
    * It gives users the option to resend the confirmation email with a button
-   * 
+   *
    * @returns The dialog
    */
   const UnconfirmedAccountDialog = () => {
@@ -170,6 +295,7 @@ export default function SignIn() {
   return (
     <>
       <UnconfirmedAccountDialog />
+      <InvalidTokenDialog />
       <Container component="main" maxWidth="xs" height="100%">
         <CssBaseline />
         <Box

@@ -68,6 +68,7 @@ function App() {
             />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/signin/:token" element={<SignIn />} />
             <Route path="/posts/:postId" element={<PostPage />} />
 
             <Route path="*" element={<NoPage />} />
