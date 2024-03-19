@@ -81,8 +81,6 @@ export default function Edit({ postId }) {
         //console.log(startTime);
         // setStartTime(postDetails.startTime);
         // setEndTime(postDetails.endTime);
-        // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
-        // setEndTime(postDetails.endTime.toISOString);
         setTags(postDetails.tags);
         console.log(tags); //not getting the value for some reason.
         console.log(postDetails.tags);
@@ -332,7 +330,8 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
   //const [tags, setTags] = useState([]);
   //const [value, setValue] = useState('');
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState([]);
+  //const [value, setValue] = useState(null);
   //const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -368,6 +367,7 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
   }, []);
 
   const onInputChange = (event, newValues) => {
+    console.log(newValues);
     for (const newValue of newValues) {
       if (newValue.id === null) {
         // if not in options add to options
@@ -404,13 +404,13 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       autoHighlight
       multiple
       clearOnBlur
-      value={tagsDetails}
+      value={value}
       onChange={onInputChange}
       options={tagOptions}
       //disableCloseOnSelect
       filterOptions={onFilterOptions}
       //option needs to be "string" not "object", even though object is kind of working.
-      getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option} //half-way working
+      //getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option} //half-way working
       //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}
       //need to make tagsDetails into a string. The below optionlabel causes a double. Ex: "tag1, tag2" "tag1, tag2"
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails) : option}
@@ -421,13 +421,19 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //     {item}
       //   </div>
       // )) : option}
-      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split('') : option}
+      // getOptionLabel={(option) => typeof option === "object" ? tagsDetails.map(item => ( 
+      //   <div key={item}>
+      //     {item}
+      //   </div>
+      // )) : option}
+      //get the api list of strings.
+      // getOptionLabel={(option) => "test"}
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(', ') : option}
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(',') : option}
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(' ') : option}
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split('') : option}
       // The below option label causes a double of invisible tags, tag 1, and tag2, depending on which tag you click.  
-      //getOptionLabel={(option) => typeof option === "string" ? value : option}
+      // getOptionLabel={(option) => typeof option === "string" ? value : option}
       //getOptionLabel={(option) => typeof option === "string" ? value : option.name}
       //getOptionLabel={(option) => typeof option === "string" ? tagsDetails.name : option}
       //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}  
@@ -445,7 +451,7 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //getOptionLabel={(option) => typeof option === "object" ? value : option.name}
       //getOptionLabel={(option) => typeof option === "object" ? tagOptions : option.name}
       //getOptionLabel={(option) => typeof option === "object" ? option : option.name}
-      //getOptionLabel={(o) => (o ? option : o.name)}
+      getOptionLabel={(o) => (o ? option : o.name)}
       //getOptionLabel={(o) => }
       isOptionEqualToValue={(option, value) => (option.name === value)}
       //isOptionEqualToValue={(option, value) => (option.name === value.name)}
