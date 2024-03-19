@@ -244,7 +244,7 @@ const GameSelector = ({ onChange, initialValue }) => {
   );
 };
 
-const TagsSelector = ({ onChange }) => {
+const TagsSelector = ({ onChange, initialValue }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
 
