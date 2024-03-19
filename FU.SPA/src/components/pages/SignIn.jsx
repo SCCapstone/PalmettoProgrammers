@@ -58,13 +58,9 @@ export default function SignIn() {
 
   // use effect to call when the token is set
   useEffect(() => {
-    const fetchData = async () => {
+    const confirmAccount = async () => {
       try {
-        // Validate token
-        // lock this piece of code
-
         const response = await AuthService.confirmAccount(token);
-        console.log('Response:', response);
         // Show success banner
         Store.addNotification({
           title: 'Account Confirmed',
@@ -90,8 +86,9 @@ export default function SignIn() {
     };
 
     if (token && token.length > 10) {
-      fetchData(); // Call the asynchronous function immediately
+      confirmAccount();
     }
+    
   }, [token, login, navigate]);
 
   // Update state for username
