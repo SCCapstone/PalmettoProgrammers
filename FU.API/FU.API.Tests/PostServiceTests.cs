@@ -2,12 +2,10 @@ namespace FU.API.Tests;
 
 using FU.API.Data;
 using FU.API.Exceptions;
-using FU.API.Interfaces;
 using FU.API.Models;
 using FU.API.Services;
 using FU.API.Tests.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 public class PostServiceTests
 {

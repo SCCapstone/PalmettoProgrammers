@@ -1,6 +1,5 @@
 namespace FU.API.DTOs;
 
-using FU.API.Helpers;
 using FU.API.Validation;
 
 public record AccountInfoDTO

@@ -1,6 +1,5 @@
 namespace FU.API.Services;
 
-using System.Data.Entity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -10,7 +9,6 @@ using FU.API.Helpers;
 using FU.API.Models;
 using Konscious.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Handles account related actions.

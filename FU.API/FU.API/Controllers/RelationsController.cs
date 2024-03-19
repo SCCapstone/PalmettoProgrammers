@@ -7,7 +7,6 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using FU.API.Validation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
