@@ -21,8 +21,6 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
-import { ReactNotifications } from "react-notifications-component";
-import "react-notifications-component/dist/theme.css";
 
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
@@ -49,8 +47,8 @@ export default function Edit({ postId }) {
         setDescription(postsDetails.description);
         setStartTime(dayjs(postsDetails.startTime));
         setEndTime(dayjs(postsDetails.endTime));
-        //setGame(postsDetails.game);
-        //setTags(postsDetails.tags);
+        // setGame(postsDetails.game);
+        // setTags(postsDetails.tags);
       } catch (e) {
         console.error(e);
       }
@@ -255,7 +253,7 @@ const TagsSelector = ({ onChange, initialValue }) => {
   useEffect(() => {
     const getTags = async () => {
       try {
-        const tags = await TagService.searchTags('').then((tags) => setTagOptions(tags));
+        const tags = TagService.searchTags('').then((tags) => setTagOptions(tags));
         setTagOptions(tags);
         //if tags aren't null and isn't empty string.
         if (initialValue && initialValue.length > 0) {
@@ -263,7 +261,7 @@ const TagsSelector = ({ onChange, initialValue }) => {
           setValue(initialTags);
         }
       } catch (e) {
-        console.error("Something went wrong getting tags: ", e);
+        console.error("Soemthing went wrong getting tags: ", e);
       }
     };
     getTags();
