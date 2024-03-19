@@ -21,6 +21,8 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
+import { ReactNotifications } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
@@ -251,7 +253,20 @@ const TagsSelector = ({ onChange, initialValue }) => {
   const [value, setValue] = useState([]);
 
   useEffect(() => {
-    TagService.searchTags('').then((tags) => setTagOptions(tags));
+    const getTags = async () => {
+      try {
+        const tags = TagService.searchTags('').then((tags) => setTagOptions(tags));
+        setTagOptions(tags);
+        //if tags aren't null and isn't empty string.
+        if (initialValue && initialValue.length > 0) {
+          const initialTags = tags.filter(tag => initialValue.includes(tag.name));
+          setValue(initialTags);
+        }
+      } catch (e) {
+        console.error("Soemthing went wrong getting tags: ", e);
+      }
+    };
+    getTags();
   }, []);
 
   const onInputChange = (event, newValues) => {
