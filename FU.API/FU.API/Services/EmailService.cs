@@ -18,7 +18,7 @@ public class EmailService : IEmailService
 
     private readonly IConfiguration _configuration;
 
-    private string baseSpaUrl = "http://http://localhost:5173/";
+    private string baseSpaUrl = "http://localhost:5173/";
 
     public EmailService(IConfiguration configuration)
     {
