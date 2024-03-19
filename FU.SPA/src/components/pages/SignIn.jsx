@@ -88,7 +88,6 @@ export default function SignIn() {
     if (token && token.length > 10) {
       confirmAccount();
     }
-    
   }, [token, login, navigate]);
 
   // Update state for username
