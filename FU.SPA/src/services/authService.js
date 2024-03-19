@@ -38,14 +38,14 @@ const signUp = async (credentials) => {
   }
 };
 
-const confirmAccount = async(token) => {
+const confirmAccount = async (token) => {
   console.log('confirmAccount', token);
   const response = await fetch(`${API_BASE_URL}/Accounts/confirm`, {
     method: 'POST',
     headers: {
-      ...AuthService.getAuthHeader(),
+      Authorization: `Bearer ${token}`,
     },
-  });  
+  });
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -56,7 +56,7 @@ const confirmAccount = async(token) => {
   return jsonResponse;
 };
 
-const resendConfirmation = async(email) => {
+const resendConfirmation = async (email) => {
   const response = await fetch(`${API_BASE_URL}/Accounts/reconfirm/${email}`, {
     method: 'POST',
   });
@@ -77,5 +77,11 @@ const getAuthHeader = () => {
   return { Authorization: `Bearer ${token}` };
 };
 
-const AuthService = { signIn, signUp, getAuthHeader, confirmAccount, resendConfirmation };
+const AuthService = {
+  signIn,
+  signUp,
+  getAuthHeader,
+  confirmAccount,
+  resendConfirmation,
+};
 export default AuthService;

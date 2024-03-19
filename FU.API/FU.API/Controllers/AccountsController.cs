@@ -40,7 +40,8 @@ public class AccountsController : ControllerBase
         var credentials = new Credentials
         {
             Username = loginDetails.Username,
-            Password = loginDetails.Password
+            Password = loginDetails.Password,
+            ReconfirmAccount = loginDetails.ReconfirmAccount
         };
 
         var authInfo = await _accountService.GetUserAuthInfo(credentials);
