@@ -263,7 +263,7 @@ const TagsSelector = ({ onChange, initialValue }) => {
           setValue(initialTags);
         }
       } catch (e) {
-        console.error("Soemthing went wrong getting tags: ", e);
+        console.error("Something went wrong getting tags: ", e);
       }
     };
     getTags();
