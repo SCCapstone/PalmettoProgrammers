@@ -30,6 +30,7 @@ export default function Edit({ postId }) {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const [postsDetails, setPostsDetails] = useState();
 
   const { user } = useContext(UserContext);
 
@@ -41,6 +42,13 @@ export default function Edit({ postId }) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
+        setPostsDetails(postDetails);
+        setTitle(postsDetails.title);
+        setDescription(postsDetails.description);
+        setStartTime(dayjs(postsDetails.startTime));
+        setEndTime(dayjs(postsDetails.endTime));
+        // setGame(postsDetails.game);
+        // setTags(postsDetails.tags);
       } catch (e) {
         console.error(e);
       }
@@ -124,8 +132,10 @@ export default function Edit({ postId }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector onChange={setGame} />
-          </Grid>
+          {postsDetails.game !== undefined && (
+            <GameSelector initialValue={postsDetails.game} onChange={setGame} />
+          )}
+            </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
@@ -139,7 +149,7 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector onChange={setTags} />
+          <TagsSelector initialValue={tags} onChange={setTags} />
           <Box
             sx={{
               display: 'flex',
@@ -175,12 +185,18 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ onChange }) => {
-  const [gammeOptions, setGameOptions] = useState([]);
+const GameSelector = ({ onChange, initialValue }) => {
+  const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
+    const game = GameService.searchGames('').then((games) => setGameOptions(games));
+    setGameOptions(game);
+    
+    const gameOptions = game.find((g) => g.name === initialValue);
+    if(gameOptions) {
+      setValue(gameOptions);
+    }
   }, []);
 
   const onInputChange = (event, newValue) => {
@@ -210,7 +226,7 @@ const GameSelector = ({ onChange }) => {
       clearOnBlur
       value={value}
       onChange={onInputChange}
-      options={gammeOptions}
+      options={gameOptions}
       disableCloseOnSelect
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
