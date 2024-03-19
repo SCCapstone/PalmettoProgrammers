@@ -1,0 +1,3 @@
+## Avatar Image System Overview
+
+First the avatar is uploaded to the server via `AvatarController.UploadAvatar`. Then it is validated to be an image, cropped to be square, resized, and converted to a JPEG using the `SkiaSharp` library. Then the image is temporarily stored on the server as a file. The user can then preview the image by calling `AvatarController.GetAvatarPreview`. After awhile the image is deleted by `PeriodicTemporaryStorageCleanupHostedService`. If the user wants to use the image, they call `UsersController.UpdateProfile` to set it as their new avatar. This uploads the profile to blob storage where it can be anonymously accessed without authentication. After awhile, the old profile picture is deleted by `PeriodicRemoteStorageCleanerHostedService`.
