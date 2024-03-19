@@ -21,16 +21,15 @@ public class AvatarController : ControllerBase
     public async Task<IActionResult> UploadAvatar(IFormFile avatarFile)
     {
         using var stream = avatarFile.OpenReadStream();
-        using Stream avatarFileStream = AvatarService.ConvertToAvatarImageFile(stream);
+        using Stream normalizedAvatar = AvatarService.NormalizeAvatar(stream);
         var newFileName = Guid.NewGuid().ToString() + ".jpg";
-        var fileUri = await _storageService.UploadAsync(avatarFileStream, newFileName);
 
-        var imageUrl = fileUri.AbsoluteUri;
+        var fileUri = await _storageService.UploadAsync(normalizedAvatar, newFileName);
+
         var response = new
         {
-            ImageUrl = imageUrl,
+            ImageUrl = fileUri.AbsoluteUri,
         };
-
         return Ok(response);
     }
 }

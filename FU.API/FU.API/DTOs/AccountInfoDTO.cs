@@ -1,4 +1,4 @@
-namespace FU.API.Models;
+namespace FU.API.DTOs;
 
 using FU.API.Helpers;
 using FU.API.Validation;

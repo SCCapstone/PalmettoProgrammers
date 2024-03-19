@@ -250,7 +250,7 @@ public static class Mapper
         };
     }
 
-    public static AccountInfoDTO ToDTO(this AccountInfo accountInfo)
+    public static AccountInfoDTO ToDto(this AccountInfo accountInfo)
     {
         return new AccountInfoDTO()
         {

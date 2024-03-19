@@ -81,7 +81,7 @@ public class AccountsController : ControllerBase
             return Problem("Could not find account");
         }
 
-        return Ok(accountInfo.ToDTO());
+        return Ok(accountInfo.ToDto());
     }
 
     // Updates the current user's credentials. The current user is obtained from the jwt token.

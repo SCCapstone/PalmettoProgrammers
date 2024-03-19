@@ -5,7 +5,7 @@ using FU.API.Exceptions;
 
 public static class AvatarService
 {
-    public static Stream ConvertToAvatarImageFile(Stream stream)
+    public static Stream NormalizeAvatar(Stream stream)
     {
         SKBitmap bitmap = SKBitmap.Decode(stream)
             ?? throw new UnprocessableException("Filetype not supported.");
