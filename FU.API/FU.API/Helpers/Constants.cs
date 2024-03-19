@@ -23,27 +23,27 @@ public static class CustomContextItems
 }
 
 /// <summary>
-/// Stores the custom config key's.
+/// Stores custom config keys.
 /// </summary>
 public static class ConfigKey
 {
     /// <summary>
-    /// The Jwt Secred config key.
+    /// The JWT Secred config key.
     /// </summary>
     public const string JwtSecret = "JWT_SECRET";
 
     /// <summary>
-    /// The connection string config key.
+    /// The database connection string config key.
     /// </summary>
     public const string ConnectionString = "CONNECTION_STRING";
 
     /// <summary>
-    /// The connection string for an azure storage account.
+    /// The config key for an azure storage account connection string.
     /// </summary>
     public const string StorageConnectionString = "STORAGE_CONNECTION_STRING";
 
     /// <summary>
-    /// The azure storage service container name for avatars.
+    /// The config key for the azure storage service container name that avatars are stored in.
     /// </summary>
     public const string AvatarContainerName = "AVATAR_CONTAINER_NAME";
 }

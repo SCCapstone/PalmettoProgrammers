@@ -3,6 +3,9 @@ namespace FU.API.Middleware;
 using FU.API.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
+/// <summary>
+/// Catches ExceptionWithResponse exceptions and converts them to responses.
+/// </summary>
 public static class ExceptionHandler
 {
     public static async Task HandleException(HttpContext context)

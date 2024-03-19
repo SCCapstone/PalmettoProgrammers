@@ -71,7 +71,7 @@ public class AccountsService : CommonService
     /// Deletes a user account.
     /// </summary>
     /// <param name="userId">The user to delete.</param>
-    /// /// <param name="credentials">Credentials of the user to delete.</param>
+    /// <param name="credentials">Credentials of the user to delete.</param>
     /// <returns>Task.</returns>
     /// <exception cref="NotFoundException">Exception thrown to the UI if the user is not found.</exception>
     public async Task DeleteAccount(int userId, Credentials credentials)

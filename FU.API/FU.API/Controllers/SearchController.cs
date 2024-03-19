@@ -6,6 +6,9 @@ using FU.API.Helpers;
 using FU.API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles search requests.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class SearchController : ControllerBase

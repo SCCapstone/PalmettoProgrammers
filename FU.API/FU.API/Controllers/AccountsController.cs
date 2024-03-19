@@ -84,7 +84,14 @@ public class AccountsController : ControllerBase
         return Ok(accountInfo.ToDto());
     }
 
-    // Updates the current user's credentials. The current user is obtained from the jwt token.
+    /// <summary>
+    /// Updates the current user's credentials.
+    /// </summary>
+    /// <remarks>
+    /// The current user is obtained from the JWT token in the authorization header.
+    /// </remarks>
+    /// <param name="newCredentials">The new credentials to be used.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPatch]
     public async Task<IActionResult> UpdateAccountCredentials(UpdateCredentailsDTO newCredentials)
     {

@@ -3,6 +3,9 @@ namespace FU.API.Services;
 using SkiaSharp;
 using FU.API.Exceptions;
 
+/// <summary>
+/// Handles avatar normalization.
+/// </summary>
 public static class AvatarService
 {
     public static Stream NormalizeAvatar(Stream stream)

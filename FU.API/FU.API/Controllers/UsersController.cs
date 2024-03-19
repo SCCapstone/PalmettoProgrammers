@@ -9,6 +9,9 @@ using FU.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles user related requests.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
