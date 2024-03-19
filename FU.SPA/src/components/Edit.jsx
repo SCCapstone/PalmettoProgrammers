@@ -149,7 +149,9 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector initialValue={tags} onChange={setTags} />
+          {postsDetails.tags !== undefined &&
+            (<TagsSelector initialValue={tags} onChange={setTags} />
+          )}
           <Box
             sx={{
               display: 'flex',
