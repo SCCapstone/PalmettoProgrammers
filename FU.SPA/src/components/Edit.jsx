@@ -53,8 +53,9 @@ export default function Edit({ postId }) {
         gameDetails = postsDetails.game;
         tagsDetails = postDetails.tags;
 
-        // setGame(postsDetails.game);
-        // setTags(postsDetails.tags);
+        setGame(postsDetails.game);
+        console.log(game);
+        setTags(postsDetails.tags);
       } catch (e) {
         console.error(e);
       }
@@ -139,7 +140,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
           {postsDetails.game !== undefined && (
-            <GameSelector initialValue={gameDetails} onChange={setGame} />
+            <GameSelector initialValue={game} onChange={setGame} />
           )}
             </Grid>
           <br />
@@ -204,6 +205,7 @@ const GameSelector = ({ onChange, initialValue }) => {
         //GameService.searchGames('').then((games) => setGameOptions(games));
         setGameOptions(game);
         const gameChoice = game.find((g) => g.name === initialValue);
+        // const gameChoice = game.GameService.searchGames(initialValue);
         if (gameChoice) {
           setValue(gameChoice);
         }
@@ -243,11 +245,11 @@ const GameSelector = ({ onChange, initialValue }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       clearOnBlur
       value={value}
       onChange={onInputChange}
       options={gameOptions}
-      disableCloseOnSelect
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
       isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -255,6 +257,7 @@ const GameSelector = ({ onChange, initialValue }) => {
       renderInput={(params) => (
         <TextField
           {...params}
+          autoHighlight
           label="Game"
           required
           placeholder="Select or create a game"
@@ -322,6 +325,7 @@ const TagsSelector = ({ onChange, initialValue }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       multiple
       clearOnBlur
       value={value}
