@@ -9,7 +9,7 @@ import {
   Paper,
   Alert,
 } from '@mui/material';
-import { useEffect, useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
