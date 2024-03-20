@@ -431,23 +431,24 @@ export default function Discover() {
             marginRight: '150px',
           }}
         >
-          {
-            hasResults ? (
-          <Stack spacing={2}>
-            <Typography>Page: {page}</Typography>
-            <Pagination
-              count={Math.ceil(totalResults / queryLimit)}
-              page={page}
-              onChange={(_, value) => setPage(value)}
-              color="secondary"
-            />
-          </Stack>
-            ) : (
-            <Typography variant="h4" style={{ color: 'violet', textAlign: 'center' }}>
+          {hasResults ? (
+            <Stack spacing={2}>
+              <Typography>Page: {page}</Typography>
+              <Pagination
+                count={Math.ceil(totalResults / queryLimit)}
+                page={page}
+                onChange={(_, value) => setPage(value)}
+                color="secondary"
+              />
+            </Stack>
+          ) : (
+            <Typography
+              variant="h4"
+              style={{ color: 'violet', textAlign: 'center' }}
+            >
               No results found
             </Typography>
-            )
-}
+          )}
         </div>
       </div>
     </div>
