@@ -431,6 +431,8 @@ export default function Discover() {
             marginRight: '150px',
           }}
         >
+          {
+            hasResults ? (
           <Stack spacing={2}>
             <Typography>Page: {page}</Typography>
             <Pagination
@@ -440,6 +442,12 @@ export default function Discover() {
               color="secondary"
             />
           </Stack>
+            ) : (
+            <Typography variant="h4" style={{ color: 'violet', textAlign: 'center' }}>
+              No results found
+            </Typography>
+            )
+}
         </div>
       </div>
     </div>
