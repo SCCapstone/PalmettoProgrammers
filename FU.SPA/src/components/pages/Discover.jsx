@@ -9,6 +9,7 @@ import {
   Select,
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector, SortOptionsSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
@@ -442,12 +443,12 @@ export default function Discover() {
               />
             </Stack>
           ) : (
-            <Typography
-              variant="h4"
-              style={{ color: 'violet', textAlign: 'center' }}
+            <div
+              style={{ textAlign: 'center', color: 'violet', padding: '20px' }}
             >
-              No Results Found
-            </Typography>
+              <SearchOffIcon style={{ fontSize: '94px' }} />
+              <Typography variant="h4">No Results Found</Typography>
+            </div>
           )}
         </div>
       </div>
