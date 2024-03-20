@@ -216,7 +216,7 @@ export default function Discover() {
         const response = await SearchService.searchPosts(query);
         setPosts(response.data);
         setTotalResults(response.totalCount);
-        setHasResults(response.data);
+        setHasResults(response.data.length > 0);
       } else {
         const query = {
           keywords: searchText,
@@ -227,7 +227,7 @@ export default function Discover() {
         const response = await SearchService.searchUsers(query);
         setPlayers(response.data);
         setTotalResults(response.totalCount);
-        setHasResults(response.data);
+        setHasResults(response.data.length > 0);
       }
     };
 
