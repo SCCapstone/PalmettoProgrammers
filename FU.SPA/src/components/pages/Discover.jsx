@@ -52,6 +52,7 @@ export default function Discover() {
 
   const queryLimit = 10;
   const [totalResults, setTotalResults] = useState(0);
+  const [hasResults, setHasResults] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('o') || tabOptions.Posts;
 
@@ -215,6 +216,7 @@ export default function Discover() {
         const response = await SearchService.searchPosts(query);
         setPosts(response.data);
         setTotalResults(response.totalCount);
+        setHasResults(response.data);
       } else {
         const query = {
           keywords: searchText,
@@ -225,6 +227,7 @@ export default function Discover() {
         const response = await SearchService.searchUsers(query);
         setPlayers(response.data);
         setTotalResults(response.totalCount);
+        setHasResults(response.data);
       }
     };
 
