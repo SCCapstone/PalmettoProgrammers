@@ -30,7 +30,7 @@ export default function ProfileSettings() {
   useEffect(() => {
     async function fetchUserInfo() {
       try {
-        const userInfo = await UserService.getProfileInfo();
+        const userInfo = await UserService.getUserprofile('current');
         setBio(userInfo.bio || '');
         setDateOfBirth(userInfo.dob ? dayjs(userInfo.dob) : null);
       } catch (error) {
