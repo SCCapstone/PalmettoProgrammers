@@ -33,9 +33,8 @@ export default function ProfileSettings() {
         const userInfo = await UserService.getProfileInfo();
         setBio(userInfo.bio || '');
         setDateOfBirth(userInfo.dob ? dayjs(userInfo.dob) : null);
-        setPfpUrl(userInfo.pfpUrl || '');
       } catch (error) {
-        console.error("Failed to load profile info", error);
+        console.error('Failed to load profile info', error);
       }
     }
 
