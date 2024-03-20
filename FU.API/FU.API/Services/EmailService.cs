@@ -25,7 +25,11 @@ public class EmailService : IEmailService
         _configuration = configuration;
 
         string? connectionString = _configuration[ConfigKey.EmailConnectionString];
-        _emailClient = new EmailClient(connectionString);
+
+        if (!string.IsNullOrEmpty(connectionString))
+        {
+            _emailClient = new EmailClient(connectionString);
+        }
 
         baseSpaUrl = _configuration[ConfigKey.BaseSpaUrl] ?? baseSpaUrl;
     }
