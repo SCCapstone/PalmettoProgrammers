@@ -3,6 +3,10 @@ namespace FU.API.Exceptions;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// An exception that carries a response code and message.
+/// </summary>
+/// <remarks>These exceptions are caught by ExceptionHandler and turned into an http response.</remarks>
 public abstract class ExceptionWithResponse : Exception
 {
     public abstract string Description { get; }

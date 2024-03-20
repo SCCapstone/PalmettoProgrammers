@@ -5,6 +5,9 @@ using FU.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Interfaces;
 
+/// <summary>
+/// Handles avatar related requests.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -17,20 +20,24 @@ public class AvatarController : ControllerBase
         _storageService = storageService;
     }
 
+    /// <summary>
+    /// Normalizes and uploads an avatar image file to cloud storage.
+    /// </summary>
+    /// <returns>The url of the avatar on cloud storage.</returns>
+    /// <param name="avatarFile">The avatar file.</param>
     [HttpPost]
     public async Task<IActionResult> UploadAvatar(IFormFile avatarFile)
     {
         using var stream = avatarFile.OpenReadStream();
-        using Stream avatarFileStream = AvatarService.ConvertToAvatarImageFile(stream);
+        using Stream normalizedAvatar = AvatarService.NormalizeAvatar(stream);
         var newFileName = Guid.NewGuid().ToString() + ".jpg";
-        var fileUri = await _storageService.UploadAsync(avatarFileStream, newFileName);
 
-        var imageUrl = fileUri.AbsoluteUri;
+        var fileUri = await _storageService.UploadAsync(normalizedAvatar, newFileName);
+
         var response = new
         {
-            ImageUrl = imageUrl,
+            ImageUrl = fileUri.AbsoluteUri,
         };
-
         return Ok(response);
     }
 }

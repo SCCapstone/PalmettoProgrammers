@@ -1,16 +1,17 @@
 namespace FU.API.Controllers;
 
-using FU.API.DTOs.User;
 using FU.API.DTOs.Post;
 using FU.API.DTOs.Search;
 using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using FU.API.Models;
-using FU.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles user related requests.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
@@ -89,7 +90,7 @@ public class UsersController : ControllerBase
 
         (var posts, var totalResults) = await _searchService.SearchPosts(query);
 
-        var postDtos = new List<PostResponseDTO>(posts.Count());
+        var postDtos = new List<PostResponseDTO>(posts.Count);
 
         // for each resonse set has joined to true
         foreach (var post in posts)

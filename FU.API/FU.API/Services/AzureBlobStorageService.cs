@@ -86,18 +86,6 @@ public class AzureBlobStorageService : IStorageService
         }
     }
 
-    public async Task<bool> DeleteFileAsync(Guid fileId)
-    {
-        return await DeleteFileAsync(GetFileName(fileId));
-    }
-
-    public Uri GetUri(Guid fileId)
-    {
-        return GetBlobClient(GetFileName(fileId)).Uri;
-    }
-
-    public string GetFileName(Guid fileId) => $"{fileId}.jpg";
-
     private async Task<bool> DeleteFileAsync(string fileName)
     {
         BlobClient blob = GetBlobClient(fileName);

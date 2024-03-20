@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
+﻿namespace FU.API.Migrations
+{
 #nullable disable
 
-namespace FU.API.Migrations
-{
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     /// <inheritdoc />
     public partial class NewDeletePolicies : Migration
     {

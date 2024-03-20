@@ -22,14 +22,197 @@ public class PostService : CommonService, IPostService
 
     public async Task<Post> CreatePost(Post post)
     {
-        var game = await _dbContext.Games
-            .FindAsync(post.GameId) ?? throw new NonexistentGameException();
+        if (await _dbContext.Users.FindAsync(post.CreatorId) is null)
+        {
+            throw new NotFoundException("Creator not found", "The creator was not found");
+        }
 
-        var user = await _dbContext.Users
-            .FindAsync(post.CreatorId) ?? throw new NotFoundException("Creator not found", "The creator was not found");
+        if (post.Creator is null)
+        {
+            throw new PostException("Creator is null", HttpStatusCode.UnprocessableEntity);
+        }
 
-        post.Game = game;
+        post.Game = await _dbContext.Games.FindAsync(post.GameId)
+            ?? throw new NonexistentGameException();
 
+        AssertValidDateAndTime(post);
+
+        var postTagIds = post.Tags.Select(t => t.TagId);
+        var tags = await _dbContext.Tags
+            .Where(t => postTagIds.Contains(t.Id))
+            .ToListAsync();
+
+        // Put tags back into post
+        post.Tags.Clear();
+        foreach (var tag in tags)
+        {
+            post.Tags.Add(new TagRelation
+            {
+                Tag = tag,
+            });
+        }
+
+        post.Chat = await _chatService.CreateChat(post.Creator, ChatType.Post, post.Title);
+
+        try
+        {
+            _dbContext.Posts.Add(post);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw new DbUpdateException();
+        }
+
+        return post;
+    }
+
+    public async Task<Post> UpdatePost(Post postChanges)
+    {
+        Post ogPost = _dbContext.Posts.Find(postChanges.Id) ?? throw new PostNotFoundException();
+
+        if (ogPost.CreatorId != postChanges.CreatorId)
+        {
+            throw new PostException("The updated post's creator does not match the old post's creator", HttpStatusCode.UnprocessableEntity);
+        }
+
+        ogPost.Game = await _dbContext.Games.FindAsync(postChanges.GameId) ?? throw new NonexistentGameException();
+        ogPost.Description = postChanges.Description;
+        ogPost.MaxPlayers = postChanges.MaxPlayers;
+        ogPost.StartTime = postChanges.StartTime;
+        ogPost.EndTime = postChanges.EndTime;
+        ogPost.Title = postChanges.Title;
+
+        var newTagIds = postChanges.Tags.Select(t => t.TagId);
+        var newTags = await _dbContext.Tags
+            .Where(t => newTagIds.Contains(t.Id))
+            .ToListAsync();
+
+        // Update post tags
+        ogPost.Tags.Clear();
+        foreach (var tag in newTags)
+        {
+            ogPost.Tags.Add(new TagRelation { Tag = tag });
+        }
+
+        _dbContext.Posts.Update(ogPost);
+        await _dbContext.SaveChangesAsync();
+
+        return ogPost;
+    }
+
+    public async Task<Post?> GetPost(int postId)
+    {
+        return await _dbContext.Posts
+            .Where(p => p.Id == postId)
+            .Include(p => p.Creator)
+            .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.Game)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<ApplicationUser>> GetPostUsers(int postId)
+    {
+        return await _dbContext.Posts
+            .Where(p => p.Id == postId)
+            .Include(p => p.Chat)
+            .ThenInclude(c => c.Members)
+            .ThenInclude(cm => cm.User)
+            .SelectMany(p => p.Chat.Members)
+            .Select(cm => cm.User)
+            .ToListAsync();
+    }
+
+    public async Task JoinPost(int postId, ApplicationUser user)
+    {
+        var post = await _dbContext.Posts
+            .Where(p => p.Id == postId)
+            .Include(p => p.Chat)
+            .ThenInclude(c => c.Members)
+            .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
+
+        // Check that the post is not full
+        if (post.MaxPlayers <= post.Chat.Members.Count)
+        {
+            throw new PostException("Post is full", HttpStatusCode.Conflict);
+        }
+
+        // Check that the user is not already in the chat
+        if (post.Chat.Members.Any(m => m.UserId == user.UserId))
+        {
+            throw new ConflictException("User is already in the post");
+        }
+
+        // Add user to post members
+        post.Chat.Members.Add(new ChatMembership
+        {
+            Chat = post.Chat,
+            User = user,
+        });
+
+        _dbContext.Update(post.Chat);
+
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw new DbUpdateException();
+        }
+    }
+
+    public async Task LeavePost(int postId, ApplicationUser user)
+    {
+        // Find the chat membership
+        var post = await _dbContext.Posts
+            .Where(p => p.Id == postId)
+            .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
+        var postMembership = await _dbContext.ChatMemberships
+            .Where(cm => cm.ChatId == post.ChatId && cm.UserId == user.UserId)
+            .FirstOrDefaultAsync() ?? throw new PostException("User is not in the post", HttpStatusCode.Forbidden);
+
+        _dbContext.ChatMemberships.Remove(postMembership);
+
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw new DbUpdateException();
+        }
+    }
+
+    public async Task DeletePost(int postId)
+    {
+        // Find everything associated with a post
+        var post = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
+        var postMessages = _dbContext.Messages.Where(m => m.ChatId == post.ChatId).ToList();
+        var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
+        var chat = _dbContext.Chats.Find(post.ChatId);
+
+        // Delete everything found
+        if (chat is not null)
+        {
+            // Break dependency on last message to allow for deletion
+            chat.LastMessageId = null;
+            _dbContext.Chats.Update(chat);
+            await _dbContext.SaveChangesAsync();
+
+            // Delete Chat
+            _dbContext.Chats.Remove(chat);
+        }
+
+        _dbContext.Posts.Remove(post);
+        _dbContext.Messages.RemoveRange(postMessages);
+        _dbContext.ChatMemberships.RemoveRange(chatMemberships);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private static void AssertValidDateAndTime(Post post)
+    {
         // Check if either start time or end time is present when the other is present
         bool isInvalidTimeRange = (post.StartTime is null) != (post.EndTime is null);
         if (isInvalidTimeRange)
@@ -72,194 +255,5 @@ public class PostService : CommonService, IPostService
                 throw new PostException("Post must last at most 24 hours", HttpStatusCode.UnprocessableEntity);
             }
         }
-
-        var postTagIds = post.Tags.Select(t => t.TagId);
-        var tags = await _dbContext.Tags
-            .Where(t => postTagIds.Contains(t.Id))
-            .ToListAsync();
-
-        // Put tags back into post
-        post.Tags.Clear();
-        foreach (var tag in tags)
-        {
-            post.Tags.Add(new TagRelation
-            {
-                Tag = tag,
-            });
-        }
-
-        if (post.Creator is null)
-        {
-            throw new PostException("Creator is null", HttpStatusCode.UnprocessableEntity);
-        }
-
-        var chat = await _chatService.CreateChat(post.Creator, ChatType.Post, post.Title);
-
-        post.Chat = chat;
-
-        try
-        {
-            _dbContext.Posts.Add(post);
-            await _dbContext.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            throw new DbUpdateException();
-        }
-
-        return post;
-    }
-
-    public async Task<Post> UpdatePost(Post post)
-    {
-        Post postEntity = _dbContext.Posts.Find(post.Id) ?? throw new PostNotFoundException();
-
-        if (postEntity.CreatorId != post.CreatorId)
-        {
-            throw new PostException("The updated post's user does not match the old post's user", HttpStatusCode.UnprocessableEntity);
-        }
-
-        var game = await _dbContext.Games
-            .FindAsync(post.GameId) ?? throw new NonexistentGameException();
-        postEntity.Game = game;
-        postEntity.Description = post.Description;
-        postEntity.MaxPlayers = post.MaxPlayers;
-        postEntity.StartTime = post.StartTime;
-        postEntity.EndTime = post.EndTime;
-        postEntity.Title = post.Title;
-
-        var postTagIds = post.Tags.Select(t => t.TagId);
-        var tags = await _dbContext.Tags
-            .Where(t => postTagIds.Contains(t.Id))
-            .ToListAsync();
-
-        // Update post tags
-        postEntity.Tags.Clear();
-        foreach (var tag in tags)
-        {
-            postEntity.Tags.Add(new TagRelation { Tag = tag });
-        }
-
-        _dbContext.Posts.Update(postEntity);
-        await _dbContext.SaveChangesAsync();
-
-        return postEntity;
-    }
-
-    public async Task<Post?> GetPost(int postId)
-    {
-        return await _dbContext.Posts
-            .Where(p => p.Id == postId)
-            .Include(p => p.Creator)
-            .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
-            .Include(p => p.Game)
-            .FirstOrDefaultAsync();
-    }
-
-    public async Task<IEnumerable<ApplicationUser>> GetPostUsers(int postId)
-    {
-        return await _dbContext.Posts
-            .Where(p => p.Id == postId)
-            .Include(p => p.Chat)
-            .ThenInclude(c => c.Members)
-            .ThenInclude(cm => cm.User)
-            .SelectMany(p => p.Chat.Members)
-            .Select(cm => cm.User)
-            .ToListAsync();
-    }
-
-    public async Task JoinPost(int postId, ApplicationUser user)
-    {
-        var post = await _dbContext.Posts
-            .Where(p => p.Id == postId)
-            .Include(p => p.Chat)
-            .ThenInclude(c => c.Members)
-            .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
-        var chat = post.Chat;
-        var userId = user.UserId;
-
-        // Check that the post is not full
-        if (post.MaxPlayers <= chat.Members.Count)
-        {
-            throw new PostException("Post is full", HttpStatusCode.Conflict);
-        }
-
-        // Check that the user is not already in the chat
-        if (chat.Members.Any(m => m.UserId == userId))
-        {
-            throw new ConflictException("User is already in the post");
-        }
-
-        // Make the new chat member relation
-        var chatMember = new ChatMembership
-        {
-            Chat = chat,
-            User = user,
-        };
-
-        try
-        {
-            chat.Members.Add(chatMember);
-            _dbContext.Update(chat);
-            await _dbContext.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            throw new DbUpdateException();
-        }
-
-        return;
-    }
-
-    public async Task LeavePost(int postId, ApplicationUser user)
-    {
-        // Find the chat membership
-        var post = await _dbContext.Posts
-            .Where(p => p.Id == postId)
-            .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
-        var chatId = post.ChatId;
-        var userId = user.UserId;
-        var toRemove = await _dbContext.ChatMemberships
-            .Where(cm => cm.ChatId == chatId && cm.UserId == userId)
-            .FirstOrDefaultAsync() ?? throw new PostException("User is not in the post", HttpStatusCode.Forbidden);
-
-        try
-        {
-            _dbContext.ChatMemberships.Remove(toRemove);
-            await _dbContext.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            throw new DbUpdateException();
-        }
-
-        return;
-    }
-
-    public async Task DeletePost(int postId)
-    {
-        // Find everything associated with a post
-        var post = _dbContext.Posts.Find(postId) ?? throw new PostNotFoundException();
-        var postMessages = _dbContext.Messages.Where(m => m.ChatId == post.ChatId).ToList();
-        var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
-        var chat = _dbContext.Chats.Find(post.ChatId);
-
-        // Delete everything found
-        if (chat is not null)
-        {
-            // Break dependency on last message to allow for deletion
-            chat.LastMessageId = null;
-            _dbContext.Chats.Update(chat);
-            await _dbContext.SaveChangesAsync();
-
-            // Delete Chat
-            _dbContext.Chats.Remove(chat);
-        }
-
-        _dbContext.Posts.Remove(post);
-        _dbContext.Messages.RemoveRange(postMessages);
-        _dbContext.ChatMemberships.RemoveRange(chatMemberships);
-
-        await _dbContext.SaveChangesAsync();
     }
 }
