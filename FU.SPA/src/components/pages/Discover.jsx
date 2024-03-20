@@ -446,7 +446,7 @@ export default function Discover() {
               variant="h4"
               style={{ color: 'violet', textAlign: 'center' }}
             >
-              No results found
+              No Results Found
             </Typography>
           )}
         </div>
