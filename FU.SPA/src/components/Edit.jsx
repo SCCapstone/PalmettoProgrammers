@@ -198,13 +198,25 @@ const GameSelector = ({ onChange, initialValue }) => {
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    //GameService.searchGames('').then((games) => setGameOptions(games));
-    setGameOptions(GameService.searchGames('').then((games) => setGameOptions(games)));
-    
-    const gameOptions = GameService.searchGames('').then((games) => setGameOptions(games)).find((g) => g.name === initialValue);
-    if(gameOptions) {
-      setValue(gameOptions);
-    }
+    const getGames = async () => {
+      try {
+        const game = await GameService.searchGames('');
+        //GameService.searchGames('').then((games) => setGameOptions(games));
+        setGameOptions(game);
+        const gameChoice = game.find((g) => g.name === initialValue);
+        if (gameChoice) {
+          setValue(gameChoice);
+        }
+        // const gameOptions = GameService.searchGames('').then((games) => setGameOptions(games)).find((g) => g.name === initialValue);
+        // if(gameOptions) {
+        //   setValue(gameOptions);
+        // }
+      } catch (e) {
+        console.error("Problem getting games", e);
+      }
+    };
+
+    getGames();
   }, []);
 
   const onInputChange = (event, newValue) => {
@@ -259,15 +271,18 @@ const TagsSelector = ({ onChange, initialValue }) => {
   useEffect(() => {
     const getTags = async () => {
       try {
+        const tags = await TagService.searchTags('');
+        setTagOptions(tags);
         //const tags = TagService.searchTags('').then((tags) => setTagOptions(tags));
-        setTagOptions(TagService.searchTags('').then((tags) => setTagOptions(tags)));
+        // setTagOptions(TagService.searchTags('').then((tags) => setTagOptions(tags)));
         //if tags aren't null and isn't empty string.
         if (initialValue && initialValue.length > 0) {
-          const initialTags = TagService.searchTags('').then((tags) => setTagOptions(tags)).filter(tag => initialValue.includes(tag.name));
+          // const initialTags = TagService.searchTags('').then((tags) => setTagOptions(tags)).filter(tag => initialValue.includes(tag.name));
+          const initialTags = tags.filter(tag => initialValue.includes(tag.name));
           setValue(initialTags);
         }
       } catch (e) {
-        console.error("Soemthing went wrong getting tags: ", e);
+        console.error("Something went wrong getting tags: ", e);
       }
     };
     getTags();
