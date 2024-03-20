@@ -115,7 +115,6 @@ const UserService = {
   getConnectedPosts,
   getConnectedGroups,
   getUserprofile,
-  getProfileInfo,
   getUserIdJson,
   updateUserProfile,
   updateAccountInfo,
