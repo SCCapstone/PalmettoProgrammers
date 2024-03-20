@@ -44,6 +44,7 @@ export default function Social() {
 
   const queryLimit = 10;
   const [totalResults, setTotalResults] = useState(0);
+  const [hasResults, setHasResults] = useState(true);
 
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
