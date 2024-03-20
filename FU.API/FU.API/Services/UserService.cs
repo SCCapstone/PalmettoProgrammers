@@ -10,39 +10,37 @@ using FU.API.Exceptions;
 public class UserService : CommonService, IUserService
 {
     private readonly AppDbContext _dbContext;
-    private readonly ISearchService _searchService;
 
-    public UserService(AppDbContext dbContext, ISearchService searchService)
+    public UserService(AppDbContext dbContext)
         : base(dbContext)
     {
         _dbContext = dbContext;
-        _searchService = searchService;
     }
 
-    public Task<UserProfile?> GetUserProfile(int userId)
+    public async Task<UserProfile?> GetUserProfile(int userId)
     {
-        UserProfile? profile = _dbContext.Users.Find(userId)?.ToProfile();
+        var appUser = await _dbContext.Users.FindAsync(userId);
 
-        return Task.FromResult(profile);
+        return appUser?.ToProfile();
     }
 
-    public Task<UserProfile?> UpdateUserProfile(UserProfile profileChanges)
+    public async Task<UserProfile?> UpdateUserProfile(UserProfile profileChanges)
     {
-        var user = _dbContext.Users.Find(profileChanges.Id);
+        var user = await _dbContext.Users.FindAsync(profileChanges.Id);
         if (user is null)
         {
-            return Task.FromResult<UserProfile?>(null);
+            return null;
         }
 
         if (profileChanges.IsOnline is not null)
         {
-            user.IsOnline = (bool)profileChanges.IsOnline;
+            user.IsOnline = profileChanges.IsOnline.Value;
         }
 
         if (profileChanges.PfpUrl is not null)
         {
             // Make sure its an image already in our blob storage
-            // Otherwise we are unure if the image is cropped and resized properly
+            // Otherwise we are unure if the image is cropped, resized, and in the right format
             if (!profileChanges.PfpUrl.Contains("storagefu.blob.core.windows.net/avatars"))
             {
                 throw new UnprocessableException("Invalid profile picture. The image must be uploaded to our storage system");
@@ -64,7 +62,7 @@ public class UserService : CommonService, IUserService
         _dbContext.Update(user);
         _dbContext.SaveChanges();
 
-        return Task.FromResult<UserProfile?>(user.ToProfile());
+        return user.ToProfile();
     }
 
     public async Task<IEnumerable<Group>> GetUsersGroups(int userId, int limit, int offset)
