@@ -79,6 +79,7 @@ const updateUserProfile = async (data) => {
   return response.json();
 };
 
+// gets current profile info
 const getProfileInfo = async (data) => {
   const response = await fetch(`${API_BASE_URL}/Users/current`, {
     method: 'GET',
