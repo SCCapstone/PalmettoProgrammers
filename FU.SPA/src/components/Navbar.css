@@ -1,0 +1,6 @@
+.MuiButton-root.active {
+  > span {
+    border-radius: 0px;
+    border-bottom: 3px solid white;
+  }
+}

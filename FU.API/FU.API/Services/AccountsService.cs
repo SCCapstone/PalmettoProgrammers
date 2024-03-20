@@ -67,6 +67,37 @@ public class AccountsService : CommonService
         return queryUser.First();
     }
 
+    /// <summary>
+    /// Deletes a user account.
+    /// </summary>
+    /// <param name="userId">The user to delete.</param>
+    /// <param name="credentials">Credentials of the user to delete.</param>
+    /// <returns>Task.</returns>
+    /// <exception cref="NotFoundException">Exception thrown to the UI if the user is not found.</exception>
+    public async Task DeleteAccount(int userId, Credentials credentials)
+    {
+        var user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+
+        // Make sure the usernames match
+        if (!string.Equals(user.Username, credentials.Username, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new UnauthorizedException("The username in the request does not match the user's username");
+        }
+
+        if (user.PasswordHash != HashPassword(credentials.Password))
+        {
+            throw new UnauthorizedException("The password in the request does not match the user's password");
+        }
+
+        _dbContext.Users.Remove(user);
+
+        // When deleting a user all posts they made have the creator set to null automatically
+        // But we need to manually remove posts if they were the only member
+        DeleteMemberlessPostsCreatedBy(userId);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task UpdatePassword(int userId, string newPassword)
     {
         ApplicationUser user = _dbContext.Users.Find(userId) ?? throw new NotFoundException("User not found", "The requested user was not found");
@@ -157,6 +188,19 @@ public class AccountsService : CommonService
         else
         {
             return Task.FromResult<ApplicationUser?>(null);
+        }
+    }
+
+    private void DeleteMemberlessPostsCreatedBy(int userId)
+    {
+        var posts = _dbContext.Posts.Where(p => p.CreatorId == userId).ToList();
+        foreach (var post in posts)
+        {
+            var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
+            if (chatMemberships.Count == 1)
+            {
+                _dbContext.Posts.Remove(post);
+            }
         }
     }
 }

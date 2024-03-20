@@ -7,6 +7,10 @@ using FU.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles game related requests.
+/// </summary>
+/// <remarks>The requests are basic CRUD requests.</remarks>
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]

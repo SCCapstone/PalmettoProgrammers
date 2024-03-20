@@ -4,9 +4,11 @@ using FU.API.DTOs.Post;
 using FU.API.DTOs.Search;
 using FU.API.Helpers;
 using FU.API.Interfaces;
-using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles search requests.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class SearchController : ControllerBase

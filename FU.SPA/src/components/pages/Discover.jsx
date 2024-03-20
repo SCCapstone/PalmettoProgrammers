@@ -349,7 +349,7 @@ export default function Discover() {
           textAlign: 'left',
           width: '200pt',
           maxWidth: '300px',
-          minWidth: '190pt',
+          minWidth: '200pt',
         }}
       >
         {renderTabSelectors()}

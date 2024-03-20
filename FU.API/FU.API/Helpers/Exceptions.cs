@@ -3,6 +3,10 @@ namespace FU.API.Exceptions;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// An exception that carries a response code and message.
+/// </summary>
+/// <remarks>These exceptions are caught by ExceptionHandler and turned into an http response.</remarks>
 public abstract class ExceptionWithResponse : Exception
 {
     public abstract string Description { get; }
@@ -174,6 +178,24 @@ public class BadRequestException : ExceptionWithResponse
     }
 
     public BadRequestException(string description)
+    {
+        Description = description;
+    }
+}
+
+public class UnprocessableException : ExceptionWithResponse
+{
+    public override string Description { get; } = "The request was unprocessable.";
+
+    public override string Title { get; } = "Unprocessable request";
+
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.UnprocessableEntity;
+
+    public UnprocessableException()
+    {
+    }
+
+    public UnprocessableException(string description)
     {
         Description = description;
     }
