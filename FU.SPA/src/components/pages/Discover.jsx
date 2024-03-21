@@ -26,6 +26,7 @@ import {
 import './Discover.css';
 import TextSearch from '../TextSearch';
 import config from '../../config';
+import SearchResults from '../SearchResults';
 
 const paramKey = {
   endDate: 'endDate',
@@ -432,24 +433,13 @@ export default function Discover() {
             marginRight: '150px',
           }}
         >
-          {hasResults ? (
-            <Stack spacing={2}>
-              <Typography>Page: {page}</Typography>
-              <Pagination
-                count={Math.ceil(totalResults / queryLimit)}
-                page={page}
-                onChange={(_, value) => setPage(value)}
-                color="secondary"
-              />
-            </Stack>
-          ) : (
-            <div
-              style={{ textAlign: 'center', color: 'violet', padding: '20px' }}
-            >
-              <SearchOffIcon style={{ fontSize: '94px' }} />
-              <Typography variant="h4">No Results Found</Typography>
-            </div>
-          )}
+          <SearchResults
+            hasResults={hasResults}
+            page={page}
+            totalResults={totalResults}
+            queryLimit={queryLimit}
+            setPage={setPage}
+          />
         </div>
       </div>
     </div>

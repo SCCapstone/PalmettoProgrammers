@@ -17,6 +17,7 @@ import './Social.css';
 import { useSearchParams } from 'react-router-dom';
 import UserContext from '../../context/userContext';
 import TextSearch from '../TextSearch';
+import SearchResults from '../SearchResults';
 
 const paramKey = {
   tabOption: 'o',
@@ -220,24 +221,13 @@ export default function Social() {
             marginRight: '150px',
           }}
         >
-          {hasResults ? (
-            <Stack spacing={2}>
-              <Typography>Page: {page}</Typography>
-              <Pagination
-                count={Math.ceil(totalResults / queryLimit)}
-                page={page}
-                onChange={(_, value) => setPage(value)}
-                color="secondary"
-              />
-            </Stack>
-          ) : (
-            <div
-              style={{ textAlign: 'center', color: 'violet', padding: '20px' }}
-            >
-              <SearchOffIcon style={{ fontSize: '94px' }} />
-              <Typography variant="h4">No Results Found</Typography>
-            </div>
-          )}
+          <SearchResults
+            hasResults={hasResults}
+            page={page}
+            totalResults={totalResults}
+            queryLimit={queryLimit}
+            setPage={setPage}
+          />
         </div>
       </div>
     </div>
