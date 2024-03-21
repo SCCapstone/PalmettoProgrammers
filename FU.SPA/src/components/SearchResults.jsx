@@ -18,7 +18,6 @@ const searchResults = ({ page, totalResults, queryLimit, setPage }) => {
       />
     </Stack>
   );
-  
 };
 
 export default searchResults;
