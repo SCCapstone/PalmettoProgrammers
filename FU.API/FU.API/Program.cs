@@ -201,7 +201,7 @@ internal class Program
             throw new Exception($"Storage connection string is not configured. Missing {ConfigKey.StorageConnectionString}. See README for adding.");
         }
 
-        if (builder.Configuration[ConfigKey.EmailConnectionString] is null)
+        if (config[ConfigKey.EmailConnectionString] is null)
         {
             throw new Exception($"Email service connection string is not configured. Missing {ConfigKey.EmailConnectionString}. See README for adding.");
         }

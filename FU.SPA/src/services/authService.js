@@ -39,7 +39,6 @@ const signUp = async (credentials) => {
 };
 
 const confirmAccount = async (token) => {
-  console.log('confirmAccount', token);
   const response = await fetch(`${API_BASE_URL}/Accounts/confirm`, {
     method: 'POST',
     headers: {

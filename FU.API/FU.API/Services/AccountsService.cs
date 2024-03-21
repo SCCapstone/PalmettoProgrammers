@@ -64,10 +64,6 @@ public class AccountsService : CommonService
             throw new DuplicateUserException();
         }
 
-        // Determine the environment
-        var env = _configuration[ConfigKey.Environment];
-        bool confirmAccount = string.Compare(env, "prod", ignoreCase: true) == 0;
-
         var duplicateEmail = _dbContext.Users.Where(u => u.NormalizedEmail == credentials.Email.ToUpper()).FirstOrDefault();
         if (duplicateEmail is not null)
         {
@@ -78,8 +74,7 @@ public class AccountsService : CommonService
         {
             Username = credentials.Username,
             Email = credentials.Email,
-            PasswordHash = HashPassword(credentials.Password),
-            AccountConfirmed = !confirmAccount,
+            PasswordHash = HashPassword(credentials.Password)
         });
         await _dbContext.SaveChangesAsync();
 
@@ -87,10 +82,7 @@ public class AccountsService : CommonService
 
         // Send welcome email
         // This will also include the token for confirming the account
-        if (confirmAccount)
-        {
-            await _emailService.SendEmail(EmailType.Welcome, createdUser);
-        }
+        await _emailService.SendEmail(EmailType.Welcome, createdUser);
 
         return createdUser;
     }
