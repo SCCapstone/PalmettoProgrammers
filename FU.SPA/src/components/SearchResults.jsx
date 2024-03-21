@@ -21,8 +21,8 @@ const searchResults = ({
     </Stack>
   ) : (
     <div style={{ textAlign: 'center', color: 'violet', padding: '20px' }}>
-      <SearchOffIcon style={{ fontSize: '94px' }} />
-      <Typography variant="h4">No Results Found</Typography>
+      <SearchOffIcon style={{ fontSize: '64px' }} />
+      <Typography variant="h5">No Results Found</Typography>
     </div>
   );
 };
