@@ -7,6 +7,7 @@ import {
   Pagination,
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { useEffect, useState, useContext } from 'react';
 import UserService from '../../services/userService';
 import RelationService from '../../services/relationService';
@@ -111,7 +112,6 @@ export default function Social() {
           setPosts(response.data);
           setTotalResults(response.totalCount || 0);
           setHasResults(response.data.length > 0);
-
         } catch (error) {
           console.error('Error', error);
         }
@@ -220,15 +220,24 @@ export default function Social() {
             marginRight: '150px',
           }}
         >
-          <Stack spacing={2}>
-            <Typography>Page: {page}</Typography>
-            <Pagination
-              count={Math.ceil(totalResults / queryLimit)}
-              page={page}
-              onChange={(_, value) => setPage(value)}
-              color="secondary"
-            />
-          </Stack>
+          {hasResults ? (
+            <Stack spacing={2}>
+              <Typography>Page: {page}</Typography>
+              <Pagination
+                count={Math.ceil(totalResults / queryLimit)}
+                page={page}
+                onChange={(_, value) => setPage(value)}
+                color="secondary"
+              />
+            </Stack>
+          ) : (
+            <div
+              style={{ textAlign: 'center', color: 'violet', padding: '20px' }}
+            >
+              <SearchOffIcon style={{ fontSize: '94px' }} />
+              <Typography variant="h4">No Results Found</Typography>
+            </div>
+          )}
         </div>
       </div>
     </div>
