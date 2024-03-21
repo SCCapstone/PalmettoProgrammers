@@ -140,7 +140,7 @@ public class AccountsController : ControllerBase
     [Route("confirm")]
     public async Task<IActionResult> ConfirmAccount()
     {
-        var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _accountService.GetCurrentUser(User, false) ?? throw new UnauthorizedException();
 
         var authInfo = await _accountService.ConfirmAccount(user.UserId);
 

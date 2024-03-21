@@ -16,7 +16,7 @@ public class CommonService : ICommonService
         _dbContext = dbContext;
     }
 
-    public async Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims)
+    public async Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims, bool mustBeConfirmed = true)
     {
         var stringId = claims.FindFirstValue(CustomClaimTypes.UserId);
 
@@ -26,7 +26,15 @@ public class CommonService : ICommonService
         }
 
         // Get the user from the database
-        return await _dbContext.Users.FindAsync(userId);
+        var user = await _dbContext.Users.FindAsync(userId);
+
+        // If the user is not confirmed and it must be, return null
+        if (mustBeConfirmed && user is not null && !user.AccountConfirmed)
+        {
+            return null;
+        }
+
+        return user;
     }
 
     public async Task<ApplicationUser?> GetUser(int userId)

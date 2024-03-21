@@ -191,7 +191,7 @@ public class AccountsService : CommonService
         // Make sure we're actually updating the email
         if (user.NormalizedEmail == newEmail.ToUpper())
         {
-            return;
+            throw new BadRequestException("New email is the same as the old email");
         }
 
         // Find users with same email

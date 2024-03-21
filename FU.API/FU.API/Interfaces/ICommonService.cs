@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 public interface ICommonService
 {
-    Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims);
+    Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims, bool mustBeConfirmed = true);
 
     Task<ApplicationUser?> GetUser(int userId);
 
