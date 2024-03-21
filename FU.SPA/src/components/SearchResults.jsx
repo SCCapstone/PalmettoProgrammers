@@ -1,14 +1,8 @@
 import { Stack, Typography, Pagination } from '@mui/material';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 
-const searchResults = ({
-  hasResults,
-  page,
-  totalResults,
-  queryLimit,
-  setPage,
-}) => {
-  return hasResults ? (
+const searchResults = ({ page, totalResults, queryLimit, setPage }) => {
+  return totalResults ? (
     <Stack spacing={2}>
       <Typography>Page: {page}</Typography>
       <Pagination
