@@ -2,14 +2,11 @@ import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 import {
   Typography,
-  Pagination,
   MenuItem,
   InputLabel,
   FormControl,
   Select,
 } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector, SortOptionsSelector } from '../Selectors';
 import SearchService from '../../services/searchService';

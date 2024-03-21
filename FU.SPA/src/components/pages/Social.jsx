@@ -1,13 +1,4 @@
-import {
-  Select,
-  Typography,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Pagination,
-} from '@mui/material';
-import Stack from '@mui/material/Stack';
-import SearchOffIcon from '@mui/icons-material/SearchOff';
+import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import UserService from '../../services/userService';
 import RelationService from '../../services/relationService';
