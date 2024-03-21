@@ -211,6 +211,7 @@ export default function Social() {
         >
           <SearchResults
             page={page}
+            count={Math.ceil(totalResults / queryLimit)}
             totalResults={totalResults}
             queryLimit={queryLimit}
             setPage={setPage}
