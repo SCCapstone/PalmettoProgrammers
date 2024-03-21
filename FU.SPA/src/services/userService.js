@@ -72,10 +72,6 @@ const updateUserProfile = async (data) => {
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    throw new Error('Error in updating information');
-  }
-
   return response.json();
 };
 
@@ -91,7 +87,8 @@ const updateAccountInfo = async (data) => {
   });
 
   if (!response.ok) {
-    throw new Error('Error in updating account information');
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in resending confirmation');
   }
 };
 

@@ -190,9 +190,9 @@ export default function AccountSettings() {
             onScreen: true,
           },
         });
-      } catch (e) {
-        // need to handle the different errors (invalid email, user with email exists, this is their current email, etc)
-        setEmailError('Invalid email');
+      } catch (event) {
+        const errorResponse = await JSON.parse(event.message);
+        setEmailError(errorResponse.detail);
         console.error('Error in changing email', e);
       }
     };

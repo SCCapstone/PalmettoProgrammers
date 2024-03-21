@@ -55,9 +55,10 @@ const confirmAccount = async (token) => {
   return jsonResponse;
 };
 
-const resendConfirmation = async (email) => {
-  const response = await fetch(`${API_BASE_URL}/Accounts/reconfirm/${email}`, {
+const resendConfirmation = async (resendConfirmationData) => {
+  const response = await fetch(`${API_BASE_URL}/Accounts/resendconfirmation`, {
     method: 'POST',
+    body: JSON.stringify(resendConfirmationData),
   });
 
   if (!response.ok) {
