@@ -222,6 +222,7 @@ public class AccountsService : CommonService
 
     public async Task ResendConfirmationEmail(string email)
     {
+        // If we made it here, then it's an email
         // Make sure the email is valid
         try
         {
@@ -282,21 +283,14 @@ public class AccountsService : CommonService
     // Return user credentials so userId is accessable without a second db call
     private async Task<ApplicationUser?> Authenticate(Credentials credentials)
     {
-        ApplicationUser? user = _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).FirstOrDefault();
+        var user = await _dbContext.Users.Where(u => u.NormalizedUsername == credentials.Username.ToUpper()).FirstOrDefaultAsync();
 
         if (user?.PasswordHash == HashPassword(credentials.Password))
         {
             // Check if the account is confirmed
             if (!user.AccountConfirmed)
             {
-                if (credentials.ReconfirmAccount)
-                {
-                    await _emailService.SendEmail(EmailType.ConfirmAccount, user);
-                }
-                else
-                {
-                    throw new UnauthorizedException("Account not confirmed");
-                }
+                throw new UnauthorizedException("Account not confirmed");
             }
 
             return user;
@@ -304,19 +298,6 @@ public class AccountsService : CommonService
         else
         {
             return null;
-        }
-    }
-
-    private void DeleteMemberlessPostsCreatedBy(int userId)
-    {
-        var posts = _dbContext.Posts.Where(p => p.CreatorId == userId).ToList();
-        foreach (var post in posts)
-        {
-            var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
-            if (chatMemberships.Count == 1)
-            {
-                _dbContext.Posts.Remove(post);
-            }
         }
     }
 

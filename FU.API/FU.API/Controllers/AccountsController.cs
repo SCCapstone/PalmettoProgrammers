@@ -40,8 +40,7 @@ public class AccountsController : ControllerBase
         var credentials = new Credentials
         {
             Username = loginDetails.Username,
-            Password = loginDetails.Password,
-            ReconfirmAccount = loginDetails.ReconfirmAccount
+            Password = loginDetails.Password
         };
 
         var authInfo = await _accountService.GetUserAuthInfo(credentials);
@@ -150,13 +149,27 @@ public class AccountsController : ControllerBase
 
     // Resend confirmation email
     [HttpPost]
-    [Route("reconfirm/{email}")]
+    [Route("resendconfirmation")]
     [AllowAnonymous]
-    public async Task<IActionResult> ResendConfirmationEmail(string email)
+    public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationDTO dto)
     {
-        await _accountService.ResendConfirmationEmail(email);
+        if (dto.Username is not null)
+        {
+            var user = await _accountService.GetUser(dto.Username) ?? throw new NotFoundException("User not found", "The requested user was not found");
+            var email = user.Email ?? throw new NotFoundException("User has no email", "The requested user has no email to send a confirmation to");
+            await _accountService.ResendConfirmationEmail(email);
 
-        return Ok();
+            return Ok();
+        }
+
+        if (dto.Email is not null)
+        {
+            await _accountService.ResendConfirmationEmail(dto.Email);
+
+            return Ok();
+        }
+
+        throw new BadRequestException("No email or username was provided");
     }
 
     [HttpDelete]

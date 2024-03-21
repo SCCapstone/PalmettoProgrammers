@@ -9,5 +9,7 @@ public interface ICommonService
 
     Task<ApplicationUser?> GetUser(int userId);
 
+    Task<ApplicationUser?> GetUser(string username);
+
     Task<bool> HasJoinedPost(int userId, int postId);
 }

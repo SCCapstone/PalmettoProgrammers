@@ -34,6 +34,11 @@ public class CommonService : ICommonService
         return await _dbContext.Users.FindAsync(userId);
     }
 
+    public async Task<ApplicationUser?> GetUser(string username)
+    {
+        return await _dbContext.Users.Where(u => u.NormalizedUsername == username.ToUpper()).FirstOrDefaultAsync();
+    }
+
     public async Task<bool> HasJoinedPost(int userId, int postId)
     {
         var chat = await _dbContext.Posts
