@@ -1,4 +1,3 @@
-import React from 'react';
 import { Stack, Typography, Pagination } from '@mui/material';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 
