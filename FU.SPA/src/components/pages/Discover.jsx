@@ -213,7 +213,7 @@ export default function Discover() {
 
         const response = await SearchService.searchPosts(query);
         setPosts(response.data);
-        setTotalResults(response.totalCount || response.data.length > 0);
+        setTotalResults(response.totalCount);
       } else {
         const query = {
           keywords: searchText,
@@ -223,7 +223,7 @@ export default function Discover() {
 
         const response = await SearchService.searchUsers(query);
         setPlayers(response.data);
-        setTotalResults(response.totalCount || response.data.length > 0);
+        setTotalResults(response.totalCount);
       }
     };
 
@@ -429,6 +429,7 @@ export default function Discover() {
         >
           <SearchResults
             page={page}
+            count={Math.ceil(totalResults / queryLimit)}
             totalResults={totalResults}
             queryLimit={queryLimit}
             setPage={setPage}
