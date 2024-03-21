@@ -23,10 +23,6 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
     showActions = true;
   }
 
-  if (showJoinedStatus === undefined) {
-    showJoinedStatus = false;
-  }
-
   const handleTagClick = (tag) => {
     if (onTagClick) {
       onTagClick(tag);
