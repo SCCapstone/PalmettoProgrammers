@@ -115,6 +115,7 @@ internal class Program
         builder.Services.AddScoped<IRelationService, RelationService>();
         builder.Services.AddScoped<ICommonService, CommonService>();
         builder.Services.AddScoped<IStorageService, AzureBlobStorageService>();
+        builder.Services.AddSingleton<IEmailService, EmailService>();
 
         builder.Services.AddSignalR(options =>
         {
@@ -198,6 +199,11 @@ internal class Program
         if (config[ConfigKey.StorageConnectionString] is null)
         {
             throw new Exception($"Storage connection string is not configured. Missing {ConfigKey.StorageConnectionString}. See README for adding.");
+        }
+
+        if (builder.Configuration[ConfigKey.EmailConnectionString] is null)
+        {
+            throw new Exception($"Email service connection string is not configured. Missing {ConfigKey.EmailConnectionString}. See README for adding.");
         }
     }
 }
