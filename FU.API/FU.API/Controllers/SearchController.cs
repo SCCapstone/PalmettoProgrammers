@@ -4,6 +4,7 @@ using FU.API.DTOs.Post;
 using FU.API.DTOs.Search;
 using FU.API.Helpers;
 using FU.API.Interfaces;
+using FU.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
@@ -61,7 +62,25 @@ public class SearchController : ControllerBase
     {
         (var users, var totalResults) = await _searchService.SearchUsers(request.ToUserQuery());
 
+        // Go through each user and check if the user has a relation with them
+        var user = await _searchService.GetCurrentUser(User);
+
         Response.Headers.Add("X-total-count", totalResults.ToString());
+
+        if (user is not null)
+        {
+            foreach (var u in users)
+            {
+                // Skip if we are checking the relation with ourselves
+                if (u.Id == user.UserId)
+                {
+                    continue;
+                }
+
+                var relation = await _searchService.GetRelation(user.UserId, u.Id);
+                u.RelationStatus = relation is not null ? relation.Status.ToString() : UserRelationStatus.None.ToString();
+            }
+        }
 
         return Ok(users);
     }

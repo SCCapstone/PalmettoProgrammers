@@ -6,11 +6,17 @@ import {
   Typography,
   CardHeader,
   Avatar,
+  Tooltip,
 } from '@mui/material';
 import './UserCard.css';
 import { useNavigate } from 'react-router-dom';
+import { People, PendingActions, CallMade } from '@mui/icons-material';
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, showRelationStatus }) => {
+  if (showRelationStatus === undefined) {
+    showRelationStatus = false;
+  }
+
   const navigate = useNavigate();
   const defaultPfp =
     !user.pfpUrl ||
@@ -53,6 +59,34 @@ const UserCard = ({ user }) => {
     (today.getTime() - dob.getTime()) / (1000 * 3600 * 24 * 365),
   );
 
+  const renderRelationStatus = () => {
+    if (!showRelationStatus) {
+      return null;
+    }
+
+    if (user.relationStatus === 'Friends') {
+      return (
+        <Tooltip title="Friends">
+          <People />
+        </Tooltip>
+      );
+    } else if (user.relationStatus === 'Pending') {
+      return (
+        <Tooltip title="Pending friend request">
+          <PendingActions />
+        </Tooltip>
+      );
+    } else if (user.relationStatus === 'Requested') {
+      return (
+        <Tooltip title="Friend request sent">
+          <CallMade />
+        </Tooltip>
+      );
+    } else {
+      return null;
+    }
+  };
+
   const renderPfp = () => {
     return defaultPfp ? (
       <Avatar
@@ -85,16 +119,27 @@ const UserCard = ({ user }) => {
       <CardHeader
         title={
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              {renderPfp()}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
               <div
-                className="user-name"
-                onClick={() => navigate(`/profile/${user.id}`)}
+                style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
               >
-                <Typography variant="h5" style={{ color: '#FFF' }}>
-                  {user.username}
-                </Typography>
+                {renderPfp()}
+                <div
+                  className="user-name"
+                  onClick={() => navigate(`/profile/${user.id}`)}
+                >
+                  <Typography variant="h5" style={{ color: '#FFF' }}>
+                    {user.username}
+                  </Typography>
+                </div>
               </div>
+              {renderRelationStatus()}
             </div>
             {user.dob && (
               <Typography variant="h6" style={{ color: '#FFF' }}>

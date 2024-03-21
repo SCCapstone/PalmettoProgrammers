@@ -13,8 +13,9 @@ import { useNavigate } from 'react-router-dom';
 import './PostCard.css';
 import Theme from '../Theme';
 import dayjs from 'dayjs';
+import { Done } from '@mui/icons-material';
 
-const PostCard = ({ post, showActions, onTagClick }) => {
+const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
   const navigate = useNavigate();
   const user = post.creator;
   let dateTimeString = 'No time';
@@ -26,6 +27,18 @@ const PostCard = ({ post, showActions, onTagClick }) => {
     if (onTagClick) {
       onTagClick(tag);
     }
+  };
+
+  const renderJoinedStatus = () => {
+    if (!showJoinedStatus || !post.hasJoined) {
+      return null;
+    }
+
+    return (
+      <Tooltip title="You have joined this post">
+        <Done />
+      </Tooltip>
+    );
   };
 
   // If we have a start time, then we also have an end time
@@ -79,22 +92,27 @@ const PostCard = ({ post, showActions, onTagClick }) => {
           className="user-header"
           onClick={() => navigate(`/profile/${user.id}`)}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
             color: Theme.palette.primary.main,
+            display: 'flex',
+            justifyContent: 'space-between',
           }}
         >
-          <Avatar
-            alt={user?.username}
-            src={user?.pfpUrl}
-            sx={{
-              width: 18,
-              height: 18,
-              bgcolor: stringToColor(user?.username),
-            }}
-          />
-          <Typography variant="subtitle2">{`by ${user.username}`}</Typography>
+          <div
+            className="user-info"
+            style={{ display: 'flex', gap: '5px', alignItems: 'center' }}
+          >
+            <Avatar
+              alt={user?.username}
+              src={user?.pfpUrl}
+              sx={{
+                width: 18,
+                height: 18,
+                bgcolor: stringToColor(user?.username),
+              }}
+            />
+            <Typography variant="subtitle2">{`by ${user.username}`}</Typography>
+          </div>
+          {renderJoinedStatus()}
         </div>
         <Tooltip title={post.title}>
           <Typography variant="h6" noWrap sx={{ whiteSpace: 'nowrap' }}>

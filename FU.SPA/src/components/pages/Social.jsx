@@ -137,9 +137,9 @@ export default function Social() {
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
-      return <Posts posts={posts} />;
+      return <Posts posts={posts} showJoinedStatus={false} />;
     } else {
-      return <Users users={users} />;
+      return <Users users={users} showRelationStatus={false} />;
     }
   };
 
