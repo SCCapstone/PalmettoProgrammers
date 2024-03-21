@@ -2,7 +2,9 @@ namespace FU.API.Services;
 
 using FU.API.Interfaces;
 
-// Periodically cleans out unused avatars from remote storage
+/// <summary>
+/// Periodically cleans out unused avatars from remote storage.
+/// </summary>
 public class PeriodicRemoteStorageCleanerHostedService : BackgroundService
 {
     private readonly ILogger<PeriodicRemoteStorageCleanerHostedService> _logger;

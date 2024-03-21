@@ -22,12 +22,10 @@ public class SearchService : CommonService, ISearchService
 
     public async Task<(List<UserProfile>, int TotalResults)> SearchUsers(UserQuery query)
     {
-        var dbQuery = GetUsersDbQuery(query);
-
-        dbQuery = dbQuery.Where(UserContainsKeywords(query.Keywords));
+        var dbQuery = BuildUsersDbQuery(query);
 
         // Count the total number of results so that the UI can display the correct number of pages
-        var totalResults = await dbQuery.CountAsync();
+        int totalResults = await dbQuery.CountAsync();
 
         // Sort results
         IOrderedQueryable<ApplicationUser> orderedDbQuery = query.SortDirection == SortDirection.Ascending
@@ -36,7 +34,7 @@ public class SearchService : CommonService, ISearchService
             : dbQuery.OrderByDescending(
                 SelectUserProperty(query.SortType));
 
-        // Always end ordering by Id to ensure order is unique. This ensures order is consistent across calls.
+        // Finally sort by Id to ensure order is consistent across calls.
         orderedDbQuery = orderedDbQuery.ThenBy(u => u.UserId);
 
         List<ApplicationUser> applicationUsers = await orderedDbQuery
@@ -49,9 +47,129 @@ public class SearchService : CommonService, ISearchService
 
     public async Task<(List<Post>, int TotalResults)> SearchPosts(PostQuery query)
     {
-        var dbQuery = GetPostsDbQuery(query);
+        var dbQuery = BuildDbQuery(query);
 
-        // Filters are addded one at a time
+        // Count the total number of results so that the UI can display the correct number of pages
+        int totalResults = await dbQuery.CountAsync();
+
+        // Sort results
+        IOrderedQueryable<Post> orderedDbQuery = query.SortDirection == SortDirection.Ascending
+            ? dbQuery.OrderBy(
+                SelectPostProperty(query.SortType))
+            : dbQuery.OrderByDescending(
+                SelectPostProperty(query.SortType));
+
+        // Finally sort by Id to ensure order is consistent across calls.
+        orderedDbQuery = orderedDbQuery.ThenBy(p => p.Id);
+
+        var posts = await orderedDbQuery
+                .Skip((query.Page - 1) * query.Limit)
+                .Take(query.Limit)
+                .Include(p => p.Creator)
+                .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
+                .Include(p => p.Game)
+                .ToListAsync();
+
+        return (posts, totalResults);
+    }
+
+    // Determines if a keyword is a user's username or bio
+    private static Expression<Func<ApplicationUser, bool>> UserContainsKeywords(List<string> keywords)
+    {
+        if (keywords.Count == 0)
+        {
+            return PredicateBuilder.New<ApplicationUser>(true); // nothing to do so return a true predicate
+        }
+
+        var predicate = PredicateBuilder.New<ApplicationUser>(false); // create a predicate that's false by default
+        foreach (string keyword in keywords)
+        {
+            predicate = predicate.Or(u => u.NormalizedBio.Contains(keyword.ToUpper()) || u.NormalizedUsername.Contains(keyword.ToUpper()));
+        }
+
+        return predicate;
+    }
+
+    // Determines if a keyword is a posts's description or title
+    private static Expression<Func<Post, bool>> PostContainsKeywords(List<string> keywords)
+    {
+        if (keywords.Count == 0)
+        {
+            return PredicateBuilder.New<Post>(true); // nothing to do so return a true predicate
+        }
+
+        var predicate = PredicateBuilder.New<Post>(false); // create a predicate that's false by default
+        foreach (string keyword in keywords)
+        {
+            predicate = predicate.Or(p => p.NormalizedDescription.Contains(keyword.ToUpper()) || p.NormalizedTitle.Contains(keyword.ToUpper()));
+        }
+
+        return predicate;
+    }
+
+    private static Expression<Func<Post, object>> SelectPostProperty(PostSortType? sortType)
+    {
+        return sortType switch
+        {
+            PostSortType.NewestCreated => (post) => post.CreatedAt,
+            PostSortType.Title => (post) => post.NormalizedTitle,
+            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? DefaultStartTime,
+            _ => (post) => post.CreatedAt,
+        };
+    }
+
+    private static Expression<Func<ApplicationUser, object>> SelectUserProperty(UserSortType? sortType)
+    {
+        return sortType switch
+        {
+            UserSortType.Username => (user) => user.NormalizedUsername,
+            _ => (user) => user.NormalizedUsername,
+        };
+    }
+
+    /// <summary>
+    /// Gets the database query for users based on the given query.
+    /// </summary>
+    /// <param name="query">The query.</param>
+    /// <returns>The users to query. Either related to user with UserId, or all users.</returns>
+    private IQueryable<ApplicationUser> BuildUsersDbQuery(UserQuery query)
+    {
+        IQueryable<ApplicationUser> dbQuery;
+
+        // Decide if member info should be included depending on if the request is anonymous
+        if (query.UserId is not null && query.RelationStatus is not null)
+        {
+            dbQuery = _dbContext.UserRelations
+                .Where(ur => ur.User1Id == query.UserId && ur.Status == query.RelationStatus)
+                .Select(ur => ur.User2);
+        }
+        else
+        {
+            dbQuery = _dbContext.Users.Select(u => u);
+        }
+
+        dbQuery = dbQuery.Where(UserContainsKeywords(query.Keywords));
+
+        return dbQuery;
+    }
+
+    private IQueryable<Post> BuildDbQuery(PostQuery query)
+    {
+        IQueryable<Post> dbQuery;
+
+        // Decide if member info should be included depending on if the request is anonymous
+        if (query.UserId is not null)
+        {
+            dbQuery = _dbContext.Posts
+                .Where(p => p.Chat.Members.Any(m => m.UserId == query.UserId))
+                .Select(p => p);
+        }
+        else
+        {
+            dbQuery = _dbContext.Posts.Select(p => p);
+        }
+
+        // Filters are added one at a time
         // Generally filer out as much as as possible first
 
         // Filter by posts that start after the given date
@@ -143,114 +261,6 @@ public class SearchService : CommonService, ISearchService
             }
         }
 
-        // Count the total number of results so that the UI can display the correct number of pages
-        var totalResults = await dbQuery.CountAsync();
-
-        // Sort results
-        IOrderedQueryable<Post> orderedDbQuery = query.SortDirection == SortDirection.Ascending
-            ? dbQuery.OrderBy(
-                SelectPostProperty(query.SortType))
-            : dbQuery.OrderByDescending(
-                SelectPostProperty(query.SortType));
-
-        // Always end ordering by Id to ensure order is unique. This ensures order is consistent across calls.
-        orderedDbQuery = orderedDbQuery.ThenBy(p => p.Id);
-
-        var posts = await orderedDbQuery
-                .Skip((query.Page - 1) * query.Limit)
-                .Take(query.Limit)
-                .Include(p => p.Creator)
-                .Include(p => p.Tags).ThenInclude(pt => pt.Tag)
-                .Include(p => p.Game)
-                .ToListAsync();
-
-        return (posts, totalResults);
-    }
-
-    // Determines if a keyword is a user's username or bio
-    private static Expression<Func<ApplicationUser, bool>> UserContainsKeywords(List<string> keywords)
-    {
-        if (keywords.Count == 0)
-        {
-            return PredicateBuilder.New<ApplicationUser>(true); // nothing to do so return a true predicate
-        }
-
-        var predicate = PredicateBuilder.New<ApplicationUser>(false); // create a predicate that's false by default
-        foreach (string keyword in keywords)
-        {
-            predicate = predicate.Or(u => u.NormalizedBio.Contains(keyword.ToUpper()) || u.NormalizedUsername.Contains(keyword.ToUpper()));
-        }
-
-        return predicate;
-    }
-
-    // Determines if a keyword is a posts's description or title
-    private static Expression<Func<Post, bool>> PostContainsKeywords(List<string> keywords)
-    {
-        if (keywords.Count == 0)
-        {
-            return PredicateBuilder.New<Post>(true); // nothing to do so return a true predicate
-        }
-
-        var predicate = PredicateBuilder.New<Post>(false); // create a predicate that's false by default
-        foreach (string keyword in keywords)
-        {
-            predicate = predicate.Or(p => p.NormalizedDescription.Contains(keyword.ToUpper()) || p.NormalizedTitle.Contains(keyword.ToUpper()));
-        }
-
-        return predicate;
-    }
-
-    private static Expression<Func<Post, object>> SelectPostProperty(PostSortType? sortType)
-    {
-        return sortType switch
-        {
-            PostSortType.NewestCreated => (post) => post.CreatedAt,
-            PostSortType.Title => (post) => post.NormalizedTitle,
-            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? DefaultStartTime,
-            _ => (post) => post.CreatedAt,
-        };
-    }
-
-    private static Expression<Func<ApplicationUser, object>> SelectUserProperty(UserSortType? sortType)
-    {
-        return sortType switch
-        {
-            UserSortType.Username => (user) => user.NormalizedUsername,
-            _ => (user) => user.NormalizedUsername,
-        };
-    }
-
-    /// <summary>
-    /// Gets the database query for users based on the given query.
-    /// </summary>
-    /// <param name="query">The query.</param>
-    /// <returns>The users to query. Either related to user with UserId, or all users.</returns>
-    private IQueryable<ApplicationUser> GetUsersDbQuery(UserQuery query)
-    {
-        if (query.UserId is not null && query.RelationStatus is not null)
-        {
-            return _dbContext.UserRelations
-                .Where(ur => ur.User1Id == query.UserId && ur.Status == query.RelationStatus)
-                .Select(ur => ur.User2);
-        }
-        else
-        {
-            return _dbContext.Users.Select(u => u);
-        }
-    }
-
-    private IQueryable<Post> GetPostsDbQuery(PostQuery query)
-    {
-        if (query.UserId is not null)
-        {
-            return _dbContext.Posts
-                .Where(p => p.Chat.Members.Any(m => m.UserId == query.UserId))
-                .Select(p => p);
-        }
-        else
-        {
-            return _dbContext.Posts.Select(p => p);
-        }
+        return dbQuery;
     }
 }

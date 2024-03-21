@@ -3,9 +3,12 @@ namespace FU.API.Services;
 using SkiaSharp;
 using FU.API.Exceptions;
 
+/// <summary>
+/// Handles avatar normalization.
+/// </summary>
 public static class AvatarService
 {
-    public static Stream ConvertToAvatarImageFile(Stream stream)
+    public static Stream NormalizeAvatar(Stream stream)
     {
         SKBitmap bitmap = SKBitmap.Decode(stream)
             ?? throw new UnprocessableException("Filetype not supported.");

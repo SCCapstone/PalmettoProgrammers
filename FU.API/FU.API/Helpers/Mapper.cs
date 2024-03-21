@@ -8,6 +8,7 @@ using FU.API.DTOs.Tag;
 using FU.API.Models;
 using FU.API.DTOs.Group;
 using FU.API.DTOs.User;
+using FU.API.DTOs;
 
 public static class Mapper
 {
@@ -250,7 +251,7 @@ public static class Mapper
         };
     }
 
-    public static AccountInfoDTO ToDTO(this AccountInfo accountInfo)
+    public static AccountInfoDTO ToDto(this AccountInfo accountInfo)
     {
         return new AccountInfoDTO()
         {

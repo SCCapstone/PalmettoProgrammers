@@ -7,6 +7,9 @@ using FU.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles post related requests.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]

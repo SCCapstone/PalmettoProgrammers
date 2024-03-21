@@ -1,7 +1,6 @@
 namespace FU.API.Services;
 
 using System.ComponentModel.DataAnnotations;
-using System.Data.Entity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -14,7 +13,6 @@ using Konscious.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Handles account related actions.
@@ -101,7 +99,7 @@ public class AccountsService : CommonService
     /// Deletes a user account.
     /// </summary>
     /// <param name="userId">The user to delete.</param>
-    /// /// <param name="credentials">Credentials of the user to delete.</param>
+    /// <param name="credentials">Credentials of the user to delete.</param>
     /// <returns>Task.</returns>
     /// <exception cref="NotFoundException">Exception thrown to the UI if the user is not found.</exception>
     public async Task DeleteAccount(int userId, Credentials credentials)
@@ -123,15 +121,7 @@ public class AccountsService : CommonService
 
         // When deleting a user all posts they made have the creator set to null automatically
         // But we need to manually remove posts if they were the only member
-        var posts = _dbContext.Posts.Where(p => p.CreatorId == userId).ToList();
-        foreach (var post in posts)
-        {
-            var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
-            if (chatMemberships.Count == 1)
-            {
-                _dbContext.Posts.Remove(post);
-            }
-        }
+        DeleteMemberlessPostsCreatedBy(userId);
 
         await _dbContext.SaveChangesAsync();
     }
@@ -322,6 +312,32 @@ public class AccountsService : CommonService
         else
         {
             return null;
+        }
+    }
+
+    private void DeleteMemberlessPostsCreatedBy(int userId)
+    {
+        var posts = _dbContext.Posts.Where(p => p.CreatorId == userId).ToList();
+        foreach (var post in posts)
+        {
+            var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
+            if (chatMemberships.Count == 1)
+            {
+                _dbContext.Posts.Remove(post);
+            }
+        }
+    }
+
+    private void DeleteMemberlessPostsCreatedBy(int userId)
+    {
+        var posts = _dbContext.Posts.Where(p => p.CreatorId == userId).ToList();
+        foreach (var post in posts)
+        {
+            var chatMemberships = _dbContext.ChatMemberships.Where(cm => cm.ChatId == post.ChatId).ToList();
+            if (chatMemberships.Count == 1)
+            {
+                _dbContext.Posts.Remove(post);
+            }
         }
     }
 }
