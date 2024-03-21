@@ -130,4 +130,69 @@ public class PostServiceTests : IDisposable
         // Calling create post should throw a PostException
         await Assert.ThrowsAsync<PostException>(async () => await _postService.CreatePost(post));
     }
+
+    [Fact]
+    public async void GetPostUsers_WithMultipleUsers_ReturnsCorrectUserCount()
+    {
+        // Arrange
+        // Note: CreateTestPostAsync creates one user as part of creating a post
+        Post post = await TestsHelper.CreateTestPostAsync(_dbContext);
+        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "pass2" });
+        await _postService.JoinPost(post.Id, user2);
+
+        // Act
+        var posts = await _postService.GetPostUsers(post.Id);
+
+        // Assert
+        Assert.Equal(2, posts.Count());
+    }
+
+    [Fact]
+    public async void DeletePost_WithValidRequest_DeletesPost()
+    {
+        // Arrange
+        Post post = await TestsHelper.CreateTestPostAsync(_dbContext);
+
+        // Act
+        await _postService.DeletePost(post.Id);
+
+        // Assert
+        var posts = await _postService.GetPostUsers(post.Id);
+        Assert.Empty(posts);
+    }
+
+    [Fact]
+    public async void JoinPost_WhenAlreadyMember_ThrowsConflictException()
+    {
+        // Arrange
+        Post post = await TestsHelper.CreateTestPostAsync(_dbContext);
+        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "pass2" });
+        await _postService.JoinPost(post.Id, user2);
+
+        // Act & Assert
+        await Assert.ThrowsAnyAsync<ExceptionWithResponse>(async () =>
+            await _postService.JoinPost(post.Id, user2));
+
+    }
+
+    [Fact]
+    public async void LeavePost_WhenMember_LeavesPost()
+    {
+        // Arrange
+        Post post = await TestsHelper.CreateTestPostAsync(_dbContext);
+        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "pass2" });
+        await _postService.JoinPost(post.Id, user2);
+
+        // Act
+        await _postService.LeavePost(post.Id, user2);
+
+        // Assert
+        var posts = await _postService.GetPostUsers(post.Id);
+        Assert.DoesNotContain(user2, posts);
+    }
+
+    public void Dispose()
+    {
+        _dbContext.Dispose();
+    }
 }
