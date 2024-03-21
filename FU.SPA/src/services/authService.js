@@ -58,6 +58,7 @@ const confirmAccount = async (token) => {
 const resendConfirmation = async (resendConfirmationData) => {
   const response = await fetch(`${API_BASE_URL}/Accounts/resendconfirmation`, {
     method: 'POST',
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify(resendConfirmationData),
   });
 

@@ -138,7 +138,10 @@ export default function SignIn() {
 
     const handleSubmit = async () => {
       try {
-        await AuthService.resendConfirmation(email);
+        const resendConfirmationData = {
+          email: email,
+        };
+        await AuthService.resendConfirmation(resendConfirmationData);
         Store.addNotification({
           title: 'Email Sent',
           message:
@@ -227,12 +230,10 @@ export default function SignIn() {
 
     const handleSend = async () => {
       try {
-        var creds = {
+        const resendConfirmationData = {
           username: username,
-          password: password,
-          reconfirmAccount: true,
         };
-        await AuthService.signIn(creds);
+        await AuthService.resendConfirmation(resendConfirmationData);
         Store.addNotification({
           title: 'Email Sent',
           message:

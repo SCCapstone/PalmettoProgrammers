@@ -193,7 +193,7 @@ export default function AccountSettings() {
       } catch (event) {
         const errorResponse = await JSON.parse(event.message);
         setEmailError(errorResponse.detail);
-        console.error('Error in changing email', e);
+        console.error('Error in changing email', event.message);
       }
     };
 
