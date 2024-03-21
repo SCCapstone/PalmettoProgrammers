@@ -110,6 +110,8 @@ export default function Social() {
           const response = await UserService.getConnectedPosts(query);
           setPosts(response.data);
           setTotalResults(response.totalCount || 0);
+          setHasResults(response.data.length > 0);
+
         } catch (error) {
           console.error('Error', error);
         }
@@ -122,6 +124,7 @@ export default function Social() {
           const response = await RelationService.getRelations(user.id, query);
           setUsers(response.data);
           setTotalResults(response.totalCount || 0);
+          setHasResults(response.data.length > 0);
         } catch (error) {
           console.error('Error', error);
         }
