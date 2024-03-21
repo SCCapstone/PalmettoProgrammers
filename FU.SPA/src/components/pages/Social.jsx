@@ -37,7 +37,6 @@ export default function Social() {
 
   const queryLimit = 10;
   const [totalResults, setTotalResults] = useState(0);
-  const [hasResults, setHasResults] = useState(true);
 
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
@@ -102,8 +101,7 @@ export default function Social() {
         try {
           const response = await UserService.getConnectedPosts(query);
           setPosts(response.data);
-          setTotalResults(response.totalCount || 0);
-          setHasResults(response.data.length > 0);
+          setTotalResults(response.totalCount || response.data.length > 0);
         } catch (error) {
           console.error('Error', error);
         }
@@ -115,8 +113,7 @@ export default function Social() {
         try {
           const response = await RelationService.getRelations(user.id, query);
           setUsers(response.data);
-          setTotalResults(response.totalCount || 0);
-          setHasResults(response.data.length > 0);
+          setTotalResults(response.totalCount || response.data.length > 0);
         } catch (error) {
           console.error('Error', error);
         }
@@ -213,7 +210,6 @@ export default function Social() {
           }}
         >
           <SearchResults
-            hasResults={hasResults}
             page={page}
             totalResults={totalResults}
             queryLimit={queryLimit}
