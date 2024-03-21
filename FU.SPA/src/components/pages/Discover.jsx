@@ -289,7 +289,7 @@ export default function Discover() {
   // Method for adding a tag id to the search
   const onTagClick = (tagTitle) => {
     const tag = tagOptions.find((tag) => tag.name === tagTitle);
-    if (tag) {
+    if (tag && !tags.some((t) => t.name === tag.name)) {
       setTags([...tags, tag]);
       setPage(1);
     }

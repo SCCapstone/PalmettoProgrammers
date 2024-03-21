@@ -5,6 +5,9 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
 
+/// <summary>
+/// Handles game CRUD actions.
+/// </summary>
 public class GameService : CommonService, IGameService
 {
     private readonly AppDbContext _dbContext;
