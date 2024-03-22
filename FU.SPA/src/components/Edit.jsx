@@ -54,10 +54,12 @@ export default function Edit({ postId }) {
           setEndTime(dayjs(postsDetails.endTime));
           gameDetails = postsDetails.game;
           tagsDetails = postDetails.tags;
+          setGame(postsDetails.game);
+          setTags(postsDetails.tags);
         }
-        setGame(postsDetails.game);
-        console.log(game);
-        setTags(postsDetails.tags);
+        // setGame(postsDetails.game);
+        // console.log(game);
+        // setTags(postsDetails.tags);
         setCount(count + 1);
       } catch (e) {
         console.error(e);
@@ -65,7 +67,7 @@ export default function Edit({ postId }) {
     };
 
     init();
-  }, [title, game]);
+  }, [game, count]);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
@@ -95,7 +97,8 @@ export default function Edit({ postId }) {
     };
 
     try {
-      await PostService.updatePost(updatedPost, postId);
+      const newPost = await PostService.updatePost(updatedPost, postId);
+      console.log(newPost);
       alert('Post updated successfully!');
       navigate(`/posts/${postId}`);
     } catch (e) {
