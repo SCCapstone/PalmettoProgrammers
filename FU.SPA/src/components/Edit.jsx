@@ -203,7 +203,6 @@ const filter = createFilterOptions();
 const GameSelector = ({ onChange, initialValue }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
-  const [choiceTracker, setChoiceTracker] = useState([]);
 
   useEffect(() => {
     const getGames = async () => {
@@ -216,19 +215,11 @@ const GameSelector = ({ onChange, initialValue }) => {
         if (gameChoice) {
           setValue(gameChoice);
         }
-        // setChoiceTracker((prevTracker) => [...prevTracker, gameChoice]);
-        
-        // choiceTracker.forEach(element => {
-        //   if((initialValue !== element) && (element !== "")) {
-
-        //   }
-        // });
-        // if (choiceTracker.includes(initialValue) && ) 
-
-        // const gameOptions = GameService.searchGames('').then((games) => setGameOptions(games)).find((g) => g.name === initialValue);
-        // if(gameOptions) {
-        //   setValue(gameOptions);
-        // }
+        //trying to fix problem with the game and 
+        if ((gameChoice === initialValue) && gameChoice) {
+          setValue("");
+          setValue(gameChoice)
+        }
       } catch (e) {
         console.error("Problem getting games", e);
       }
