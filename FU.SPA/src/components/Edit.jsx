@@ -215,11 +215,6 @@ const GameSelector = ({ onChange, initialValue }) => {
         if (gameChoice) {
           setValue(gameChoice);
         }
-        //trying to fix problem with the game and 
-        if ((gameChoice === initialValue) && gameChoice) {
-          setValue("");
-          setValue(gameChoice)
-        }
       } catch (e) {
         console.error("Problem getting games", e);
       }
