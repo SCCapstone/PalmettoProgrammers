@@ -34,6 +34,7 @@ export default function Edit({ postId }) {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const [postsDetails, setPostsDetails] = useState('');
+  const [count, setCount] = useState(0);
 
   const { user } = useContext(UserContext);
 
@@ -45,24 +46,26 @@ export default function Edit({ postId }) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
-        setPostsDetails(postDetails);
-        setTitle(postsDetails.title);
-        setDescription(postsDetails.description);
-        setStartTime(dayjs(postsDetails.startTime));
-        setEndTime(dayjs(postsDetails.endTime));
-        gameDetails = postsDetails.game;
-        tagsDetails = postDetails.tags;
-
+        if (count < 2) {
+          setPostsDetails(postDetails);
+          setTitle(postsDetails.title);
+          setDescription(postsDetails.description);
+          setStartTime(dayjs(postsDetails.startTime));
+          setEndTime(dayjs(postsDetails.endTime));
+          gameDetails = postsDetails.game;
+          tagsDetails = postDetails.tags;
+        }
         setGame(postsDetails.game);
         console.log(game);
         setTags(postsDetails.tags);
+        setCount(count + 1);
       } catch (e) {
         console.error(e);
       }
     };
 
     init();
-  });
+  }, [title, game]);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
@@ -140,7 +143,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
           {postsDetails.game !== undefined && (
-            <GameSelector initialValue={game} onChange={setGame} />
+            <GameSelector initialValue={gameDetails} onChange={setGame} />
           )}
             </Grid>
           <br />
@@ -197,6 +200,7 @@ const filter = createFilterOptions();
 const GameSelector = ({ onChange, initialValue }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
+  const [choiceTracker, setChoiceTracker] = useState([]);
 
   useEffect(() => {
     const getGames = async () => {
@@ -209,6 +213,15 @@ const GameSelector = ({ onChange, initialValue }) => {
         if (gameChoice) {
           setValue(gameChoice);
         }
+        // setChoiceTracker((prevTracker) => [...prevTracker, gameChoice]);
+        
+        // choiceTracker.forEach(element => {
+        //   if((initialValue !== element) && (element !== "")) {
+
+        //   }
+        // });
+        // if (choiceTracker.includes(initialValue) && ) 
+
         // const gameOptions = GameService.searchGames('').then((games) => setGameOptions(games)).find((g) => g.name === initialValue);
         // if(gameOptions) {
         //   setValue(gameOptions);
@@ -219,7 +232,7 @@ const GameSelector = ({ onChange, initialValue }) => {
     };
 
     getGames();
-  }, []);
+  }, [initialValue]);
 
   const onInputChange = (event, newValue) => {
     setValue(newValue);
