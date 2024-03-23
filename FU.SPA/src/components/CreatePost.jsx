@@ -103,7 +103,7 @@ export default function CreatePost() {
         >
           <TextField
             fullWidth
-            error={title?.length < 3 || title === null}
+            error={title?.length < 3}
             id="searchGames"
             helperText={
               title?.length < 3 || title === null
@@ -232,7 +232,7 @@ const GameSelector = ({ onChange }) => {
         <TextField
           {...params}
           fullWidth
-          error={value === null || error}
+          error={error}
           label="Game *"
           minLength={3}
           maxLength={25}
