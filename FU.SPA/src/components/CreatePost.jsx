@@ -191,8 +191,6 @@ const GameSelector = ({ onChange }) => {
   }, []);
 
   const onInputChange = (event, newValue) => {
-    console.log('newValue');
-    console.log(newValue);
     try {
       setValue(newValue);
       if (newValue && newValue.name && newValue.name.length < 3) {
