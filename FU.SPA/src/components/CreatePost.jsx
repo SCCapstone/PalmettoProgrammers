@@ -62,11 +62,7 @@ export default function CreatePost() {
     };
 
     try {
-      if (
-        game === null ||
-        game === '' ||
-        game.length < 3
-      ) {
+      if (game === null || game === '' || game.length < 3) {
         return;
       } else {
         const newPost = await PostService.createPost(post);
