@@ -29,7 +29,6 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
-  // const [error, setError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,8 +47,6 @@ export default function CreatePost() {
       game.name === '' ||
       game.name.length < 3
     ) {
-      //setGame('default');
-      // setError(true);
       return;
     }
 
@@ -70,14 +67,12 @@ export default function CreatePost() {
         game === '' ||
         game.length < 3
       ) {
-        // setError(true);
         return;
       } else {
         const newPost = await PostService.createPost(post);
         navigate(`/posts/${newPost.id}`);
       }
     } catch (e) {
-      // setError(true);
       console.log(e);
     }
   };
@@ -167,7 +162,7 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ onChange, onErrorChange }) => {
+const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState(null);
   const [error, setError] = useState(false);
@@ -185,7 +180,6 @@ const GameSelector = ({ onChange, onErrorChange }) => {
           setGameOptions(games),
         );
         console.log(test);
-        //setGameOptions('default');
       }
     };
     fetchGameOptions();
