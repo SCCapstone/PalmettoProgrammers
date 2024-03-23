@@ -2,6 +2,7 @@ namespace FU.API.Services;
 
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
 using FU.API.Data;
@@ -28,7 +29,7 @@ public class AccountsService : CommonService
     /// </summary>
     /// <param name="configuration">Allows access to the config.</param>
     /// <param name="dbContext">Allows access to the database.</param>
-    /// /// <param name="emailService">The email service.</param>
+    /// <param name="emailService">The email service.</param>
     public AccountsService(IConfiguration configuration, AppDbContext dbContext, IEmailService emailService)
         : base(dbContext)
     {
@@ -159,7 +160,7 @@ public class AccountsService : CommonService
             return null;
         }
 
-        return CreateAuthInfo(DateTime.UtcNow.AddDays(1), user);
+        return AuthHelper.CreateAuthInfo(_configuration, DateTime.UtcNow.AddDays(1), user.UserId);
     }
 
     /// <summary>
@@ -260,24 +261,7 @@ public class AccountsService : CommonService
         _dbContext.Update(user);
         await _dbContext.SaveChangesAsync();
 
-        return CreateAuthInfo(DateTime.UtcNow.AddDays(1), user);
-    }
-
-    public AuthenticationInfo CreateAuthInfo(DateTime expires, ApplicationUser user)
-    {
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty));
-        var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-        List<Claim> claims = new()
-        {
-            new (CustomClaimTypes.UserId, user.UserId.ToString())
-        };
-
-        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: expires, claims: claims);
-
-        string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
-        return new AuthenticationInfo(token, tokenOptions.ValidTo);
+        return AuthHelper.CreateAuthInfo(_configuration, DateTime.UtcNow.AddDays(1), user.UserId);
     }
 
     // Return user credentials so userId is accessable without a second db call

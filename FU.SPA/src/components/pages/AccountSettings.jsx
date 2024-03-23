@@ -169,7 +169,6 @@ export default function AccountSettings() {
         const data = {
           newEmail: email,
         };
-        console.log(data);
         await UserService.updateAccountInfo(data);
         setChangeEmailDialogOpen(false);
         // logout and navigate to the home page
@@ -207,8 +206,6 @@ export default function AccountSettings() {
             and require reconfirmation of your account using the new email
             address. Are you sure you wish to proceed?
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
           <TextField
             autoFocus
             error={!!emailError}
@@ -221,6 +218,8 @@ export default function AccountSettings() {
             onChange={handleEmailChange}
             fullWidth
           />
+        </DialogContent>
+        <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleSubmit} autoFocus>
             Change Email
@@ -327,7 +326,6 @@ export default function AccountSettings() {
             variant="contained"
             color="error"
             onClick={() => {
-              console.log('Delete Account');
               setDeleteDialogOpen(true);
             }}
             sx={{

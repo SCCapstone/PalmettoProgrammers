@@ -1,6 +1,7 @@
 ﻿namespace FU.API.Services;
 
 using FU.API.Data;
+using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using FU.API.Models;
@@ -28,10 +29,10 @@ public class CommonService : ICommonService
         // Get the user from the database
         var user = await _dbContext.Users.FindAsync(userId);
 
-        // If the user is not confirmed and it must be, return null
+        // If the user is not confirmed and it must be, throw an unauthorized exception
         if (mustBeConfirmed && user is not null && !user.AccountConfirmed)
         {
-            return null;
+            throw new UnauthorizedException("Account not confirmed");
         }
 
         return user;

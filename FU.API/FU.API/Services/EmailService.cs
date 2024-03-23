@@ -18,20 +18,17 @@ public class EmailService : IEmailService
 
     private readonly IConfiguration _configuration;
 
-    private string baseSpaUrl = "http://localhost:5173/";
+    private string baseSpaUrl;
 
     public EmailService(IConfiguration configuration)
     {
         _configuration = configuration;
 
-        string? connectionString = _configuration[ConfigKey.EmailConnectionString];
+        var connectionString = _configuration[ConfigKey.EmailConnectionString];
 
-        if (!string.IsNullOrEmpty(connectionString))
-        {
-            _emailClient = new EmailClient(connectionString);
-        }
+        _emailClient = new EmailClient(connectionString);
 
-        baseSpaUrl = _configuration[ConfigKey.BaseSpaUrl] ?? baseSpaUrl;
+        baseSpaUrl = _configuration[ConfigKey.BaseSpaUrl] ?? throw new ArgumentNullException(ConfigKey.BaseSpaUrl);
     }
 
     public Task SendEmail(EmailType emailType, ApplicationUser user)
@@ -71,7 +68,7 @@ public class EmailService : IEmailService
 
     private string GenerateConfirmAccountEmail(ApplicationUser user)
     {
-        var token = GenerateJwtToken(user);
+        var token = AuthHelper.CreateAuthInfo(_configuration, DateTime.UtcNow.AddMinutes(30), user.UserId).Token;
 
         string message = $@"
                 <!DOCTYPE html>
@@ -127,7 +124,7 @@ public class EmailService : IEmailService
 
     private string GenerateWelcomeEmail(ApplicationUser user)
     {
-        string token = GenerateJwtToken(user);
+        var token = AuthHelper.CreateAuthInfo(_configuration, DateTime.UtcNow.AddMinutes(30), user.UserId).Token;
 
         string message = $@"
                 <!DOCTYPE html>
@@ -180,20 +177,5 @@ public class EmailService : IEmailService
                 </html>";
 
         return message;
-    }
-
-    private string GenerateJwtToken(ApplicationUser user)
-    {
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[ConfigKey.JwtSecret] ?? string.Empty));
-        var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-        List<Claim> claims = new()
-        {
-            new (CustomClaimTypes.UserId, user.UserId.ToString())
-        };
-
-        var tokenOptions = new JwtSecurityToken(signingCredentials: signingCredentials, expires: DateTime.UtcNow.AddMinutes(30), claims: claims);
-
-        return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
     }
 }

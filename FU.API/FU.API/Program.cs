@@ -205,5 +205,10 @@ internal class Program
         {
             throw new Exception($"Email service connection string is not configured. Missing {ConfigKey.EmailConnectionString}. See README for adding.");
         }
+
+        if (config[ConfigKey.BaseSpaUrl] is null)
+        {
+            throw new Exception($"The base SPA Url is not configured. Missing {ConfigKey.BaseSpaUrl}. See README for adding.");
+        }
     }
 }
