@@ -16,6 +16,7 @@ import { Label, Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
+import { Store } from 'react-notifications-component';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -75,7 +76,6 @@ export default function SignUp() {
     // errors in signup, and redirect to signin/last page if there are no errors
     try {
       await AuthService.signUp(creds);
-      setSignUpSuccess(true);
       var returnUrl = searchParams.get('returnUrl');
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
@@ -104,20 +104,34 @@ export default function SignUp() {
     }
   };
 
+  const displaySuccess = () => {
+    try {
+      navigate('/SignIn');
+      Store.addNotification({
+        title: 'Account SignUp Confirmation',
+        message: 'Your account has been successfully created!',
+        type: 'success',
+        insert: 'top',
+        container: 'top-center',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+    } catch (event) {
+      console.error('Error in creating account', event);
+    }
+  };
+
   // Display component
   return (
     <>
       {
-        signUpSuccess ? ( //if signup was successful
-          <Grid>
-            <Typography component="h1" variant="h5">
-              Sign Up Successful!
-            </Typography>
-            <Link href="/SignIn">Sign In</Link>
-          </Grid>
-        ) : (
-          ''
-        ) //if signup was not successful
+        signUpSuccess
+          ? displaySuccess() //if signup was successful
+          : '' //if signup was not successful
       }
       <Container component="main" maxWidth="xs" height="100%">
         <CssBaseline />
