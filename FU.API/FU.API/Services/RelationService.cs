@@ -16,23 +16,6 @@ public class RelationService : CommonService, IRelationService
         _dbContext = dbContext;
     }
 
-    public async Task<UserRelation?> GetRelation(int initiatedById, int otherUserId)
-    {
-        if (initiatedById == otherUserId)
-        {
-            throw new BadRequestException("You can't get your own relation");
-        }
-
-        await AssertUserExists(initiatedById);
-        await AssertUserExists(otherUserId);
-
-        var relation = await _dbContext.UserRelations
-            .Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId)
-            .FirstOrDefaultAsync();
-
-        return relation;
-    }
-
     public async Task HandleRelationAction(int initiatedById, int otherUserId, UserRelationAction action)
     {
         if (initiatedById == otherUserId)

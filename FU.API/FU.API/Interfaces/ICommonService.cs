@@ -12,4 +12,6 @@ public interface ICommonService
     Task<ApplicationUser?> GetUser(string username);
 
     Task<bool> HasJoinedPost(int userId, int postId);
+
+    Task<UserRelation?> GetRelation(int initiatedById, int otherUserId);
 }

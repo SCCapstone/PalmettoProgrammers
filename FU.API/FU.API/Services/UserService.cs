@@ -41,7 +41,7 @@ public class UserService : CommonService, IUserService
         {
             // Make sure its an image already in our blob storage
             // Otherwise we are unure if the image is cropped, resized, and in the right format
-            if (!profileChanges.PfpUrl.Contains("storagefu.blob.core.windows.net/avatars"))
+            if (!profileChanges.PfpUrl.Contains("storagefu.blob.core.windows.net"))
             {
                 throw new UnprocessableException("Invalid profile picture. The image must be uploaded to our storage system");
             }

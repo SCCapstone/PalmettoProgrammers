@@ -27,6 +27,20 @@ export default function ProfileSettings() {
   const [newPfpUrl, setNewPfpUrl] = useState();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    async function fetchUserInfo() {
+      try {
+        const userInfo = await UserService.getUserprofile('current');
+        setBio(userInfo.bio || '');
+        setDateOfBirth(userInfo.dob ? dayjs(userInfo.dob) : null);
+      } catch (error) {
+        console.error('Failed to load profile info', error);
+      }
+    }
+
+    fetchUserInfo();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
