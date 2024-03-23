@@ -65,11 +65,7 @@ export default function CreatePost() {
     };
 
     try {
-      if (
-        game === null ||
-        game === '' ||
-        game.length < 3
-      ) {
+      if (game === null || game === '' || game.length < 3) {
         // setError(true);
         return;
       } else {
@@ -110,33 +106,37 @@ export default function CreatePost() {
             gap: 1,
           }}
         >
-        <TextField
-          fullWidth
-          error={title?.length < 3 || title===null}
-          id="searchGames"
-          helperText={title?.length < 3 || title === null? "Must be at least 3 characters" : ""}
-          minLength={3}
-          maxLength={25}
-          label="Title *"
-          autoFocus
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <Grid item xs={0}>
-          <GameSelector onChange={setGame} />
-        </Grid>
-        <br />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateTimePicker
-            label="Start Time"
-            value={startTime}
-            onChange={(newValue) => setStartTime(newValue)}
+          <TextField
+            fullWidth
+            error={title?.length < 3 || title === null}
+            id="searchGames"
+            helperText={
+              title?.length < 3 || title === null
+                ? 'Must be at least 3 characters'
+                : ''
+            }
+            minLength={3}
+            maxLength={25}
+            label="Title *"
+            autoFocus
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
-          <DateTimePicker
-            label="End Time"
-            value={endTime}
-            onChange={(newValue) => setEndTime(newValue)}
-          />
+          <Grid item xs={0}>
+            <GameSelector onChange={setGame} />
+          </Grid>
+          <br />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+            />
+            <DateTimePicker
+              label="End Time"
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+            />
           </LocalizationProvider>
           <TagsSelector onChange={setTags} />
           <Box
@@ -161,7 +161,8 @@ export default function CreatePost() {
         </Box>
       </Box>
     </Container>
-)};
+  );
+}
 
 const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
@@ -225,7 +226,7 @@ const GameSelector = ({ onChange, onErrorChange }) => {
   };
 
   return (
-    <Autocomplete 
+    <Autocomplete
       autoHighlight
       clearOnBlur
       value={value}
@@ -243,7 +244,9 @@ const GameSelector = ({ onChange, onErrorChange }) => {
           label="Game *"
           minLength={3}
           maxLength={25}
-          helperText={error || value === null? "Must be at least 3 characters" : ""}
+          helperText={
+            error || value === null ? 'Must be at least 3 characters' : ''
+          }
         />
       )}
     />
