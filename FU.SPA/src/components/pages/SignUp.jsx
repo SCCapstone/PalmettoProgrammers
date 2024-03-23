@@ -16,6 +16,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
+import { Store } from 'react-notifications-component';
 import Theme from '../../Theme';
 
 export default function SignUp() {
@@ -84,6 +85,20 @@ export default function SignUp() {
       } else {
         navigate('/SignIn');
       }
+      //Display SignUp success
+      Store.addNotification({
+        title: 'Account SignUp Confirmation',
+        message: 'Your account has been successfully created!',
+        type: 'success',
+        insert: 'top',
+        container: 'top-center',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
     } catch (event) {
       // Parse the error message
       const errorResponse = JSON.parse(event.message);
