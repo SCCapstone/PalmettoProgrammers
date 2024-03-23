@@ -34,4 +34,25 @@ public static class TestsHelper
 
         return user;
     }
+
+    public static async Task<Post> CreateTestPostAsync(AppDbContext context)
+    {
+        var chatService = new ChatService(context);
+        var postService = new PostService(context, chatService);
+
+        var gameService = new GameService(context);
+        Game game = await gameService.CreateGame("Game Title");
+
+        ApplicationUser user = await TestsHelper.CreateUserAsync(context);
+        Post post = new()
+        {
+            Title = "Title Text",
+            Description = "Description Text",
+            GameId = game.Id,
+            Creator = user,
+            CreatorId = user.UserId,
+        };
+
+        return await postService.CreatePost(post);
+    }
 }

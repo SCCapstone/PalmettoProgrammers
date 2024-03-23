@@ -86,12 +86,12 @@ public class Post
     /// <summary>
     /// Gets or sets the creator of the post.
     /// </summary>
-    public ApplicationUser Creator { get; set; } = new ApplicationUser();
+    public ApplicationUser? Creator { get; set; } = new ApplicationUser();
 
     /// <summary>
     /// Gets or sets the id of the creator.
     /// </summary>
-    public int CreatorId { get; set; }
+    public int? CreatorId { get; set; }
 
     /// <summary>
     /// Gets or sets when the post was created.

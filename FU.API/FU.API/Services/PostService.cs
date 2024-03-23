@@ -22,42 +22,20 @@ public class PostService : CommonService, IPostService
 
     public async Task<Post> CreatePost(Post post)
     {
-        var game = await _dbContext.Games
-            .FindAsync(post.GameId) ?? throw new NonexistentGameException();
-
-        var user = await _dbContext.Users
-            .FindAsync(post.CreatorId) ?? throw new NotFoundException("Creator not found", "The creator was not found");
-
-        post.Game = game;
-
-        // Check if either start time or end time is present when the other is present
-        bool isInvalidTimeRange = (post.StartTime is null) != (post.EndTime is null);
-        if (isInvalidTimeRange)
+        if (await _dbContext.Users.FindAsync(post.CreatorId) is null)
         {
-            throw new PostException("Start and end times must both be present", HttpStatusCode.UnprocessableEntity);
+            throw new NotFoundException("Creator not found", "The creator was not found");
         }
 
-        // Check if start time is after end time
-        bool isStartTimeAfterEndTime = (post.StartTime is not null) && (post.EndTime is not null) && (post.StartTime > post.EndTime);
-        if (isStartTimeAfterEndTime)
+        if (post.Creator is null)
         {
-            throw new PostException("Start time cannot be after end time", HttpStatusCode.UnprocessableEntity);
+            throw new PostException("Creator is null", HttpStatusCode.UnprocessableEntity);
         }
 
-        // Find how long the post will last
-        if (post.StartTime is not null && post.EndTime is not null)
-        {
-            var duration = post.EndTime - post.StartTime;
-            if (duration.Value.TotalMinutes < 30)
-            {
-                throw new PostException("Post must last at least 30 minutes", HttpStatusCode.UnprocessableEntity);
-            }
+        post.Game = await _dbContext.Games.FindAsync(post.GameId)
+            ?? throw new NonexistentGameException();
 
-            if (duration.Value.TotalHours > 24)
-            {
-                throw new PostException("Post must last at most 24 hours", HttpStatusCode.UnprocessableEntity);
-            }
-        }
+        AssertValidDateAndTime(post);
 
         var postTagIds = post.Tags.Select(t => t.TagId);
         var tags = await _dbContext.Tags
@@ -74,9 +52,7 @@ public class PostService : CommonService, IPostService
             });
         }
 
-        var chat = await _chatService.CreateChat(post.Creator, ChatType.Post, post.Title);
-
-        post.Chat = chat;
+        post.Chat = await _chatService.CreateChat(post.Creator, ChatType.Post, post.Title);
 
         try
         {
@@ -91,40 +67,38 @@ public class PostService : CommonService, IPostService
         return post;
     }
 
-    public async Task<Post> UpdatePost(Post post)
+    public async Task<Post> UpdatePost(Post postChanges)
     {
-        Post postEntity = _dbContext.Posts.Find(post.Id) ?? throw new PostNotFoundException();
+        Post ogPost = _dbContext.Posts.Find(postChanges.Id) ?? throw new PostNotFoundException();
 
-        if (postEntity.CreatorId != post.CreatorId)
+        if (ogPost.CreatorId != postChanges.CreatorId)
         {
-            throw new PostException("The updated post's user does not match the old post's user", HttpStatusCode.UnprocessableEntity);
+            throw new PostException("The updated post's creator does not match the old post's creator", HttpStatusCode.UnprocessableEntity);
         }
 
-        var game = await _dbContext.Games
-            .FindAsync(post.GameId) ?? throw new NonexistentGameException();
-        postEntity.Game = game;
-        postEntity.Description = post.Description;
-        postEntity.MaxPlayers = post.MaxPlayers;
-        postEntity.StartTime = post.StartTime;
-        postEntity.EndTime = post.EndTime;
-        postEntity.Title = post.Title;
+        ogPost.Game = await _dbContext.Games.FindAsync(postChanges.GameId) ?? throw new NonexistentGameException();
+        ogPost.Description = postChanges.Description;
+        ogPost.MaxPlayers = postChanges.MaxPlayers;
+        ogPost.StartTime = postChanges.StartTime;
+        ogPost.EndTime = postChanges.EndTime;
+        ogPost.Title = postChanges.Title;
 
-        var postTagIds = post.Tags.Select(t => t.TagId);
-        var tags = await _dbContext.Tags
-            .Where(t => postTagIds.Contains(t.Id))
+        var newTagIds = postChanges.Tags.Select(t => t.TagId);
+        var newTags = await _dbContext.Tags
+            .Where(t => newTagIds.Contains(t.Id))
             .ToListAsync();
 
         // Update post tags
-        postEntity.Tags.Clear();
-        foreach (var tag in tags)
+        ogPost.Tags.Clear();
+        foreach (var tag in newTags)
         {
-            postEntity.Tags.Add(new TagRelation { Tag = tag });
+            ogPost.Tags.Add(new TagRelation { Tag = tag });
         }
 
-        _dbContext.Posts.Update(postEntity);
+        _dbContext.Posts.Update(ogPost);
         await _dbContext.SaveChangesAsync();
 
-        return postEntity;
+        return ogPost;
     }
 
     public async Task<Post?> GetPost(int postId)
@@ -156,40 +130,36 @@ public class PostService : CommonService, IPostService
             .Include(p => p.Chat)
             .ThenInclude(c => c.Members)
             .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
-        var chat = post.Chat;
-        var userId = user.UserId;
 
         // Check that the post is not full
-        if (post.MaxPlayers <= chat.Members.Count)
+        if (post.MaxPlayers <= post.Chat.Members.Count)
         {
             throw new PostException("Post is full", HttpStatusCode.Conflict);
         }
 
         // Check that the user is not already in the chat
-        if (chat.Members.Any(m => m.UserId == userId))
+        if (post.Chat.Members.Any(m => m.UserId == user.UserId))
         {
             throw new ConflictException("User is already in the post");
         }
 
-        // Make the new chat member relation
-        var chatMember = new ChatMembership
+        // Add user to post members
+        post.Chat.Members.Add(new ChatMembership
         {
-            Chat = chat,
+            Chat = post.Chat,
             User = user,
-        };
+        });
+
+        _dbContext.Update(post.Chat);
 
         try
         {
-            chat.Members.Add(chatMember);
-            _dbContext.Update(chat);
             await _dbContext.SaveChangesAsync();
         }
         catch (DbUpdateException)
         {
             throw new DbUpdateException();
         }
-
-        return;
     }
 
     public async Task LeavePost(int postId, ApplicationUser user)
@@ -198,23 +168,20 @@ public class PostService : CommonService, IPostService
         var post = await _dbContext.Posts
             .Where(p => p.Id == postId)
             .FirstOrDefaultAsync() ?? throw new PostNotFoundException();
-        var chatId = post.ChatId;
-        var userId = user.UserId;
-        var toRemove = await _dbContext.ChatMemberships
-            .Where(cm => cm.ChatId == chatId && cm.UserId == userId)
+        var postMembership = await _dbContext.ChatMemberships
+            .Where(cm => cm.ChatId == post.ChatId && cm.UserId == user.UserId)
             .FirstOrDefaultAsync() ?? throw new PostException("User is not in the post", HttpStatusCode.Forbidden);
+
+        _dbContext.ChatMemberships.Remove(postMembership);
 
         try
         {
-            _dbContext.ChatMemberships.Remove(toRemove);
             await _dbContext.SaveChangesAsync();
         }
         catch (DbUpdateException)
         {
             throw new DbUpdateException();
         }
-
-        return;
     }
 
     public async Task DeletePost(int postId)
@@ -242,5 +209,51 @@ public class PostService : CommonService, IPostService
         _dbContext.ChatMemberships.RemoveRange(chatMemberships);
 
         await _dbContext.SaveChangesAsync();
+    }
+
+    private static void AssertValidDateAndTime(Post post)
+    {
+        // Check if either start time or end time is present when the other is present
+        bool isInvalidTimeRange = (post.StartTime is null) != (post.EndTime is null);
+        if (isInvalidTimeRange)
+        {
+            throw new PostException("Start and end times must both be present", HttpStatusCode.UnprocessableEntity);
+        }
+
+        // Make sure the post is not in the past
+        bool isPostInPast = post.StartTime < DateTime.UtcNow;
+        if (isPostInPast)
+        {
+            throw new PostException("Post cannot be in the past", HttpStatusCode.UnprocessableEntity);
+        }
+
+        // Make sure the post is not too far in the future
+        bool isPostTooFarInFuture = post.StartTime > DateTime.UtcNow.AddYears(1);
+        if (isPostTooFarInFuture)
+        {
+            throw new PostException("Post cannot be more than 1 year in the future", HttpStatusCode.UnprocessableEntity);
+        }
+
+        // Check if start time is after end time
+        bool isStartTimeAfterEndTime = (post.StartTime is not null) && (post.EndTime is not null) && (post.StartTime > post.EndTime);
+        if (isStartTimeAfterEndTime)
+        {
+            throw new PostException("Start time cannot be after end time", HttpStatusCode.UnprocessableEntity);
+        }
+
+        // Find how long the post will last
+        if (post.StartTime is not null && post.EndTime is not null)
+        {
+            var duration = post.EndTime - post.StartTime;
+            if (duration.Value.TotalMinutes < 5)
+            {
+                throw new PostException("Post must last at least 5 minutes", HttpStatusCode.UnprocessableEntity);
+            }
+
+            if (duration.Value.TotalHours > 24)
+            {
+                throw new PostException("Post must last at most 24 hours", HttpStatusCode.UnprocessableEntity);
+            }
+        }
     }
 }

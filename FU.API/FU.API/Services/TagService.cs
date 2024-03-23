@@ -5,6 +5,9 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
 
+/// <summary>
+/// Handles tags CRUD actions.
+/// </summary>
 public class TagService : CommonService, ITagService
 {
     private readonly AppDbContext _dbContext;

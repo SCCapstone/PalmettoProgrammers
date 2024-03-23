@@ -74,6 +74,8 @@ export default function CreatePost() {
       }
     } catch (e) {
       console.log(e);
+      window.alert('Error creating post');
+      console.error(e);
     }
   };
 
@@ -204,6 +206,8 @@ const GameSelector = ({ onChange }) => {
     } catch (err) {
       setError(true);
     }
+    setValue(newValue);
+    onChange(newValue);
   };
 
   const onFilterOptions = (options, params) => {

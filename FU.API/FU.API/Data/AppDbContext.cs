@@ -54,6 +54,48 @@ public class AppDbContext : DbContext
             .HasIndex(g => g.Name)
             .IsUnique();
 
+        // On deleting user, set post creator to null in Post
+        modelBuilder.Entity<Post>()
+            .HasOne(p => p.Creator)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // On deleting user, set creator to null in Chat
+        modelBuilder.Entity<Chat>()
+            .HasOne(c => c.Creator)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // On deleting user, set sender to null in Message
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Sender)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // On deleting user, delete all chat memberships
+        modelBuilder.Entity<ChatMembership>()
+            .HasOne(cm => cm.User)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Delete user relations when user is deleted
+        modelBuilder.Entity<UserRelation>()
+            .HasOne(ur => ur.User1)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Delete user relations when user is deleted
+        modelBuilder.Entity<UserRelation>()
+            .HasOne(ur => ur.User2)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // On deleting user, delete all group memberships
+        modelBuilder.Entity<GroupMembership>()
+            .HasOne(gm => gm.User)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Cascade);
+
         base.OnModelCreating(modelBuilder);
     }
 

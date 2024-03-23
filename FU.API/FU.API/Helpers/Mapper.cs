@@ -8,6 +8,7 @@ using FU.API.DTOs.Tag;
 using FU.API.Models;
 using FU.API.DTOs.Group;
 using FU.API.DTOs.User;
+using FU.API.DTOs;
 
 public static class Mapper
 {
@@ -16,7 +17,7 @@ public static class Mapper
         return new UserProfile()
         {
             Id = appUser.UserId,
-            Username = appUser.Username,
+            Username = appUser.Username == string.Empty ? "Deleted User" : appUser.Username,
             Bio = appUser.Bio,
             DOB = appUser.DOB,
             PfpUrl = appUser.PfpUrl,
@@ -36,7 +37,7 @@ public static class Mapper
             Id = message.Id,
             CreatedAt = message.CreatedAt,
             Content = message.Content,
-            Sender = message.Sender.ToProfile(),
+            Sender = message.Sender == null ? new UserProfile { Username = "Deleted User" } : message.Sender.ToProfile(),
         };
     }
 
@@ -88,9 +89,9 @@ public static class Mapper
         var query = new UserQuery()
         {
             Limit = dto.Limit ?? 20,
-            Offset = dto.Offset ?? 0,
             SortType = new(),
             SortDirection = new(),
+            Page = dto.Page ?? 1,
         };
 
         if (dto.Keywords is not null)
@@ -131,9 +132,9 @@ public static class Mapper
             EndOnOrBeforeTime = dto.EndOnOrBeforeTime,
             MinimumRequiredPlayers = dto.MinPlayers ?? 0,
             Limit = dto.Limit ?? 20,
-            Offset = dto.Offset ?? 0,
             SortType = new(),
             SortDirection = new(),
+            Page = dto.Page ?? 1
         };
 
         if (dto.Keywords is not null)
@@ -203,7 +204,7 @@ public static class Mapper
             EndTime = post.EndTime,
             MaxPlayers = post.MaxPlayers,
             ChatId = post.ChatId,
-            Creator = post.Creator.ToProfile(),
+            Creator = post.Creator == null ? new UserProfile { Username = "Deleted User" } : post.Creator.ToProfile(),
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
             HasJoined = hasJoined,
         };
@@ -250,7 +251,7 @@ public static class Mapper
         };
     }
 
-    public static AccountInfoDTO ToDTO(this AccountInfo accountInfo)
+    public static AccountInfoDTO ToDto(this AccountInfo accountInfo)
     {
         return new AccountInfoDTO()
         {

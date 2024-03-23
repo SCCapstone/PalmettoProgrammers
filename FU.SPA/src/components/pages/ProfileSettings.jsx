@@ -1,20 +1,45 @@
-import { Container, Box, Typography, Button, TextField } from '@mui/material';
-import { useState } from 'react';
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Avatar,
+  Stack,
+  Paper,
+  Alert,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import UserService from '../../services/userService';
-// import { TagsSelector, GamesSelector } from "../Selectors";
 import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+import AvatarService from '../../services/avatarService';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
-  const [pfpUrl, setPfpUrl] = useState('');
-  // const [favoriteGames, setFavoriteGames] = useState([]);
-  // const [favoriteTags, setFavoriteTags] = useState([]);
+  const [newPfpUrl, setNewPfpUrl] = useState();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchUserInfo() {
+      try {
+        const userInfo = await UserService.getUserprofile('current');
+        setBio(userInfo.bio || '');
+        setDateOfBirth(userInfo.dob ? dayjs(userInfo.dob) : null);
+      } catch (error) {
+        console.error('Failed to load profile info', error);
+      }
+    }
+
+    fetchUserInfo();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,13 +47,10 @@ export default function ProfileSettings() {
     try {
       const idJson = await UserService.getUserIdJson();
 
-      // console.log(favoriteGames);
-      // console.log(favoriteTags);
-
       // Form request payload
       const data = {
+        pfpUrl: newPfpUrl,
         id: idJson.userId,
-        pfpUrl: pfpUrl !== '' ? pfpUrl : null,
         bio: bio !== '' ? bio : null,
         // if the date of birth is the same as today, ignore and set as null
         // if not same day, update
@@ -37,20 +59,22 @@ export default function ProfileSettings() {
           dayjs().toISOString().substring(0, 10)
             ? dateOfBirth.toISOString().substring(0, 10)
             : null,
-        //favoriteGames: favoriteGames,
-        //favoriteTags: favoriteTags
       };
 
-      const response = await UserService.updateUserProfile(data);
-      console.log(response);
+      await UserService.updateUserProfile(data);
       alert('Info updated successfully!');
 
       // Redirect to user profile
       navigate('/profile/' + idJson.userId);
     } catch (e) {
       alert(e);
-      console.log(e);
+      console.error(e);
     }
+  };
+
+  const handlePreviewUrl = (imageUrl) => {
+    setNewPfpUrl(imageUrl);
+    console.log(imageUrl);
   };
 
   // Display component
@@ -58,7 +82,6 @@ export default function ProfileSettings() {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 1,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -77,8 +100,9 @@ export default function ProfileSettings() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            mt: 1,
+            mt: 2,
             gap: 2,
+            width: 270,
           }}
         >
           <TextField
@@ -89,7 +113,6 @@ export default function ProfileSettings() {
             multiline
             onChange={(e) => setBio(e.target.value)}
           />
-          <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Date of Birth"
@@ -98,31 +121,101 @@ export default function ProfileSettings() {
               onChange={(newValue) => setDateOfBirth(newValue)}
             />
           </LocalizationProvider>
-          <TextField
-            fullWidth
-            id="setPfpUrl"
-            label="Update Profile Picture (Insert link)"
-            value={pfpUrl}
-            onChange={(e) => setPfpUrl(e.target.value)}
-          />
-          {/* TODO(epadams) make this work once the backend gets fixed
-            <GamesSelector
-              onChange={(e) => setFavoriteGames(e.target.value)}
-            />
-            <TagsSelector
-              onChange={(e) => setFavoriteTags(e.target.value)}
-            />
-            */}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Update Information
+          <UploadAvatar onNewPreview={handlePreviewUrl} />
+          <Button type="submit" fullWidth variant="contained">
+            Update Profile
           </Button>
         </Box>
       </Box>
     </Container>
   );
 }
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
+const UploadAvatar = ({ onNewPreview }) => {
+  const [file, setFile] = useState();
+  const [uploadedImageUrl, setUploadedImageUrl] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    if (onNewPreview) onNewPreview(uploadedImageUrl);
+  }, [onNewPreview, uploadedImageUrl]);
+
+  const handleFileChange = async (event) => {
+    event.preventDefault();
+    setError();
+
+    if (!event.target.files) {
+      setFile();
+      return;
+    }
+
+    setLoading(true);
+    setFile(event.target.files[0]);
+
+    try {
+      const response = await AvatarService.upload(event.target.files[0]);
+      setUploadedImageUrl(response.imageUrl);
+    } catch (error) {
+      setError(error.message);
+      handleClearFile();
+    }
+
+    setLoading(false);
+  };
+
+  const handleClearFile = () => {
+    setUploadedImageUrl();
+    setFile();
+  };
+
+  return (
+    <>
+      <Button
+        component="label"
+        role={undefined}
+        variant="outlined"
+        tabIndex={-1}
+        startIcon={<CloudUploadIcon />}
+      >
+        Upload avatar
+        <VisuallyHiddenInput
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+      </Button>
+      {file && (
+        <Paper variant="outlined" sx={{ padding: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ pr: 1 }}>
+            <Avatar
+              sx={{ width: 60, height: 60 }}
+              src={
+                loading
+                  ? 'https://storagefu.blob.core.windows.net/icons/spinner.gif'
+                  : uploadedImageUrl
+              }
+            />
+            <Typography sx={{ flexGrow: 99, textAlign: 'left' }} noWrap>
+              {file?.name}
+            </Typography>
+            <ClearIcon sx={{ cursor: 'pointer' }} onClick={handleClearFile} />
+          </Stack>
+        </Paper>
+      )}
+      {error && <Alert severity="error">{error}</Alert>}
+    </>
+  );
+};
