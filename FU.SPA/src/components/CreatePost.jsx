@@ -30,6 +30,22 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  
+  //Test post to show for preview.
+  const previewPost = {
+    id: 100,
+    creator: {
+      id: 100,
+      username: 'previewTest_user',
+      pfpUrl: 'previewTest_profile_pic',
+    },
+    title: title,
+    game: 'Preview Test Game',
+    startTime: dayjs().toISOString(),
+    endTime: dayjs().add(1, 'hour').toISOString(),
+    description: description,
+    tags: tags,
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,6 +79,7 @@ export default function CreatePost() {
 
   return (
     <Container component="main" maxWidth="xs">
+    {/* {<PostCardPreview/>} */}
       <Box
         sx={{
           marginTop: 1,
@@ -142,6 +159,15 @@ export default function CreatePost() {
             Create Post
           </Button>
         </Box>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          mt: 4,
+        }}
+      >
+        <PostCard post={previewPost} showActions={false} />
       </Box>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
         {/* {posts.map((post) => ( //original mapping of posts
