@@ -79,7 +79,6 @@ export default function CreatePost() {
 
   return (
     <Container component="main" maxWidth="xs">
-    {/* {<PostCardPreview/>} */}
       <Box
         sx={{
           marginTop: 1,
