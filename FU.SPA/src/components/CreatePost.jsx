@@ -30,21 +30,28 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const [newPost, setNewPost] = useState();
+  const [findGame, setFindGame] = useState();
+  const [newTag, setNewTag] = useState();
+  const [post, setPost] = useState([]);
   
+  //var tagIds = [];
   //Test post to show for preview.
+  
+  //var previewPost;
   const previewPost = {
-    id: 100,
+    id: 100,//newPost?.id,
     creator: {
       id: 100,
       username: 'previewTest_user',
       pfpUrl: 'previewTest_profile_pic',
-    },
+    }, //post
     title: title,
-    game: 'Preview Test Game',
-    startTime: dayjs().toISOString(),
-    endTime: dayjs().add(1, 'hour').toISOString(),
+    game: 'Preview Test Game',//findGame.id,
+    startTime: startTime !== null ? startTime.toISOString() : null,
+    endTime: endTime !== null ? endTime.toISOString() : null,
     description: description,
-    tags: tags,
+    tags: tags //tagIds,
   };
 
   const handleSubmit = async (e) => {
@@ -53,28 +60,43 @@ export default function CreatePost() {
     let tagIds = [];
 
     for (const tag of tags) {
-      const newTag = await TagService.findOrCreateTagByName(tag.name);
+      setNewTag(await TagService.findOrCreateTagByName(tag.name));
       tagIds.push(newTag.id);
     }
 
-    var findGame = await GameService.findOrCreateGameByTitle(game.name);
+    setFindGame(await GameService.findOrCreateGameByTitle(game.name));
 
-    const post = {
+    setPost({
       title: title,
       description: description,
       startTime: startTime !== null ? startTime.toISOString() : null,
       endTime: endTime !== null ? endTime.toISOString() : null,
       tagIds: tagIds,
       gameId: findGame.id,
-    };
+    });
 
     try {
-      const newPost = await PostService.createPost(post);
+      setNewPost(await PostService.createPost(post));
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
       window.alert('Error creating post');
       console.log(e);
     }
+
+    // previewPost = {
+    //   id: newPost.id,
+    //   creator: {
+    //     id: 100,
+    //     username: 'previewTest_user',
+    //     pfpUrl: 'previewTest_profile_pic',
+    //   },
+    //   title: title,
+    //   game: findGame.id,
+    //   startTime: startTime !== null ? startTime.toISOString() : null,
+    //   endTime: endTime !== null ? endTime.toISOString() : null,
+    //   description: description,
+    //   tags: tagIds,
+    // };
   };
 
   return (
@@ -101,8 +123,8 @@ export default function CreatePost() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            mt: 3,
-            gap: 2,
+            //mt: 3,
+            gap: .9,
           }}
         >
           <TextField
@@ -136,11 +158,6 @@ export default function CreatePost() {
               display: 'flex',
             }}
           >
-            <Typography component="h1" variant="h6">
-              {' '}
-              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
-              Description
-            </Typography>
           </Box>
           <TextField
             label="Description"
@@ -153,7 +170,7 @@ export default function CreatePost() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ }}
           >
             Create Post
           </Button>
@@ -162,6 +179,7 @@ export default function CreatePost() {
       <Box
         sx={{
           display: 'flex',
+          //flexDirection: 'column',
           justifyContent: 'center',
           mt: 4,
         }}
