@@ -28,7 +28,6 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   // Showing passwords when user wants
   const handleClickShowPassword = () => {
@@ -80,7 +79,21 @@ export default function SignUp() {
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
       } else {
-        setSignUpSuccess(true);
+        //Display SignUp success
+        navigate('/SignIn');
+        Store.addNotification({
+          title: 'Account SignUp Confirmation',
+          message: 'Your account has been successfully created!',
+          type: 'success',
+          insert: 'top',
+          container: 'top-center',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
       }
     } catch (event) {
       // Parse the error message
@@ -104,35 +117,9 @@ export default function SignUp() {
     }
   };
 
-  const displaySuccess = () => {
-    try {
-      navigate('/SignIn');
-      Store.addNotification({
-        title: 'Account SignUp Confirmation',
-        message: 'Your account has been successfully created!',
-        type: 'success',
-        insert: 'top',
-        container: 'top-center',
-        animationIn: ['animate__animated', 'animate__fadeIn'],
-        animationOut: ['animate__animated', 'animate__fadeOut'],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-        },
-      });
-    } catch (event) {
-      console.error('Error in creating account', event);
-    }
-  };
-
   // Display component
   return (
     <>
-      {
-        signUpSuccess
-          ? displaySuccess() //if signup was successful
-          : '' //if signup was not successful
-      }
       <Container component="main" maxWidth="xs" height="100%">
         <CssBaseline />
         <Box
