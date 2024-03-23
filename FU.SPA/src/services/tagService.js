@@ -16,7 +16,6 @@ const searchTags = async (keyword) => {
 
 const findTagByName = async (name) => {
   let tags = await searchTags(name);
-  console.log(tags);
 
   let tag = null;
 
@@ -52,8 +51,6 @@ const createTag = async (params) => {
     throw new Error('Error in tag creation');
   }
   const jsonResponse = await response.json();
-
-  console.log(jsonResponse);
 
   return jsonResponse;
 };

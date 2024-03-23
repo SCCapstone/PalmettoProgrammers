@@ -7,7 +7,6 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using FU.API.Validation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -56,15 +55,8 @@ public class RelationsController : ControllerBase
     {
         var currentUser = await _relationService.GetCurrentUser(User) ?? throw new UnauthorizedException();
 
-        var relation = await _relationService.GetRelation(currentUser.UserId, userId);
-
-        if (relation is null)
-        {
-            relation = new UserRelation
-            {
-                Status = UserRelationStatus.None
-            };
-        }
+        var relation = await _relationService.GetRelation(currentUser.UserId, userId)
+            ?? new UserRelation { Status = UserRelationStatus.None };
 
         var response = relation.ToDto();
         return Ok(response);
@@ -89,7 +81,9 @@ public class RelationsController : ControllerBase
         query.RelationStatus = status;
         query.UserId = userId;
 
-        var relatedUsers = await _searchService.SearchUsers(query);
+        (var relatedUsers, var totalResults) = await _searchService.SearchUsers(query);
+
+        Response.Headers.Add("X-total-count", totalResults.ToString());
 
         return Ok(relatedUsers);
     }

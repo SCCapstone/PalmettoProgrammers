@@ -1,11 +1,8 @@
 ﻿namespace FU.API.Tests.Helpers;
 
 using FU.API.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public static class MockDataHelper
 {

@@ -17,6 +17,7 @@ import AuthService from '../../services/authService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import { Store } from 'react-notifications-component';
+import Theme from '../../Theme';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -35,17 +36,19 @@ export default function SignUp() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  // Update state for each field
+  // Update state for username
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
     setUsernameError('');
   };
 
+  // Update state for password
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
     setPasswordError('');
   };
 
+  // Update state for confirmed password
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
     setPasswordError('');
@@ -205,7 +208,16 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/SignIn" variant="body2">
+              <Link
+                class="signin-link"
+                onClick={() => navigate(`/SignIn`)}
+                variant="body2"
+                style={{
+                  color: Theme.palette.primary.main,
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                }}
+              >
                 Already have an account? Sign in
               </Link>
             </Grid>

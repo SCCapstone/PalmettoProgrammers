@@ -10,4 +10,6 @@ public interface ICommonService
     Task<ApplicationUser?> GetUser(int userId);
 
     Task<bool> HasJoinedPost(int userId, int postId);
+
+    Task<UserRelation?> GetRelation(int initiatedById, int otherUserId);
 }

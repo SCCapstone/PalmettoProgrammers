@@ -81,10 +81,17 @@ public class AccountsController : ControllerBase
             return Problem("Could not find account");
         }
 
-        return Ok(accountInfo.ToDTO());
+        return Ok(accountInfo.ToDto());
     }
 
-    // Updates the current user's credentials. The current user is obtained from the jwt token.
+    /// <summary>
+    /// Updates the current user's credentials.
+    /// </summary>
+    /// <remarks>
+    /// The current user is obtained from the JWT token in the authorization header.
+    /// </remarks>
+    /// <param name="newCredentials">The new credentials to be used.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPatch]
     public async Task<IActionResult> UpdateAccountCredentials(UpdateCredentailsDTO newCredentials)
     {
@@ -112,6 +119,16 @@ public class AccountsController : ControllerBase
 
             await _accountService.UpdatePassword(user.UserId, newCredentials.NewPassword);
         }
+
+        return Ok();
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAccount([FromBody] Credentials credentials)
+    {
+        var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+
+        await _accountService.DeleteAccount(user.UserId, credentials);
 
         return Ok();
     }

@@ -10,7 +10,6 @@ public class SearchServiceSearchPostsTests : IDisposable
     private readonly DbContextOptions<AppDbContext> _contextOptions;
     private readonly AppDbContext _dbContext;
     private readonly SearchService _searchService;
-    private readonly PostService _postService;
 
     // adapted from https://github.com/dotnet/EntityFramework.Docs/blob/main/samples/core/Testing/TestingWithoutTheDatabase/InMemoryBloggingControllerTest.cs
     public SearchServiceSearchPostsTests()
@@ -27,7 +26,6 @@ public class SearchServiceSearchPostsTests : IDisposable
         _dbContext.SaveChanges();
 
         _searchService = new SearchService(_dbContext);
-        _postService = new PostService(_dbContext, new ChatService(_dbContext));
     }
 
     public void Dispose()
@@ -41,14 +39,17 @@ public class SearchServiceSearchPostsTests : IDisposable
         // Arrange
         Game game = await TestsHelper.CreateTestGameAsync(_dbContext);
         var user = await TestsHelper.CreateUserAsync(_dbContext);
-        await _postService.CreatePost(new Post()
+        var post = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
-        });
+        };
+
+        await _dbContext.Posts.AddAsync(post);
+        await _dbContext.SaveChangesAsync();
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery());
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery());
 
         // Assert
         Assert.Single(posts);
@@ -62,24 +63,27 @@ public class SearchServiceSearchPostsTests : IDisposable
         Game game = await TestsHelper.CreateTestGameAsync(_dbContext);
         var user = await TestsHelper.CreateUserAsync(_dbContext);
         // Create a post that ends an hour before the search time
-        await _postService.CreatePost(new Post()
+        var post1 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(-2)),
             EndTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(-1)),
-        });
+        };
         // Create a post that starts an after the search time
-        await _postService.CreatePost(new Post()
+        var post2 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(1)),
             EndTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(2)),
-        });
+        };
+
+        await _dbContext.Posts.AddRangeAsync(post1, post2);
+        await _dbContext.SaveChangesAsync();
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             StartOnOrAfterTime = searchTime,
         });
@@ -96,24 +100,27 @@ public class SearchServiceSearchPostsTests : IDisposable
         Game game = await TestsHelper.CreateTestGameAsync(_dbContext);
         var user = await TestsHelper.CreateUserAsync(_dbContext);
         // Create a post that ends an hour before the search time
-        await _postService.CreatePost(new Post()
+        var post1 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(-2)),
             EndTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(-1)),
-        });
+        };
         // Create a post that starts an after the search time
-        await _postService.CreatePost(new Post()
+        var post2 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(1)),
             EndTime = new DateOnly(2099, 1, 1).ToDateTime(searchTime.AddHours(2)),
-        });
+        };
+
+        await _dbContext.Posts.AddRangeAsync(post1, post2);
+        await _dbContext.SaveChangesAsync();
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             EndOnOrBeforeTime = searchTime,
         });
@@ -130,24 +137,27 @@ public class SearchServiceSearchPostsTests : IDisposable
         Game game = await TestsHelper.CreateTestGameAsync(_dbContext);
         var user = await TestsHelper.CreateUserAsync(_dbContext);
         // Create a post is the day before the search date
-        await _postService.CreatePost(new Post()
+        var post1 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = searchDate.AddDays(-1).ToDateTime(TimeOnly.MinValue),
             EndTime = searchDate.AddDays(-1).ToDateTime(TimeOnly.MaxValue),
-        });
+        };
         // Create a post is the day after the search date
-        await _postService.CreatePost(new Post()
+        var post2 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = searchDate.AddDays(1).ToDateTime(TimeOnly.MinValue),
             EndTime = searchDate.AddDays(1).ToDateTime(TimeOnly.MaxValue),
-        });
+        };
+
+        await _dbContext.Posts.AddRangeAsync(post1, post2);
+        await _dbContext.SaveChangesAsync();
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             StartOnOrAfterDate = searchDate,
         });
@@ -164,24 +174,27 @@ public class SearchServiceSearchPostsTests : IDisposable
         Game game = await TestsHelper.CreateTestGameAsync(_dbContext);
         var user = await TestsHelper.CreateUserAsync(_dbContext);
         // Create a post is the day before the search date
-        await _postService.CreatePost(new Post()
+        var post1 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = searchDate.AddDays(-1).ToDateTime(TimeOnly.MinValue),
             EndTime = searchDate.AddDays(-1).ToDateTime(TimeOnly.MaxValue),
-        });
+        };
         // Create a post is the day after the search date
-        await _postService.CreatePost(new Post()
+        var post2 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = searchDate.AddDays(1).ToDateTime(TimeOnly.MinValue),
             EndTime = searchDate.AddDays(1).ToDateTime(TimeOnly.MaxValue),
-        });
+        };
+
+        await _dbContext.Posts.AddRangeAsync(post1, post2);
+        await _dbContext.SaveChangesAsync();
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             EndOnOrBeforeDate = searchDate,
         });
@@ -197,24 +210,27 @@ public class SearchServiceSearchPostsTests : IDisposable
         Game game = await TestsHelper.CreateTestGameAsync(_dbContext);
         var user = await TestsHelper.CreateUserAsync(_dbContext);
         // Create a post that ends an hour before the search time
-        var post1 = await _postService.CreatePost(new Post()
+        var post1 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = DateTime.UtcNow.AddHours(-2),
             EndTime = DateTime.UtcNow.AddHours(-1),
-        });
+        };
         // Create a post that starts an after the search time
-        var post2 = await _postService.CreatePost(new Post()
+        var post2 = new Post()
         {
             GameId = game.Id,
             CreatorId = user.UserId,
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-        });
+        };
+
+        await _dbContext.Posts.AddRangeAsync(post1, post2);
+        await _dbContext.SaveChangesAsync();
 
         // Act
-        List<Post> posts = await _searchService.SearchPosts(new PostQuery()
+        (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
             StartOnOrAfterDate = DateOnly.FromDateTime(DateTime.UtcNow),
         });

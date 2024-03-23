@@ -1,6 +1,7 @@
 ﻿namespace FU.API.Services;
 
 using FU.API.Data;
+using FU.API.Exceptions;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using FU.API.Models;
@@ -46,5 +47,30 @@ public class CommonService : ICommonService
 
         var res = chat is not null && chat.Members.Any(m => m.UserId == userId);
         return res;
+    }
+
+    public async Task<UserRelation?> GetRelation(int initiatedById, int otherUserId)
+    {
+        if (initiatedById == otherUserId)
+        {
+            throw new BadRequestException("You can't get your own relation");
+        }
+
+        await AssertUserExists(initiatedById);
+        await AssertUserExists(otherUserId);
+
+        var relation = await _dbContext.UserRelations
+            .Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId)
+            .FirstOrDefaultAsync();
+
+        return relation;
+    }
+
+    private async Task AssertUserExists(int userId)
+    {
+        if (await _dbContext.Users.FindAsync(userId) is null)
+        {
+            throw new NotFoundException("User not found", "The requested user was not found");
+        }
     }
 }
