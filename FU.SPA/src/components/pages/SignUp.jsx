@@ -90,7 +90,6 @@ export default function SignUp() {
     // errors in signup, and redirect to signin/last page if there are no errors
     try {
       await AuthService.signUp(creds);
-      navigate('/SignIn');
       var returnUrl = searchParams.get('returnUrl');
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
@@ -99,8 +98,9 @@ export default function SignUp() {
       }
       //Display SignUp success
       Store.addNotification({
-        title: 'Account SignUp Confirmation',
-        message: 'Your account has been successfully created!',
+        title: 'Account Signup Confirmation',
+        message:
+          'Your account has been successfully created! Please check your email to verify your account.',
         type: 'success',
         insert: 'top',
         container: 'top-center',

@@ -59,9 +59,7 @@ export default function SignIn() {
   useEffect(() => {
     const token = searchParams.get('token');
     setToken(token);
-    // Ignore the warning about searchParams
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams]);
 
   // use effect to call when the token is set
   useEffect(() => {
