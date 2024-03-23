@@ -178,13 +178,11 @@ const GameSelector = ({ onChange }) => {
         var test = await GameService.searchGames('').then((games) =>
           setGameOptions(games),
         );
-        console.log(test);
         GameService.searchGames('').then((games) => setGameOptions(games));
       } catch (err) {
         var test = GameService.searchGames('').then((games) =>
           setGameOptions(games),
         );
-        console.log(test);
       }
     };
     fetchGameOptions();
