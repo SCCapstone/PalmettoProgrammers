@@ -73,6 +73,16 @@ export default function Edit({ postId }) {
     // change to get post state, autofill fields based on info
     e.preventDefault();
 
+    /*
+     * Purpose is to fix a bug that requires the values to change.
+     */
+    if(!areValuesSame()) {
+      setTags(null);
+      setTags(postsDetails.tags);
+      setGame(null);
+      setGame(postsDetails.game);
+    }
+
     let tagIds = [];
 
     for (const tag of tags) {
@@ -106,6 +116,33 @@ export default function Edit({ postId }) {
       console.error(e);
     }
   };
+  /*
+   * Checking if the values are the same as the ones given
+   */
+  const areValuesSame = () => {
+    if (
+      postsDetails.game !== game ||
+      !compareTags(postsDetails.tags, tags)
+    ) {
+      return true;
+    }
+    return false;
+  };
+  /* 
+   * Comparing two arrays (tags) to see if they're the same.
+   */
+  const compareTags = (tags1, tags2) => {
+    if(tags1.length !== tags2.length) {
+      return false;
+    }
+    for (var i = 0; i < tags1.length; i++) {
+      if (tags1[i].name !== tags2[i].name) {
+        return false;
+      }
+    }
+    return false;
+  };
+  
 
   return (
     <Container component="main" maxWidth="xs">
