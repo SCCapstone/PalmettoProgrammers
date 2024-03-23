@@ -17,7 +17,7 @@ public class CommonService : ICommonService
         _dbContext = dbContext;
     }
 
-    public async Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims, bool mustBeConfirmed = true)
+    public async Task<ApplicationUser?> GetAuthorizedUser(ClaimsPrincipal claims, bool mustBeConfirmed = true)
     {
         var stringId = claims.FindFirstValue(CustomClaimTypes.UserId);
 

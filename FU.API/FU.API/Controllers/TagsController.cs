@@ -26,7 +26,7 @@ public class TagsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTag([FromBody] TagRequestDTO dto)
     {
-        var user = await _tagService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _tagService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var tagName = dto.Name;
         var tag = await _tagService.GetTag(tagName);
@@ -75,7 +75,7 @@ public class TagsController : ControllerBase
     [Route("{tagId}")]
     public async Task<IActionResult> UpdateTag(int tagId, [FromBody] TagRequestDTO dto)
     {
-        var user = await _tagService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _tagService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         if (!user.IsAdmin)
         {
@@ -102,7 +102,7 @@ public class TagsController : ControllerBase
     [Route("{tagId}")]
     public async Task<IActionResult> DeleteTag(int tagId)
     {
-        var user = await _tagService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _tagService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         if (!user.IsAdmin)
         {

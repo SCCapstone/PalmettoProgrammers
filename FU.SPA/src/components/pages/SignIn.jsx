@@ -27,7 +27,7 @@ import Theme from '../../Theme';
 export default function SignIn() {
   const { login } = useContext(UserContext);
   const [searchParams] = useSearchParams();
-  const [token] = useState(searchParams.get('token'));
+  const [token, setToken] = useState('');
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -55,6 +55,13 @@ export default function SignIn() {
     : '/SignUp';
 
   const isEnabled = username.length > 0 && password.length > 0;
+
+  useEffect(() => {
+    const token = searchParams.get('token');
+    setToken(token);
+    // Ignore the warning about searchParams
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // use effect to call when the token is set
   useEffect(() => {
@@ -88,7 +95,9 @@ export default function SignIn() {
     if (token && token.length > 10) {
       confirmAccount();
     }
-  }, [token, login, navigate]);
+    // Ignore the warning about signin and navigate
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   // Update state for username
   const handleUsernameChange = (event) => {

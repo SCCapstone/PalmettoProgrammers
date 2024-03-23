@@ -102,7 +102,7 @@ public class AccountsController : ControllerBase
     [HttpPatch]
     public async Task<IActionResult> UpdateAccountCredentials(UpdateCredentailsDTO newCredentials)
     {
-        var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _accountService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         if (newCredentials.Username is not null)
         {
@@ -140,7 +140,7 @@ public class AccountsController : ControllerBase
     [Route("confirm")]
     public async Task<IActionResult> ConfirmAccount()
     {
-        var user = await _accountService.GetCurrentUser(User, false) ?? throw new UnauthorizedException();
+        var user = await _accountService.GetAuthorizedUser(User, false) ?? throw new UnauthorizedException();
 
         var authInfo = await _accountService.ConfirmAccount(user.UserId);
 
@@ -175,7 +175,7 @@ public class AccountsController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> DeleteAccount([FromBody] LoginRequestDTO loginDetails)
     {
-        var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _accountService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
         var credentials = new Credentials
         {
             Username = loginDetails.Username,

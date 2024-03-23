@@ -35,7 +35,7 @@ public class SearchController : ControllerBase
         var postDtos = new List<PostResponseDTO>(posts.Count);
 
         // Go through each post and check if the user has joined the post
-        var user = await _searchService.GetCurrentUser(User);
+        var user = await _searchService.GetAuthorizedUser(User);
 
         if (user is not null)
         {
