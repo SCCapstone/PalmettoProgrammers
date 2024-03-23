@@ -22,8 +22,8 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 export default function CreatePost() {
-  const [game, setGame] = useState('');
-  const [title, setTitle] = useState('');
+  const [game, setGame] = useState(null);
+  const [title, setTitle] = useState(null);
   const [startTime, setStartTime] = useState(dayjs());
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
@@ -120,7 +120,7 @@ export default function CreatePost() {
                     <div>
                       <TextField
                         fullWidth
-                        error={title?.length < 3}
+                        error={title?.length < 3 && title!==null}
                         id="searchGames"
                         helperText="Must be at least 3 characters"
                         minLength={3}
@@ -228,7 +228,7 @@ export default function CreatePost() {
               {(title?.length < 3) || error? ( //if title does have an error or a length too short
                 <div>
                   <TextField
-                    error={title?.length < 3}
+                    error={title?.length < 3 && title !== null}
                     fullWidth
                     id="searchGames"
                     helperText="Must be at least 3 characters"
@@ -243,12 +243,12 @@ export default function CreatePost() {
               ) : ( //if title is not less than 3 and there isn't an error
                 <div>
                   <TextField
-                    error={title?.length < 3}
+                    error={title?.length < 3 && title !== null}
                     fullWidth
                     id="searchGames"
                     minLength={3}
                     maxLength={25}
-                    label="Title *"
+                    label="Title"
                     autoFocus
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
@@ -257,7 +257,7 @@ export default function CreatePost() {
               )}
               <div>
                 <Grid item xs={0}>
-                  <GameSelector required={game?.length < 3} error={game?.length < 3} onChange={setGame} onErrorChange={handleGameErrorChange}/>
+                  <GameSelector required={game?.length < 3 && game !== null} error={game?.length < 3 || game === null} onChange={setGame} onErrorChange={handleGameErrorChange}/>
                 </Grid>
               </div>
               <br />
@@ -308,7 +308,7 @@ const filter = createFilterOptions();
 
 const GameSelector = ({ onChange, onErrorChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -345,7 +345,7 @@ const GameSelector = ({ onChange, onErrorChange }) => {
       setError(true);
       //setGameOptions('default');
     }
-  }, []);
+  }, [value]);
 
   const onInputChange = (event, newValue) => {
     console.log('newValue');
@@ -445,7 +445,7 @@ const GameSelector = ({ onChange, onErrorChange }) => {
 
 const GameSelectorError = ({ onChange, onErrorChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -475,7 +475,7 @@ const GameSelectorError = ({ onChange, onErrorChange }) => {
       setError(true);
       //setGameOptions('default');
     }
-  }, []);
+  }, [value]);
 
   const onInputChange = (event, newValue) => {
     console.log('newValue');
@@ -535,7 +535,7 @@ const GameSelectorError = ({ onChange, onErrorChange }) => {
               <div>
                 <TextField
                   {...params}
-                  error={value?.length < 3}
+                  error={value?.length < 3 && value !== null}
                   required={value?.length < 3}
                   minLength={3}
                   maxLength={25}
