@@ -315,6 +315,16 @@ export default function Discover() {
           }}
         />
       );
+    } else if (tabOption === tabOptions.Users) {
+      return (
+        <SortOptionsSelector
+          options={config.USER_SORT_OPTIONS}
+          onChange={(newValue) => {
+            setSortOption(newValue);
+            setPage(1);
+          }}
+        />
+      );
     }
   };
 
