@@ -102,8 +102,7 @@ export default function CreatePost() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            mt: 3,
-            gap: 2,
+            gap: 1,
           }}
         >
           <TextField
@@ -136,13 +135,7 @@ export default function CreatePost() {
             sx={{
               display: 'flex',
             }}
-          >
-            <Typography component="h1" variant="h6">
-              {' '}
-              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
-              Description
-            </Typography>
-          </Box>
+          ></Box>
           <TextField
             label="Description"
             value={description}
@@ -150,12 +143,7 @@ export default function CreatePost() {
             multiline
           ></TextField>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+          <Button type="submit" fullWidth variant="contained" sx={{}}>
             Create Post
           </Button>
         </Box>
