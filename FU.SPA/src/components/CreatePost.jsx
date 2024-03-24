@@ -150,7 +150,16 @@ export default function CreatePost() {
             fullWidth
             variant="contained"
             sx={{ mt: 0, mb: 0 }}
-            disabled={!game || !title || game?.length < 3 || title?.length < 3 || game?.length == 2 || title?.length === 2 || title?.length === 1 || game?.length === 1}
+            disabled={
+              !game ||
+              !title ||
+              game?.length < 3 ||
+              title?.length < 3 ||
+              game?.length == 2 ||
+              title?.length === 2 ||
+              title?.length === 1 ||
+              game?.length === 1
+            }
           >
             Create Post
           </Button>
@@ -166,7 +175,7 @@ const filter = createFilterOptions();
 
 const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [error, setError] = useState(false);
 
   useEffect(() => {
