@@ -22,18 +22,6 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
 
-window.gameDetails = '';
-window.tagsDetails = '';
-
-// globalGameDetails = (value) => {
-//   if (gameDetails === null) {
-//     gameDetails = "";
-//     console.log(gameDetails);
-//   }
-//   gameDetails = value;
-//   console.log(gameDetails);
-// }
-
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
   const [title, setTitle] = useState('');
@@ -41,10 +29,9 @@ export default function Edit({ postId }) {
   const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
-  //const [count, setCount] = useState(0);
-  //const [details, setDetails] = useState('');
-  //const [globalDetails, setGlobalDetails] = useState('');
   const navigate = useNavigate();
+  const [postsDetails, setPostsDetails] = useState('');
+  const [count, setCount] = useState(0);
 
   const { user } = useContext(UserContext);
 
@@ -56,50 +43,37 @@ export default function Edit({ postId }) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
-        //setDetails(postDetails);
-        //if(title !== postDetails.title && count === 0) {
-        setTitle(postDetails.title); //works
-        //}
-
-        setDescription(postDetails.description); //works
-        // if (postDetails.game) {
-        //   setGame(postDetails.game);
-        // }
-        //postDetails.games
-        setGame(postDetails.game);
-        //setGame(postDetails.game);
-        //console.log(game);
-        gameDetails = postDetails.game;
-        //tagsDetails = postDetails.tags;
-        //console.log(tagsDetails);
-        //globalGameDetails(game);
-        //console.log(gameDetails);
-        //console.log(gameDetails);
-        //console.log(postDetails.game);
-        setStartTime(dayjs(postDetails.startTime)); //works
-        setEndTime(dayjs(postDetails.endTime)); //works
-        //console.log(startTime);
-        // setStartTime(postDetails.startTime);
-        // setEndTime(postDetails.endTime);
-        // setStartTime(postDetails.startTime.toISOString); //gives me an error blacking the screen out. if the catch isn't getting it, it might be a run time error.
-        // setEndTime(postDetails.endTime.toISOString);
-        setTags(postDetails.tags);
-        console.log(tags); //not getting the value for some reason.
-        console.log(postDetails.tags);
-        tagsDetails = postDetails.tags;
-        console.log(tagsDetails);
-        //console.log(postDetails.tags);
-        //setCount(count + 1);
+        if (count < 2) {
+          setPostsDetails(postDetails);
+          setTitle(postsDetails.title);
+          setDescription(postsDetails.description);
+          setStartTime(dayjs(postsDetails.startTime));
+          setEndTime(dayjs(postsDetails.endTime));
+          setGame(postDetails.game);
+          setTags(postDetails.tags);
+        }
+        // setGame(postsDetails.game);
+        // console.log(game);
+        // setTags(postsDetails.tags);
+        setCount(count + 1);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     };
 
     init();
-    //}, [title, description, startTime, endTime]);
-    //}, [title, description, startTime, endTime, count]);
-  }, []);
-  //}, [game, tags]);
+  }, [
+    title,
+    game,
+    count,
+    navigate,
+    postId,
+    postsDetails.description,
+    postsDetails.endTime,
+    postsDetails.startTime,
+    postsDetails.title,
+    user.id,
+  ]);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
@@ -116,7 +90,7 @@ export default function Edit({ postId }) {
       var findGame = await GameService.findOrCreateGameByTitle(game.name);
     } catch (e) {
       alert(e);
-      console.log(e);
+      console.error(e);
     }
 
     const updatedPost = {
@@ -129,13 +103,12 @@ export default function Edit({ postId }) {
     };
 
     try {
-      const newPost = await PostService.updatePost(updatedPost, postId);
-      console.log(newPost);
+      await PostService.updatePost(updatedPost, postId);
       alert('Post updated successfully!');
       navigate(`/posts/${postId}`);
     } catch (e) {
       window.alert(e);
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -177,14 +150,9 @@ export default function Edit({ postId }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector
-              value={gameDetails}
-              //inputValue = {game}
-              // onChange={setGame(globalDetails)} />
-              //onChange={(newValue) => setGame(newValue)}
-              //onChange={(gameDetails) => setGame(gameDetails)}
-              onChange={setGame}
-            />
+            {postsDetails.game !== undefined && (
+              <GameSelector initialValue={game} onChange={setGame} />
+            )}
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -199,7 +167,9 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector value={tagsDetails} onChange={setTags} />
+          {postsDetails.tags !== undefined && (
+            <TagsSelector initialValue={tags} onChange={setTags} />
+          )}
           <Box
             sx={{
               display: 'flex',
@@ -235,23 +205,43 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ value: gameDetails, onChange }) => {
-  // const GameSelector = ({ inputValue: game, onChange }) => {
-  //const GameSelector = ({ newValue, onChange}) => {
-  //const GameSelector = ({ onChange }) => {
+const GameSelector = ({ onChange, initialValue }) => {
   const [gameOptions, setGameOptions] = useState([]);
-  //const [value, setValue] = useState(defaultVal || '');
   const [value, setValue] = useState('');
-  //const [game, setGame] = useState('');
 
   useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
-  }, []);
+    const getGames = async () => {
+      try {
+        const game = await GameService.searchGames('');
+        //GameService.searchGames('').then((games) => setGameOptions(games));
+        setGameOptions(game);
+        const gameChoice = game.find((g) => g.name === initialValue);
+        // const gameChoice = game.GameService.searchGames(initialValue);
+        if (gameChoice) {
+          setValue(gameChoice);
+        }
+        // setChoiceTracker((prevTracker) => [...prevTracker, gameChoice]);
+
+        // choiceTracker.forEach(element => {
+        //   if((initialValue !== element) && (element !== "")) {
+
+        //   }
+        // });
+        // if (choiceTracker.includes(initialValue) && )
+
+        // const gameOptions = GameService.searchGames('').then((games) => setGameOptions(games)).find((g) => g.name === initialValue);
+        // if(gameOptions) {
+        //   setValue(gameOptions);
+        // }
+      } catch (e) {
+        console.error('Problem getting games', e);
+      }
+    };
+
+    getGames();
+  }, [initialValue]);
 
   const onInputChange = (event, newValue) => {
-    console.log('newValue');
-    console.log(newValue);
-
     setValue(newValue);
     onChange(newValue);
   };
@@ -277,41 +267,17 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
     <Autocomplete
       autoHighlight
       clearOnBlur
-      //value={game? game : game}
-      //value={game? game : null}
-      //value={game}
-      //value={String(gameDetails)}
-      //value={value}
       value={value}
-      //defaultValue={gameDetails}
-      //inputValue = {game}
-      //defaultValue={defaultVal}
-      //defaultValue={value}
       onChange={onInputChange}
       options={gameOptions}
-      //disableCloseOnSelect
       filterOptions={onFilterOptions}
-      //getOptionLabel={(o) => (o ? o.name : '')}
-      //getOptionLabel={(o) => (game)}
-      //getOptionLabel={(o) => (o ? game : "") }
-      //getOptionLabel={(o) => (o ? game : o.name)}
-      //getOptionLabel={(o) => (o ? o.name : game)}
-      getOptionLabel={(option) =>
-        typeof option === 'string' ? gameDetails : option.name
-      } //working
+      getOptionLabel={(o) => (o ? o.name : '')}
       isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option) => <li {...props}>{option.name}</li>}
       renderInput={(params) => (
         <TextField
           {...params}
           autoHighlight
-          //value={game? game: game}
-          //value={game? game: null}
-          //value={game}
-          //value={String(gameDetails)}
-          value={value}
-          //defaultValue={game}
-          //defaultValue={value}
           label="Game"
           required
           placeholder="Select or create a game"
@@ -321,45 +287,31 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
   );
 };
 
-//const TagsSelector = ({ onChange }) => {
-const TagsSelector = ({ value: tagsDetails, onChange }) => {
+const TagsSelector = ({ onChange, initialValue }) => {
   const [tagOptions, setTagOptions] = useState([]);
-  //const [tags, setTags] = useState([]);
-  //const [value, setValue] = useState('');
-  const [value, setValue] = useState(null);
-  //const [count, setCount] = useState(0);
+  const [value, setValue] = useState([]);
 
   useEffect(() => {
-    TagService.searchTags('').then((tags) => setTagOptions(tags));
-    //setValue(tagsDetails);
-    // try {
-    //   console.log(tagsDetails);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
-    // if(count === 0) {
-    //   setValue(prevTags);
-    // }
-    //const tagOps = tagOptions.find((object) => object.name === prevTags);
-    // tagOps.forEach(element => {
-    //   if(prevTags[element] === tagOps[element]) {
-    //     setTags(tagOps);
-    //   } else {
-    //     alert("Tags in tags selector not the same");
-    //   }
-    // });
-    //for(var i = 0; (i < prevTags.length); i++) {
-    //if(prevTags[i] === tagOps[i]) {
-    // if(tagOps) {
-    //   setTags(tagOps);
-    // } else {
-    //   alert("Tags in tags selector not the same");
-    // }
-    //}
-    // setCount(count + 1);
-    //}, [count]);
-  }, []);
+    const getTags = async () => {
+      try {
+        const tags = await TagService.searchTags('');
+        setTagOptions(tags);
+        //const tags = TagService.searchTags('').then((tags) => setTagOptions(tags));
+        // setTagOptions(TagService.searchTags('').then((tags) => setTagOptions(tags)));
+        //if tags aren't null and isn't empty string.
+        if (initialValue && initialValue.length > 0) {
+          // const initialTags = TagService.searchTags('').then((tags) => setTagOptions(tags)).filter(tag => initialValue.includes(tag.name));
+          const initialTags = tags.filter((tag) =>
+            initialValue.includes(tag.name),
+          );
+          setValue(initialTags);
+        }
+      } catch (e) {
+        console.error('Something went wrong getting tags: ', e);
+      }
+    };
+    getTags();
+  }, [initialValue]);
 
   const onInputChange = (event, newValues) => {
     for (const newValue of newValues) {
@@ -398,59 +350,16 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       autoHighlight
       multiple
       clearOnBlur
-      value={tagsDetails}
+      value={value}
       onChange={onInputChange}
       options={tagOptions}
-      //disableCloseOnSelect
+      disableCloseOnSelect
       filterOptions={onFilterOptions}
-      //option needs to be "string" not "object", even though object is kind of working.
-      getOptionLabel={(option) =>
-        typeof option === 'object' ? tagsDetails : option
-      } //half-way working
-      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}
-      //need to make tagsDetails into a string. The below optionlabel causes a double. Ex: "tag1, tag2" "tag1, tag2"
-      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails) : option}
-      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails.name : option}
-      // The below option label causes a double similar to one of those above, but causes them to stack tag1 on top of tag 2 in the same in cases tag.
-      // getOptionLabel={(option) => typeof option === "string" ? tagsDetails.map(item => (
-      //   <div key={item}>
-      //     {item}
-      //   </div>
-      // )) : option}
-      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split('') : option}
-      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(', ') : option}
-      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(',') : option}
-      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(' ') : option}
-      //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split('') : option}
-      // The below option label causes a double of invisible tags, tag 1, and tag2, depending on which tag you click.
-      //getOptionLabel={(option) => typeof option === "string" ? value : option}
-      //getOptionLabel={(option) => typeof option === "string" ? value : option.name}
-      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails.name : option}
-      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}
-      //getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option.name}
-      //getOptionLabel={(option) => typeof option === "string" ? String.split(tagsDetails) : option}
-      //getOptionLabel={(option) => option.name}
-      //getOptionLabel={(o) => o.name}
-      //getOptionLabel={(option) => typeof option === "string" ? prevTags : option.name} //prevTags is now tagsDetails
-      //getOptionLabel={(option) => typeof option === "string" ? prevTags : tagOptions}
-      //getOptionLabel={(option) => typeof option === "string" ? tagOptions : prevTags}
-      //getOptionLabel={(option) => typeof option === "string" ? option.name : tagOptions}
-      //getOptionLabel={(option) => typeof option === "string" ? tagOptions : option.name}
-      //getOptionLabel={(option) => typeof option === "string" ? option : option.name}
-      //getOptionLabel={(option) => typeof option === "string" ? gameDetails : option.name} //working for games
-      //getOptionLabel={(option) => typeof option === "object" ? value : option.name}
-      //getOptionLabel={(option) => typeof option === "object" ? tagOptions : option.name}
-      //getOptionLabel={(option) => typeof option === "object" ? option : option.name}
-      //getOptionLabel={(o) => (o ? option : o.name)}
-      //getOptionLabel={(o) => }
-      isOptionEqualToValue={(option, value) => option.name === value}
-      //isOptionEqualToValue={(option, value) => (option.name === value.name)}
-      //isOptionEqualToValue={(option, value) => (tagsDetails.name === option.name)}
-      //isOptionEqualToValue={(option, value) => (o ? (option.name === value.name) : prevTags)}
+      getOptionLabel={(o) => o.name}
+      isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
-            autoHighlight
             icon={checkboxIconBlank}
             checkedIcon={checkboxIconChecked}
             style={{ marginRight: 8 }}
@@ -460,7 +369,7 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} value={value} label="Tags" placeholder="" />
+        <TextField {...params} label="Tags" placeholder="" />
       )}
     />
   );
