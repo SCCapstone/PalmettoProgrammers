@@ -52,10 +52,6 @@ export const GamesSelector = ({ value, onChange }) => {
           {...params}
           label="Games"
           placeholder=""
-          inputProps={{
-            ...params.inputProps,
-            autoComplete: 'new-games', //disable autcomplete and autofill.
-          }}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
               // Handle Enter key press
@@ -104,7 +100,7 @@ export const TagsSelector = ({ value, onChange }) => {
           label="Tags"
           inputProps={{
             ...params.inputProps,
-            autoComplete: 'new-tags', //disable autcomplete and autofill.
+            autoComplete: 'new-tag', //disable autcomplete and autofill.
           }}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
