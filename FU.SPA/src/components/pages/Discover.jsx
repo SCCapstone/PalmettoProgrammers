@@ -6,7 +6,6 @@ import {
   InputLabel,
   FormControl,
   Select,
-  Button,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector, SortOptionsSelector } from '../Selectors';
@@ -419,20 +418,7 @@ export default function Discover() {
           <TextSearch.SearchBar
             searchText={searchText}
             onSearchSubmit={setSearchText}
-            // onChange={(e) => setSearchText(e.target.value)}
           />
-          <Button
-            variant="contained"
-            onClick={() =>
-              console.log('this button has been clicked', searchText)
-            }
-            // onClick={setSearchText}
-            sx={{
-              marginBottom: '20px',
-            }}
-          >
-            Search
-          </Button>
           {renderSortSelector()}
         </div>
         {renderTabContent()}
