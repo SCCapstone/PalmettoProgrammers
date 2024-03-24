@@ -101,7 +101,7 @@ public class ChatService : CommonService, IChatService
         return chat;
     }
 
-    public async Task<IEnumerable<Message>?> GetChatMessages(int chatId, int offset = 1, int limit = 10)
+    public async Task<IEnumerable<Message>> GetChatMessages(int chatId, int offset = 1, int limit = 10)
     {
         var messages = await _dbContext.Chats
             .Where(c => c.Id == chatId)

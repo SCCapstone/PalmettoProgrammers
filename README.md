@@ -4,19 +4,34 @@ Read our [wiki](https://github.com/SCCapstone/PalmettoProgrammers/wiki/Project-D
 
 ## External Requirements
 In order to build this project you first have to install:
-* [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-7.0)
+* [ASP.NET Core 7](https://learn.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-7.0)
 * [npm](https://www.npmjs.com/package/npm)
 * [Docker](https://www.docker.com/get-started/)
 * [PostgreSQL](https://www.postgresql.org/download/)
-* [Entity Framework Core tools](https://learn.microsoft.com/en-us/ef/core/cli/)
+* [Entity Framework Core tools for .NET 7](https://learn.microsoft.com/en-us/ef/core/cli/)
 
 ### Backend Environment Setup
 Config settings are loaded from the environment variables. To automatically load the environment variable from a file, create a `.env` file in the `FU.API` parent folder.
+
+### Blob storage
+An azure storage account is needed with a storage container. Public anonymous access must be enabled. The `STORAGE_CONNECTION_STRING` and `AVATAR_CONTAINER_NAME` environment variables must be set.
+```
+STORAGE_CONNECTION_STRING="XXXXXXXX"
+AVATAR_CONTAINER_NAME="some-container-name"
+```
+
 ### Jwt Secret
 A random string of 32+ characters is required in the `JWT_SECRET` environment variable as a Jwt Secret.
 ```
 JWT_SECRET="my-32-character-ultra-secure-and-ultra-long-secret"
 ```
+
+### Email service
+An azure communication service is needed to send emails
+```
+EMAIL_CONNECTION_STRING="XXXXXXXX"
+```
+
 ### Starting Postgres
 Install and start the database by installing Docker and running the following command.
 ```
@@ -33,7 +48,7 @@ Alternatively, install and start a PostgreSQL database manually.
 Run the following command to apply the latest database changes.
 Make sure you have the Entity Framework tool installed.
 ```
-dotnet tool install --global dotnet-ef
+dotnet tool install --global dotnet-ef --version 7.0.16
 dotnet ef database update
 ```
 
@@ -48,8 +63,9 @@ Config settings are loaded from the environment variables. To automatically load
 
 Then set the `VITE_API_URL` environment variable
 ```
-VITE_API_URL=https://localhost:7171/api
+VITE_API_URL=https://localhost:PORT/api
 ```
+where `PORT` is the port number the API is running on. If there are CORS errors, change the URL to match `http://` instead of `https://` and this may resolve the issue.
 
 ## Running
 ### Running Web API

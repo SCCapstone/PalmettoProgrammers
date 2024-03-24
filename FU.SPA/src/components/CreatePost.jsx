@@ -56,7 +56,7 @@ export default function CreatePost() {
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
       window.alert('Error creating post');
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -159,9 +159,6 @@ const GameSelector = ({ onChange }) => {
   }, []);
 
   const onInputChange = (event, newValue) => {
-    console.log('newValue');
-    console.log(newValue);
-
     setValue(newValue);
     onChange(newValue);
   };

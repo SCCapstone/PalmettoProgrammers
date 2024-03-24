@@ -4,7 +4,7 @@ using FU.API.Models;
 
 public interface ISearchService : ICommonService
 {
-    Task<List<Post>> SearchPosts(PostQuery query);
+    Task<(List<Post>, int TotalResults)> SearchPosts(PostQuery query);
 
-    Task<List<UserProfile>> SearchUsers(UserQuery query);
+    Task<(List<UserProfile>, int TotalResults)> SearchUsers(UserQuery query);
 }

@@ -1,11 +1,23 @@
-import { Link, useMatch, useResolvedPath, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import UserContext from '../context/userContext';
 import { useContext, useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
-import Theme from '../Theme';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Menu from '@mui/material/Menu';
+import './Navbar.css';
 
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const navigate = useNavigate();
+
   const location = useLocation();
   const [previousPath, setPreviousPath] = useState(location.pathname);
   const [currentPath, setCurrentPath] = useState(location.pathname);
@@ -16,117 +28,174 @@ export default function Navbar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  function CustomLink({ to, children, ...props }) {
-    const pathName = useResolvedPath(to).pathname;
-    // determine if current path is a post page
-    var isPostPage = currentPath.includes('posts');
-    const isActive =
-      useMatch({ path: pathName, end: true }) ||
-      (isPostPage && previousPath === pathName);
-    return (
-      <li className={isActive ? 'active' : ''}>
-        <Link to={to} {...props}>
-          {children}
-        </Link>
-      </li>
-    );
-  }
+  const isActiveMenuItem = (menuItemTitle) => {
+    // If the current path contains the menuItemTitle and it's not the post page, then it is active
+    const containsMatch =
+      currentPath.includes(menuItemTitle) && !currentPath.includes('post');
 
-  const renderTabContent = () => {
-    if (user) {
-      // if user has a custom pfp then use that, if not then use MUI instead of default pfp
-      const defaultPFP =
-        !user.pfpUrl ||
-        (user.pfpUrl !== null &&
-          user.pfpUrl.includes(
-            'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-          ));
-      const pfpComponent = !defaultPFP ? (
-        <Avatar src={user.pfpUrl} sx={{ width: 33, height: 33 }} />
-      ) : (
-        <Avatar
-          {...stringAvatar(user.username)}
-          sx={{ width: 33, height: 33, bgcolor: stringToColor(user.username) }}
-        />
-      );
-      // For some reason, can't user user.Id inside of link itself so this is
-      // an easy workaround
-      const navUserId = user.id;
-      return (
-        <>
-          <li style={{ display: 'flex', alignItems: 'center' }}>
-            {/* This link redirects to a user's profile page */}
-            <Link to={`/profile/${navUserId}`}>{pfpComponent}</Link>
-          </li>
-          <li style={{ display: 'flex', alignItems: 'center' }}>
-            <button onClick={logout}>Logout</button>
-          </li>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <CustomLink to="/SignIn">Sign In</CustomLink>
-          <CustomLink to="/SignUp">Sign Up</CustomLink>
-        </>
-      );
+    const isPostPage = currentPath.includes('post');
+    var postMatch = isPostPage && previousPath.includes(menuItemTitle);
+
+    // Discover active if post page, checking for discover, and previous path is a post
+    // This is a special case for when the post page is refreshed
+    if (
+      isPostPage &&
+      menuItemTitle === 'discover' &&
+      previousPath.includes('post')
+    ) {
+      postMatch = true;
     }
+
+    return containsMatch || postMatch;
+  };
+
+  const renderProfile = () => (
+    <>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <Typography textAlign="center">{user?.username}</Typography>
+        <Tooltip title="Open settings">
+          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Avatar
+              alt={user?.username}
+              src={user?.pfpUrl}
+              sx={{
+                border: '2px solid #ffffff',
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+      </div>
+      <Menu
+        sx={{ mt: '45px' }}
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+      >
+        <MenuItem
+          onClick={() => {
+            handleCloseUserMenu();
+            navigate(`/profile/${user?.id}`);
+          }}
+        >
+          <Typography textAlign="center">Profile</Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleCloseUserMenu();
+            navigate(`/accountsettings`);
+          }}
+        >
+          <Typography textAlign="center">Account</Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleCloseUserMenu();
+            logout();
+          }}
+        >
+          <Typography textAlign="center">Logout</Typography>
+        </MenuItem>
+      </Menu>
+    </>
+  );
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   return (
-    <nav
-      className="nav"
-      style={{ backgroundColor: Theme.palette.primary.main }}
-    >
-      <div className="left-content">
-        <Link to="/" className="site-title">
+    <AppBar position="sticky" enableColorOnDark>
+      <Toolbar>
+        <Typography
+          noWrap
+          component="a"
+          onClick={() => navigate('/')}
+          sx={{
+            mr: 2,
+            fontFamily:
+              "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
+            fontWeight: 700,
+            color: 'inherit',
+            textDecoration: 'none',
+            fontSize: '1.7rem',
+            cursor: 'pointer',
+          }}
+        >
           Forces Unite
-        </Link>
-        <ul>
-          <CustomLink to="/">Home</CustomLink>
-          <CustomLink to="/discover">Discover</CustomLink>
+        </Typography>
+
+        <Box
+          sx={{
+            height: '64px',
+            display: 'flex',
+            flexGrow: 1,
+            flexWrap: 'nowrap',
+          }}
+        >
+          <Button
+            className={isActiveMenuItem('discover') ? 'active' : ''}
+            color="inherit"
+            onClick={() => navigate('/discover')}
+          >
+            Discover
+          </Button>
           {user && (
             <>
-              <CustomLink to="/social">Social</CustomLink>
-              <CustomLink to="/create">Create</CustomLink>
+              <Button
+                color="inherit"
+                className={isActiveMenuItem('social') ? 'active' : ''}
+                onClick={() => navigate('/social')}
+              >
+                Social
+              </Button>
+              <Button
+                color="inherit"
+                className={isActiveMenuItem('create') ? 'active' : ''}
+                onClick={() => navigate('/create')}
+              >
+                Create
+              </Button>
             </>
           )}
-        </ul>
-      </div>
-      <div className="right-content">
-        <ul>{renderTabContent()}</ul>
-      </div>
-    </nav>
+        </Box>
+
+        <Box sx={{ flexGrow: 0 }}>
+          {user ? (
+            renderProfile()
+          ) : (
+            <>
+              <Button
+                sx={{ mr: 1 }}
+                color="inherit"
+                onClick={() => navigate('/SignIn')}
+              >
+                Sign in
+              </Button>
+              <Button
+                color="inherit"
+                variant="outlined"
+                onClick={() => navigate('/SignUp')}
+              >
+                Sign up
+              </Button>
+            </>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
-}
-
-function stringToColor(string) {
-  let hash = 0;
-  let i;
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  let color = '#';
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  return color;
-}
-
-function stringAvatar(name) {
-  // split  name by spaces and filter empty entries
-  let nameParts = name.split(' ').filter(Boolean);
-  // get the first letter of the first part
-  let initials = nameParts[0][0];
-  // if there is a second part to name
-  if (nameParts.length > 1) {
-    initials += nameParts[1][0];
-  }
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: initials,
-  };
 }
