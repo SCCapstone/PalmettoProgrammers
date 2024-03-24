@@ -181,14 +181,11 @@ const GameSelector = ({ onChange }) => {
   useEffect(() => {
     const fetchGameOptions = async () => {
       try {
-        var test = await GameService.searchGames('').then((games) =>
-          setGameOptions(games),
-        );
+        GameService.searchGames('').then((games) => setGameOptions(games));
+        setValue(test);
         GameService.searchGames('').then((games) => setGameOptions(games));
       } catch (err) {
-        var test = GameService.searchGames('').then((games) =>
-          setGameOptions(games),
-        );
+        console.log(err);
       }
     };
     fetchGameOptions();
