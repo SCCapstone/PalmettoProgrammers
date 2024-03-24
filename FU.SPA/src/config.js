@@ -15,14 +15,12 @@ const config = {
     { value: 'newest', label: 'Created Date' },
     { value: 'soonest', label: 'Start Time' },
     { value: 'title', label: 'Title' },
+    { value: 'players', label: '# of Players'},
     // TODO(epadams) add num players, already present in api
   ],
   USER_SORT_OPTIONS: [
     { value: 'username', label: 'Name' },
-    /* look into adding these
-    { value: 'join-date', label: 'Account Age' }, // can literally just sort by account id
-    { value: 'birthday', label: 'Birthday' }, // more involved
-    */
+    { value: 'joindate', label: 'Account Age' }, // can just sort by account id
   ],
 };
 

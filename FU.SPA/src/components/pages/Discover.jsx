@@ -321,6 +321,7 @@ export default function Discover() {
           options={config.USER_SORT_OPTIONS}
           onChange={(newValue) => {
             setSortOption(newValue);
+            console.log('new value:',newValue);
             setPage(1);
           }}
         />
