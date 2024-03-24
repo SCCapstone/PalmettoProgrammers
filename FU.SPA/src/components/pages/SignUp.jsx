@@ -23,8 +23,10 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -42,6 +44,12 @@ export default function SignUp() {
     setUsernameError('');
   };
 
+  // Update state for email
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+    setEmailError('');
+  };
+
   // Update state for password
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -56,7 +64,10 @@ export default function SignUp() {
 
   // Check if all fields are filled
   const isEnabled =
-    username.length > 0 && password.length > 0 && confirmPassword.length > 0;
+    username.length > 0 &&
+    email.length > 0 &&
+    password.length > 0 &&
+    confirmPassword.length > 0;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
@@ -65,6 +76,7 @@ export default function SignUp() {
 
     const creds = {
       username: data.get('username'),
+      email: data.get('email'),
       password: data.get('password'),
     };
 
@@ -78,7 +90,6 @@ export default function SignUp() {
     // errors in signup, and redirect to signin/last page if there are no errors
     try {
       await AuthService.signUp(creds);
-      navigate('/SignIn');
       var returnUrl = searchParams.get('returnUrl');
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
@@ -87,8 +98,9 @@ export default function SignUp() {
       }
       //Display SignUp success
       Store.addNotification({
-        title: 'Account SignUp Confirmation',
-        message: 'Your account has been successfully created!',
+        title: 'Account Signup Confirmation',
+        message:
+          'Your account has been successfully created! Please check your email to verify your account.',
         type: 'success',
         insert: 'top',
         container: 'top-center',
@@ -104,15 +116,16 @@ export default function SignUp() {
       const errorResponse = JSON.parse(event.message);
 
       //If username already exists
-      if (errorResponse && errorResponse.title === 'Duplicate User') {
+      if (errorResponse?.title === 'Duplicate User') {
         setUsernameError(errorResponse.detail);
       } // Check if there is a specific error message for Username
-      else if (
-        errorResponse &&
-        errorResponse.errors &&
-        errorResponse.errors.Username
-      ) {
+      else if (errorResponse?.errors?.Username) {
         setUsernameError(errorResponse.errors.Username[0]);
+      } else if (errorResponse?.status === 409) {
+        // Duplicate email
+        setEmailError(errorResponse.detail);
+      } else if (errorResponse?.errors?.Email) {
+        setEmailError(errorResponse.errors.Email[0]);
       } else {
         // Handles other general errors
         setUsernameError('An unexpected error occurred. Please try again.');
@@ -153,6 +166,20 @@ export default function SignUp() {
                 type="username"
                 name="username"
                 autoFocus
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                error={!!emailError}
+                helperText={emailError}
+                onChange={handleEmailChange}
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                type="email"
+                name="email"
+                autoComplete="email"
               />
             </Grid>
             <Grid item xs={12}>

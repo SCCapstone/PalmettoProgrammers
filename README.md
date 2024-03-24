@@ -25,6 +25,13 @@ A random string of 32+ characters is required in the `JWT_SECRET` environment va
 ```
 JWT_SECRET="my-32-character-ultra-secure-and-ultra-long-secret"
 ```
+
+### Email service
+An azure communication service is needed to send emails
+```
+EMAIL_CONNECTION_STRING="XXXXXXXX"
+```
+
 ### Starting Postgres
 Install and start the database by installing Docker and running the following command.
 ```

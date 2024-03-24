@@ -1,5 +1,6 @@
 ﻿namespace FU.API.Models;
 
+using FU.API.Validation;
 using System.ComponentModel.DataAnnotations;
 
 public record Credentials
@@ -14,4 +15,7 @@ public record Credentials
     /// Gets or sets the user's password.
     /// </summary>
     public string Password { get; set; } = string.Empty;
+
+    [Email]
+    public string Email { get; set; } = string.Empty;
 }
