@@ -8,6 +8,8 @@ import {
   Stack,
   Paper,
   Alert,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -20,6 +22,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import AvatarService from '../../services/avatarService';
 import ClearIcon from '@mui/icons-material/Clear';
+import { Store } from 'react-notifications-component';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
@@ -62,12 +65,38 @@ export default function ProfileSettings() {
       };
 
       await UserService.updateUserProfile(data);
-      alert('Info updated successfully!');
-
       // Redirect to user profile
       navigate('/profile/' + idJson.userId);
+
+      // Profile notification success
+      Store.addNotification({
+        title: 'Profile Settings Updated',
+        message: 'Your profile settings have successfully changed.',
+        type: 'success',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
     } catch (e) {
-      alert(e);
+      // Profile notification error
+      Store.addNotification({
+        title: 'Error has occured',
+        message: 'An error has occured. Please try again.\n' + e,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error(e);
     }
   };
@@ -75,6 +104,14 @@ export default function ProfileSettings() {
   const handlePreviewUrl = (imageUrl) => {
     setNewPfpUrl(imageUrl);
     console.log(imageUrl);
+  };
+
+  const clearBio = () => {
+    try {
+      setBio('');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   // Display component
@@ -112,6 +149,19 @@ export default function ProfileSettings() {
             value={bio}
             multiline
             onChange={(e) => setBio(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                    color="primary"
+                    onClick={(e) => clearBio(e.target.value)}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
