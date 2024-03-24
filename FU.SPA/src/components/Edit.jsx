@@ -199,10 +199,7 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector 
-            value={tagsDetails} 
-            onChange={setTags} 
-            />
+          <TagsSelector value={tagsDetails} onChange={setTags} />
           <Box
             sx={{
               display: 'flex',
@@ -299,7 +296,9 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
       //getOptionLabel={(o) => (o ? game : "") }
       //getOptionLabel={(o) => (o ? game : o.name)}
       //getOptionLabel={(o) => (o ? o.name : game)}
-      getOptionLabel={(option) => typeof option === "string" ? gameDetails : option.name} //working
+      getOptionLabel={(option) =>
+        typeof option === 'string' ? gameDetails : option.name
+      } //working
       isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option) => <li {...props}>{option.name}</li>}
       renderInput={(params) => (
@@ -322,11 +321,6 @@ const GameSelector = ({ value: gameDetails, onChange }) => {
   );
 };
 
-
-
-
-
-
 //const TagsSelector = ({ onChange }) => {
 const TagsSelector = ({ value: tagsDetails, onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
@@ -341,9 +335,9 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
     // try {
     //   console.log(tagsDetails);
     // } catch (error) {
-    //   console.log(error);  
+    //   console.log(error);
     // }
-    
+
     // if(count === 0) {
     //   setValue(prevTags);
     // }
@@ -356,15 +350,15 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
     //   }
     // });
     //for(var i = 0; (i < prevTags.length); i++) {
-      //if(prevTags[i] === tagOps[i]) {
-      // if(tagOps) {
-      //   setTags(tagOps);
-      // } else {
-      //   alert("Tags in tags selector not the same");
-      // }
+    //if(prevTags[i] === tagOps[i]) {
+    // if(tagOps) {
+    //   setTags(tagOps);
+    // } else {
+    //   alert("Tags in tags selector not the same");
+    // }
     //}
     // setCount(count + 1);
-  //}, [count]);
+    //}, [count]);
   }, []);
 
   const onInputChange = (event, newValues) => {
@@ -410,7 +404,9 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //disableCloseOnSelect
       filterOptions={onFilterOptions}
       //option needs to be "string" not "object", even though object is kind of working.
-      getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option} //half-way working
+      getOptionLabel={(option) =>
+        typeof option === 'object' ? tagsDetails : option
+      } //half-way working
       //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}
       //need to make tagsDetails into a string. The below optionlabel causes a double. Ex: "tag1, tag2" "tag1, tag2"
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails) : option}
@@ -426,11 +422,11 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(',') : option}
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split(' ') : option}
       //getOptionLabel={(option) => typeof option === "string" ? String(tagsDetails).split('') : option}
-      // The below option label causes a double of invisible tags, tag 1, and tag2, depending on which tag you click.  
+      // The below option label causes a double of invisible tags, tag 1, and tag2, depending on which tag you click.
       //getOptionLabel={(option) => typeof option === "string" ? value : option}
       //getOptionLabel={(option) => typeof option === "string" ? value : option.name}
       //getOptionLabel={(option) => typeof option === "string" ? tagsDetails.name : option}
-      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}  
+      //getOptionLabel={(option) => typeof option === "string" ? tagsDetails : option}
       //getOptionLabel={(option) => typeof option === "object" ? tagsDetails : option.name}
       //getOptionLabel={(option) => typeof option === "string" ? String.split(tagsDetails) : option}
       //getOptionLabel={(option) => option.name}
@@ -447,7 +443,7 @@ const TagsSelector = ({ value: tagsDetails, onChange }) => {
       //getOptionLabel={(option) => typeof option === "object" ? option : option.name}
       //getOptionLabel={(o) => (o ? option : o.name)}
       //getOptionLabel={(o) => }
-      isOptionEqualToValue={(option, value) => (option.name === value)}
+      isOptionEqualToValue={(option, value) => option.name === value}
       //isOptionEqualToValue={(option, value) => (option.name === value.name)}
       //isOptionEqualToValue={(option, value) => (tagsDetails.name === option.name)}
       //isOptionEqualToValue={(option, value) => (o ? (option.name === value.name) : prevTags)}

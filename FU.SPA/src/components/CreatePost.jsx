@@ -30,7 +30,7 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
-  
+
   //Test post to show for preview.
   const previewPost = {
     id: null,
@@ -44,7 +44,7 @@ export default function CreatePost() {
     startTime: dayjs().toISOString(),
     endTime: dayjs().add(1, 'hour').toISOString(),
     description: description,
-    tags: ["Tag1", "Tag2"]//tags,
+    tags: ['Tag1', 'Tag2'], //tags,
   };
 
   const handleSubmit = async (e) => {
@@ -79,7 +79,7 @@ export default function CreatePost() {
 
   return (
     <Container component="main" maxWidth="xs">
-    {/* {<PostCardPreview/>} */}
+      {/* {<PostCardPreview/>} */}
       <Box
         sx={{
           marginTop: 1,
