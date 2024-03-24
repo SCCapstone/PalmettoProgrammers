@@ -10,7 +10,7 @@ using FU.API.Helpers;
 
 public class SearchService : CommonService, ISearchService
 {
-    private static readonly DateTime DefaultStartTime = DateTime.MinValue;
+    private static readonly DateTime DefaultTime = DateTime.MinValue;
 
     private readonly AppDbContext _dbContext;
 
@@ -113,7 +113,8 @@ public class SearchService : CommonService, ISearchService
         {
             PostSortType.NewestCreated => (post) => post.CreatedAt,
             PostSortType.Title => (post) => post.NormalizedTitle,
-            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? DefaultStartTime,
+            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? DefaultTime,
+            PostSortType.ChatActivity => (post) => post.Chat.LastMessageAt ?? DefaultTime,
             _ => (post) => post.CreatedAt,
         };
     }
@@ -162,6 +163,7 @@ public class SearchService : CommonService, ISearchService
         {
             dbQuery = _dbContext.Posts
                 .Where(p => p.Chat.Members.Any(m => m.UserId == query.UserId))
+                .Include(p => p.Chat).ThenInclude(c => c.LastMessage).ThenInclude(m => m.Sender)
                 .Select(p => p);
         }
         else

@@ -107,6 +107,7 @@ public static class Mapper
         query.SortType = arr[0] switch
         {
             "username" => UserSortType.Username,
+            "chatactivity" => UserSortType.ChatActivity,
             _ => UserSortType.Username,
         };
 
@@ -177,6 +178,7 @@ public static class Mapper
             "soonest" => PostSortType.EarliestToScheduledTime,
             "newest" => PostSortType.NewestCreated,
             "title" => PostSortType.Title,
+            "chatactivity" => PostSortType.ChatActivity,
             _ => PostSortType.NewestCreated
         };
 
@@ -207,6 +209,7 @@ public static class Mapper
             Creator = post.Creator == null ? new UserProfile { Username = "Deleted User" } : post.Creator.ToProfile(),
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
             HasJoined = hasJoined,
+            LastMessage = post.Chat.LastMessage == null ? null : post.Chat.LastMessage.ToDto(),
         };
     }
 
