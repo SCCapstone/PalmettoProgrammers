@@ -89,10 +89,10 @@ export default function CreatePost() {
           }}
         >
           <TextField
-            required 
+            required
             fullWidth
             id="searchGames"
-            label="Title" 
+            label="Title"
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}

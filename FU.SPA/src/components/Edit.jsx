@@ -22,8 +22,8 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
 
-window.gameDetails = "";
-window.tagsDetails = "";
+window.gameDetails = '';
+window.tagsDetails = '';
 
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
@@ -76,7 +76,7 @@ export default function Edit({ postId }) {
     /*
      * Purpose is to fix a bug that requires the values to change.
      */
-    if(!areValuesSame()) {
+    if (!areValuesSame()) {
       setTags(null);
       setTags(postsDetails.tags);
       setGame(null);
@@ -120,19 +120,16 @@ export default function Edit({ postId }) {
    * Checking if the values are the same as the ones given
    */
   const areValuesSame = () => {
-    if (
-      postsDetails.game !== game ||
-      !compareTags(postsDetails.tags, tags)
-    ) {
+    if (postsDetails.game !== game || !compareTags(postsDetails.tags, tags)) {
       return true;
     }
     return false;
   };
-  /* 
+  /*
    * Comparing two arrays (tags) to see if they're the same.
    */
   const compareTags = (tags1, tags2) => {
-    if(tags1.length !== tags2.length) {
+    if (tags1.length !== tags2.length) {
       return false;
     }
     for (var i = 0; i < tags1.length; i++) {
@@ -142,7 +139,6 @@ export default function Edit({ postId }) {
     }
     return false;
   };
-  
 
   return (
     <Container component="main" maxWidth="xs">
@@ -182,10 +178,10 @@ export default function Edit({ postId }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-          {postsDetails.game !== undefined && (
-            <GameSelector initialValue={gameDetails} onChange={setGame} />
-          )}
-            </Grid>
+            {postsDetails.game !== undefined && (
+              <GameSelector initialValue={gameDetails} onChange={setGame} />
+            )}
+          </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
@@ -199,8 +195,8 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          {postsDetails.tags !== undefined &&
-            (<TagsSelector initialValue={tagsDetails} onChange={setTags} />
+          {postsDetails.tags !== undefined && (
+            <TagsSelector initialValue={tagsDetails} onChange={setTags} />
           )}
           <Box
             sx={{
@@ -253,7 +249,7 @@ const GameSelector = ({ onChange, initialValue }) => {
           setValue(gameChoice);
         }
       } catch (e) {
-        console.error("Problem getting games", e);
+        console.error('Problem getting games', e);
       }
     };
 
@@ -320,11 +316,13 @@ const TagsSelector = ({ onChange, initialValue }) => {
         //if tags aren't null and isn't empty string.
         if (initialValue && initialValue.length > 0) {
           // const initialTags = TagService.searchTags('').then((tags) => setTagOptions(tags)).filter(tag => initialValue.includes(tag.name));
-          const initialTags = tags.filter(tag => initialValue.includes(tag.name));
+          const initialTags = tags.filter((tag) =>
+            initialValue.includes(tag.name),
+          );
           setValue(initialTags);
         }
       } catch (e) {
-        console.error("Something went wrong getting tags: ", e);
+        console.error('Something went wrong getting tags: ', e);
       }
     };
     getTags();
