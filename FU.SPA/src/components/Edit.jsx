@@ -30,6 +30,7 @@ export default function Edit({ postId }) {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const [editPostDetails, setEditPostDetails] = useState({});
 
   const { user } = useContext(UserContext);
 
@@ -37,7 +38,12 @@ export default function Edit({ postId }) {
     const init = async () => {
       try {
         const postDetails = await PostService.getPostDetails(postId);
-        if (user.id !== postDetails.creator.id) {
+        setEditPostDetails(postDetails);
+        setTitle(postDetails.title);
+        setDescription(postDetails.description);
+        setStartTime(dayjs(postDetails.startTime));
+        setEndTime(dayjs(postDetails.endTime));
+        if (user && user.id !== postDetails.creator.id) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
@@ -47,7 +53,7 @@ export default function Edit({ postId }) {
     };
 
     init();
-  });
+  }, [postId, user, navigate]);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
@@ -124,7 +130,12 @@ export default function Edit({ postId }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector onChange={setGame} />
+            {editPostDetails.game !== undefined && (
+              <GameSelector
+                onChange={setGame}
+                initialValue={editPostDetails.game}
+              />
+            )}
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -139,7 +150,12 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector onChange={setTags} />
+          {editPostDetails.tags !== undefined && (
+            <TagsSelector
+              onChange={setTags}
+              initialValues={editPostDetails.tags}
+            />
+          )}
           <Box
             sx={{
               display: 'flex',
@@ -175,13 +191,27 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ onChange }) => {
+const GameSelector = ({ onChange, initialValue }) => {
   const [gammeOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
-  }, []);
+    const fetchGames = async () => {
+      try {
+        const games = await GameService.searchGames('');
+        setGameOptions(games);
+        const gameOption = games.find((g) => g.name === initialValue);
+        if (gameOption) {
+          setValue(gameOption);
+          onChange(gameOption);
+        }
+      } catch (error) {
+        console.error('Error fetching games:', error);
+      }
+    };
+
+    fetchGames();
+  }, [initialValue, onChange]);
 
   const onInputChange = (event, newValue) => {
     setValue(newValue);
@@ -228,13 +258,29 @@ const GameSelector = ({ onChange }) => {
   );
 };
 
-const TagsSelector = ({ onChange }) => {
+const TagsSelector = ({ onChange, initialValues }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
 
   useEffect(() => {
-    TagService.searchTags('').then((tags) => setTagOptions(tags));
-  }, []);
+    const fetchTags = async () => {
+      try {
+        const tags = await TagService.searchTags('');
+        setTagOptions(tags);
+        if (initialValues && initialValues.length > 0) {
+          const initialTags = tags.filter((tag) =>
+            initialValues.includes(tag.name),
+          );
+          setValue(initialTags);
+          onChange(initialTags);
+        }
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+
+    fetchTags();
+  }, [initialValues, onChange]);
 
   const onInputChange = (event, newValues) => {
     for (const newValue of newValues) {
