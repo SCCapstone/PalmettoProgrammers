@@ -27,7 +27,12 @@ public class AccountServiceTests : IDisposable
         _dbContext.SaveChanges();
 
         // Setup and create account service
-        var configPairs = new Dictionary<string, string?> { { "JWT_SECRET", "1234567890" } };
+        var configPairs = new Dictionary<string, string?>
+        {
+            { "JWT_SECRET", "1234567890" },
+            { "EMAIL_CONNECTION_STRING", "endpoint=https://fake.com/;accesskey=Pdada/dsadasd==" },
+            { "BASE_SPA_URL", "http://localhost:5173/" },
+        };
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(configPairs)
             .Build();
