@@ -182,7 +182,6 @@ const GameSelector = ({ onChange }) => {
     const fetchGameOptions = async () => {
       try {
         GameService.searchGames('').then((games) => setGameOptions(games));
-        setValue(test);
         GameService.searchGames('').then((games) => setGameOptions(games));
       } catch (err) {
         console.log(err);
