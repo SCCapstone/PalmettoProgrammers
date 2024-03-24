@@ -16,7 +16,6 @@ const config = {
     { value: 'soonest', label: 'Start Time' },
     { value: 'title', label: 'Title' },
     { value: 'players', label: '# of Players'},
-    // TODO(epadams) add num players, already present in api
   ],
   USER_SORT_OPTIONS: [
     { value: 'username', label: 'Name' },
