@@ -21,6 +21,10 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PostCard from './PostCard';
+import UserService from '../services/userService';
+
+window.newTag = [""];
+window.gameDetails = "";
 
 export default function CreatePost() {
   const [game, setGame] = useState(null);
@@ -37,21 +41,27 @@ export default function CreatePost() {
   
   //var tagIds = [];
   //Test post to show for preview.
-  
+  // const getUser= async (e) => {
+  //   try {
+  //     const userId = await UserService.getUserIdJson();
+  //   } catch (e) {
+
+  //   }
+  // };
   //var previewPost;
   const previewPost = {
     id: 100,//newPost?.id,
     creator: {
       id: 100,
-      username: 'previewTest_user',
+      username: 'Preview Test User',
       pfpUrl: 'previewTest_profile_pic',
     }, //post
     title: title,
-    game: 'Preview Test Game',//findGame.id,
+    game: post.game,//'Preview Test Game',//findGame.id,//game,//gamedetails,
     startTime: startTime !== null ? startTime.toISOString() : null,
     endTime: endTime !== null ? endTime.toISOString() : null,
     description: description,
-    tags: tags //tagIds,
+    tags: tags//["usa", "fun"] //tagIds,//post.tags,//
   };
 
   const handleSubmit = async (e) => {
@@ -66,14 +76,17 @@ export default function CreatePost() {
 
     setFindGame(await GameService.findOrCreateGameByTitle(game.name));
 
-    setPost({
+    const post ={
       title: title,
       description: description,
       startTime: startTime !== null ? startTime.toISOString() : null,
       endTime: endTime !== null ? endTime.toISOString() : null,
       tagIds: tagIds,
       gameId: findGame.id,
-    });
+    };
+    gameDetails = post.gameId;
+    // gameDetails = findGame.id;
+    // newTag = tagIds;
 
     try {
       setNewPost(await PostService.createPost(post));
@@ -137,7 +150,7 @@ export default function CreatePost() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector onChange={setGame} />
+            <GameSelector initialValue={gameDetails} onChange={setGame} />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -212,19 +225,33 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ onChange }) => {
-  const [gammeOptions, setGameOptions] = useState([]);
+const GameSelector = ({ onChange, initialValue }) => {
+  const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
-  }, []);
+    const getGames = async () => {
+      try {
+        const game = GameService.searchGames('').then((games) => setGameOptions(games));
+        setGameOptions(game);
+        const gameChoice = game.find((g) => g.name === initialValue);
+        if(gameChoice) {
+          setValue(gameChoice);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    getGames();
+  }, [initialValue]);
 
   const onInputChange = (event, newValue) => {
     console.log('newValue');
     console.log(newValue);
 
     setValue(newValue);
+    //gameDetails = newValue;
     onChange(newValue);
   };
 
@@ -247,11 +274,11 @@ const GameSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       clearOnBlur
       value={value}
       onChange={onInputChange}
-      options={gammeOptions}
-      disableCloseOnSelect
+      options={gameOptions}
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
       isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -288,6 +315,7 @@ const TagsSelector = ({ onChange }) => {
     }
 
     setValue(newValues);
+    newtag = newValues;
     onChange(newValues);
   };
 
@@ -310,6 +338,7 @@ const TagsSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       multiple
       clearOnBlur
       value={value}
