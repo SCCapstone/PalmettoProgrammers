@@ -23,12 +23,12 @@ public class Message
     /// <summary>
     /// Gets or sets the sender of the message.
     /// </summary>
-    public ApplicationUser Sender { get; set; } = new ApplicationUser();
+    public ApplicationUser? Sender { get; set; } = new ApplicationUser();
 
     /// <summary>
     /// Gets or sets the id of the sender.
     /// </summary>
-    public int SenderId { get; set; }
+    public int? SenderId { get; set; }
 
     /// <summary>
     /// Gets or sets the chat the message belongs to.

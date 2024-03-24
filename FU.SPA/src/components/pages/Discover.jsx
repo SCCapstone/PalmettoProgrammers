@@ -2,14 +2,12 @@ import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 import {
   Typography,
-  Pagination,
   MenuItem,
   InputLabel,
   FormControl,
   Select,
   Button,
 } from '@mui/material';
-import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector, SortOptionsSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
@@ -26,6 +24,7 @@ import {
 import './Discover.css';
 import TextSearch from '../TextSearch';
 import config from '../../config';
+import SearchResults from '../SearchResults';
 
 const paramKey = {
   endDate: 'endDate',
@@ -292,7 +291,7 @@ export default function Discover() {
   // Method for adding a tag id to the search
   const onTagClick = (tagTitle) => {
     const tag = tagOptions.find((tag) => tag.name === tagTitle);
-    if (tag) {
+    if (tag && !tags.some((t) => t.name === tag.name)) {
       setTags([...tags, tag]);
       setPage(1);
     }
@@ -300,9 +299,11 @@ export default function Discover() {
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
-      return <Posts posts={posts} onTagClick={onTagClick} />;
+      return (
+        <Posts posts={posts} onTagClick={onTagClick} showJoinedStatus={true} />
+      );
     } else if (tabOption === tabOptions.Users) {
-      return <Users users={players} />;
+      return <Users users={players} showRelationStatus={true} />;
     }
   };
 
@@ -352,7 +353,7 @@ export default function Discover() {
           textAlign: 'left',
           width: '200pt',
           maxWidth: '300px',
-          minWidth: '190pt',
+          minWidth: '200pt',
         }}
       >
         {renderTabSelectors()}
@@ -444,15 +445,13 @@ export default function Discover() {
             marginRight: '150px',
           }}
         >
-          <Stack spacing={2}>
-            <Typography>Page: {page}</Typography>
-            <Pagination
-              count={Math.ceil(totalResults / queryLimit)}
-              page={page}
-              onChange={(_, value) => setPage(value)}
-              color="secondary"
-            />
-          </Stack>
+          <SearchResults
+            page={page}
+            count={Math.ceil(totalResults / queryLimit)}
+            totalResults={totalResults}
+            queryLimit={queryLimit}
+            setPage={setPage}
+          />
         </div>
       </div>
     </div>

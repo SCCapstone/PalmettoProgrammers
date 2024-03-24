@@ -1,12 +1,4 @@
-import {
-  Select,
-  Typography,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Pagination,
-} from '@mui/material';
-import Stack from '@mui/material/Stack';
+import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import UserService from '../../services/userService';
 import RelationService from '../../services/relationService';
@@ -16,6 +8,7 @@ import './Social.css';
 import { useSearchParams } from 'react-router-dom';
 import UserContext from '../../context/userContext';
 import TextSearch from '../TextSearch';
+import SearchResults from '../SearchResults';
 
 const paramKey = {
   tabOption: 'o',
@@ -85,7 +78,7 @@ export default function Social() {
         try {
           const response = await UserService.getConnectedPosts(query);
           setPosts(response.data);
-          setTotalResults(response.totalCount || 0);
+          setTotalResults(response.totalCount);
         } catch (error) {
           console.error('Error', error);
         }
@@ -97,7 +90,7 @@ export default function Social() {
         try {
           const response = await RelationService.getRelations(user.id, query);
           setUsers(response.data);
-          setTotalResults(response.totalCount || 0);
+          setTotalResults(response.totalCount);
         } catch (error) {
           console.error('Error', error);
         }
@@ -114,9 +107,9 @@ export default function Social() {
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
-      return <Posts posts={posts} />;
+      return <Posts posts={posts} showJoinedStatus={false} />;
     } else {
-      return <Users users={users} />;
+      return <Users users={users} showRelationStatus={false} />;
     }
   };
 
@@ -193,15 +186,13 @@ export default function Social() {
             marginRight: '150px',
           }}
         >
-          <Stack spacing={2}>
-            <Typography>Page: {page}</Typography>
-            <Pagination
-              count={Math.ceil(totalResults / queryLimit)}
-              page={page}
-              onChange={(_, value) => setPage(value)}
-              color="secondary"
-            />
-          </Stack>
+          <SearchResults
+            page={page}
+            count={Math.ceil(totalResults / queryLimit)}
+            totalResults={totalResults}
+            queryLimit={queryLimit}
+            setPage={setPage}
+          />
         </div>
       </div>
     </div>

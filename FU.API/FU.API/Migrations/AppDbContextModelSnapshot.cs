@@ -30,6 +30,9 @@ namespace FU.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
+                    b.Property<bool>("AccountConfirmed")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Bio")
                         .IsRequired()
                         .HasColumnType("text");
@@ -47,6 +50,10 @@ namespace FU.API.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("NormalizedBio")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedEmail")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -121,6 +128,9 @@ namespace FU.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ApplicationUserUserId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ChatId")
                         .HasColumnType("integer");
 
@@ -128,6 +138,8 @@ namespace FU.API.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserUserId");
 
                     b.HasIndex("ChatId");
 
@@ -237,6 +249,9 @@ namespace FU.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ApplicationUserUserId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
 
@@ -247,6 +262,8 @@ namespace FU.API.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserUserId");
 
                     b.HasIndex("GroupId");
 
@@ -273,7 +290,7 @@ namespace FU.API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("SenderId")
+                    b.Property<int?>("SenderId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -299,7 +316,7 @@ namespace FU.API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -425,7 +442,8 @@ namespace FU.API.Migrations
                 {
                     b.HasOne("FU.API.Models.ApplicationUser", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("FU.API.Models.Message", "LastMessage")
                         .WithOne()
@@ -438,6 +456,10 @@ namespace FU.API.Migrations
 
             modelBuilder.Entity("FU.API.Models.ChatMembership", b =>
                 {
+                    b.HasOne("FU.API.Models.ApplicationUser", null)
+                        .WithMany("Chats")
+                        .HasForeignKey("ApplicationUserUserId");
+
                     b.HasOne("FU.API.Models.Chat", "Chat")
                         .WithMany("Members")
                         .HasForeignKey("ChatId")
@@ -445,7 +467,7 @@ namespace FU.API.Migrations
                         .IsRequired();
 
                     b.HasOne("FU.API.Models.ApplicationUser", "User")
-                        .WithMany("Chats")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -489,6 +511,10 @@ namespace FU.API.Migrations
 
             modelBuilder.Entity("FU.API.Models.GroupMembership", b =>
                 {
+                    b.HasOne("FU.API.Models.ApplicationUser", null)
+                        .WithMany("Groups")
+                        .HasForeignKey("ApplicationUserUserId");
+
                     b.HasOne("FU.API.Models.Group", "Group")
                         .WithMany("Memberships")
                         .HasForeignKey("GroupId")
@@ -496,7 +522,7 @@ namespace FU.API.Migrations
                         .IsRequired();
 
                     b.HasOne("FU.API.Models.ApplicationUser", "User")
-                        .WithMany("Groups")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -517,8 +543,7 @@ namespace FU.API.Migrations
                     b.HasOne("FU.API.Models.ApplicationUser", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Chat");
 
@@ -536,8 +561,7 @@ namespace FU.API.Migrations
                     b.HasOne("FU.API.Models.ApplicationUser", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("FU.API.Models.Game", "Game")
                         .WithMany()

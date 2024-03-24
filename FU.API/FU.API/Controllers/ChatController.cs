@@ -33,7 +33,7 @@ public class ChatController : ControllerBase
     [Route("{chatId}/messages")]
     public async Task<IActionResult> SaveMessage(int chatId, [FromBody] string message)
     {
-        var user = await _chatService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _chatService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var chat = await _chatService.GetChat(chatId);
 
@@ -73,7 +73,7 @@ public class ChatController : ControllerBase
     [Route("{chatId}/messages")]
     public async Task<IActionResult> GetMessages(int chatId, [FromQuery] int offset = 1, [FromQuery] int limit = 10)
     {
-        var user = await _chatService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _chatService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var chat = await _chatService.GetChat(chatId);
 
@@ -106,7 +106,7 @@ public class ChatController : ControllerBase
     [Route("{chatId}")]
     public async Task<IActionResult> GetChat(int chatId)
     {
-        var user = await _chatService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _chatService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var chat = await _chatService.GetChat(chatId);
         if (chat is null)
@@ -136,7 +136,7 @@ public class ChatController : ControllerBase
     [Route("direct/{otherUserId}")]
     public async Task<IActionResult> GetDirectChat(int otherUserId)
     {
-        var user = await _chatService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _chatService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var otherUser = await _chatService.GetUser(otherUserId);
 

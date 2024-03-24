@@ -166,7 +166,7 @@ const UserProfile = () => {
             </div>
           </div>
           <div className="body">
-            {isOwnProfile && (
+            {!isOwnProfile && (
               <SocialRelationActionButton requesteeId={userProfile?.id} />
             )}
             {renderBio()}

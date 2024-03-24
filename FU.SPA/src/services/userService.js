@@ -72,10 +72,6 @@ const updateUserProfile = async (data) => {
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    throw new Error('Error in updating information');
-  }
-
   return response.json();
 };
 
@@ -91,7 +87,24 @@ const updateAccountInfo = async (data) => {
   });
 
   if (!response.ok) {
-    throw new Error('Error in updating account information');
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in resending confirmation');
+  }
+};
+
+// Delete account
+const deleteAccount = async (credentials) => {
+  const response = await fetch(`${API_BASE_URL}/Accounts`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      ...AuthService.getAuthHeader(),
+    },
+    body: JSON.stringify(credentials),
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in deleting account');
   }
 };
 
@@ -102,5 +115,6 @@ const UserService = {
   getUserIdJson,
   updateUserProfile,
   updateAccountInfo,
+  deleteAccount,
 };
 export default UserService;

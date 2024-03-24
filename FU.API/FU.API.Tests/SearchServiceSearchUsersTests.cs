@@ -27,7 +27,7 @@ public class SearchServiceSearchUsersTests : IDisposable
         _dbContext.SaveChanges();
 
         _searchService = new SearchService(_dbContext);
-        _userService = new UserService(_dbContext, _searchService);
+        _userService = new UserService(_dbContext);
     }
 
     public void Dispose()
@@ -55,16 +55,19 @@ public class SearchServiceSearchUsersTests : IDisposable
         var user1 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials()
         {
             Username = "User1",
+            Email = "fake1@email.com",
             Password = "Pass1"
         });
         var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials()
         {
             Username = "User2",
+            Email = "fake2@email.com",
             Password = "Pass2"
         });
         var user3 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials()
         {
             Username = "User3",
+            Email = "fake3@email.com",
             Password = "Pass3"
         });
         await _userService.UpdateUserProfile(new UserProfile() { Bio = "Bio3", Id = user3.UserId });

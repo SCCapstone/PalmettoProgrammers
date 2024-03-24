@@ -7,7 +7,6 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using FU.API.Validation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -28,7 +27,7 @@ public class RelationsController : ControllerBase
     [HttpPost("{userId}/{userAction}")]
     public async Task<IActionResult> HandleRelationAction(int userId, string userAction)
     {
-        var currentUser = await _relationService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var currentUser = await _relationService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         // Try to get the value from userAction as an enum
         if (!Enum.TryParse<UserRelationAction>(userAction, ignoreCase: true, out var action))
@@ -44,7 +43,7 @@ public class RelationsController : ControllerBase
     [HttpDelete("{userId}")]
     public async Task<IActionResult> DeleteRelation(int userId)
     {
-        var user = await _relationService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _relationService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         await _relationService.RemoveRelation(user.UserId, userId);
         return Ok();
@@ -54,17 +53,10 @@ public class RelationsController : ControllerBase
     [HttpGet("{userId}/status")]
     public async Task<IActionResult> GetRelationStatus(int userId)
     {
-        var currentUser = await _relationService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var currentUser = await _relationService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
-        var relation = await _relationService.GetRelation(currentUser.UserId, userId);
-
-        if (relation is null)
-        {
-            relation = new UserRelation
-            {
-                Status = UserRelationStatus.None
-            };
-        }
+        var relation = await _relationService.GetRelation(currentUser.UserId, userId)
+            ?? new UserRelation { Status = UserRelationStatus.None };
 
         var response = relation.ToDto();
         return Ok(response);
@@ -75,7 +67,7 @@ public class RelationsController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetRelations(int userId, [RelationStatus] string relationStatus, [FromQuery] UserSearchRequestDTO request)
     {
-        var currentUser = await _relationService.GetCurrentUser(User);
+        var currentUser = await _relationService.GetAuthorizedUser(User);
         var userIsRequester = currentUser?.UserId == userId;
 
         var status = Enum.Parse<UserRelationStatus>(relationStatus, ignoreCase: true);
