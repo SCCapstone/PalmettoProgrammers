@@ -21,10 +21,6 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PostCard from './PostCard';
-import UserService from '../services/userService';
-
-window.newTag = [""];
-window.gameDetails = "";
 
 export default function CreatePost() {
   const [game, setGame] = useState(null);
@@ -34,34 +30,21 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
-  const [newPost, setNewPost] = useState();
-  const [findGame, setFindGame] = useState();
-  const [newTag, setNewTag] = useState();
-  const [post, setPost] = useState([]);
   
-  //var tagIds = [];
   //Test post to show for preview.
-  // const getUser= async (e) => {
-  //   try {
-  //     const userId = await UserService.getUserIdJson();
-  //   } catch (e) {
-
-  //   }
-  // };
-  //var previewPost;
   const previewPost = {
-    id: 100,//newPost?.id,
+    id: null,
     creator: {
-      id: 100,
-      username: 'Preview Test User',
+      id: null,
+      username: 'Your username here',
       pfpUrl: 'previewTest_profile_pic',
-    }, //post
+    },
     title: title,
-    game: post.game,//'Preview Test Game',//findGame.id,//game,//gamedetails,
-    startTime: startTime !== null ? startTime.toISOString() : null,
-    endTime: endTime !== null ? endTime.toISOString() : null,
+    game: 'Game Name Here',
+    startTime: dayjs().toISOString(),
+    endTime: dayjs().add(1, 'hour').toISOString(),
     description: description,
-    tags: tags//["usa", "fun"] //tagIds,//post.tags,//
+    tags: ["Tag1", "Tag2"]//tags,
   };
 
   const handleSubmit = async (e) => {
@@ -70,13 +53,13 @@ export default function CreatePost() {
     let tagIds = [];
 
     for (const tag of tags) {
-      setNewTag(await TagService.findOrCreateTagByName(tag.name));
+      const newTag = await TagService.findOrCreateTagByName(tag.name);
       tagIds.push(newTag.id);
     }
 
-    setFindGame(await GameService.findOrCreateGameByTitle(game.name));
+    var findGame = await GameService.findOrCreateGameByTitle(game.name);
 
-    const post ={
+    const post = {
       title: title,
       description: description,
       startTime: startTime !== null ? startTime.toISOString() : null,
@@ -84,36 +67,19 @@ export default function CreatePost() {
       tagIds: tagIds,
       gameId: findGame.id,
     };
-    gameDetails = post.gameId;
-    // gameDetails = findGame.id;
-    // newTag = tagIds;
 
     try {
-      setNewPost(await PostService.createPost(post));
+      const newPost = await PostService.createPost(post);
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
       window.alert('Error creating post');
       console.log(e);
     }
-
-    // previewPost = {
-    //   id: newPost.id,
-    //   creator: {
-    //     id: 100,
-    //     username: 'previewTest_user',
-    //     pfpUrl: 'previewTest_profile_pic',
-    //   },
-    //   title: title,
-    //   game: findGame.id,
-    //   startTime: startTime !== null ? startTime.toISOString() : null,
-    //   endTime: endTime !== null ? endTime.toISOString() : null,
-    //   description: description,
-    //   tags: tagIds,
-    // };
   };
 
   return (
     <Container component="main" maxWidth="xs">
+    {/* {<PostCardPreview/>} */}
       <Box
         sx={{
           marginTop: 1,
@@ -136,8 +102,8 @@ export default function CreatePost() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            //mt: 3,
-            gap: .9,
+            mt: 3,
+            gap: 2,
           }}
         >
           <TextField
@@ -150,7 +116,7 @@ export default function CreatePost() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector initialValue={gameDetails} onChange={setGame} />
+            <GameSelector onChange={setGame} />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -171,6 +137,11 @@ export default function CreatePost() {
               display: 'flex',
             }}
           >
+            <Typography component="h1" variant="h6">
+              {' '}
+              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
+              Description
+            </Typography>
           </Box>
           <TextField
             label="Description"
@@ -183,7 +154,7 @@ export default function CreatePost() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ }}
+            sx={{ mt: 3, mb: 2 }}
           >
             Create Post
           </Button>
@@ -192,31 +163,12 @@ export default function CreatePost() {
       <Box
         sx={{
           display: 'flex',
-          //flexDirection: 'column',
           justifyContent: 'center',
           mt: 4,
         }}
       >
         <PostCard post={previewPost} showActions={false} />
       </Box>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-        {/* {posts.map((post) => ( //original mapping of posts
-              <PostCard key={post.id} post={post} />
-            ))} 
-            I need to use the postservice.js. Maybe*, create a function, which pulls
-            the last id index and then adds + 1 to it (will be the next id, but could cause a problem with pulling), 
-            which will let me, possibly, pull the card that is in the process of being created by the user.
-            Might need to create a post using const newPost = await PostService.createPost(post); so that I'm able
-            to pass the information and create the post. I may need to have default values for it, or I can 
-            try and pass default values somehow. Wrap it in a try catch.
-
-            May just create a preview card and copy a lot of the postcard.jsx code and remove what isn't necessary.
-        */}
-        {/* <PostCard key={parseInt(5)} post={parseInt(5)} /> */}
-        {/* <PostCard key={"5"} post={"5"} /> */}
-        {/* Passing the postcard information to const PostCard = ({ post, showActions }) => {
-            and in PostCard CardActions section onClick={() => navigate(`/posts/${post.id}`)} */}
-      </div>
     </Container>
   );
 }
@@ -225,33 +177,19 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ onChange, initialValue }) => {
-  const [gameOptions, setGameOptions] = useState([]);
+const GameSelector = ({ onChange }) => {
+  const [gammeOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    const getGames = async () => {
-      try {
-        const game = GameService.searchGames('').then((games) => setGameOptions(games));
-        setGameOptions(game);
-        const gameChoice = game.find((g) => g.name === initialValue);
-        if(gameChoice) {
-          setValue(gameChoice);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    getGames();
-  }, [initialValue]);
+    GameService.searchGames('').then((games) => setGameOptions(games));
+  }, []);
 
   const onInputChange = (event, newValue) => {
     console.log('newValue');
     console.log(newValue);
 
     setValue(newValue);
-    //gameDetails = newValue;
     onChange(newValue);
   };
 
@@ -278,7 +216,7 @@ const GameSelector = ({ onChange, initialValue }) => {
       clearOnBlur
       value={value}
       onChange={onInputChange}
-      options={gameOptions}
+      options={gammeOptions}
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
       isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -315,7 +253,6 @@ const TagsSelector = ({ onChange }) => {
     }
 
     setValue(newValues);
-    newtag = newValues;
     onChange(newValues);
   };
 
@@ -338,7 +275,6 @@ const TagsSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
-      autoHighlight
       multiple
       clearOnBlur
       value={value}
