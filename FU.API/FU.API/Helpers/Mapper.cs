@@ -12,7 +12,7 @@ using FU.API.DTOs;
 
 public static class Mapper
 {
-    public static UserProfile ToProfile(this ApplicationUser appUser)
+    public static UserProfile ToProfile(this ApplicationUser appUser, Message? lastChatMessage = null)
     {
         return new UserProfile()
         {
@@ -24,6 +24,7 @@ public static class Mapper
             IsOnline = appUser.IsOnline,
             FavoriteGames = appUser.FavoriteGames.Select(g => g.Game).ToList(),
             FavoriteTags = appUser.FavoriteTags.Select(t => t.Tag).ToList(),
+            LastMessage = lastChatMessage == null ? null : lastChatMessage.ToDto(),
         };
     }
 

@@ -42,6 +42,8 @@ export default function Chat({ chatId }) {
     };
 
     const handleReceiveMessage = (receivedMessage) => {
+      // set the created at to be a new day js object
+      receivedMessage.createdAt = new Date(receivedMessage.createdAt);
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
 
       // Return if user is the sender

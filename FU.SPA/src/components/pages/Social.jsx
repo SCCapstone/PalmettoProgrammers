@@ -9,12 +9,22 @@ import { useSearchParams } from 'react-router-dom';
 import UserContext from '../../context/userContext';
 import TextSearch from '../TextSearch';
 import SearchResults from '../SearchResults';
+import { SortOptionsSelector } from '../Selectors';
+import config from '../../config';
 
 const paramKey = {
   tabOption: 'o',
   relationOption: 'r',
   page: 'page',
 };
+
+const chatActivitySortOption = {
+  value: 'chatactivity',
+  label: 'Chat Activity',
+};
+
+const postSortOptions = config.POST_SORT_OPTIONS.concat(chatActivitySortOption);
+const userSortOptions = config.USER_SORT_OPTIONS.concat(chatActivitySortOption);
 
 const tabOptions = {
   Posts: 'Posts',
@@ -44,31 +54,14 @@ export default function Social() {
   const [relationOption, setRelationOption] = useState(initialRelation);
   const [page, setPage] = useState(initialPage);
 
-  const { user } = useContext(UserContext);
+  const [postSortOption, setPostSortOption] = useState(
+    searchParams.get('psort') || null,
+  );
+  const [userSortOption, setUserSortOption] = useState(
+    searchParams.get('usort') || null,
+  );
 
-  useEffect(() => {
-    const loadContent = async () => {
-      if (tabOption === tabOptions.Posts) {
-        const query = {
-          limit: queryLimit,
-          page: page,
-        };
-        const response = await UserService.getConnectedPosts(query);
-        setPosts(response.data);
-        setTotalResults(response.totalCount);
-      } else {
-        const query = {
-          relation: relationOption,
-          limit: queryLimit,
-          page: page,
-        };
-        const response = await RelationService.getRelations(user.id, query);
-        setUsers(response.data);
-        setTotalResults(response.totalCount);
-      }
-    };
-    loadContent();
-  }, [tabOption, searchText, relationOption, user.id, page]);
+  const { user } = useContext(UserContext);
 
   // use effect to update search params
   useEffect(() => {
@@ -81,10 +74,20 @@ export default function Social() {
           params.set('o', tabOption);
           params.set('page', page);
 
+          if (postSortOption) {
+            params.set('psort', postSortOption);
+          }
+
+          if (userSortOption) {
+            params.set('usort', userSortOption);
+          }
+
           if (tabOption === tabOptions.Posts) {
             params.delete('r');
+            params.delete('usort');
           } else {
             params.set('r', relationOption);
+            params.delete('psort');
           }
           return params;
         },
@@ -96,6 +99,9 @@ export default function Social() {
       if (tabOption === tabOptions.Posts) {
         const query = {
           keywords: searchText,
+          limit: queryLimit,
+          page: page,
+          sort: postSortOption,
         };
 
         try {
@@ -109,6 +115,9 @@ export default function Social() {
         const query = {
           keywords: searchText,
           relation: relationOption,
+          limit: queryLimit,
+          page: page,
+          sort: userSortOption,
         };
         try {
           const response = await RelationService.getRelations(user.id, query);
@@ -126,7 +135,16 @@ export default function Social() {
     };
 
     submitSearch();
-  }, [tabOption, relationOption, searchText, user.id, setSearchParams, page]);
+  }, [
+    tabOption,
+    relationOption,
+    searchText,
+    user.id,
+    setSearchParams,
+    page,
+    postSortOption,
+    userSortOption,
+  ]);
 
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
@@ -134,6 +152,34 @@ export default function Social() {
     } else {
       return <Users users={users} showRelationStatus={false} />;
     }
+  };
+
+  const renderPostSortOptions = () => {
+    return (
+      <SortOptionsSelector
+        initialValue={postSortOption}
+        options={postSortOptions}
+        onChange={(newValue) => {
+          console.log(newValue);
+          setPostSortOption(newValue);
+          setPage(1);
+        }}
+      />
+    );
+  };
+
+  const renderUserSortOptions = () => {
+    return (
+      <SortOptionsSelector
+        initialValue={userSortOption}
+        options={userSortOptions}
+        onChange={(newValue) => {
+          console.log(newValue);
+          setUserSortOption(newValue);
+          setPage(1);
+        }}
+      />
+    );
   };
 
   const renderTabSelectors = () => {
@@ -195,10 +241,14 @@ export default function Social() {
         {renderTabSelectors()}
       </div>
       <div>
-        <TextSearch.SearchBar
-          searchText={searchText}
-          onSearchSubmit={setSearchText}
-        />
+        <div style={{ display: 'flex', gap: '50px', justifyContent: 'center' }}>
+          <TextSearch.SearchBar
+            searchText={searchText}
+            onSearchSubmit={setSearchText}
+          />
+          {tabOption === tabOptions.Posts && renderPostSortOptions()}
+          {tabOption === tabOptions.Users && renderUserSortOptions()}
+        </div>
         {renderTabContent()}
         <div
           style={{

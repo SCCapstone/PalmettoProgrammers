@@ -16,6 +16,7 @@ const config = {
     { value: 'soonest', label: 'Start Time' },
     { value: 'title', label: 'Title' },
   ],
+  USER_SORT_OPTIONS: [{ value: 'username', label: 'Name' }],
 };
 
 export default config;
