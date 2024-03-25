@@ -24,6 +24,7 @@ export default function AccountSettings() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [changeEmailDialogOpen, setChangeEmailDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -57,9 +58,6 @@ export default function AccountSettings() {
         logout();
         navigate('/signin');
       }
-      // Not the best way to do this but it'll do for now
-      //const idJson = await UserService.getUserIdJson();
-      //navigate('/profile/' + idJson.userId);
     } catch (e) {
       alert(e);
       console.error(e);
@@ -137,6 +135,94 @@ export default function AccountSettings() {
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleDelete} autoFocus>
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  /***
+   * Dialog to change email
+   * We want to ensure that the user is sure they want to change their email
+   * TODO: look into password verification
+   *
+   * @returns The dialog to confirm the email change
+   */
+  const ChangeEmailDialog = () => {
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
+
+    const handleClose = () => {
+      setChangeEmailDialogOpen(false);
+    };
+
+    const handleEmailChange = (e) => {
+      const newEmail = e.target.value;
+      setEmail(newEmail);
+      if (newEmail.trim() === '') {
+        setEmailError('');
+      }
+    };
+
+    const handleSubmit = async () => {
+      try {
+        const data = {
+          newEmail: email,
+        };
+        await UserService.updateAccountInfo(data);
+        setChangeEmailDialogOpen(false);
+        // logout and navigate to the home page
+        localStorage.clear();
+        logout();
+        navigate('/');
+        Store.addNotification({
+          title: 'Email Change Confirmation',
+          message:
+            'Your email has been successfully changed. Please reconfirm your account using the new email.',
+          type: 'success',
+          insert: 'top',
+          container: 'top-center',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      } catch (event) {
+        const errorResponse = await JSON.parse(event.message);
+        setEmailError(errorResponse.detail);
+        console.error('Error in changing email', event.message);
+      }
+    };
+
+    // Component details
+    return (
+      <Dialog open={changeEmailDialogOpen} onClose={handleClose}>
+        <DialogTitle>Email Change</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please note that updating your email will automatically log you out
+            and require reconfirmation of your account using the new email
+            address. Are you sure you wish to proceed?
+          </DialogContentText>
+          <TextField
+            autoFocus
+            error={!!emailError}
+            helperText={emailError}
+            margin="dense"
+            id="changeEmail"
+            label="Change Email"
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit} autoFocus>
+            Change Email
           </Button>
         </DialogActions>
       </Dialog>
@@ -221,6 +307,18 @@ export default function AccountSettings() {
               >
                 Update Information
               </Button>
+              <ChangeEmailDialog />
+              <Button
+                className="change-email-button"
+                variant="contained"
+                onClick={() => setChangeEmailDialogOpen(true)}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                }}
+              >
+                Change Email
+              </Button>
             </Box>
           </div>
           <Button
@@ -228,7 +326,6 @@ export default function AccountSettings() {
             variant="contained"
             color="error"
             onClick={() => {
-              console.log('Delete Account');
               setDeleteDialogOpen(true);
             }}
             sx={{

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FU.API.Helpers;
 using FU.API.Exceptions;
+using FU.API.DTOs;
 
 /// <summary>
 /// Handles accounts endpoint requests.
@@ -29,13 +30,19 @@ public class AccountsController : ControllerBase
     /// <summary>
     /// Authenticates a user and gives them an access token.
     /// </summary>
-    /// <param name="credentials">Credentials to verify.</param>
+    /// <param name="loginDetails">Login details.</param>
     /// <returns>An object with a Jwt token and timeout.</returns>
     [HttpPost]
     [Route("auth")]
     [AllowAnonymous]
-    public async Task<IActionResult> Authenticate(Credentials credentials)
+    public async Task<IActionResult> Authenticate(LoginRequestDTO loginDetails)
     {
+        var credentials = new Credentials
+        {
+            Username = loginDetails.Username,
+            Password = loginDetails.Password
+        };
+
         var authInfo = await _accountService.GetUserAuthInfo(credentials);
 
         if (authInfo is null)
@@ -95,7 +102,7 @@ public class AccountsController : ControllerBase
     [HttpPatch]
     public async Task<IActionResult> UpdateAccountCredentials(UpdateCredentailsDTO newCredentials)
     {
-        var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _accountService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         if (newCredentials.Username is not null)
         {
@@ -120,13 +127,60 @@ public class AccountsController : ControllerBase
             await _accountService.UpdatePassword(user.UserId, newCredentials.NewPassword);
         }
 
+        if (newCredentials.NewEmail is not null)
+        {
+            await _accountService.UpdateEmail(user.UserId, newCredentials.NewEmail);
+        }
+
         return Ok();
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteAccount([FromBody] Credentials credentials)
+    // Confirm account
+    [HttpPost]
+    [Route("confirm")]
+    public async Task<IActionResult> ConfirmAccount()
     {
-        var user = await _accountService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _accountService.GetAuthorizedUser(User, false) ?? throw new UnauthorizedException();
+
+        var authInfo = await _accountService.ConfirmAccount(user.UserId);
+
+        return Ok(authInfo);
+    }
+
+    // Resend confirmation email
+    [HttpPost]
+    [Route("resendconfirmation")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationDTO dto)
+    {
+        if (dto.Username is not null)
+        {
+            var user = await _accountService.GetUser(dto.Username) ?? throw new NotFoundException("User not found", "The requested user was not found");
+            var email = user.Email ?? throw new NotFoundException("User has no email", "The requested user has no email to send a confirmation to");
+            await _accountService.ResendConfirmationEmail(email);
+
+            return Ok();
+        }
+
+        if (dto.Email is not null)
+        {
+            await _accountService.ResendConfirmationEmail(dto.Email);
+
+            return Ok();
+        }
+
+        throw new BadRequestException("No email or username was provided");
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAccount([FromBody] LoginRequestDTO loginDetails)
+    {
+        var user = await _accountService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
+        var credentials = new Credentials
+        {
+            Username = loginDetails.Username,
+            Password = loginDetails.Password
+        };
 
         await _accountService.DeleteAccount(user.UserId, credentials);
 

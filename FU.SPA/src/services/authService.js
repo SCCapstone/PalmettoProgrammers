@@ -11,7 +11,8 @@ const signIn = async (credentials) => {
   });
 
   if (!response.ok) {
-    throw new Error('Error in sign in');
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in sign in');
   }
 
   const jsonResponse = await response.json();
@@ -37,6 +38,36 @@ const signUp = async (credentials) => {
   }
 };
 
+const confirmAccount = async (token) => {
+  const response = await fetch(`${API_BASE_URL}/Accounts/confirm`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in confirming account');
+  }
+
+  const jsonResponse = await response.json();
+  return jsonResponse;
+};
+
+const resendConfirmation = async (resendConfirmationData) => {
+  const response = await fetch(`${API_BASE_URL}/Accounts/resendconfirmation`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(resendConfirmationData),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in resending confirmation');
+  }
+};
+
 const getToken = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
   return token;
@@ -47,5 +78,11 @@ const getAuthHeader = () => {
   return { Authorization: `Bearer ${token}` };
 };
 
-const AuthService = { signIn, signUp, getAuthHeader };
+const AuthService = {
+  signIn,
+  signUp,
+  getAuthHeader,
+  confirmAccount,
+  resendConfirmation,
+};
 export default AuthService;

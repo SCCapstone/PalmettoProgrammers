@@ -104,10 +104,28 @@ public class ApplicationUser
     [JsonIgnore]
     public string PasswordHash { get; set; } = string.Empty;
 
+    [NotMapped]
+    private string? _email;
+
     /// <summary>
     /// Gets or sets the user email.
     /// </summary>
     [EmailAddress]
     [JsonIgnore]
-    public string? Email { get; set; }
+    public string? Email
+    {
+        get => _email;
+        set
+        {
+            _email = value;
+            if (value is not null)
+            {
+                NormalizedEmail = value.ToUpper();
+            }
+        }
+    }
+
+    public string NormalizedEmail { get; set; } = string.Empty;
+
+    public bool AccountConfirmed { get; set; } = false;
 }

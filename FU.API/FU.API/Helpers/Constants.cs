@@ -37,6 +37,8 @@ public static class ConfigKey
     /// </summary>
     public const string ConnectionString = "CONNECTION_STRING";
 
+    public const string EmailConnectionString = "EMAIL_CONNECTION_STRING";
+
     /// <summary>
     /// The config key for an azure storage account connection string.
     /// </summary>
@@ -46,4 +48,9 @@ public static class ConfigKey
     /// The config key for the azure storage service container name that avatars are stored in.
     /// </summary>
     public const string AvatarContainerName = "AVATAR_CONTAINER_NAME";
+
+    /// <summary>
+    /// The base spa url.
+    /// </summary>
+    public const string BaseSpaUrl = "BASE_SPA_URL";
 }

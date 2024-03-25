@@ -83,7 +83,7 @@ public class UsersController : ControllerBase
     [Route("current/connected/posts")]
     public async Task<IActionResult> GetUsersAssociatedPosts([FromQuery] PostSearchRequestDTO request)
     {
-        var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _userService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var query = request.ToPostQuery();
         query.UserId = user.UserId;
@@ -107,7 +107,7 @@ public class UsersController : ControllerBase
     [Route("current/connected/groups")]
     public async Task<IActionResult> GetUsersGroups([FromQuery] int limit = 10, [FromQuery] int offset = 0)
     {
-        var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _userService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var groups = await _userService.GetUsersGroups(user.UserId, limit, offset);
 

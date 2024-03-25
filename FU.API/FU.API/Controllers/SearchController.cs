@@ -36,7 +36,7 @@ public class SearchController : ControllerBase
         var postDtos = new List<PostResponseDTO>(posts.Count);
 
         // Go through each post and check if the user has joined the post
-        var user = await _searchService.GetCurrentUser(User);
+        var user = await _searchService.GetAuthorizedUser(User);
 
         if (user is not null)
         {
@@ -63,7 +63,7 @@ public class SearchController : ControllerBase
         (var users, var totalResults) = await _searchService.SearchUsers(request.ToUserQuery());
 
         // Go through each user and check if the user has a relation with them
-        var user = await _searchService.GetCurrentUser(User);
+        var user = await _searchService.GetAuthorizedUser(User);
 
         Response.Headers.Add("X-total-count", totalResults.ToString());
 
