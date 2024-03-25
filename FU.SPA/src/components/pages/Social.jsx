@@ -95,6 +95,7 @@ export default function Social() {
       );
     };
 
+    // TODO pull this out to call directly
     const updateSearchResults = async () => {
       if (tabOption === tabOptions.Posts) {
         const query = {
