@@ -46,30 +46,6 @@ export default function Social() {
 
   const { user } = useContext(UserContext);
 
-  useEffect(() => {
-    const loadContent = async () => {
-      if (tabOption === tabOptions.Posts) {
-        const query = {
-          limit: queryLimit,
-          page: page,
-        };
-        const response = await UserService.getConnectedPosts(query);
-        setPosts(response.data);
-        setTotalResults(response.totalCount);
-      } else {
-        const query = {
-          relation: relationOption,
-          limit: queryLimit,
-          page: page,
-        };
-        const response = await RelationService.getRelations(user.id, query);
-        setUsers(response.data);
-        setTotalResults(response.totalCount);
-      }
-    };
-    loadContent();
-  }, [tabOption, searchText, relationOption, user.id, page]);
-
   // use effect to update search params
   useEffect(() => {
     const updateSearchParams = () => {
@@ -92,6 +68,7 @@ export default function Social() {
       );
     };
 
+    // TODO pull this out to call directly
     const updateSearchResults = async () => {
       if (tabOption === tabOptions.Posts) {
         const query = {
