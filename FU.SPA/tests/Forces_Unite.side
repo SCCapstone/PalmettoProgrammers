@@ -180,6 +180,74 @@
       ],
       "value": ""
     }]
+  }, {
+    "id": "a7a4da97-252f-43e0-8352-50d4dcb7ca5d",
+    "name": "Discover Player Search",
+    "commands": [{
+      "id": "7b15819b-2f01-406a-b12f-4200e22b9864",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a1b75788-5310-4299-a26d-14d1fb2e9812",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "2560x1392",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "97eb3172-6cda-4d75-8c6b-7f42e526b2c1",
+      "comment": "",
+      "command": "click",
+      "target": "css=.css-1ekild3-MuiButtonBase-root-MuiButton-root",
+      "targets": [
+        ["css=.css-1ekild3-MuiButtonBase-root-MuiButton-root", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/header/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e452e08d-894b-44b4-a27b-afbfb60044b0",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2) .PrivateSwitchBase-input",
+      "targets": [
+        ["css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2) .PrivateSwitchBase-input", "css:finder"],
+        ["xpath=(//input[@name=':rd:'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/div/div/div[4]/div/label[2]/span/input", "xpath:idRelative"],
+        ["xpath=//label[2]/span/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b5a09a81-a5d2-4dd7-a319-fad7e1cea9da",
+      "comment": "",
+      "command": "type",
+      "target": "id=outlined-basic",
+      "targets": [
+        ["id=outlined-basic", "id"],
+        ["css=#outlined-basic", "css:finder"],
+        ["xpath=//input[@id='outlined-basic']", "xpath:attributes"],
+        ["xpath=//div[@id='search-bar']/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": "Test"
+    }, {
+      "id": "55da43aa-86ca-4a73-877d-741e0443f79a",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=outlined-basic",
+      "targets": [
+        ["id=outlined-basic", "id"],
+        ["css=#outlined-basic", "css:finder"],
+        ["xpath=//input[@id='outlined-basic']", "xpath:attributes"],
+        ["xpath=//div[@id='search-bar']/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }]
   }],
   "suites": [{
     "id": "81ed32f4-9c63-4cf5-8567-e789f1afb8ad",
