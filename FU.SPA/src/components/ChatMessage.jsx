@@ -14,18 +14,19 @@ export default function ChatMessage({ chatMessage, userIsSender }) {
       ));
 
   const timeDifference = (timestamp) => {
-    const today = dayjs();
-    const sentDate = dayjs(timestamp);
+    const messageDate = new Date(timestamp);
+    const currentTimestamp = Date.now();
 
-    // find the difference between the dates
-    const diff = today.diff(sentDate, 'day', true);
+    const difference = currentTimestamp - messageDate.getTime();
 
-    const days = Math.floor(diff);
-    const hours = Math.floor((diff - days) * 24);
-    const minutes = Math.floor(((diff - days) * 24 - hours) * 60);
-    const seconds = Math.floor(
-      (((diff - days) * 24 - hours) * 60 - minutes) * 60,
-    );
+    if (difference <= 0) {
+      return 'Just now';
+    }
+
+    const seconds = Math.floor(difference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
 
     if (days > 0) {
       return `${days} day${days > 1 ? 's' : ''} ago`;
@@ -33,8 +34,6 @@ export default function ChatMessage({ chatMessage, userIsSender }) {
       return `${hours} hour${hours > 1 ? 's' : ''} ago`;
     } else if (minutes > 0) {
       return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    } else if (seconds < 0) {
-      return '0 seconds ago';
     } else {
       return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
     }
