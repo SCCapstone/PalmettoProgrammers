@@ -1,6 +1,5 @@
 import './ChatMessage.css';
 import { Avatar } from '@mui/material';
-import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
 export default function ChatMessage({ chatMessage, userIsSender }) {
