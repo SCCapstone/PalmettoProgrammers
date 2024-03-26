@@ -193,7 +193,7 @@
     }, {
       "id": "a1b75788-5310-4299-a26d-14d1fb2e9812",
       "comment": "",
-      "command": "setWindowSize",
+      "command": "//setWindowSize",
       "target": "2560x1392",
       "targets": [],
       "value": ""
@@ -701,6 +701,66 @@
         ["xpath=//div[5]/div[3]/div/input", "xpath:position"]
       ],
       "value": "800PM"
+    }]
+  }, {
+    "id": "935f27d9-3714-44bf-ba1f-232de8fc9947",
+    "name": "Discover User Search",
+    "commands": [{
+      "id": "1789131e-3083-47ca-9493-1339cceae700",
+      "comment": "",
+      "command": "open",
+      "target": "/discover",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6f2b02b4-323c-4070-a130-3d87c4548345",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='root']/div[2]/div/div/div/div/div/div",
+      "targets": [
+        ["css=.Mui-focused > .MuiSelect-select", "css:finder"],
+        ["xpath=//div[@id='root']/div[2]/div/div/div/div/div/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e2644799-ad40-4d22-972b-73ef974324d4",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiMenuItem-root:nth-child(2)",
+      "targets": [
+        ["css=.MuiMenuItem-root:nth-child(2)", "css:finder"],
+        ["xpath=//ul[@id=':r3i:']/li[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/ul/li[2]", "xpath:position"],
+        ["xpath=//li[contains(.,'Users')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c2093b7d-2c44-4d10-acd6-646361090102",
+      "comment": "",
+      "command": "type",
+      "target": "id=outlined-basic",
+      "targets": [
+        ["id=outlined-basic", "id"],
+        ["css=#outlined-basic", "css:finder"],
+        ["xpath=//input[@id='outlined-basic']", "xpath:attributes"],
+        ["xpath=//div[@id='search-bar']/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": "person"
+    }, {
+      "id": "d12e3dee-636d-445b-8e5d-2531c0cd9311",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=outlined-basic",
+      "targets": [
+        ["id=outlined-basic", "id"],
+        ["css=#outlined-basic", "css:finder"],
+        ["xpath=//input[@id='outlined-basic']", "xpath:attributes"],
+        ["xpath=//div[@id='search-bar']/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
     }]
   }],
   "suites": [{
