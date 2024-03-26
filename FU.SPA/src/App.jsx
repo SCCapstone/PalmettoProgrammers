@@ -11,10 +11,10 @@ import UserProfile from './components/pages/UserProfile';
 import { ThemeProvider } from '@mui/material/styles';
 import Theme from './Theme';
 import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
-import './App.css';
 import ProfileSettings from './components/pages/ProfileSettings';
 import AccountSettings from './components/pages/AccountSettings';
 import EditPost from './components/pages/EditPost';
@@ -28,7 +28,7 @@ function App() {
       <CssBaseline />
       <UserProvider>
         <Navbar />
-        <div className="container">
+        <Box sx={{ margin: '1rem', textAlign: 'center' }}>
           <Routes>
             <Route index element={<Home />} />
             <Route path="/" element={<Home />} />
@@ -75,7 +75,7 @@ function App() {
             <Route path="/profile/:userId" element={<UserProfile />} />
             <Route path="/posts/:postId/edit" element={<EditPost />} />
           </Routes>
-        </div>
+        </Box>
       </UserProvider>
     </ThemeProvider>
   );
