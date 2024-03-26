@@ -11,7 +11,7 @@ import {
 import './UserCard.css';
 import { useNavigate } from 'react-router-dom';
 import { People, PendingActions, CallMade } from '@mui/icons-material';
-import ChatMessage from './ChatMessage';
+import ChatMessagePreview from './ChatMessagePreview';
 
 const UserCard = ({ user, showRelationStatus }) => {
   if (showRelationStatus === undefined) {
@@ -165,7 +165,7 @@ const UserCard = ({ user, showRelationStatus }) => {
       >
         {user.bio && <Typography variant="body2">{user.bio}</Typography>}
         {user.lastMessage && (
-          <ChatMessage chatMessage={user.lastMessage} userIsSender={false} />
+          <ChatMessagePreview chatMessage={user.lastMessage} />
         )}
       </CardContent>
       <CardActions style={{ justifyContent: 'flex-end' }}>

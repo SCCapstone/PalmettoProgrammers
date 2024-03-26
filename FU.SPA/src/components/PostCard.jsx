@@ -14,7 +14,7 @@ import './PostCard.css';
 import Theme from '../Theme';
 import dayjs from 'dayjs';
 import { Done } from '@mui/icons-material';
-import ChatMessage from './ChatMessage';
+import ChatMessagePreview from './ChatMessagePreview';
 
 const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
   const navigate = useNavigate();
@@ -145,11 +145,14 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
         >
           {post.description}
         </Typography>
+        {post.lastMessage && (
+          <ChatMessagePreview chatMessage={post.lastMessage} />
+        )}
         <div
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            paddingTop: '10px',
+            paddingTop: 10,
             gap: '5px',
             maxHeight: 80,
             overflow: 'hidden',
@@ -163,9 +166,6 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
             />
           ))}
         </div>
-        {post.lastMessage && (
-          <ChatMessage chatMessage={post.lastMessage} userIsSender={false} />
-        )}
       </CardContent>
       {showActions && (
         <CardActions>
