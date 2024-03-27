@@ -10,11 +10,10 @@ import {
   Tooltip,
 } from '@mui/material';
 import Theme from '../Theme';
-import './UserCard.css';
 import { useNavigate } from 'react-router-dom';
 import { People, PendingActions, CallMade } from '@mui/icons-material';
 
-const UserCard = ({ user, showRelationStatus }) => {
+const UserCard = ({ user, showRelationStatus, showActions }) => {
   if (showRelationStatus === undefined) {
     showRelationStatus = false;
   }
@@ -81,7 +80,7 @@ const UserCard = ({ user, showRelationStatus }) => {
     >
       <CardContent style={{ textAlign: 'left', height: 300 }}>
         <Stack
-          className="user-card-header"
+          sx={{ '&:hover': showActions ? { cursor: 'pointer' } : {} }}
           alignItems="center"
           direction="row"
           onClick={() => navigate(`/profile/${user.id}`)}
@@ -97,9 +96,14 @@ const UserCard = ({ user, showRelationStatus }) => {
           />
           <Tooltip title={user.username}>
             <Typography
-              className="user-name"
               variant="h5"
               sx={{
+                '&:hover': showActions
+                  ? {
+                      textDecoration: 'underline',
+                      textDecorationThickness: '2px',
+                    }
+                  : {},
                 color: '#FFF',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -138,15 +142,17 @@ const UserCard = ({ user, showRelationStatus }) => {
           </Typography>
         )}
       </CardContent>
-      <CardActions style={{ justifyContent: 'flex-end' }}>
-        <Button
-          variant="contained"
-          style={{ color: '#FFF', width: '100%' }}
-          onClick={() => navigate(`/profile/${user.id}`)}
-        >
-          View Profile
-        </Button>
-      </CardActions>
+      {showActions && (
+        <CardActions style={{ justifyContent: 'flex-end' }}>
+          <Button
+            variant="contained"
+            style={{ color: '#FFF', width: '100%' }}
+            onClick={() => navigate(`/profile/${user.id}`)}
+          >
+            View Profile
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 };
