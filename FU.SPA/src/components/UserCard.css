@@ -3,3 +3,7 @@
   cursor: pointer;
   text-decoration-thickness: 2px;
 }
+
+.user-card-header:hover {
+  cursor: pointer;
+}

@@ -1,13 +1,15 @@
 import {
+  Stack,
+  Divider,
   Card,
   CardActions,
   Button,
   CardContent,
   Typography,
-  CardHeader,
   Avatar,
   Tooltip,
 } from '@mui/material';
+import Theme from '../Theme';
 import './UserCard.css';
 import { useNavigate } from 'react-router-dom';
 import { People, PendingActions, CallMade } from '@mui/icons-material';
@@ -18,12 +20,6 @@ const UserCard = ({ user, showRelationStatus }) => {
   }
 
   const navigate = useNavigate();
-  const defaultPfp =
-    !user.pfpUrl ||
-    (user.pfpUrl !== null &&
-      user.pfpUrl.includes(
-        'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-      ));
 
   const stringToColor = (string) => {
     let hash = 0;
@@ -37,19 +33,6 @@ const UserCard = ({ user, showRelationStatus }) => {
       color += `00${value.toString(16)}`.slice(-2);
     }
     return color;
-  };
-
-  const initials = (name) => {
-    // split  name by spaces and filter empty entries
-    let nameParts = name.split(' ').filter(Boolean);
-    // get the first letter of the first part
-    let initials = nameParts[0][0];
-    // if there is a second part to name
-    if (nameParts.length > 1) {
-      initials += nameParts[1][0];
-    }
-
-    return initials;
   };
 
   // convert dob to years old
@@ -87,26 +70,6 @@ const UserCard = ({ user, showRelationStatus }) => {
     }
   };
 
-  const renderPfp = () => {
-    return defaultPfp ? (
-      <Avatar
-        sx={{
-          bgcolor: stringToColor(user.username),
-          width: 40,
-          height: 40,
-        }}
-      >
-        {initials(user.username)}
-      </Avatar>
-    ) : (
-      <Avatar
-        alt={user.username}
-        src={user.pfpUrl}
-        sx={{ width: 40, height: 40 }}
-      />
-    );
-  };
-
   return (
     <Card
       style={{
@@ -116,53 +79,64 @@ const UserCard = ({ user, showRelationStatus }) => {
         flexDirection: 'column',
       }}
     >
-      <CardHeader
-        title={
-          <>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+      <CardContent style={{ textAlign: 'left', height: 300 }}>
+        <Stack
+          className="user-card-header"
+          alignItems="center"
+          direction="row"
+          onClick={() => navigate(`/profile/${user.id}`)}
+        >
+          <Avatar
+            alt={user?.username}
+            src={user?.pfpUrl}
+            sx={{
+              width: 40,
+              height: 40,
+              bgcolor: stringToColor(user?.username),
+            }}
+          />
+          <Tooltip title={user.username}>
+            <Typography
+              className="user-name"
+              variant="h5"
+              sx={{
+                color: '#FFF',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                ml: 1,
               }}
             >
-              <div
-                style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
-              >
-                {renderPfp()}
-                <div
-                  className="user-name"
-                  onClick={() => navigate(`/profile/${user.id}`)}
-                >
-                  <Typography variant="h5" style={{ color: '#FFF' }}>
-                    {user.username}
-                  </Typography>
-                </div>
-              </div>
-              {renderRelationStatus()}
-            </div>
-            {user.dob && (
-              <Typography variant="h6" style={{ color: '#FFF' }}>
-                {age} years old
-              </Typography>
-            )}
-            <div
-              style={{ borderTop: '2px solid #E340DC', marginTop: '5px' }}
-            ></div>
-          </>
-        }
-      />
-      <CardContent
-        style={{
-          width: 'auto',
-          paddingTop: '0px',
-          flex: 1,
-          display: 'flex',
-          flexGrow: 1,
-          flexDirection: 'column',
-        }}
-      >
-        {user.bio && <Typography variant="body2">{user.bio}</Typography>}
+              {user.username}
+            </Typography>
+          </Tooltip>
+          <div style={{ flexGrow: 9 }} />
+          {renderRelationStatus()}
+        </Stack>
+        {user.dob && (
+          <Typography variant="subtitle1" sx={{ mb: '-6px' }}>
+            {age} years old
+          </Typography>
+        )}
+        <Divider
+          sx={{
+            borderColor: Theme.palette.primary.main,
+            borderWidth: 1,
+            marginTop: '8px',
+            marginBottom: '6px',
+          }}
+        />
+        {user.bio && (
+          <Typography
+            variant="body2"
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              height: 200,
+            }}
+          >
+            {user.bio}
+          </Typography>
+        )}
       </CardContent>
       <CardActions style={{ justifyContent: 'flex-end' }}>
         <Button
