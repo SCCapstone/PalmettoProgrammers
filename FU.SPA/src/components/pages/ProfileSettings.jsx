@@ -62,10 +62,9 @@ export default function ProfileSettings() {
       };
 
       await UserService.updateUserProfile(data);
-      alert('Info updated successfully!');
 
       // Redirect to user profile
-      navigate('/profile/' + idJson.userId);
+      navigate(0);
     } catch (e) {
       alert(e);
       console.error(e);
@@ -81,51 +80,41 @@ export default function ProfileSettings() {
   return (
     <Container component="main" maxWidth="xs">
       <Box
+        component="form"
+        noValidate
+        onSubmit={handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') e.preventDefault();
+        }}
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          mt: 2,
+          gap: 2,
+          width: 270,
         }}
       >
-        <Typography component="h1" variant="h5">
-          Profile Settings
-        </Typography>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') e.preventDefault();
-          }}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            mt: 2,
-            gap: 2,
-            width: 270,
-          }}
-        >
-          <TextField
+        <Typography variant="h5">Update Profile</Typography>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Date of Birth"
+            value={null} // Leave null as to not change date
             fullWidth
-            id="setBio"
-            label="Update Bio"
-            value={bio}
-            multiline
-            onChange={(e) => setBio(e.target.value)}
+            onChange={(newValue) => setDateOfBirth(newValue)}
           />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Date of Birth"
-              value={null} // Leave null as to not change date
-              fullWidth
-              onChange={(newValue) => setDateOfBirth(newValue)}
-            />
-          </LocalizationProvider>
-          <UploadAvatar onNewPreview={handlePreviewUrl} />
-          <Button type="submit" fullWidth variant="contained">
-            Update Profile
-          </Button>
-        </Box>
+        </LocalizationProvider>
+        <TextField
+          fullWidth
+          id="setBio"
+          label="About"
+          value={bio}
+          multiline
+          onChange={(e) => setBio(e.target.value)}
+        />
+        <UploadAvatar onNewPreview={handlePreviewUrl} />
+        <Button type="submit" fullWidth variant="contained">
+          Update Profile
+        </Button>
       </Box>
     </Container>
   );

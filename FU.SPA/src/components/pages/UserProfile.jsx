@@ -10,6 +10,7 @@ import ChatLocked from '../ChatLocked';
 import RelationService from '../../services/relationService';
 import Button from '@mui/material/Button';
 import UserCard from '../UserCard';
+import ProfileSettings from './ProfileSettings';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -59,8 +60,9 @@ const UserProfile = () => {
           {!isOwnProfile && (
             <SocialRelationActionButton requesteeId={userProfile?.id} />
           )}
-          {isOwnProfile && <UserSettings />}
+          {isOwnProfile && <AccountSettingButton />}
         </div>
+        {isOwnProfile && <ProfileSettings />}
         {renderChat()}
       </div>
     );
@@ -131,15 +133,12 @@ const SocialRelationActionButton = ({ requesteeId }) => {
   );
 };
 
-const UserSettings = () => {
+const AccountSettingButton = () => {
   const navigate = useNavigate();
   return (
     <>
       <Button variant="contained" onClick={() => navigate(`/accountsettings`)}>
         Account Settings
-      </Button>
-      <Button variant="contained" onClick={() => navigate(`/profilesettings`)}>
-        Profile Settings
       </Button>
     </>
   );
