@@ -54,7 +54,7 @@ export default function ProfileSettings() {
       const data = {
         pfpUrl: newPfpUrl,
         id: idJson.userId,
-        bio: bio !== '' ? bio : null,
+        bio: bio,
         // if the date of birth is the same as today, ignore and set as null
         // if not same day, update
         dob:
