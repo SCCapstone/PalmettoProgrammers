@@ -953,11 +953,11 @@
   }],
   "suites": [{
     "id": "81ed32f4-9c63-4cf5-8567-e789f1afb8ad",
-    "name": "Default Suite",
+    "name": "default",
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": []
+    "tests": ["d71ad0ec-d136-4f9d-91d7-0b316006b5f5", "755fd4a9-6ce5-4d61-b96b-c7f9dfc19155", "a7a4da97-252f-43e0-8352-50d4dcb7ca5d", "1bb69d13-f52d-426e-8353-79b801b6d59b", "935f27d9-3714-44bf-ba1f-232de8fc9947", "fac1e247-f0b9-44fb-a7b7-92f606c09de1"]
   }],
   "urls": ["http://localhost:5173/"],
   "plugins": []
