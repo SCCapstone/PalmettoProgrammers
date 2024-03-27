@@ -2,7 +2,7 @@ import Navbar from './components/Navbar';
 import Home from './components/pages/Home';
 import Discover from './components/pages/Discover';
 import Social from './components/pages/Social';
-import Create from './components/pages/Create';
+import CreatePost from './components/pages/CreatePost';
 import NoPage from './components/pages/NoPage';
 import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
@@ -45,7 +45,7 @@ function App() {
               path="/create"
               element={
                 <ProtectedRoute>
-                  <Create />
+                  <CreatePost />
                 </ProtectedRoute>
               }
             />
