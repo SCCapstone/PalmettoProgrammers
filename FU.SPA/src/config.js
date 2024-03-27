@@ -15,15 +15,11 @@ const config = {
     { value: 'newest', label: 'Created Date' },
     { value: 'soonest', label: 'Start Time' },
     { value: 'title', label: 'Title' },
-    { value: 'players', label: '# of Players'},
+    { value: 'players', label: '# of Players' },
   ],
   USER_SORT_OPTIONS: [
-    { value: 'username', label: 'Name' },
-    { value: 'joindate', label: 'Account Age' },
-    /* can just sort by account id
-     * maybe not as simple, if we sort by user id it doesn't account for users
-     * that were low id and deleted their account
-     */
+    { value: 'name', label: 'Name' },
+    { value: 'DOB', label: 'Age' },
   ],
 };
 

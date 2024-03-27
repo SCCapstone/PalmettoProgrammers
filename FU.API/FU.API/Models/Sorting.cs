@@ -3,6 +3,8 @@ namespace FU.API.Models;
 public enum UserSortType
 {
     Username,
+    DOB,
+    AccountAge,
 }
 
 public enum PostSortType

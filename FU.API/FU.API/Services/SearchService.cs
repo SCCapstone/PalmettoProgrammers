@@ -123,6 +123,7 @@ public class SearchService : CommonService, ISearchService
         return sortType switch
         {
             UserSortType.Username => (user) => user.NormalizedUsername,
+            UserSortType.DOB => (user) => user.DOB,
             _ => (user) => user.NormalizedUsername,
         };
     }
