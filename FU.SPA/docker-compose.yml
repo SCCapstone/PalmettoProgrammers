@@ -1,0 +1,6 @@
+services:
+  fu-spa:
+    build:
+      context: .
+    ports:
+      - '5173:5173'
