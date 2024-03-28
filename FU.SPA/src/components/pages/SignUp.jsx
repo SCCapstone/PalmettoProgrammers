@@ -277,6 +277,33 @@ export default function SignUp() {
       style={{ marginRight: 0 }}
     />
   </Grid>
+  <Grid item>
+    <FormControlLabel
+      control={
+        <Checkbox
+          name="agreePolicy"
+          color="primary"
+          size="extra small"
+          style={{ padding: 5 }}
+        />
+      }
+      label={
+        <Link
+          href="https://www.privacypolicies.com/live/44822c92-1088-4bab-bb39-93117fc0dc50"
+          variant="body2"
+          target="_blank"
+          style={{
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            color: Theme.palette.primary.main,
+          }}
+        >
+          Privacy Policy
+        </Link>
+      }
+      style={{ marginRight: 0 }}
+    />
+  </Grid>
 </Grid>
         </Box>
       </Box>
