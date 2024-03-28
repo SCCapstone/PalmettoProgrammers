@@ -31,6 +31,8 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmedReadTerms, setConfirmedReadTerms] = useState(false)
+  const [confirmedReadPolicy, setConfirmedReadPolicy] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -69,7 +71,9 @@ export default function SignUp() {
     username.length > 0 &&
     email.length > 0 &&
     password.length > 0 &&
-    confirmPassword.length > 0;
+    confirmPassword.length > 0 &&
+    confirmedReadTerms &&
+    confirmedReadPolicy;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
@@ -257,6 +261,8 @@ export default function SignUp() {
           name="agreeTerms"
           color="primary"
           size="extra small"
+          checked={confirmedReadTerms}
+          onChange={(event) => setConfirmedReadTerms(event.target.checked)}
           style={{ padding: 5 }}
         />
       }
@@ -284,6 +290,8 @@ export default function SignUp() {
           name="agreePolicy"
           color="primary"
           size="extra small"
+          checked={confirmedReadPolicy}
+          onChange={(event) => setConfirmedReadPolicy(event.target.checked)}
           style={{ padding: 5 }}
         />
       }
