@@ -268,7 +268,7 @@ export default function SignUp() {
             <Grid item>
               <ConfirmedCheckbox
                 name="agreePolicy"
-                label="Privacy Policy"
+                label="Privacy policy"
                 link="https://www.privacypolicies.com/live/44822c92-1088-4bab-bb39-93117fc0dc50"
                 checked={confirmedReadPolicy}
                 onChange={(event) =>
