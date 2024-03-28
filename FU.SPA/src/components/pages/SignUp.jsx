@@ -10,6 +10,8 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -233,7 +235,7 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container direction="column" alignItems="flex-end">
             <Grid item>
               <Link
                 className="signin-link"
@@ -248,25 +250,34 @@ export default function SignUp() {
                 Already have an account? Sign in
               </Link>
             </Grid>
-          </Grid>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-            <Link
-                className="terms-and-conditions"
-                href="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
-                variant="body2"
-                target="_blank"
-                style={{
-                  color: Theme.palette.primary.main,
-                  textDecoration: 'underline',
-                  cursor: 'pointer',
-                  paddingBottom: '20px',
-                }}
-              >
-                Terms and conditions
-              </Link>
-            </Grid>
-          </Grid>
+  <Grid item>
+    <FormControlLabel
+      control={
+        <Checkbox
+          name="agreeTerms"
+          color="primary"
+          size="extra small"
+          style={{ padding: 5 }}
+        />
+      }
+      label={
+        <Link
+          href="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
+          variant="body2"
+          target="_blank"
+          style={{
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            color: Theme.palette.primary.main,
+          }}
+        >
+          Terms and conditions
+        </Link>
+      }
+      style={{ marginRight: 0 }}
+    />
+  </Grid>
+</Grid>
         </Box>
       </Box>
     </Container>
