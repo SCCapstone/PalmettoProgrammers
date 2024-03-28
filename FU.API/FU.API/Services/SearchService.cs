@@ -26,28 +26,10 @@ public class SearchService : CommonService, ISearchService
         {
             return await SearchConnectedUsers(query);
         }
-
-        var dbQuery = BuildUsersDbQuery(query);
-
-        // Count the total number of results so that the UI can display the correct number of pages
-        int totalResults = await dbQuery.CountAsync();
-
-        // Sort results
-        IOrderedQueryable<ApplicationUser> orderedDbQuery = query.SortDirection == SortDirection.Ascending
-            ? dbQuery.OrderBy(
-                SelectUserProperty(query.SortType))
-            : dbQuery.OrderByDescending(
-                SelectUserProperty(query.SortType));
-
-        // Finally sort by Id to ensure order is consistent across calls.
-        orderedDbQuery = orderedDbQuery.ThenBy(u => u.UserId);
-
-        List<ApplicationUser> applicationUsers = await orderedDbQuery
-            .Skip((query.Page - 1) * query.Limit)
-            .Take(query.Limit)
-            .ToListAsync();
-
-        return (applicationUsers.ToProfiles().ToList(), totalResults);
+        else
+        {
+            return await SearchAllUsers(query);
+        }
     }
 
     public async Task<(List<Post>, int TotalResults)> SearchPosts(PostQuery query)
@@ -327,5 +309,30 @@ public class SearchService : CommonService, ISearchService
         }).ToList();
 
         return (userProfiles, totalResults);
+    }
+
+    private async Task<(List<UserProfile>, int TotalResults)> SearchAllUsers(UserQuery query)
+    {
+        var dbQuery = BuildUsersDbQuery(query);
+
+        // Count the total number of results so that the UI can display the correct number of pages
+        int totalResults = await dbQuery.CountAsync();
+
+        // Sort results
+        IOrderedQueryable<ApplicationUser> orderedDbQuery = query.SortDirection == SortDirection.Ascending
+            ? dbQuery.OrderBy(
+                SelectUserProperty(query.SortType))
+            : dbQuery.OrderByDescending(
+                SelectUserProperty(query.SortType));
+
+        // Finally sort by Id to ensure order is consistent across calls.
+        orderedDbQuery = orderedDbQuery.ThenBy(u => u.UserId);
+
+        List<ApplicationUser> applicationUsers = await orderedDbQuery
+            .Skip((query.Page - 1) * query.Limit)
+            .Take(query.Limit)
+            .ToListAsync();
+
+        return (applicationUsers.ToProfiles().ToList(), totalResults);
     }
 }
