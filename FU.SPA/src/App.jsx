@@ -15,7 +15,6 @@ import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
 import './App.css';
-import ProfileSettings from './components/pages/ProfileSettings';
 import AccountSettings from './components/pages/AccountSettings';
 import EditPost from './components/pages/EditPost';
 import { ReactNotifications } from 'react-notifications-component';
@@ -50,14 +49,6 @@ function App() {
               }
             />
 
-            <Route
-              path="/profilesettings/"
-              element={
-                <ProtectedRoute>
-                  <ProfileSettings />
-                </ProtectedRoute>
-              }
-            />
             <Route
               path="/accountsettings/"
               element={
