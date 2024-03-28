@@ -236,7 +236,7 @@ export default function SignUp() {
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link
-                class="signin-link"
+                className="signin-link"
                 onClick={() => navigate(`/SignIn`)}
                 variant="body2"
                 style={{
@@ -246,6 +246,24 @@ export default function SignUp() {
                 }}
               >
                 Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+            <Link
+                className="terms-and-conditions"
+                href="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
+                variant="body2"
+                target="_blank"
+                style={{
+                  color: Theme.palette.primary.main,
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  paddingBottom: '20px',
+                }}
+              >
+                Terms and conditions
               </Link>
             </Grid>
           </Grid>
