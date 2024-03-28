@@ -18,14 +18,6 @@ const paramKey = {
   page: 'page',
 };
 
-const chatActivitySortOption = {
-  value: 'chatactivity',
-  label: 'Chat Activity',
-};
-
-const postSortOptions = config.POST_SORT_OPTIONS.concat(chatActivitySortOption);
-const userSortOptions = config.USER_SORT_OPTIONS.concat(chatActivitySortOption);
-
 const tabOptions = {
   Posts: 'Posts',
   Users: 'Users',
@@ -159,7 +151,7 @@ export default function Social() {
     return (
       <SortOptionsSelector
         initialValue={postSortOption}
-        options={postSortOptions}
+        options={config.SOCIAL_POST_SORT_OPTIONS}
         onChange={(newValue) => {
           console.log(newValue);
           setPostSortOption(newValue);
@@ -173,7 +165,7 @@ export default function Social() {
     return (
       <SortOptionsSelector
         initialValue={userSortOption}
-        options={userSortOptions}
+        options={config.SOCIAL_USER_SORT_OPTIONS}
         onChange={(newValue) => {
           console.log(newValue);
           setUserSortOption(newValue);
