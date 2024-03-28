@@ -8,6 +8,7 @@ const Users = ({ users, showRelationStatus }) => {
           key={user.id}
           user={user}
           showRelationStatus={showRelationStatus}
+          showActions={true}
         />
       ))}
     </div>
