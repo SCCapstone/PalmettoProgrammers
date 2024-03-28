@@ -11,24 +11,24 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import UserService from '../../services/userService';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useNavigate } from 'react-router';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import AvatarService from '../../services/avatarService';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Store } from 'react-notifications-component';
+import UserContext from '../../context/userContext';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [newPfpUrl, setNewPfpUrl] = useState();
-  const navigate = useNavigate();
+  const { refreshUser } = useContext(UserContext);
 
   useEffect(() => {
     async function fetchUserInfo() {
@@ -65,8 +65,7 @@ export default function ProfileSettings() {
       };
 
       await UserService.updateUserProfile(data);
-      // Redirect to user profile
-      navigate(0);
+      refreshUser();
 
       // Profile notification success
       Store.addNotification({
@@ -148,6 +147,19 @@ export default function ProfileSettings() {
           value={bio}
           multiline
           onChange={(e) => setBio(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  edge="end"
+                  color="primary"
+                  onClick={(e) => clearBio(e.target.value)}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <UploadAvatar onNewPreview={handlePreviewUrl} />
         <Button type="submit" fullWidth variant="contained">
