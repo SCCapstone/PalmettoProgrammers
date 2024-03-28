@@ -32,7 +32,6 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmedReadTerms, setConfirmedReadTerms] = useState(false);
-  const [confirmedReadPolicy, setConfirmedReadPolicy] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -72,8 +71,7 @@ export default function SignUp() {
     email.length > 0 &&
     password.length > 0 &&
     confirmPassword.length > 0 &&
-    confirmedReadTerms &&
-    confirmedReadPolicy;
+    confirmedReadTerms;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
@@ -230,12 +228,22 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
+          <Grid item sx={{ mt: 1 }}>
+            <ConfirmedCheckbox
+              name="agreeTerms"
+              label="terms and conditions"
+              link="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
+              checked={confirmedReadTerms}
+              onChange={(event) => setConfirmedReadTerms(event.target.checked)}
+              description="I agree to the"
+            />
+          </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             disabled={!isEnabled}
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 1, mb: 2 }}
           >
             Sign Up
           </Button>
@@ -254,34 +262,19 @@ export default function SignUp() {
                 Already have an account? Sign in
               </Link>
             </Grid>
-            <Grid item>
-              <ConfirmedCheckbox
-                name="agreeTerms"
-                label="Terms and conditions"
-                link="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
-                checked={confirmedReadTerms}
-                onChange={(event) =>
-                  setConfirmedReadTerms(event.target.checked)
-                }
-              />
-            </Grid>
-            <Grid item>
-              <ConfirmedCheckbox
-                name="agreePolicy"
-                label="Privacy policy"
-                link="https://www.privacypolicies.com/live/44822c92-1088-4bab-bb39-93117fc0dc50"
-                checked={confirmedReadPolicy}
-                onChange={(event) =>
-                  setConfirmedReadPolicy(event.target.checked)
-                }
-              />
-            </Grid>
           </Grid>
         </Box>
       </Box>
     </Container>
   );
-  function ConfirmedCheckbox({ name, label, link, checked, onChange }) {
+  function ConfirmedCheckbox({
+    name,
+    label,
+    link,
+    checked,
+    onChange,
+    description,
+  }) {
     return (
       <FormControlLabel
         control={
@@ -295,18 +288,30 @@ export default function SignUp() {
           />
         }
         label={
-          <Link
-            href={link}
-            variant="body2"
-            target="_blank"
-            style={{
-              textDecoration: 'underline',
-              cursor: 'pointer',
-              color: Theme.palette.primary.main,
-            }}
-          >
-            {label}
-          </Link>
+          <span>
+            <Typography
+              component="span"
+              variant="body2"
+              style={{
+                color: Theme.palette.primary.main,
+                marginRight: 3,
+              }}
+            >
+              {description}
+            </Typography>
+            <Link
+              href={link}
+              variant="body2"
+              target="_blank"
+              style={{
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                color: Theme.palette.primary.main,
+              }}
+            >
+              {label}
+            </Link>
+          </span>
         }
         style={{ marginRight: 0 }}
       />
