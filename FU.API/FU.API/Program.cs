@@ -127,7 +127,25 @@ internal class Program
         builder.Services.AddScoped<IRelationService, RelationService>();
         builder.Services.AddScoped<ICommonService, CommonService>();
         builder.Services.AddScoped<IStorageService, AzureBlobStorageService>();
-        builder.Services.AddSingleton<IEmailService, EmailService>();
+
+        if (builder.Configuration[ConfigKey.BaseSpaUrl] is null || builder.Configuration[ConfigKey.EmailConnectionString] is null)
+        {
+            if (builder.Configuration[ConfigKey.EmailConnectionString] is null)
+            {
+                Console.WriteLine($"Email service connection string is not configured. Missing {ConfigKey.EmailConnectionString}. See README for adding. Will use mock email service.");
+            }
+
+            if (builder.Configuration[ConfigKey.BaseSpaUrl] is null)
+            {
+                Console.WriteLine($"The base SPA Url is not configured. Missing {ConfigKey.BaseSpaUrl}. See README for adding. Will use mock email service.");
+            }
+
+            builder.Services.AddSingleton<IEmailService, MockEmailService>();
+        }
+        else
+        {
+            builder.Services.AddSingleton<IEmailService, EmailService>();
+        }
 
         builder.Services.AddSignalR(options =>
         {
@@ -211,16 +229,6 @@ internal class Program
         if (config[ConfigKey.StorageConnectionString] is null)
         {
             throw new Exception($"Storage connection string is not configured. Missing {ConfigKey.StorageConnectionString}. See README for adding.");
-        }
-
-        if (config[ConfigKey.EmailConnectionString] is null)
-        {
-            throw new Exception($"Email service connection string is not configured. Missing {ConfigKey.EmailConnectionString}. See README for adding.");
-        }
-
-        if (config[ConfigKey.BaseSpaUrl] is null)
-        {
-            throw new Exception($"The base SPA Url is not configured. Missing {ConfigKey.BaseSpaUrl}. See README for adding.");
         }
     }
 }
