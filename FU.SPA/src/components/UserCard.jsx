@@ -142,6 +142,9 @@ const UserCard = ({ user, showRelationStatus, showActions }) => {
             {user.bio}
           </Typography>
         )}
+        {user.lastMessage && (
+          <ChatMessagePreview chatMessage={user.lastMessage} />
+        )}
       </CardContent>
       {showActions && (
         <CardActions style={{ justifyContent: 'flex-end' }}>
