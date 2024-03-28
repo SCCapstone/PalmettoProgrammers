@@ -21,6 +21,7 @@ internal class Program
     {
         WebApplication app = BuildApp(args);
         ConfigureApp(app);
+        ApplyDbMigrations(app.Configuration);
         app.Run();
     }
 
@@ -54,6 +55,17 @@ internal class Program
 
         // Add SignalR hub endpoint
         app.MapHub<ChatHub>("/chathub");
+    }
+
+    private static void ApplyDbMigrations(IConfiguration config)
+    {
+        // Create a DbContext
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseNpgsql(config[ConfigKey.ConnectionString]);
+        using AppDbContext dbContext = new(optionsBuilder.Options);
+
+        // Dangerous. See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli#apply-migrations-at-runtime
+        dbContext.Database.Migrate();
     }
 
     private static WebApplication BuildApp(string[] args)
