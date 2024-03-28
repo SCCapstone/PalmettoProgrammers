@@ -31,8 +31,8 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [confirmedReadTerms, setConfirmedReadTerms] = useState(false)
-  const [confirmedReadPolicy, setConfirmedReadPolicy] = useState(false)
+  const [confirmedReadTerms, setConfirmedReadTerms] = useState(false);
+  const [confirmedReadPolicy, setConfirmedReadPolicy] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -254,67 +254,62 @@ export default function SignUp() {
                 Already have an account? Sign in
               </Link>
             </Grid>
-  <Grid item>
-    <FormControlLabel
-      control={
-        <Checkbox
-          name="agreeTerms"
-          color="primary"
-          size="extra small"
-          checked={confirmedReadTerms}
-          onChange={(event) => setConfirmedReadTerms(event.target.checked)}
-          style={{ padding: 5 }}
-        />
-      }
-      label={
-        <Link
-          href="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
-          variant="body2"
-          target="_blank"
-          style={{
-            textDecoration: 'underline',
-            cursor: 'pointer',
-            color: Theme.palette.primary.main,
-          }}
-        >
-          Terms and conditions
-        </Link>
-      }
-      style={{ marginRight: 0 }}
-    />
-  </Grid>
-  <Grid item>
-    <FormControlLabel
-      control={
-        <Checkbox
-          name="agreePolicy"
-          color="primary"
-          size="extra small"
-          checked={confirmedReadPolicy}
-          onChange={(event) => setConfirmedReadPolicy(event.target.checked)}
-          style={{ padding: 5 }}
-        />
-      }
-      label={
-        <Link
-          href="https://www.privacypolicies.com/live/44822c92-1088-4bab-bb39-93117fc0dc50"
-          variant="body2"
-          target="_blank"
-          style={{
-            textDecoration: 'underline',
-            cursor: 'pointer',
-            color: Theme.palette.primary.main,
-          }}
-        >
-          Privacy Policy
-        </Link>
-      }
-      style={{ marginRight: 0 }}
-    />
-  </Grid>
-</Grid>
+            <Grid item>
+              <ConfirmedCheckbox
+                name="agreeTerms"
+                label="Terms and conditions"
+                link="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
+                checked={confirmedReadTerms}
+                onChange={(event) =>
+                  setConfirmedReadTerms(event.target.checked)
+                }
+              />
+            </Grid>
+            <Grid item>
+              <ConfirmedCheckbox
+                name="agreePolicy"
+                label="Privacy Policy"
+                link="https://www.privacypolicies.com/live/44822c92-1088-4bab-bb39-93117fc0dc50"
+                checked={confirmedReadPolicy}
+                onChange={(event) =>
+                  setConfirmedReadPolicy(event.target.checked)
+                }
+              />
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </Container>
   );
+  function ConfirmedCheckbox({ name, label, link, checked, onChange }) {
+    return (
+      <FormControlLabel
+        control={
+          <Checkbox
+            name={name}
+            color="primary"
+            size="extra small"
+            checked={checked}
+            onChange={onChange}
+            style={{ padding: 5 }}
+          />
+        }
+        label={
+          <Link
+            href={link}
+            variant="body2"
+            target="_blank"
+            style={{
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              color: Theme.palette.primary.main,
+            }}
+          >
+            {label}
+          </Link>
+        }
+        style={{ marginRight: 0 }}
+      />
+    );
+  }
 }
