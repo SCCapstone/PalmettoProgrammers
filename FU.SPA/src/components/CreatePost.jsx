@@ -24,8 +24,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 export default function CreatePost() {
   const [game, setGame] = useState(null);
   const [title, setTitle] = useState('');
-  const [startTime, setStartTime] = useState(dayjs());
-  const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
+  const [startTime, setStartTime] = useState(dayjs().add(30, 'minute'));
+  const [endTime, setEndTime] = useState(dayjs().add(35, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
