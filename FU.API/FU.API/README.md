@@ -42,44 +42,50 @@ Once connected, users can navigate to a post or users pages, which will then con
 
 Whenever a new message is saved to a chat, it is instantly broadcasted to all users currently connected to that chat room. 
 
-    private readonly IChatService _chatService;
-    private readonly IHubContext<ChatHub> _hubContext;
-
-    public ChatController(IChatService chatService, IHubContext<ChatHub> hubContext)
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class ChatController : ControllerBase
     {
-        _chatService = chatService;
-        _hubContext = hubContext;
-    }
+        private readonly IChatService _chatService;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-    [HttpPost]
-    [Route("{chatId}/messages")]
-    public async Task<IActionResult> SaveMessage(int chatId, [FromBody] string message)
-    {
-        var user = await _chatService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
-
-        var chat = await _chatService.GetChat(chatId);
-
-        if (chat is null)
+        public ChatController(IChatService chatService, IHubContext<ChatHub> hubContext)
         {
-            return NotFound("Chat not found");
+            _chatService = chatService;
+            _hubContext = hubContext;
         }
 
-        // Make sure the user is in the chat
-        var userInChat = chat.Members.Where(m => m.UserId == user.UserId).Any();
-
-        if (!userInChat)
+        [HttpPost]
+        [Route("{chatId}/messages")]
+        public async Task<IActionResult> SaveMessage(int chatId, [FromBody] string message)
         {
-            return Unauthorized("User is not part of chat");
+            var user = await _chatService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
+
+            var chat = await _chatService.GetChat(chatId);
+
+            if (chat is null)
+            {
+                return NotFound("Chat not found");
+            }
+
+            // Make sure the user is in the chat
+            var userInChat = chat.Members.Where(m => m.UserId == user.UserId).Any();
+
+            if (!userInChat)
+            {
+                return Unauthorized("User is not part of chat");
+            }
+
+            var newMessage = await _chatService.SaveMessage(chat, message, user);
+            if (newMessage is null)
+            {
+                return BadRequest();
+            }
+
+            var response = newMessage.ToDto();
+            await _hubContext.Clients.Group($"ChatGroup-{chatId}").SendAsync("ReceiveMessage", response);
+
+            return CreatedAtAction(nameof(SaveMessage), response);
         }
-
-        var newMessage = await _chatService.SaveMessage(chat, message, user);
-        if (newMessage is null)
-        {
-            return BadRequest();
-        }
-
-        var response = newMessage.ToDto();
-        await _hubContext.Clients.Group($"ChatGroup-{chatId}").SendAsync("ReceiveMessage", response);
-
-        return CreatedAtAction(nameof(SaveMessage), response);
     }
