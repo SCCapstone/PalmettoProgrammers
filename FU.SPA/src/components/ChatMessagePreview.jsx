@@ -3,7 +3,7 @@ import DateUtils from '../helpers/dateUtils';
 
 export default function ChatMessage({ chatMessage }) {
   return (
-    <div>
+    <div style={{ fontStyle: 'italic' }}>
       <Typography
         variant="body1"
         style={{
@@ -11,6 +11,7 @@ export default function ChatMessage({ chatMessage }) {
           overflow: 'hidden',
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
+          paddingTop: '10px',
         }}
       >
         {chatMessage.sender.username}: {chatMessage.content}

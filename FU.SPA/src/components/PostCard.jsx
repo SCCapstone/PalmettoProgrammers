@@ -135,16 +135,22 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
             margin: '5px 0',
           }}
         />
-        <Typography
-          variant="body2"
-          sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            height: 80,
-          }}
-        >
-          {post.description}
-        </Typography>
+        <Tooltip title={post.description}>
+          <Typography
+            variant="body2"
+            sx={{
+              height: 80,
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
+              textOverflow: 'ellipsis',
+              overflowWrap: 'break-word',
+            }}
+          >
+            {post.description}
+          </Typography>
+        </Tooltip>
         {post.lastMessage && (
           <ChatMessagePreview chatMessage={post.lastMessage} />
         )}

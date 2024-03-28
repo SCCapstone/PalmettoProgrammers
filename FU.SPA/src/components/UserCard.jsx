@@ -130,18 +130,22 @@ const UserCard = ({ user, showRelationStatus, showActions }) => {
             marginBottom: '6px',
           }}
         />
-        {user.bio && (
+        <Tooltip title={user.bio}>
           <Typography
             variant="body2"
             sx={{
+              height: 80,
               overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
               textOverflow: 'ellipsis',
-              height: 200,
+              overflowWrap: 'break-word',
             }}
           >
             {user.bio}
           </Typography>
-        )}
+        </Tooltip>
         {user.lastMessage && (
           <ChatMessagePreview chatMessage={user.lastMessage} />
         )}

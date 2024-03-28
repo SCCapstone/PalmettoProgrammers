@@ -126,8 +126,6 @@ export const TagsSelector = ({ value, onChange }) => {
  * @param {string} initialValue The initial value to display in the dropdown list. Should be of the format: optionValue:asc or optionValue:desc
  */
 export const SortOptionsSelector = ({ options, onChange, initialValue }) => {
-  console.log(options);
-  console.log(initialValue);
   // split the initial value into the option and order
   const [initialOption, initialOrder] = initialValue
     ? initialValue.split(':')
@@ -169,7 +167,7 @@ export const SortOptionsSelector = ({ options, onChange, initialValue }) => {
       <Select
         labelId="sort-option-label"
         label="Sort by"
-        value={optionValue ?? options[0].value}
+        value={optionValue}
         onChange={(e) => {
           handleFormControlChange('option', {
             optionValue: e.target.value,

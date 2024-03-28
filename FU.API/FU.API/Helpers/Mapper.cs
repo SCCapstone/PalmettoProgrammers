@@ -24,7 +24,7 @@ public static class Mapper
             IsOnline = appUser.IsOnline,
             FavoriteGames = appUser.FavoriteGames.Select(g => g.Game).ToList(),
             FavoriteTags = appUser.FavoriteTags.Select(t => t.Tag).ToList(),
-            LastMessage = lastChatMessage == null ? null : lastChatMessage.ToDto(),
+            LastMessage = lastChatMessage?.ToDto(),
         };
     }
 
@@ -210,7 +210,7 @@ public static class Mapper
             Creator = post.Creator == null ? new UserProfile { Username = "Deleted User" } : post.Creator.ToProfile(),
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
             HasJoined = hasJoined,
-            LastMessage = post.Chat.LastMessage == null ? null : post.Chat.LastMessage.ToDto(),
+            LastMessage = post.Chat.LastMessage?.ToDto(),
         };
     }
 
