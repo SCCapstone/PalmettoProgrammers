@@ -86,6 +86,13 @@ public class AzureBlobStorageService : IStorageService
         }
     }
 
+    public async Task<bool> IsInStorageAsync(Uri uri)
+    {
+        BlobClient blobClient = new(uri);
+
+        return await blobClient.ExistsAsync();
+    }
+
     private async Task<bool> DeleteFileAsync(string fileName)
     {
         BlobClient blob = await GetBlobClientAsync(fileName);
