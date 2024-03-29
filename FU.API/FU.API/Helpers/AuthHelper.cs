@@ -30,5 +30,4 @@ public static class AuthHelper
     {
         return configuration[ConfigKey.JwtSecret] ?? string.Empty;
     }
-
 }
