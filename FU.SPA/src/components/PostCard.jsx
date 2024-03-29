@@ -88,7 +88,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
 
   return (
     <Card sx={{ width: 250 }}>
-      <CardContent sx={{ textAlign: 'left', height: 300 }}>
+      <CardContent sx={{ textAlign: 'left', height: 350 }}>
         <div
           className="user-header"
           onClick={() => navigate(`/profile/${user.id}`)}
@@ -139,7 +139,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
           <Typography
             variant="body2"
             sx={{
-              height: 80,
+              maxHeight: 80,
               overflow: 'hidden',
               display: '-webkit-box',
               WebkitLineClamp: 4,

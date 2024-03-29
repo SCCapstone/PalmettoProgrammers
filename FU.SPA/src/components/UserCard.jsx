@@ -79,7 +79,7 @@ const UserCard = ({ user, showRelationStatus, showActions }) => {
         flexDirection: 'column',
       }}
     >
-      <CardContent style={{ textAlign: 'left', height: 300 }}>
+      <CardContent style={{ textAlign: 'left', height: 350 }}>
         <Stack
           sx={{ '&:hover': showActions ? { cursor: 'pointer' } : {} }}
           alignItems="center"
@@ -134,7 +134,7 @@ const UserCard = ({ user, showRelationStatus, showActions }) => {
           <Typography
             variant="body2"
             sx={{
-              height: 80,
+              maxHeight: 80,
               overflow: 'hidden',
               display: '-webkit-box',
               WebkitLineClamp: 4,
