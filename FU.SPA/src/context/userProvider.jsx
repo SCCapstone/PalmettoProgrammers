@@ -7,23 +7,23 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token') || null);
 
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        if (token) {
-          const currentUser = await UserService.getUserprofile('current');
-          setUser(currentUser);
-          startConnection();
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error('Error fetching current user:', error.message);
+  const fetchCurrentUser = async (token) => {
+    try {
+      if (token) {
+        const currentUser = await UserService.getUserprofile('current');
+        setUser(currentUser);
+        startConnection();
+      } else {
         setUser(null);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching current user:', error.message);
+      setUser(null);
+    }
+  };
 
-    fetchCurrentUser();
+  useEffect(() => {
+    fetchCurrentUser(token);
   }, [token]);
 
   const login = (newToken) => {
@@ -38,8 +38,12 @@ const UserProvider = ({ children }) => {
     stopConnection();
   };
 
+  const refreshUser = async () => {
+    fetchCurrentUser(token);
+  };
+
   return (
-    <UserContext.Provider value={{ user, token, login, logout }}>
+    <UserContext.Provider value={{ user, token, login, logout, refreshUser }}>
       {children}
     </UserContext.Provider>
   );

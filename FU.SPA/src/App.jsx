@@ -51,14 +51,6 @@ function App() {
             />
 
             <Route
-              path="/profilesettings/"
-              element={
-                <ProtectedRoute>
-                  <ProfileSettings />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/accountsettings/"
               element={
                 <ProtectedRoute>
