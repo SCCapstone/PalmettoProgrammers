@@ -46,7 +46,7 @@ To pause the container press `CTRL-C`. To resume it run the above command. To st
 
 Tests are located in `FU.SPA/tests`.
 
-To add initial testing data, add API calls to `tests/setup-tests.js`. The file can be run manually with `node tests/setup-tests.js`.
+To add initial testing data, add API calls to `tests/setup-tests.js`. The file can be run manually with `node tests/setup-tests.js`. If run manually, the `API_BASE_URL` environment variable must be set. See [here](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs) for details.
 
 To run behavioral tests with a API and SPA already running, run
 
