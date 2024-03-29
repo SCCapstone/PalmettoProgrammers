@@ -23,11 +23,6 @@ public class MockEmailService : IEmailService
 
     public async Task SendEmail(EmailType emailType, ApplicationUser user)
     {
-        if (emailType != EmailType.ConfirmAccount)
-        {
-            return;
-        }
-
         var userEntity = _dbContext.Users.Find(user.UserId)
             ?? throw new NotFoundException("User not found", "The requested user was not found");
 
