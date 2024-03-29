@@ -5,18 +5,15 @@ using FU.API.Models;
 using FU.API.Helpers;
 using FU.API.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using FU.API.Exceptions;
 
 public class UserService : CommonService, IUserService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IStorageService _storageService;
 
-    public UserService(AppDbContext dbContext, IStorageService storageService)
+    public UserService(AppDbContext dbContext)
         : base(dbContext)
     {
         _dbContext = dbContext;
-        _storageService = storageService;
     }
 
     public async Task<UserProfile?> GetUserProfile(int userId)
@@ -41,22 +38,6 @@ public class UserService : CommonService, IUserService
 
         if (profileChanges.PfpUrl is not null)
         {
-            // Make sure its an image already in our blob storage
-            // Otherwise we are unure if the image is cropped, resized, and in the right format
-            try
-            {
-                Uri avatarUri = new(profileChanges.PfpUrl);
-
-                if (!(await _storageService.IsInStorageAsync(avatarUri)))
-                {
-                    throw new UnprocessableException("Invalid profile picture. The image must be uploaded to our storage system");
-                }
-            }
-            catch (UriFormatException)
-            {
-                throw new UnprocessableException("Invalid avatar url format.");
-            }
-
             user.PfpUrl = profileChanges.PfpUrl;
         }
 
