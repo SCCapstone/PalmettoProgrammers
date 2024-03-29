@@ -121,9 +121,9 @@ export default function Edit({ postId }) {
    */
   const areValuesSame = () => {
     if (postsDetails.game !== game || !compareTags(postsDetails.tags, tags)) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   };
   /*
    * Comparing two arrays (tags) to see if they're the same.
@@ -137,7 +137,7 @@ export default function Edit({ postId }) {
         return false;
       }
     }
-    return false;
+    return true;
   };
 
   return (
