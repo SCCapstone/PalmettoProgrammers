@@ -10,7 +10,12 @@
     "preview": "npx vite preview",
     "format": "npx prettier . --write",
     "format-check": "npx prettier . --check",
-    "selenium-test": "npx selenium-side-runner tests/*.side -c browserName=firefox"
+    "selenium-test": "npx selenium-side-runner tests/*.side -c browserName=firefox",
+    "selenium-test:clean": "npm run container-setup && npm run selenium-test && npm run container-teardown",
+    "container-setup": "npm run container-teardown && docker compose -f tests/docker-compose.yml up --build -d",
+    "container-teardown": "docker compose -f tests/docker-compose.yml down",
+    "api-start": "docker compose -f ../FU.API/FU.API/docker-compose.yml up --build",
+    "api-teardown": "docker compose -f ../FU.API/FU.API/docker-compose.yml down"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
