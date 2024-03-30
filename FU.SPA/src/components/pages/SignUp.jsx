@@ -10,6 +10,8 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -29,6 +31,7 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmedReadTerms, setConfirmedReadTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -67,7 +70,8 @@ export default function SignUp() {
     username.length > 0 &&
     email.length > 0 &&
     password.length > 0 &&
-    confirmPassword.length > 0;
+    confirmPassword.length > 0 &&
+    confirmedReadTerms;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
@@ -224,19 +228,29 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
+          <Grid item sx={{ mt: 1 }}>
+            <ConfirmedCheckbox
+              name="agreeTerms"
+              label="terms and conditions"
+              link="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
+              checked={confirmedReadTerms}
+              onChange={(event) => setConfirmedReadTerms(event.target.checked)}
+              description="I agree to the"
+            />
+          </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             disabled={!isEnabled}
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 1, mb: 2 }}
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container direction="column" alignItems="flex-end">
             <Grid item>
               <Link
-                class="signin-link"
+                className="signin-link"
                 onClick={() => navigate(`/SignIn`)}
                 variant="body2"
                 style={{
@@ -253,4 +267,54 @@ export default function SignUp() {
       </Box>
     </Container>
   );
+  function ConfirmedCheckbox({
+    name,
+    label,
+    link,
+    checked,
+    onChange,
+    description,
+  }) {
+    return (
+      <FormControlLabel
+        control={
+          <Checkbox
+            name={name}
+            color="primary"
+            size="extra small"
+            checked={checked}
+            onChange={onChange}
+            style={{ padding: 5 }}
+          />
+        }
+        label={
+          <span>
+            <Typography
+              component="span"
+              variant="body2"
+              style={{
+                color: Theme.palette.primary.main,
+                marginRight: 3,
+              }}
+            >
+              {description}
+            </Typography>
+            <Link
+              href={link}
+              variant="body2"
+              target="_blank"
+              style={{
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                color: Theme.palette.primary.main,
+              }}
+            >
+              {label}
+            </Link>
+          </span>
+        }
+        style={{ marginRight: 0 }}
+      />
+    );
+  }
 }

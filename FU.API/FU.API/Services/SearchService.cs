@@ -10,7 +10,7 @@ using FU.API.Helpers;
 
 public class SearchService : CommonService, ISearchService
 {
-    private static readonly DateTime DefaultStartTime = DateTime.MinValue;
+    private static readonly DateTime DefaultTime = DateTime.MinValue;
 
     private readonly AppDbContext _dbContext;
 
@@ -22,27 +22,14 @@ public class SearchService : CommonService, ISearchService
 
     public async Task<(List<UserProfile>, int TotalResults)> SearchUsers(UserQuery query)
     {
-        var dbQuery = BuildUsersDbQuery(query);
-
-        // Count the total number of results so that the UI can display the correct number of pages
-        int totalResults = await dbQuery.CountAsync();
-
-        // Sort results
-        IOrderedQueryable<ApplicationUser> orderedDbQuery = query.SortDirection == SortDirection.Ascending
-            ? dbQuery.OrderBy(
-                SelectUserProperty(query.SortType))
-            : dbQuery.OrderByDescending(
-                SelectUserProperty(query.SortType));
-
-        // Finally sort by Id to ensure order is consistent across calls.
-        orderedDbQuery = orderedDbQuery.ThenBy(u => u.UserId);
-
-        List<ApplicationUser> applicationUsers = await orderedDbQuery
-            .Skip((query.Page - 1) * query.Limit)
-            .Take(query.Limit)
-            .ToListAsync();
-
-        return (applicationUsers.ToProfiles().ToList(), totalResults);
+        if (query.UserId is not null && query.RelationStatus is not null)
+        {
+            return await SearchConnectedUsers(query);
+        }
+        else
+        {
+            return await SearchAllUsers(query);
+        }
     }
 
     public async Task<(List<Post>, int TotalResults)> SearchPosts(PostQuery query)
@@ -90,6 +77,22 @@ public class SearchService : CommonService, ISearchService
         return predicate;
     }
 
+    private static Expression<Func<UserRelation, bool>> ConnectedUserContainsKeywords(List<string> keywords)
+    {
+        if (keywords.Count == 0)
+        {
+            return PredicateBuilder.New<UserRelation>(true); // nothing to do so return a true predicate
+        }
+
+        var predicate = PredicateBuilder.New<UserRelation>(false); // create a predicate that's false by default
+        foreach (string keyword in keywords)
+        {
+            predicate = predicate.Or(ur => ur.User2.NormalizedBio.Contains(keyword.ToUpper()) || ur.User2.NormalizedUsername.Contains(keyword.ToUpper()));
+        }
+
+        return predicate;
+    }
+
     // Determines if a keyword is a posts's description or title
     private static Expression<Func<Post, bool>> PostContainsKeywords(List<string> keywords)
     {
@@ -113,7 +116,8 @@ public class SearchService : CommonService, ISearchService
         {
             PostSortType.NewestCreated => (post) => post.CreatedAt,
             PostSortType.Title => (post) => post.NormalizedTitle,
-            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? DefaultStartTime,
+            PostSortType.EarliestToScheduledTime => (post) => post.StartTime ?? DefaultTime,
+            PostSortType.ChatActivity => (post) => post.Chat.LastMessageAt ?? DefaultTime,
             _ => (post) => post.CreatedAt,
         };
     }
@@ -127,6 +131,16 @@ public class SearchService : CommonService, ISearchService
         };
     }
 
+    private static Expression<Func<UserRelation, object>> SelectConnectedUserProperty(UserSortType? sortType)
+    {
+        return sortType switch
+        {
+            UserSortType.Username => (ur) => ur.User2.NormalizedUsername,
+            UserSortType.ChatActivity => (ur) => ur.Chat.LastMessageAt ?? DefaultTime,
+            _ => (ur) => ur.User2.NormalizedUsername,
+        };
+    }
+
     /// <summary>
     /// Gets the database query for users based on the given query.
     /// </summary>
@@ -134,21 +148,21 @@ public class SearchService : CommonService, ISearchService
     /// <returns>The users to query. Either related to user with UserId, or all users.</returns>
     private IQueryable<ApplicationUser> BuildUsersDbQuery(UserQuery query)
     {
-        IQueryable<ApplicationUser> dbQuery;
-
-        // Decide if member info should be included depending on if the request is anonymous
-        if (query.UserId is not null && query.RelationStatus is not null)
-        {
-            dbQuery = _dbContext.UserRelations
-                .Where(ur => ur.User1Id == query.UserId && ur.Status == query.RelationStatus)
-                .Select(ur => ur.User2);
-        }
-        else
-        {
-            dbQuery = _dbContext.Users.Select(u => u);
-        }
+        IQueryable<ApplicationUser> dbQuery = _dbContext.Users.Select(u => u);
 
         dbQuery = dbQuery.Where(UserContainsKeywords(query.Keywords));
+
+        return dbQuery;
+    }
+
+    private IQueryable<UserRelation> BuildConnectedUsersDbQuery(UserQuery query)
+    {
+        IQueryable<UserRelation> dbQuery = _dbContext.UserRelations
+            .Where(ur => ur.User1Id == query.UserId && ur.Status == query.RelationStatus)
+            .Include(ur => ur.User2)
+            .Include(ur => ur.Chat).ThenInclude(c => c.LastMessage).ThenInclude(m => m.Sender);
+
+        dbQuery = dbQuery.Where(ConnectedUserContainsKeywords(query.Keywords));
 
         return dbQuery;
     }
@@ -162,6 +176,7 @@ public class SearchService : CommonService, ISearchService
         {
             dbQuery = _dbContext.Posts
                 .Where(p => p.Chat.Members.Any(m => m.UserId == query.UserId))
+                .Include(p => p.Chat).ThenInclude(c => c.LastMessage).ThenInclude(m => m.Sender)
                 .Select(p => p);
         }
         else
@@ -262,5 +277,62 @@ public class SearchService : CommonService, ISearchService
         }
 
         return dbQuery;
+    }
+
+    private async Task<(List<UserProfile> users, int totalResults)> SearchConnectedUsers(UserQuery query)
+    {
+        var dbQuery = BuildConnectedUsersDbQuery(query);
+
+        // Count the total number of results so that the UI can display the correct number of pages
+        int totalResults = await dbQuery.CountAsync();
+
+        // Sort results
+        IOrderedQueryable<UserRelation> orderedDbQuery = query.SortDirection == SortDirection.Ascending
+            ? dbQuery.OrderBy(
+                SelectConnectedUserProperty(query.SortType))
+            : dbQuery.OrderByDescending(
+                SelectConnectedUserProperty(query.SortType));
+
+        // Finally sort by Id to ensure order is consistent across calls.
+        orderedDbQuery = orderedDbQuery.ThenBy(ur => ur.Id);
+
+        List<UserRelation> userRelations = await orderedDbQuery
+            .Skip((query.Page - 1) * query.Limit)
+            .Take(query.Limit)
+            .ToListAsync();
+
+        // Go through each relation and attach the last message to the user profile we are returning
+        List<UserProfile> userProfiles = userRelations.Select(ur =>
+        {
+            var userProfile = ur.User2.ToProfile(lastChatMessage: ur.Chat.LastMessage);
+            return userProfile;
+        }).ToList();
+
+        return (userProfiles, totalResults);
+    }
+
+    private async Task<(List<UserProfile>, int TotalResults)> SearchAllUsers(UserQuery query)
+    {
+        var dbQuery = BuildUsersDbQuery(query);
+
+        // Count the total number of results so that the UI can display the correct number of pages
+        int totalResults = await dbQuery.CountAsync();
+
+        // Sort results
+        IOrderedQueryable<ApplicationUser> orderedDbQuery = query.SortDirection == SortDirection.Ascending
+            ? dbQuery.OrderBy(
+                SelectUserProperty(query.SortType))
+            : dbQuery.OrderByDescending(
+                SelectUserProperty(query.SortType));
+
+        // Finally sort by Id to ensure order is consistent across calls.
+        orderedDbQuery = orderedDbQuery.ThenBy(u => u.UserId);
+
+        List<ApplicationUser> applicationUsers = await orderedDbQuery
+            .Skip((query.Page - 1) * query.Limit)
+            .Take(query.Limit)
+            .ToListAsync();
+
+        return (applicationUsers.ToProfiles().ToList(), totalResults);
     }
 }
