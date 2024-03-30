@@ -27,22 +27,37 @@ export default function CreatePost() {
   const [game, setGame] = useState(null);
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs());
-  const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
+  const [endTime, setEndTime] = useState(dayjs().add(5, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const [fGame, setFGame] = useState(null);
+  const [tIds, setTIds] = useState([]);
 
-  // useEffect(() => {
-  //   const init = async () => {
-  //     try {
-        
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  //   init();
-  // }, []); 
+  useEffect(() => {
+    const init = async () => {
+      try {
+        //e.preventDefault();
+
+        let tagIds = [];
+
+        for (const tag of tags) {
+          const newTag = await TagService.findOrCreateTagByName(tag.name);
+          tagIds.push(newTag.id);
+        }
+
+        var findGame = await GameService.findOrCreateGameByTitle(game.name);
+
+
+        setTIds(tagIds);
+        setFGame(findGame);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    init();
+  }, []); 
   
   //Test post to show for preview.
   const previewPost = {
@@ -54,8 +69,8 @@ export default function CreatePost() {
     },
     title: title,
     game: 'Game Name Here',
-    startTime: dayjs().toISOString(),
-    endTime: dayjs().add(1, 'hour').toISOString(),
+    startTime: startTime,
+    endTime: endTime,
     description: description,
     tags: ['Tag1', 'Tag2'], //tags,
   };
@@ -91,6 +106,7 @@ export default function CreatePost() {
   };
 
   return (
+    <Box sx={{ display: 'flex', justifyConent: 'center'}}>
     <Container component="main" maxWidth="xs">
       {/* {<PostCardPreview/>} */}
       <Box
@@ -161,16 +177,21 @@ export default function CreatePost() {
           </Button>
         </Box>
       </Box>
+      </Container>
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          mt: 4,
+          //alignItems: 'right',
+          //alignContent: 'center',
+          flexDirection: 'column',
+          marginRight: 50,
         }}
       >
         <PostCard post={previewPost} showActions={false} />
       </Box>
-    </Container>
+
+    </Box>
   );
 }
 
