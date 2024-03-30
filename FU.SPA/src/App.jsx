@@ -15,7 +15,6 @@ import Box from '@mui/material/Box';
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
-import ProfileSettings from './components/pages/ProfileSettings';
 import AccountSettings from './components/pages/AccountSettings';
 import EditPost from './components/pages/EditPost';
 import { ReactNotifications } from 'react-notifications-component';
