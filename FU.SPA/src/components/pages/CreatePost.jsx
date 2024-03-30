@@ -12,9 +12,9 @@ import {
 import { useEffect, useState } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import PostService from '../services/postService';
-import TagService from '../services/tagService';
-import GameService from '../services/gameService';
+import PostService from '../../services/postService';
+import TagService from '../../services/tagService';
+import GameService from '../../services/gameService';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
