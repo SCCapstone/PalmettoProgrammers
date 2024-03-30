@@ -9,7 +9,7 @@ import {
   Autocomplete,
   createFilterOptions,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PostService from '../services/postService';
@@ -21,6 +21,7 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PostCard from './PostCard';
+import UserContext from '../context/userContext';
 
 export default function CreatePost() {
   const [game, setGame] = useState(null);
@@ -30,13 +31,25 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+        
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  //   init();
+  // }, []); 
+  
   //Test post to show for preview.
   const previewPost = {
     id: null,
     creator: {
-      id: null,
-      username: 'Your username here',
+      id: user.id,
+      username: user.username,
       pfpUrl: 'previewTest_profile_pic',
     },
     title: title,
@@ -106,10 +119,10 @@ export default function CreatePost() {
           }}
         >
           <TextField
-            required //may want to get rid of this and just check if it's empty when clicking create button.
+            required 
             fullWidth
             id="searchGames"
-            label="Title" //might want to put a Search icon in front, if we can figure it out.
+            label="Title" 
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
