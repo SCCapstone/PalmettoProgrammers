@@ -12,6 +12,7 @@ import {
 import Theme from '../Theme';
 import { useNavigate } from 'react-router-dom';
 import { People, PendingActions, CallMade } from '@mui/icons-material';
+import ChatMessagePreview from './ChatMessagePreview';
 
 const UserCard = ({ user, showRelationStatus, showActions }) => {
   if (showRelationStatus === undefined) {
@@ -78,7 +79,7 @@ const UserCard = ({ user, showRelationStatus, showActions }) => {
         flexDirection: 'column',
       }}
     >
-      <CardContent style={{ textAlign: 'left', height: 300 }}>
+      <CardContent style={{ textAlign: 'left', height: 350 }}>
         <Stack
           sx={{ '&:hover': showActions ? { cursor: 'pointer' } : {} }}
           alignItems="center"
@@ -129,17 +130,24 @@ const UserCard = ({ user, showRelationStatus, showActions }) => {
             marginBottom: '6px',
           }}
         />
-        {user.bio && (
+        <Tooltip title={user.bio}>
           <Typography
             variant="body2"
             sx={{
+              maxHeight: 80,
               overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
               textOverflow: 'ellipsis',
-              height: 200,
+              overflowWrap: 'break-word',
             }}
           >
             {user.bio}
           </Typography>
+        </Tooltip>
+        {user.lastMessage && (
+          <ChatMessagePreview chatMessage={user.lastMessage} />
         )}
       </CardContent>
       {showActions && (
