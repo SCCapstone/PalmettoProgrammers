@@ -22,9 +22,6 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
 
-window.gameDetails = '';
-window.tagsDetails = '';
-
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
   const [title, setTitle] = useState('');
@@ -56,21 +53,26 @@ export default function Edit({ postId }) {
     };
 
     init();
-  }, [postId, user, navigate, title, description]); //had to add title and description to avoid them not showing on some occasions.
+    /*
+     * Had to add title and description to the dependencies
+     * to avoid them not showing on some occasions.
+     * Added the others to satisfy npm run lint.
+     */
+  }, [
+    postId,
+    user,
+    navigate,
+    title,
+    description,
+    postsDetails.description,
+    postsDetails.endTime,
+    postsDetails.startTime,
+    postsDetails.title,
+  ]);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
     e.preventDefault();
-
-    /*
-     * Purpose is to fix a bug that requires the values to change.
-     */
-    if (!areValuesSame()) {
-      setTags(null);
-      setTags(postsDetails.tags);
-      setGame(null);
-      setGame(postsDetails.game);
-    }
 
     let tagIds = [];
 
@@ -104,29 +106,6 @@ export default function Edit({ postId }) {
       window.alert(e);
       console.error(e);
     }
-  };
-  /*
-   * Checking if the values are the same as the ones given
-   */
-  const areValuesSame = () => {
-    if (postsDetails.game !== game || !compareTags(postsDetails.tags, tags)) {
-      return false;
-    }
-    return true;
-  };
-  /*
-   * Comparing two arrays (tags) to see if they're the same.
-   */
-  const compareTags = (tags1, tags2) => {
-    if (tags1.length !== tags2.length) {
-      return false;
-    }
-    for (var i = 0; i < tags1.length; i++) {
-      if (tags1[i].name !== tags2[i].name) {
-        return false;
-      }
-    }
-    return true;
   };
 
   return (
