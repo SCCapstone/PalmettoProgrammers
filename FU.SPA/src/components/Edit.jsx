@@ -62,12 +62,10 @@ export default function Edit({ postId }) {
     postId,
     user,
     navigate,
-    title,
-    description,
-    postsDetails.description,
-    postsDetails.endTime,
-    postsDetails.startTime,
     postsDetails.title,
+    postsDetails.description,
+    postsDetails.startTime,
+    postsDetails.endTime,
   ]);
 
   const handleSubmit = async (e) => {

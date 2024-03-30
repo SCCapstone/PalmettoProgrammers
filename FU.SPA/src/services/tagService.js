@@ -39,28 +39,23 @@ const findOrCreateTagByName = async (name) => {
 
 // Create tag request
 const createTag = async (params) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/Tags`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        ...AuthService.getAuthHeader(),
-      },
-      body: JSON.stringify(params),
-    });
+  const response = await fetch(`${API_BASE_URL}/Tags`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      ...AuthService.getAuthHeader(),
+    },
+    body: JSON.stringify(params),
+  });
 
-    if (!response.ok) {
-      throw new Error('Error in tag creation');
-    }
-    const jsonResponse = await response.json();
-
-    console.log(jsonResponse);
-
-    return jsonResponse;
-  } catch (e) {
-    console.error('Error creating tag: ', e);
-    throw e;
+  if (!response.ok) {
+    throw new Error('Error in tag creation');
   }
+  const jsonResponse = await response.json();
+
+  console.log(jsonResponse);
+
+  return jsonResponse;
 };
 
 const TagService = {
