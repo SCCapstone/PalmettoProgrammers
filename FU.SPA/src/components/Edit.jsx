@@ -29,12 +29,11 @@ export default function Edit({ postId }) {
   const [game, setGame] = useState();
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs());
-  const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
+  const [endTime, setEndTime] = useState(dayjs().add(5, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const [postsDetails, setPostsDetails] = useState('');
-  const [count, setCount] = useState(0);
 
   const { user } = useContext(UserContext);
 
@@ -42,32 +41,22 @@ export default function Edit({ postId }) {
     const init = async () => {
       try {
         const postDetails = await PostService.getPostDetails(postId);
+        setPostsDetails(postDetails);
+        setTitle(postsDetails.title);
+        setDescription(postsDetails.description);
+        setStartTime(dayjs(postsDetails.startTime));
+        setEndTime(dayjs(postsDetails.endTime));  
         if (user.id !== postDetails.creator.id) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
-        if (count < 2) {
-          setPostsDetails(postDetails);
-          setTitle(postsDetails.title);
-          setDescription(postsDetails.description);
-          setStartTime(dayjs(postsDetails.startTime));
-          setEndTime(dayjs(postsDetails.endTime));
-          gameDetails = postsDetails.game;
-          tagsDetails = postDetails.tags;
-          setGame(postsDetails.game);
-          setTags(postsDetails.tags);
-        }
-        // setGame(postsDetails.game);
-        // console.log(game);
-        // setTags(postsDetails.tags);
-        setCount(count + 1);
       } catch (e) {
         console.error(e);
       }
     };
 
     init();
-  }, [game, count]);
+  }, [postId, user, navigate, title, description]); //had to add title and description to avoid them not showing on some occasions.
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
@@ -179,7 +168,7 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             {postsDetails.game !== undefined && (
-              <GameSelector initialValue={gameDetails} onChange={setGame} />
+              <GameSelector initialValue={postsDetails.game} onChange={setGame} />
             )}
           </Grid>
           <br />
@@ -196,7 +185,7 @@ export default function Edit({ postId }) {
             />
           </LocalizationProvider>
           {postsDetails.tags !== undefined && (
-            <TagsSelector initialValue={tagsDetails} onChange={setTags} />
+            <TagsSelector initialValue={postsDetails.tags} onChange={setTags} />
           )}
           <Box
             sx={{
@@ -241,12 +230,11 @@ const GameSelector = ({ onChange, initialValue }) => {
     const getGames = async () => {
       try {
         const game = await GameService.searchGames('');
-        //GameService.searchGames('').then((games) => setGameOptions(games));
         setGameOptions(game);
         const gameChoice = game.find((g) => g.name === initialValue);
-        // const gameChoice = game.GameService.searchGames(initialValue);
         if (gameChoice) {
           setValue(gameChoice);
+          onChange(gameChoice);
         }
       } catch (e) {
         console.error('Problem getting games', e);
@@ -254,7 +242,7 @@ const GameSelector = ({ onChange, initialValue }) => {
     };
 
     getGames();
-  }, [initialValue]);
+  }, [initialValue, onChange]);
 
   const onInputChange = (event, newValue) => {
     setValue(newValue);
@@ -311,22 +299,20 @@ const TagsSelector = ({ onChange, initialValue }) => {
       try {
         const tags = await TagService.searchTags('');
         setTagOptions(tags);
-        //const tags = TagService.searchTags('').then((tags) => setTagOptions(tags));
-        // setTagOptions(TagService.searchTags('').then((tags) => setTagOptions(tags)));
         //if tags aren't null and isn't empty string.
         if (initialValue && initialValue.length > 0) {
-          // const initialTags = TagService.searchTags('').then((tags) => setTagOptions(tags)).filter(tag => initialValue.includes(tag.name));
           const initialTags = tags.filter((tag) =>
             initialValue.includes(tag.name),
           );
           setValue(initialTags);
+          onChange(initialTags);
         }
       } catch (e) {
         console.error('Something went wrong getting tags: ', e);
       }
     };
     getTags();
-  }, []);
+  }, [initialValue, onChange]);
 
   const onInputChange = (event, newValues) => {
     for (const newValue of newValues) {
