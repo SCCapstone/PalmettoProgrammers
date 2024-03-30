@@ -35,29 +35,29 @@ export default function CreatePost() {
   const [fGame, setFGame] = useState(null);
   const [tIds, setTIds] = useState([]);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        //e.preventDefault();
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       //e.preventDefault();
 
-        let tagIds = [];
+  //       let tagIds = [];
 
-        for (const tag of tags) {
-          const newTag = await TagService.findOrCreateTagByName(tag.name);
-          tagIds.push(newTag.id);
-        }
+  //       for (const tag of tags) {
+  //         const newTag = await TagService.findOrCreateTagByName(tag.name);
+  //         tagIds.push(newTag.id);
+  //       }
 
-        var findGame = await GameService.findOrCreateGameByTitle(game.name);
+  //       var findGame = await GameService.findOrCreateGameByTitle(game.name);
 
 
-        setTIds(tagIds);
-        setFGame(findGame);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    init();
-  }, []); 
+  //       setTIds(tagIds);
+  //       setFGame(findGame);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  //   init();
+  // }, []); 
   
   //Test post to show for preview.
   const previewPost = {
