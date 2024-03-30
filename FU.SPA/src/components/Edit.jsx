@@ -45,7 +45,7 @@ export default function Edit({ postId }) {
         setTitle(postsDetails.title);
         setDescription(postsDetails.description);
         setStartTime(dayjs(postsDetails.startTime));
-        setEndTime(dayjs(postsDetails.endTime));  
+        setEndTime(dayjs(postsDetails.endTime));
         if (user.id !== postDetails.creator.id) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
@@ -168,7 +168,10 @@ export default function Edit({ postId }) {
           />
           <Grid item xs={12}>
             {postsDetails.game !== undefined && (
-              <GameSelector initialValue={postsDetails.game} onChange={setGame} />
+              <GameSelector
+                initialValue={postsDetails.game}
+                onChange={setGame}
+              />
             )}
           </Grid>
           <br />
