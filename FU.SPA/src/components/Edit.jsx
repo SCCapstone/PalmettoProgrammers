@@ -26,18 +26,24 @@ export default function Edit({ postId }) {
   const [game, setGame] = useState();
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs());
-  const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
+  const [endTime, setEndTime] = useState(dayjs().add(5, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const [postsDetails, setPostsDetails] = useState('');
 
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     const init = async () => {
       try {
-        const postDetails = await PostService.getPostDetails(postId);
-        if (user.id !== postDetails.creator.id) {
+        const ogPostDetails = await PostService.getPostDetails(postId);
+        setPostsDetails(ogPostDetails);
+        setTitle(ogPostDetails.title);
+        setDescription(ogPostDetails.description);
+        setStartTime(dayjs(ogPostDetails.startTime));
+        setEndTime(dayjs(ogPostDetails.endTime));
+        if (user.id !== ogPostDetails.creator.id) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
@@ -47,7 +53,7 @@ export default function Edit({ postId }) {
     };
 
     init();
-  });
+  }, [postId, user, navigate]);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
@@ -124,7 +130,12 @@ export default function Edit({ postId }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector onChange={setGame} />
+            {postsDetails.game !== undefined && (
+              <GameSelector
+                initialValue={postsDetails.game}
+                onChange={setGame}
+              />
+            )}
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -139,7 +150,12 @@ export default function Edit({ postId }) {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector onChange={setTags} />
+          {postsDetails.tags !== undefined && (
+            <TagsSelector
+              initialValues={postsDetails.tags}
+              onChange={setTags}
+            />
+          )}
           <Box
             sx={{
               display: 'flex',
@@ -175,13 +191,27 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
-const GameSelector = ({ onChange }) => {
-  const [gammeOptions, setGameOptions] = useState([]);
+const GameSelector = ({ onChange, initialValue }) => {
+  const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
-  }, []);
+    const getGames = async () => {
+      try {
+        const game = await GameService.searchGames('');
+        setGameOptions(game);
+        const gameChoice = game.find((g) => g.name === initialValue);
+        if (gameChoice) {
+          setValue(gameChoice);
+          onChange(gameChoice);
+        }
+      } catch (e) {
+        console.error('Problem getting games', e);
+      }
+    };
+
+    getGames();
+  }, [initialValue, onChange]);
 
   const onInputChange = (event, newValue) => {
     setValue(newValue);
@@ -207,11 +237,11 @@ const GameSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       clearOnBlur
       value={value}
       onChange={onInputChange}
-      options={gammeOptions}
-      disableCloseOnSelect
+      options={gameOptions}
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
       isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -219,6 +249,7 @@ const GameSelector = ({ onChange }) => {
       renderInput={(params) => (
         <TextField
           {...params}
+          autoHighlight
           label="Game"
           required
           placeholder="Select or create a game"
@@ -228,13 +259,29 @@ const GameSelector = ({ onChange }) => {
   );
 };
 
-const TagsSelector = ({ onChange }) => {
+const TagsSelector = ({ onChange, initialValues }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
 
   useEffect(() => {
-    TagService.searchTags('').then((tags) => setTagOptions(tags));
-  }, []);
+    const getTags = async () => {
+      try {
+        const tags = await TagService.searchTags('');
+        setTagOptions(tags);
+        //if tags aren't null and isn't empty string.
+        if (initialValues && initialValues.length > 0) {
+          const initialTags = tags.filter((tag) =>
+            initialValues.includes(tag.name),
+          );
+          setValue(initialTags);
+          onChange(initialTags);
+        }
+      } catch (e) {
+        console.error('Something went wrong getting tags: ', e);
+      }
+    };
+    getTags();
+  }, [initialValues, onChange]);
 
   const onInputChange = (event, newValues) => {
     for (const newValue of newValues) {
@@ -270,6 +317,7 @@ const TagsSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       multiple
       clearOnBlur
       value={value}
