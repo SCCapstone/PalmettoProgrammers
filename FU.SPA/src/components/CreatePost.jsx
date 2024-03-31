@@ -40,22 +40,54 @@ export default function CreatePost() {
       pfpUrl: 'previewTest_profile_pic',
     },
     title: title,
-    game: 'Game Name Here',
+    game: '',
     startTime: startTime,
     endTime: endTime,
     description: description,
-    tags: ['Tag1', 'Tag2'], //tags,
+    tags: tags,
   });
+
+  const handleTitleChange = (title) => {
+    setTitle(title);
+    setPreviewPost((prevPost) => ({
+    ...prevPost,
+    title: title,
+    }));
+  };
+
+  const handleDescriptionChange = (description) => {
+    setDescription(description);
+    setPreviewPost((prevPost) => ({
+    ...prevPost,
+    description: description,
+    }));
+  };
+
+  const handleStartTimeChange = (startTime) => {
+    setStartTime(startTime);
+    setPreviewPost((prevPost) => ({
+    ...prevPost,
+    startTime: startTime,
+    }));
+  };
+
+  const handleEndTimeChange = (endTime) => {
+    setEndTime(endTime);
+    setPreviewPost((prevPost) => ({
+    ...prevPost,
+    endTime: endTime,
+    }));
+  };
 
   const handleGameChange = (game) => {
     setGame(game);
     setPreviewPost((prevPost) => ({
     ...prevPost,
-    title: title,
+    // title: title,
     game: game ? game.name : '',
-    startTime: startTime,
-    endTime: endTime,
-    description: description,
+    // startTime: startTime,
+    // endTime: endTime,
+    // description: description,
     }));
   };
 
@@ -63,11 +95,11 @@ export default function CreatePost() {
     setTags(tags);
     setPreviewPost((prevPost) => ({
       ...prevPost,
-      title: title,
+      // title: title,
       tags: tags.map((tag) => tag.name),
-      startTime: startTime,
-    endTime: endTime,
-    description: description,
+    // startTime: startTime,
+    // endTime: endTime,
+    // description: description,
     }));
   };
   //Test post to show for preview.
@@ -151,7 +183,7 @@ export default function CreatePost() {
             label="Title" 
             autoFocus
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => handleTitleChange(e.target.value)}
           />
           <Grid item xs={12}>
             {/* <GameSelector onChange={setGame} /> */}
@@ -162,12 +194,12 @@ export default function CreatePost() {
             <DateTimePicker
               label="Start Time"
               value={startTime}
-              onChange={(newValue) => setStartTime(newValue)}
+              onChange={(newValue) => handleStartTimeChange(newValue)}
             />
             <DateTimePicker
               label="End Time"
               value={endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              onChange={(newValue) => handleEndTimeChange(newValue)}
             />
           </LocalizationProvider>
           {/* <TagsSelector onChange={setTags} /> */}
@@ -180,7 +212,7 @@ export default function CreatePost() {
           <TextField
             label="Description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => handleDescriptionChange(e.target.value)}
             multiline
           ></TextField>
 
