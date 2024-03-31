@@ -3,6 +3,7 @@ namespace FU.API.Models;
 public enum UserSortType
 {
     Username,
+    DOB,
     ChatActivity,
 }
 

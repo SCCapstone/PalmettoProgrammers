@@ -108,6 +108,7 @@ public static class Mapper
         query.SortType = arr[0] switch
         {
             "username" => UserSortType.Username,
+            "dob" => UserSortType.DOB,
             "chatactivity" => UserSortType.ChatActivity,
             _ => UserSortType.Username,
         };

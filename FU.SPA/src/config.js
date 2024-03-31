@@ -9,7 +9,10 @@ const SOCIAL_POST_SORT_OPTIONS = [
   { value: 'chatactivity', label: 'Chat Activity' },
 ];
 
-const USER_SORT_OPTIONS = [{ value: 'username', label: 'Name' }];
+const USER_SORT_OPTIONS = [
+  { value: 'username', label: 'Name' },
+  { value: 'dob', label: 'DOB' },
+];
 
 const SOCIAL_USER_SORT_OPTIONS = [
   ...USER_SORT_OPTIONS,
