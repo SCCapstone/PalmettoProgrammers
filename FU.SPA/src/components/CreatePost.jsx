@@ -32,39 +32,12 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  //const [previewPost, setPreviewPost] = useState(null);
-  // const [fGame, setFGame] = useState(null);
-  // const [tIds, setTIds] = useState([]);
 
-  // useEffect(() => {
-  //   const init = async () => {
-  //     try {
-  //       //e.preventDefault();
-
-  //       let tagIds = [];
-
-  //       for (const tag of tags) {
-  //         const newTag = await TagService.findOrCreateTagByName(tag.name);
-  //         tagIds.push(newTag.id);
-  //       }
-
-  //       var findGame = await GameService.findOrCreateGameByTitle(game.name);
-
-
-  //       setTIds(tagIds);
-  //       setFGame(findGame);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  //   init();
-  // }, []); 
-  
   //Test post to show for preview.
   const previewPost = {
     id: null,
     creator: {
-      id: user.id,
+      id: null,
       username: user.username,
       pfpUrl: 'previewTest_profile_pic',
     },
@@ -109,7 +82,6 @@ export default function CreatePost() {
   return (
     <Box sx={{ display: 'flex', justifyConent: 'center'}}>
     <Container component="main" maxWidth="xs">
-      {/* {<PostCardPreview/>} */}
       <Box
         sx={{
           marginTop: 1,
@@ -183,8 +155,6 @@ export default function CreatePost() {
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          //alignItems: 'right',
-          //alignContent: 'center',
           flexDirection: 'column',
           marginRight: 50,
         }}
