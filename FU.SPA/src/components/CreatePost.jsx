@@ -59,46 +59,6 @@ export default function CreatePost() {
   //   }
   //   init();
   // }, []); 
-  // useEffect(() => {
-  //   try {
-  //   const updatePreviewPost = () => {
-  //     const previewPostInfo = {
-  //       id: null,
-  //       creator: {
-  //         id: user.id,
-  //         username: user.username,
-  //         pfpUrl: 'previewTest_profile_pic',
-  //       },
-  //       title: title,
-  //       game: game? game.name : '',
-  //       startTime: startTime,
-  //       endTime: endTime,
-  //       description: description,
-  //       tags: tags.map(tag => tag.name),
-  //     };
-  //     setPreviewPost(previewPostInfo);
-  //   };
-  //   updatePreviewPost(); //first update
-
-  //   const initiateTitle = setTitle((value) => updatePreviewPost(value));
-  //   const initiateGame = setGame((value) => updatePreviewPost(value));
-  //   const initiateStartTime = setStartTime((value) => updatePreviewPost(value));
-  //   const initiateEndTime = setEndTime((value) => updatePreviewPost(value));
-  //   const initiateDescription = setDescription((value) => updatePreviewPost(value));
-  //   const initiateTags = setTags((value) => updatePreviewPost(value));
-
-  //   console.log(previewPostinfo);
-    
-  //   initiateTitle();
-  //   initiateGame();
-  //   initiateStartTime();
-  //   initiateEndTime();
-  //   initiateDescription();
-  //   initiateTags();
-  // } catch (e) {
-  //   console.error(e);
-  // }
-  // }, [title, game, startTime, endTime, description, tags]);
   
   //Test post to show for preview.
   const previewPost = {
