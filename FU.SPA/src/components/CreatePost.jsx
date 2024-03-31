@@ -51,7 +51,11 @@ export default function CreatePost() {
     setGame(game);
     setPreviewPost((prevPost) => ({
     ...prevPost,
+    title: title,
     game: game ? game.name : '',
+    startTime: startTime,
+    endTime: endTime,
+    description: description,
     }));
   };
 
@@ -59,7 +63,11 @@ export default function CreatePost() {
     setTags(tags);
     setPreviewPost((prevPost) => ({
       ...prevPost,
+      title: title,
       tags: tags.map((tag) => tag.name),
+      startTime: startTime,
+    endTime: endTime,
+    description: description,
     }));
   };
   //Test post to show for preview.
