@@ -32,6 +32,7 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  
   const [previewPost, setPreviewPost] = useState({
     id: null,
     creator: {
@@ -83,11 +84,7 @@ export default function CreatePost() {
     setGame(game);
     setPreviewPost((prevPost) => ({
     ...prevPost,
-    // title: title,
     game: game ? game.name : '',
-    // startTime: startTime,
-    // endTime: endTime,
-    // description: description,
     }));
   };
 
@@ -95,28 +92,9 @@ export default function CreatePost() {
     setTags(tags);
     setPreviewPost((prevPost) => ({
       ...prevPost,
-      // title: title,
       tags: tags.map((tag) => tag.name),
-    // startTime: startTime,
-    // endTime: endTime,
-    // description: description,
     }));
   };
-  //Test post to show for preview.
-  // const previewPost = {
-  //   id: null,
-  //   creator: {
-  //     id: null,
-  //     username: user.username,
-  //     pfpUrl: 'previewTest_profile_pic',
-  //   },
-  //   title: title,
-  //   game: 'Game Name Here',
-  //   startTime: startTime,
-  //   endTime: endTime,
-  //   description: description,
-  //   tags: ['Tag1', 'Tag2'], //tags,
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -186,7 +164,6 @@ export default function CreatePost() {
             onChange={(e) => handleTitleChange(e.target.value)}
           />
           <Grid item xs={12}>
-            {/* <GameSelector onChange={setGame} /> */}
             <GameSelector onChange={handleGameChange} />
           </Grid>
           <br />
@@ -202,7 +179,6 @@ export default function CreatePost() {
               onChange={(newValue) => handleEndTimeChange(newValue)}
             />
           </LocalizationProvider>
-          {/* <TagsSelector onChange={setTags} /> */}
           <TagsSelector onChange={handleTagsChange} />
           <Box
             sx={{
