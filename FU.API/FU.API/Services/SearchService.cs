@@ -12,6 +12,8 @@ public class SearchService : CommonService, ISearchService
 {
     private static readonly DateTime DefaultTime = DateTime.MinValue;
 
+    private static readonly DateOnly DefaultDate = new DateOnly(1, 1, 1);
+
     private readonly AppDbContext _dbContext;
 
     public SearchService(AppDbContext dbContext)
@@ -127,7 +129,7 @@ public class SearchService : CommonService, ISearchService
         return sortType switch
         {
             UserSortType.Username => (user) => user.NormalizedUsername,
-            UserSortType.DOB => (user) => user.DOB,
+            UserSortType.DOB => (user) => user.DOB ?? DefaultDate,
             _ => (user) => user.NormalizedUsername,
         };
     }
@@ -138,6 +140,7 @@ public class SearchService : CommonService, ISearchService
         {
             UserSortType.Username => (ur) => ur.User2.NormalizedUsername,
             UserSortType.ChatActivity => (ur) => ur.Chat.LastMessageAt ?? DefaultTime,
+            UserSortType.DOB => (ur) => ur.User2.DOB ?? DefaultDate,
             _ => (ur) => ur.User2.NormalizedUsername,
         };
     }
