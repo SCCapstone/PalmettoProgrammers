@@ -44,6 +44,7 @@ const buildPostQueryString = (query) => {
     queryString += '&limit=' + query.limit;
   }
 
+  // Sort option
   if (query.sort) {
     queryString += '&sort=' + query.sort;
   }
@@ -67,6 +68,7 @@ const buildUserQueryString = (query) => {
     queryString += '&limit=' + query.limit;
   }
 
+  // Sort option
   if (query.sort) {
     queryString += '&sort=' + query.sort;
   }

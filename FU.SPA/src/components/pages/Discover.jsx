@@ -77,7 +77,9 @@ export default function Discover() {
   );
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
-  const [sortOption, setSortOption] = useState(null);
+
+  const [postSortOption, setPostSortOption] = useState(null);
+  const [userSortOption, setUserSortOption] = useState(null);
 
   const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
     const paramValue = searchParams.get(paramKey.dateRadio);
@@ -181,7 +183,7 @@ export default function Discover() {
           tags: tags,
           limit: queryLimit,
           page: page,
-          sort: sortOption,
+          sort: postSortOption,
         };
 
         if (startDate) query.startDate = startDate;
@@ -213,16 +215,20 @@ export default function Discover() {
           }
         }
 
+        // Search and set posts
         const response = await SearchService.searchPosts(query);
         setPosts(response.data);
         setTotalResults(response.totalCount);
       } else {
+        // on User tab
         const query = {
           keywords: searchText,
           limit: queryLimit,
           page: page,
+          sort: userSortOption,
         };
 
+        // Search and set users
         const response = await SearchService.searchUsers(query);
         setPlayers(response.data);
         setTotalResults(response.totalCount);
@@ -249,7 +255,8 @@ export default function Discover() {
     startTime,
     endTime,
     tabOption,
-    sortOption,
+    postSortOption,
+    userSortOption,
   ]);
 
   useEffect(() => {
@@ -306,18 +313,28 @@ export default function Discover() {
     }
   };
 
-  const renderSortSelector = () => {
-    if (tabOption === tabOptions.Posts) {
-      return (
-        <SortOptionsSelector
-          options={config.POST_SORT_OPTIONS}
-          onChange={(newValue) => {
-            setSortOption(newValue);
-            setPage(1);
-          }}
-        />
-      );
-    }
+  const renderPostSortSelector = () => {
+    return (
+      <SortOptionsSelector
+        options={config.POST_SORT_OPTIONS}
+        onChange={(newValue) => {
+          setPostSortOption(newValue);
+          setPage(1);
+        }}
+      />
+    );
+  };
+
+  const renderUserSortSelector = () => {
+    return (
+      <SortOptionsSelector
+        options={config.USER_SORT_OPTIONS}
+        onChange={(newValue) => {
+          setUserSortOption(newValue);
+          setPage(1);
+        }}
+      />
+    );
   };
 
   const renderTabSelectors = () => {
@@ -419,7 +436,8 @@ export default function Discover() {
             searchText={searchText}
             onSearchSubmit={setSearchText}
           />
-          {renderSortSelector()}
+          {tabOption === tabOptions.Posts && renderPostSortSelector()}
+          {tabOption === tabOptions.Users && renderUserSortSelector()}
         </div>
         {renderTabContent()}
         <div

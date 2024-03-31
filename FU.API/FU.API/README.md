@@ -54,3 +54,6 @@ When users navigate to a pages with a chat, they will be connected the chat grou
             return Created(response);
         }
     }
+
+## Understanding Services
+Services usually interact directly with the database and use LINQ queries to sort, remove, and insert data into the database. To get a better and more complete understanding of how services work, look at the `FU.API.Tests` directory and look at the unit test.
