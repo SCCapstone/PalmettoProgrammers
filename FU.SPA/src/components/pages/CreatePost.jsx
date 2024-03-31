@@ -89,10 +89,10 @@ export default function CreatePost() {
           }}
         >
           <TextField
-            required //may want to get rid of this and just check if it's empty when clicking create button.
+            required
             fullWidth
             id="searchGames"
-            label="Title" //might want to put a Search icon in front, if we can figure it out.
+            label="Title"
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
