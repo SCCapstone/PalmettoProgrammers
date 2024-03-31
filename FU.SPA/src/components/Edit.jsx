@@ -37,13 +37,13 @@ export default function Edit({ postId }) {
   useEffect(() => {
     const init = async () => {
       try {
-        const postDetails = await PostService.getPostDetails(postId);
-        setPostsDetails(postDetails);
-        setTitle(postsDetails.title);
-        setDescription(postsDetails.description);
-        setStartTime(dayjs(postsDetails.startTime));
-        setEndTime(dayjs(postsDetails.endTime));
-        if (user.id !== postDetails.creator.id) {
+        const ogPostDetails = await PostService.getPostDetails(postId);
+        setPostsDetails(ogPostDetails);
+        setTitle(ogPostDetails.title);
+        setDescription(ogPostDetails.description);
+        setStartTime(dayjs(ogPostDetails.startTime));
+        setEndTime(dayjs(ogPostDetails.endTime));
+        if (user.id !== ogPostDetails.creator.id) {
           alert('You are not authorized to edit this post');
           navigate(`/discover`);
         }
@@ -53,20 +53,7 @@ export default function Edit({ postId }) {
     };
 
     init();
-    /*
-     * Had to add title and description to the dependencies
-     * to avoid them not showing on some occasions.
-     * Added the others to satisfy npm run lint.
-     */
-  }, [
-    postId,
-    user,
-    navigate,
-    postsDetails.title,
-    postsDetails.description,
-    postsDetails.startTime,
-    postsDetails.endTime,
-  ]);
+  }, [postId, user, navigate]);
 
   const handleSubmit = async (e) => {
     // change to get post state, autofill fields based on info
