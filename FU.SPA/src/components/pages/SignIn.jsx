@@ -129,7 +129,7 @@ export default function SignIn() {
         setCredentialsError('Account not yet verified');
         setUnconfirmedAccountDialogOpen(true);
       } else {
-        setCredentialsError('Incorrect credentails');
+        setCredentialsError('Incorrect credentials');
       }
       console.error('Error in sign in:', event);
     }
