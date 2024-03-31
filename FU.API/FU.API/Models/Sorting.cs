@@ -4,7 +4,7 @@ public enum UserSortType
 {
     Username,
     DOB,
-    AccountAge,
+    ChatActivity,
 }
 
 public enum PostSortType
@@ -13,6 +13,7 @@ public enum PostSortType
     NewestCreated,
     NumberOfPlayers,
     Title,
+    ChatActivity,
 }
 
 public enum SortDirection

@@ -1,5 +1,6 @@
 ﻿namespace FU.API.DTOs.Post;
 
+using FU.API.DTOs.Chat;
 using FU.API.Models;
 
 public class PostResponseDTO
@@ -25,4 +26,6 @@ public class PostResponseDTO
     public ICollection<string> Tags { get; set; } = new HashSet<string>();
 
     public bool HasJoined { get; set; } = false;
+
+    public MessageResponseDTO? LastMessage { get; set; }
 }

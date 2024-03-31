@@ -1,7 +1,7 @@
 import './ChatMessage.css';
 import { Avatar } from '@mui/material';
-import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import DateUtils from '../helpers/dateUtils';
 
 export default function ChatMessage({ chatMessage, userIsSender }) {
   const user = chatMessage.sender;
@@ -12,33 +12,6 @@ export default function ChatMessage({ chatMessage, userIsSender }) {
       user.pfpUrl.includes(
         'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
       ));
-
-  const timeDifference = (timestamp) => {
-    const today = dayjs();
-    const sentDate = dayjs(timestamp);
-
-    // find the difference between the dates
-    const diff = today.diff(sentDate, 'day', true);
-
-    const days = Math.floor(diff);
-    const hours = Math.floor((diff - days) * 24);
-    const minutes = Math.floor(((diff - days) * 24 - hours) * 60);
-    const seconds = Math.floor(
-      (((diff - days) * 24 - hours) * 60 - minutes) * 60,
-    );
-
-    if (days > 0) {
-      return `${days} day${days > 1 ? 's' : ''} ago`;
-    } else if (hours > 0) {
-      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    } else if (minutes > 0) {
-      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    } else if (seconds < 0) {
-      return '0 seconds ago';
-    } else {
-      return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
-    }
-  };
 
   const stringToColor = (string) => {
     let hash = 0;
@@ -97,7 +70,7 @@ export default function ChatMessage({ chatMessage, userIsSender }) {
             {user.username}
           </div>
           <div className="chat-message-time">
-            {timeDifference(chatMessage.createdAt)}
+            {DateUtils.timeDifference(chatMessage.createdAt)}
           </div>
         </div>
         <div className="chat-message-content">{chatMessage.content}</div>

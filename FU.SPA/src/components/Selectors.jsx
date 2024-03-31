@@ -123,11 +123,19 @@ export const TagsSelector = ({ value, onChange }) => {
  *
  * @param {Object} options The array of sorting options to display in the dropdown list. Each option should have a value and a label.
  * @param {Function} onChange The function to call when the user selects an option. The function should accept the new value as an argument.
+ * @param {string} initialValue The initial value to display in the dropdown list. Should be of the format: optionValue:asc or optionValue:desc
  */
-export const SortOptionsSelector = ({ options, onChange }) => {
+export const SortOptionsSelector = ({ options, onChange, initialValue }) => {
+  // split the initial value into the option and order
+  const [initialOption, initialOrder] = initialValue
+    ? initialValue.split(':')
+    : [null, null];
+  console.log(initialOption);
   // Default sort order in the api is descending
-  const [ascSortOrder, setAscSortOrder] = useState(false);
-  const [optionValue, setOptionValue] = useState(options[0].value);
+  const [ascSortOrder, setAscSortOrder] = useState(initialOrder === 'asc');
+  const [optionValue, setOptionValue] = useState(
+    initialOption ?? options[0].value,
+  );
 
   /**
    * Handle the change of the form control

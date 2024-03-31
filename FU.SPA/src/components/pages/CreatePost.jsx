@@ -12,9 +12,9 @@ import {
 import { useEffect, useState } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import PostService from '../services/postService';
-import TagService from '../services/tagService';
-import GameService from '../services/gameService';
+import PostService from '../../services/postService';
+import TagService from '../../services/tagService';
+import GameService from '../../services/gameService';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -24,8 +24,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 export default function CreatePost() {
   const [game, setGame] = useState(null);
   const [title, setTitle] = useState('');
-  const [startTime, setStartTime] = useState(dayjs());
-  const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
+  const [startTime, setStartTime] = useState(dayjs().add(30, 'minute'));
+  const [endTime, setEndTime] = useState(dayjs().add(35, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();

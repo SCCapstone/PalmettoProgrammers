@@ -61,6 +61,7 @@ export default function Discover() {
   const [page, setPage] = useState(
     parseInt(searchParams.get(paramKey.page), 10) || 1,
   );
+
   const [searchText, setSearchText] = useState(searchParams.get('q') || '');
   const [games, setGames] = useState(
     searchParams
@@ -173,6 +174,7 @@ export default function Discover() {
       );
     };
 
+    //TODO pull this out to directly call
     const updateSearchResults = async () => {
       if (tabOption === tabOptions.Posts) {
         const query = {

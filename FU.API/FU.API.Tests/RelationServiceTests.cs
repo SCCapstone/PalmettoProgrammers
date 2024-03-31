@@ -132,6 +132,6 @@ public class RelationServiceTests
 
     private static RelationService CreateRelationService(AppDbContext context)
     {
-        return new RelationService(context);
+        return new RelationService(context, new ChatService(context));
     }
 }

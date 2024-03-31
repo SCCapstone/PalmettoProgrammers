@@ -8,24 +8,27 @@ import {
   Stack,
   Paper,
   Alert,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import UserService from '../../services/userService';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useNavigate } from 'react-router';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import AvatarService from '../../services/avatarService';
 import ClearIcon from '@mui/icons-material/Clear';
+import { Store } from 'react-notifications-component';
+import UserContext from '../../context/userContext';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [newPfpUrl, setNewPfpUrl] = useState();
-  const navigate = useNavigate();
+  const { refreshUser } = useContext(UserContext);
 
   useEffect(() => {
     async function fetchUserInfo() {
@@ -51,7 +54,7 @@ export default function ProfileSettings() {
       const data = {
         pfpUrl: newPfpUrl,
         id: idJson.userId,
-        bio: bio !== '' ? bio : null,
+        bio: bio,
         // if the date of birth is the same as today, ignore and set as null
         // if not same day, update
         dob:
@@ -62,12 +65,37 @@ export default function ProfileSettings() {
       };
 
       await UserService.updateUserProfile(data);
-      alert('Info updated successfully!');
+      refreshUser();
 
-      // Redirect to user profile
-      navigate('/profile/' + idJson.userId);
+      // Profile notification success
+      Store.addNotification({
+        title: 'Profile Settings Updated',
+        message: 'Your profile settings have successfully changed.',
+        type: 'success',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
     } catch (e) {
-      alert(e);
+      // Profile notification error
+      Store.addNotification({
+        title: 'Error has occured',
+        message: 'An error has occured. Please try again.\n' + e,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error(e);
     }
   };
@@ -77,55 +105,66 @@ export default function ProfileSettings() {
     console.log(imageUrl);
   };
 
+  const clearBio = () => {
+    try {
+      setBio('');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // Display component
   return (
     <Container component="main" maxWidth="xs">
       <Box
+        component="form"
+        noValidate
+        onSubmit={handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') e.preventDefault();
+        }}
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          mt: 2,
+          gap: 2,
+          width: 270,
         }}
       >
-        <Typography component="h1" variant="h5">
-          Profile Settings
-        </Typography>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') e.preventDefault();
-          }}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            mt: 2,
-            gap: 2,
-            width: 270,
-          }}
-        >
-          <TextField
+        <Typography variant="h5">Update Profile</Typography>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Date of Birth"
+            value={null} // Leave null as to not change date
             fullWidth
-            id="setBio"
-            label="Update Bio"
-            value={bio}
-            multiline
-            onChange={(e) => setBio(e.target.value)}
+            onChange={(newValue) => setDateOfBirth(newValue)}
           />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Date of Birth"
-              value={null} // Leave null as to not change date
-              fullWidth
-              onChange={(newValue) => setDateOfBirth(newValue)}
-            />
-          </LocalizationProvider>
-          <UploadAvatar onNewPreview={handlePreviewUrl} />
-          <Button type="submit" fullWidth variant="contained">
-            Update Profile
-          </Button>
-        </Box>
+        </LocalizationProvider>
+        <TextField
+          fullWidth
+          id="setBio"
+          label="About"
+          value={bio}
+          multiline
+          onChange={(e) => setBio(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  edge="end"
+                  color="primary"
+                  onClick={(e) => clearBio(e.target.value)}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <UploadAvatar onNewPreview={handlePreviewUrl} />
+        <Button type="submit" fullWidth variant="contained">
+          Update Profile
+        </Button>
       </Box>
     </Container>
   );
