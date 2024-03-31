@@ -25,10 +25,22 @@ export default function CreatePost() {
   const [game, setGame] = useState(null);
   const [title, setTitle] = useState(null);
   const [startTime, setStartTime] = useState(dayjs());
-  const [endTime, setEndTime] = useState(dayjs().add(30, 'minute'));
+  const [endTime, setEndTime] = useState(dayjs().add(5, 'minute'));
+  const [originalTime, setOriginalTime] = useState(dayjs()); //Time for initial start time
+  const [maxTime, setMaxTime] = useState(dayjs().add(31, 'days')); //Time for maximum end time
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
+  const [startTimeError, setStartTimeError] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setOriginalTime(dayjs().subtract(1, 'minute'));
+    if(startTime.isBefore(originalTime)) {
+      setStartTimeError(true);
+      return;
+    }
+  }, []);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,7 +137,17 @@ export default function CreatePost() {
             <DateTimePicker
               label="Start Time"
               value={startTime}
+              error={startTime.isBefore(originalTime)}
               onChange={(newValue) => setStartTime(newValue)}
+              renderInput={(params) => (
+                <TextField 
+                  {...params} 
+                  helperText={startTimeError 
+                    ? 'Time must not be set before current time' 
+                    : ''
+                  } 
+                />
+              )}
             />
             <DateTimePicker
               label="End Time"
