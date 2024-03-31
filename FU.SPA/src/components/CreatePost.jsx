@@ -41,7 +41,7 @@ export default function CreatePost() {
       pfpUrl: 'previewTest_profile_pic',
     },
     title: title,
-    game: '',
+    game: game,
     startTime: startTime,
     endTime: endTime,
     description: description,
