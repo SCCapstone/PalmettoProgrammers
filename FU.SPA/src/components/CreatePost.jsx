@@ -32,7 +32,7 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [previewPost, setPreviewPost] = useState(null);
+  //const [previewPost, setPreviewPost] = useState(null);
   // const [fGame, setFGame] = useState(null);
   // const [tIds, setTIds] = useState([]);
 
@@ -59,62 +59,62 @@ export default function CreatePost() {
   //   }
   //   init();
   // }, []); 
-  useEffect(() => {
-    try {
-    const updatePreviewPost = () => {
-      const previewPostInfo = {
-        id: null,
-        creator: {
-          id: user.id,
-          username: user.username,
-          pfpUrl: 'previewTest_profile_pic',
-        },
-        title: title,
-        game: game? game.name : '',
-        startTime: startTime,
-        endTime: endTime,
-        description: description,
-        tags: tags.map(tag => tag.name),
-      };
-      setPreviewPost(previewPostInfo);
-    };
-    updatePreviewPost(); //first update
+  // useEffect(() => {
+  //   try {
+  //   const updatePreviewPost = () => {
+  //     const previewPostInfo = {
+  //       id: null,
+  //       creator: {
+  //         id: user.id,
+  //         username: user.username,
+  //         pfpUrl: 'previewTest_profile_pic',
+  //       },
+  //       title: title,
+  //       game: game? game.name : '',
+  //       startTime: startTime,
+  //       endTime: endTime,
+  //       description: description,
+  //       tags: tags.map(tag => tag.name),
+  //     };
+  //     setPreviewPost(previewPostInfo);
+  //   };
+  //   updatePreviewPost(); //first update
 
-    const initiateTitle = setTitle((value) => updatePreviewPost(value));
-    const initiateGame = setGame((value) => updatePreviewPost(value));
-    const initiateStartTime = setStartTime((value) => updatePreviewPost(value));
-    const initiateEndTime = setEndTime((value) => updatePreviewPost(value));
-    const initiateDescription = setDescription((value) => updatePreviewPost(value));
-    const initiateTags = setTags((value) => updatePreviewPost(value));
+  //   const initiateTitle = setTitle((value) => updatePreviewPost(value));
+  //   const initiateGame = setGame((value) => updatePreviewPost(value));
+  //   const initiateStartTime = setStartTime((value) => updatePreviewPost(value));
+  //   const initiateEndTime = setEndTime((value) => updatePreviewPost(value));
+  //   const initiateDescription = setDescription((value) => updatePreviewPost(value));
+  //   const initiateTags = setTags((value) => updatePreviewPost(value));
 
-    console.log(previewPostinfo);
+  //   console.log(previewPostinfo);
     
-    initiateTitle();
-    initiateGame();
-    initiateStartTime();
-    initiateEndTime();
-    initiateDescription();
-    initiateTags();
-  } catch (e) {
-    console.error(e);
-  }
-  }, [title, game, startTime, endTime, description, tags]);
+  //   initiateTitle();
+  //   initiateGame();
+  //   initiateStartTime();
+  //   initiateEndTime();
+  //   initiateDescription();
+  //   initiateTags();
+  // } catch (e) {
+  //   console.error(e);
+  // }
+  // }, [title, game, startTime, endTime, description, tags]);
   
   //Test post to show for preview.
-  // const previewPost = {
-  //   id: null,
-  //   creator: {
-  //     id: user.id,
-  //     username: user.username,
-  //     pfpUrl: 'previewTest_profile_pic',
-  //   },
-  //   title: title,
-  //   game: game,//'Game Name Here',
-  //   startTime: startTime,
-  //   endTime: endTime,
-  //   description: description,
-  //   tags: ['Tag1', 'Tag2'], //tags,
-  // };
+  const previewPost = {
+    id: null,
+    creator: {
+      id: user.id,
+      username: user.username,
+      pfpUrl: 'previewTest_profile_pic',
+    },
+    title: title,
+    game: 'Game Name Here',
+    startTime: startTime,
+    endTime: endTime,
+    description: description,
+    tags: ['Tag1', 'Tag2'], //tags,
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
