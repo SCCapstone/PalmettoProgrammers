@@ -7,6 +7,10 @@ using FU.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles game related requests.
+/// </summary>
+/// <remarks>The requests are basic CRUD requests.</remarks>
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
@@ -22,7 +26,7 @@ public class GamesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] GameDTO dto)
     {
-        var user = await _gameService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _gameService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var gameName = dto.Name;
         var game = await _gameService.GetGame(gameName);
@@ -71,7 +75,7 @@ public class GamesController : ControllerBase
     [Route("{gameId}")]
     public async Task<IActionResult> UpdateGame(int gameId, [FromBody] UpdateGameDTO updateGame)
     {
-        var user = await _gameService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _gameService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         if (!user.IsAdmin)
         {
@@ -99,7 +103,7 @@ public class GamesController : ControllerBase
     [Route("{gameId}")]
     public async Task<IActionResult> DeleteGame(int gameId)
     {
-        var user = await _gameService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _gameService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         if (!user.IsAdmin)
         {

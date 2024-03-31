@@ -9,6 +9,9 @@ using FU.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles user related requests.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
@@ -72,6 +75,7 @@ public class UsersController : ControllerBase
         profileChanges.Id = userId;
 
         var newProfile = await _userService.UpdateUserProfile(profileChanges);
+
         return Ok(newProfile);
     }
 
@@ -79,29 +83,31 @@ public class UsersController : ControllerBase
     [Route("current/connected/posts")]
     public async Task<IActionResult> GetUsersAssociatedPosts([FromQuery] PostSearchRequestDTO request)
     {
-        var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _userService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var query = request.ToPostQuery();
         query.UserId = user.UserId;
 
-        var posts = await _searchService.SearchPosts(query);
+        (var posts, var totalResults) = await _searchService.SearchPosts(query);
 
-        var response = new List<PostResponseDTO>(posts.Count());
+        var postDtos = new List<PostResponseDTO>(posts.Count);
 
         // for each resonse set has joined to true
         foreach (var post in posts)
         {
-            response.Add(post.ToDto(hasJoined: true));
+            postDtos.Add(post.ToDto(hasJoined: true));
         }
 
-        return Ok(response);
+        Response.Headers.Add("X-total-count", totalResults.ToString());
+
+        return Ok(postDtos);
     }
 
     [HttpGet]
     [Route("current/connected/groups")]
     public async Task<IActionResult> GetUsersGroups([FromQuery] int limit = 10, [FromQuery] int offset = 0)
     {
-        var user = await _userService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _userService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var groups = await _userService.GetUsersGroups(user.UserId, limit, offset);
 

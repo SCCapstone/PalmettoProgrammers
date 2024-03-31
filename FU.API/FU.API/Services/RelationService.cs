@@ -10,26 +10,13 @@ public class RelationService : CommonService, IRelationService
 {
     private readonly AppDbContext _dbContext;
 
-    public RelationService(AppDbContext dbContext)
+    private readonly IChatService _chatService;
+
+    public RelationService(AppDbContext dbContext, IChatService chatService)
         : base(dbContext)
     {
         _dbContext = dbContext;
-    }
-
-    public async Task<UserRelation?> GetRelation(int initiatedById, int otherUserId)
-    {
-        if (initiatedById == otherUserId)
-        {
-            throw new BadRequestException("You can't get your own relation");
-        }
-
-        // Make sure the users exist
-        var initiatedByUser = await _dbContext.Users.FindAsync(initiatedById) ?? throw new NotFoundException("User not found", "The requested user was not found");
-        var otherUser = await _dbContext.Users.FindAsync(otherUserId) ?? throw new NotFoundException("User not found", "The requested user was not found");
-
-        var relation = await _dbContext.UserRelations.Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId).FirstOrDefaultAsync();
-
-        return relation;
+        _chatService = chatService;
     }
 
     public async Task HandleRelationAction(int initiatedById, int otherUserId, UserRelationAction action)
@@ -39,9 +26,10 @@ public class RelationService : CommonService, IRelationService
             throw new BadRequestException("You can't modify your own relation");
         }
 
-        // Make sure the users exist
-        var initiatedByUser = await _dbContext.Users.FindAsync(initiatedById) ?? throw new NotFoundException("User not found", "The requested user was not found");
-        var otherUser = await _dbContext.Users.FindAsync(otherUserId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+        var initiatedByUser = await _dbContext.Users.FindAsync(initiatedById)
+            ?? throw new NotFoundException("User not found", "The requested user was not found");
+        var otherUser = await _dbContext.Users.FindAsync(otherUserId)
+            ?? throw new NotFoundException("User not found", "The requested user was not found");
 
         var relation = await _dbContext.UserRelations.Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId).FirstOrDefaultAsync();
 
@@ -63,13 +51,10 @@ public class RelationService : CommonService, IRelationService
             throw new BadRequestException("You are not allowed to modify blocked relations");
         }
 
-        var inverseRelation = await _dbContext.UserRelations.Where(r => r.User1Id == otherUserId && r.User2Id == initiatedById).FirstOrDefaultAsync();
-
-        // The inverse relation should always exist
-        if (inverseRelation is null)
-        {
-            throw new ServerError("The inverse relation does not exist");
-        }
+        var inverseRelation = await _dbContext.UserRelations
+            .Where(r => r.User1Id == otherUserId && r.User2Id == initiatedById)
+            .FirstOrDefaultAsync()
+                ?? throw new ServerError("The inverse relation does not exist");
 
         if (action == UserRelationAction.Block)
         {
@@ -117,33 +102,27 @@ public class RelationService : CommonService, IRelationService
             throw new BadRequestException("You can't modify your own relation");
         }
 
-        // Make sure the users exist
-        var initiatedByUser = await _dbContext.Users.FindAsync(initiatedById) ?? throw new NotFoundException("User not found", "The requested user was not found");
-        var otherUser = await _dbContext.Users.FindAsync(otherUserId) ?? throw new NotFoundException("User not found", "The requested user was not found");
+        await AssertUserExists(initiatedById);
+        await AssertUserExists(otherUserId);
 
-        var relation = await _dbContext.UserRelations.Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId).FirstOrDefaultAsync();
-
-        if (relation is null)
-        {
-            throw new NotFoundException("Relation not found", "The requested relation was not found");
-        }
+        var relation = await _dbContext.UserRelations
+            .Where(r => r.User1Id == initiatedById && r.User2Id == otherUserId)
+            .FirstOrDefaultAsync()
+                ?? throw new NotFoundException("Relation not found", "The requested relation was not found");
 
         if (relation.Status == UserRelationStatus.BlockedBy)
         {
             throw new ForbidException("You are not allowed to modify this relation");
         }
 
-        var inverseRelation = await _dbContext.UserRelations.Where(r => r.User1Id == otherUserId && r.User2Id == initiatedById).FirstOrDefaultAsync();
+        var inverseRelation = await _dbContext.UserRelations
+            .Where(r => r.User1Id == otherUserId && r.User2Id == initiatedById)
+            .FirstOrDefaultAsync()
+                ?? throw new ServerError("The inverse relation does not exist");
 
-        // The inverse relation should always exist
-        if (inverseRelation is null)
-        {
-            throw new ServerError("The inverse relation does not exist");
-        }
-
-        // Remove the relations
         try
         {
+            // Remove both sides of the relations
             _dbContext.UserRelations.Remove(relation);
             _dbContext.UserRelations.Remove(inverseRelation);
             await _dbContext.SaveChangesAsync();
@@ -158,6 +137,14 @@ public class RelationService : CommonService, IRelationService
 
     private async Task HandleNewRelation(ApplicationUser initiatedBy, ApplicationUser otherUser, UserRelationAction action)
     {
+        // Create or find a chat between the two users
+        var chat = await _chatService.GetChat(initiatedBy.UserId, otherUser.UserId) ?? await _chatService.CreateChat(initiatedBy, otherUser);
+
+        if (chat is null)
+        {
+            throw new ServerError("Chat creation failed");
+        }
+
         switch (action)
         {
             case UserRelationAction.Friend:
@@ -168,12 +155,14 @@ public class RelationService : CommonService, IRelationService
                         User1 = initiatedBy,
                         User2 = otherUser,
                         Status = UserRelationStatus.Requested,
+                        Chat = chat,
                     },
                     new UserRelation
                     {
                         User1 = otherUser,
                         User2 = initiatedBy,
                         Status = UserRelationStatus.Pending,
+                        Chat = chat,
                     },
                 };
 
@@ -187,12 +176,14 @@ public class RelationService : CommonService, IRelationService
                         User1 = initiatedBy,
                         User2 = otherUser,
                         Status = UserRelationStatus.Blocked,
+                        Chat = chat,
                     },
                     new UserRelation
                     {
                         User1 = otherUser,
                         User2 = initiatedBy,
                         Status = UserRelationStatus.BlockedBy,
+                        Chat = chat,
                     },
                 };
 
@@ -210,5 +201,13 @@ public class RelationService : CommonService, IRelationService
         }
 
         return;
+    }
+
+    private async Task AssertUserExists(int userId)
+    {
+        if (await _dbContext.Users.FindAsync(userId) is null)
+        {
+            throw new NotFoundException("User not found", "The requested user was not found");
+        }
     }
 }

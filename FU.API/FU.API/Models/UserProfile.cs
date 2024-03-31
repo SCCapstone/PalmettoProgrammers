@@ -1,5 +1,7 @@
 namespace FU.API.Models;
 
+using FU.API.DTOs.Chat;
+
 // Some Propertie are nullable to allow partial updating
 public record UserProfile
 {
@@ -11,4 +13,6 @@ public record UserProfile
     public string? Username { get; set; } = string.Empty;
     public ICollection<Game> FavoriteGames { get; set; } = new HashSet<Game>();
     public ICollection<Tag> FavoriteTags { get; set; } = new HashSet<Tag>();
+    public string? RelationStatus { get; set; } = string.Empty;
+    public MessageResponseDTO? LastMessage { get; set; }
 }

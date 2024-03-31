@@ -1,23 +1,25 @@
 import {
+  Stack,
+  Divider,
   Card,
   CardActions,
   Button,
   CardContent,
   Typography,
-  CardHeader,
   Avatar,
+  Tooltip,
 } from '@mui/material';
-import './UserCard.css';
+import Theme from '../Theme';
 import { useNavigate } from 'react-router-dom';
+import { People, PendingActions, CallMade } from '@mui/icons-material';
+import ChatMessagePreview from './ChatMessagePreview';
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, showRelationStatus, showActions }) => {
+  if (showRelationStatus === undefined) {
+    showRelationStatus = false;
+  }
+
   const navigate = useNavigate();
-  const defaultPfp =
-    !user.pfpUrl ||
-    (user.pfpUrl !== null &&
-      user.pfpUrl.includes(
-        'https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png',
-      ));
 
   const stringToColor = (string) => {
     let hash = 0;
@@ -33,19 +35,6 @@ const UserCard = ({ user }) => {
     return color;
   };
 
-  const initials = (name) => {
-    // split  name by spaces and filter empty entries
-    let nameParts = name.split(' ').filter(Boolean);
-    // get the first letter of the first part
-    let initials = nameParts[0][0];
-    // if there is a second part to name
-    if (nameParts.length > 1) {
-      initials += nameParts[1][0];
-    }
-
-    return initials;
-  };
-
   // convert dob to years old
   const dob = new Date(user?.dob);
   const today = new Date();
@@ -53,24 +42,32 @@ const UserCard = ({ user }) => {
     (today.getTime() - dob.getTime()) / (1000 * 3600 * 24 * 365),
   );
 
-  const renderPfp = () => {
-    return defaultPfp ? (
-      <Avatar
-        sx={{
-          bgcolor: stringToColor(user.username),
-          width: 40,
-          height: 40,
-        }}
-      >
-        {initials(user.username)}
-      </Avatar>
-    ) : (
-      <Avatar
-        alt={user.username}
-        src={user.pfpUrl}
-        sx={{ width: 40, height: 40 }}
-      />
-    );
+  const renderRelationStatus = () => {
+    if (!showRelationStatus) {
+      return null;
+    }
+
+    if (user.relationStatus === 'Friends') {
+      return (
+        <Tooltip title="Friends">
+          <People />
+        </Tooltip>
+      );
+    } else if (user.relationStatus === 'Pending') {
+      return (
+        <Tooltip title="Pending friend request">
+          <PendingActions />
+        </Tooltip>
+      );
+    } else if (user.relationStatus === 'Requested') {
+      return (
+        <Tooltip title="Friend request sent">
+          <CallMade />
+        </Tooltip>
+      );
+    } else {
+      return null;
+    }
   };
 
   return (
@@ -82,52 +79,88 @@ const UserCard = ({ user }) => {
         flexDirection: 'column',
       }}
     >
-      <CardHeader
-        title={
-          <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              {renderPfp()}
-              <div
-                className="user-name"
-                onClick={() => navigate(`/profile/${user.id}`)}
-              >
-                <Typography variant="h5" style={{ color: '#FFF' }}>
-                  {user.username}
-                </Typography>
-              </div>
-            </div>
-            {user.dob && (
-              <Typography variant="h6" style={{ color: '#FFF' }}>
-                {age} years old
-              </Typography>
-            )}
-            <div
-              style={{ borderTop: '2px solid #E340DC', marginTop: '5px' }}
-            ></div>
-          </>
-        }
-      />
-      <CardContent
-        style={{
-          width: 'auto',
-          paddingTop: '0px',
-          flex: 1,
-          display: 'flex',
-          flexGrow: 1,
-          flexDirection: 'column',
-        }}
-      >
-        {user.bio && <Typography variant="body2">{user.bio}</Typography>}
-      </CardContent>
-      <CardActions style={{ justifyContent: 'flex-end' }}>
-        <Button
-          variant="contained"
-          style={{ color: '#FFF', width: '100%' }}
+      <CardContent style={{ textAlign: 'left', height: 350 }}>
+        <Stack
+          sx={{ '&:hover': showActions ? { cursor: 'pointer' } : {} }}
+          alignItems="center"
+          direction="row"
           onClick={() => navigate(`/profile/${user.id}`)}
         >
-          View Profile
-        </Button>
-      </CardActions>
+          <Avatar
+            alt={user?.username}
+            src={user?.pfpUrl}
+            sx={{
+              width: 40,
+              height: 40,
+              bgcolor: stringToColor(user?.username),
+            }}
+          />
+          <Tooltip title={user.username}>
+            <Typography
+              variant="h5"
+              sx={{
+                '&:hover': showActions
+                  ? {
+                      textDecoration: 'underline',
+                      textDecorationThickness: '2px',
+                    }
+                  : {},
+                color: '#FFF',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                ml: 1,
+              }}
+            >
+              {user.username}
+            </Typography>
+          </Tooltip>
+          <div style={{ flexGrow: 9 }} />
+          {renderRelationStatus()}
+        </Stack>
+        {user.dob && (
+          <Typography variant="subtitle1" sx={{ mb: '-6px' }}>
+            {age} years old
+          </Typography>
+        )}
+        <Divider
+          sx={{
+            borderColor: Theme.palette.primary.main,
+            borderWidth: 1,
+            marginTop: '8px',
+            marginBottom: '6px',
+          }}
+        />
+        <Tooltip title={user.bio}>
+          <Typography
+            variant="body2"
+            sx={{
+              maxHeight: 80,
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
+              textOverflow: 'ellipsis',
+              overflowWrap: 'break-word',
+            }}
+          >
+            {user.bio}
+          </Typography>
+        </Tooltip>
+        {user.lastMessage && (
+          <ChatMessagePreview chatMessage={user.lastMessage} />
+        )}
+      </CardContent>
+      {showActions && (
+        <CardActions style={{ justifyContent: 'flex-end' }}>
+          <Button
+            variant="contained"
+            style={{ color: '#FFF', width: '100%' }}
+            onClick={() => navigate(`/profile/${user.id}`)}
+          >
+            View Profile
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 };

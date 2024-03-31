@@ -6,7 +6,6 @@ using FU.API.Models;
 using FU.API.Services;
 using FU.API.Tests.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 public class RelationServiceTests
 {
@@ -133,6 +132,6 @@ public class RelationServiceTests
 
     private static RelationService CreateRelationService(AppDbContext context)
     {
-        return new RelationService(context);
+        return new RelationService(context, new ChatService(context));
     }
 }

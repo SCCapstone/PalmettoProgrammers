@@ -18,8 +18,6 @@ const createPost = async (params) => {
   }
   const jsonResponse = await response.json();
 
-  console.log(jsonResponse);
-
   return jsonResponse;
 };
 
@@ -39,8 +37,6 @@ const updatePost = async (params, postId) => {
   }
   const jsonResponse = await response.json();
 
-  console.log(jsonResponse);
-
   return jsonResponse;
 };
 
@@ -59,8 +55,6 @@ const getPostDetails = async (postId) => {
 
   const jsonResponse = await response.json();
 
-  console.log(jsonResponse);
-
   return jsonResponse;
 };
 
@@ -70,8 +64,6 @@ const getPostUsers = async (postId) => {
     method: 'GET',
   });
   const jsonResponse = await response.json();
-
-  console.log(jsonResponse);
 
   return jsonResponse;
 };

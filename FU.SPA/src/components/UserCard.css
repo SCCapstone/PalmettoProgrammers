@@ -1,5 +1,6 @@
 .user-name:hover .MuiTypography-root {
-  text-decoration: underline;
+}
+
+.user-card-header:hover {
   cursor: pointer;
-  text-decoration-thickness: 2px;
 }

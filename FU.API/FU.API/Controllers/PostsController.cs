@@ -7,6 +7,9 @@ using FU.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Handles post related requests.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -22,7 +25,7 @@ public class PostsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreatePost([FromBody] PostRequestDTO dto)
     {
-        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _postService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var post = dto.ToModel();
         post.CreatorId = user.UserId;
@@ -38,7 +41,7 @@ public class PostsController : ControllerBase
     public async Task<IActionResult> UpdatePost([FromRoute] int postId, [FromBody] PostRequestDTO dto)
     {
         var ogPost = await _postService.GetPost(postId) ?? throw new PostNotFoundException();
-        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _postService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         if (ogPost.CreatorId != user.UserId)
         {
@@ -67,7 +70,7 @@ public class PostsController : ControllerBase
         }
 
         var hasJoinedPost = false;
-        var user = await _postService.GetCurrentUser(User);
+        var user = await _postService.GetAuthorizedUser(User);
 
         if (user is not null)
         {
@@ -83,7 +86,7 @@ public class PostsController : ControllerBase
     [Route("{postId}/users/current")]
     public async Task<IActionResult> JoinPost(int postId)
     {
-        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _postService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var post = await _postService.GetPost(postId);
 
@@ -101,7 +104,7 @@ public class PostsController : ControllerBase
     [Route("{postId}/users/current")]
     public async Task<IActionResult> LeavePost(int postId)
     {
-        var user = await _postService.GetCurrentUser(User) ?? throw new UnauthorizedException();
+        var user = await _postService.GetAuthorizedUser(User) ?? throw new UnauthorizedException();
 
         var post = await _postService.GetPost(postId);
 

@@ -15,7 +15,9 @@ const getConnectedPosts = async (query) => {
     throw new Error('Error getting posts');
   }
 
-  return await response.json();
+  const totalCount = parseInt(response.headers.get('x-total-count'));
+  const responseData = await response.json();
+  return { data: responseData, totalCount: totalCount };
 };
 
 const getConnectedGroups = async () => {
@@ -26,19 +28,6 @@ const getConnectedGroups = async () => {
 
   if (!response.ok) {
     throw new Error('Error getting groups');
-  }
-
-  return await response.json();
-};
-
-const getConnectedPlayers = async () => {
-  const response = await fetch(
-    `${API_BASE_URL}/users/current/connected/players`,
-    { headers: { ...AuthService.getAuthHeader() } },
-  );
-
-  if (!response.ok) {
-    throw new Error('Error getting players');
   }
 
   return await response.json();
@@ -83,10 +72,6 @@ const updateUserProfile = async (data) => {
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    throw new Error('Error in updating information');
-  }
-
   return response.json();
 };
 
@@ -102,17 +87,34 @@ const updateAccountInfo = async (data) => {
   });
 
   if (!response.ok) {
-    throw new Error('Error in updating account information');
+    const errorText = await response.text();
+    throw new Error(errorText || 'Error in resending confirmation');
+  }
+};
+
+// Delete account
+const deleteAccount = async (credentials) => {
+  const response = await fetch(`${API_BASE_URL}/Accounts`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      ...AuthService.getAuthHeader(),
+    },
+    body: JSON.stringify(credentials),
+  });
+
+  if (!response.ok) {
+    throw new Error('Error in deleting account');
   }
 };
 
 const UserService = {
   getConnectedPosts,
   getConnectedGroups,
-  getConnectedPlayers,
   getUserprofile,
   getUserIdJson,
   updateUserProfile,
   updateAccountInfo,
+  deleteAccount,
 };
 export default UserService;

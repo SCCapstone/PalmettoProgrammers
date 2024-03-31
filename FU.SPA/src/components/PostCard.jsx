@@ -13,14 +13,34 @@ import { useNavigate } from 'react-router-dom';
 import './PostCard.css';
 import Theme from '../Theme';
 import dayjs from 'dayjs';
+import { Done } from '@mui/icons-material';
+import ChatMessagePreview from './ChatMessagePreview';
 
-const PostCard = ({ post, showActions }) => {
+const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
   const navigate = useNavigate();
   const user = post.creator;
   let dateTimeString = 'No time';
   if (showActions === undefined) {
     showActions = true;
   }
+
+  const handleTagClick = (tag) => {
+    if (onTagClick) {
+      onTagClick(tag);
+    }
+  };
+
+  const renderJoinedStatus = () => {
+    if (!showJoinedStatus || !post.hasJoined) {
+      return null;
+    }
+
+    return (
+      <Tooltip title="You have joined this post">
+        <Done />
+      </Tooltip>
+    );
+  };
 
   // If we have a start time, then we also have an end time
   if (post.startTime) {
@@ -68,27 +88,32 @@ const PostCard = ({ post, showActions }) => {
 
   return (
     <Card sx={{ width: 250 }}>
-      <CardContent sx={{ textAlign: 'left', height: 300 }}>
+      <CardContent sx={{ textAlign: 'left', height: 350 }}>
         <div
           className="user-header"
           onClick={() => navigate(`/profile/${user.id}`)}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
             color: Theme.palette.primary.main,
+            display: 'flex',
+            justifyContent: 'space-between',
           }}
         >
-          <Avatar
-            alt={user?.username}
-            src={user?.pfpUrl}
-            sx={{
-              width: 18,
-              height: 18,
-              bgcolor: stringToColor(user?.username),
-            }}
-          />
-          <Typography variant="subtitle2">{`by ${user.username}`}</Typography>
+          <div
+            className="user-info"
+            style={{ display: 'flex', gap: '5px', alignItems: 'center' }}
+          >
+            <Avatar
+              alt={user?.username}
+              src={user?.pfpUrl}
+              sx={{
+                width: 18,
+                height: 18,
+                bgcolor: stringToColor(user?.username),
+              }}
+            />
+            <Typography variant="subtitle2">{`by ${user.username}`}</Typography>
+          </div>
+          {renderJoinedStatus()}
         </div>
         <Tooltip title={post.title}>
           <Typography variant="h6" noWrap sx={{ whiteSpace: 'nowrap' }}>
@@ -110,28 +135,41 @@ const PostCard = ({ post, showActions }) => {
             margin: '5px 0',
           }}
         />
-        <Typography
-          variant="body2"
-          sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            height: 80,
-          }}
-        >
-          {post.description}
-        </Typography>
+        <Tooltip title={post.description}>
+          <Typography
+            variant="body2"
+            sx={{
+              maxHeight: 80,
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
+              textOverflow: 'ellipsis',
+              overflowWrap: 'break-word',
+            }}
+          >
+            {post.description}
+          </Typography>
+        </Tooltip>
+        {post.lastMessage && (
+          <ChatMessagePreview chatMessage={post.lastMessage} />
+        )}
         <div
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            paddingTop: '10px',
+            paddingTop: 10,
             gap: '5px',
             maxHeight: 80,
             overflow: 'hidden',
           }}
         >
           {post.tags.map((t) => (
-            <Chip key={t} label={'# ' + t} />
+            <Chip
+              key={t}
+              label={'# ' + t}
+              onClick={showActions ? () => handleTagClick(t) : null}
+            />
           ))}
         </div>
       </CardContent>

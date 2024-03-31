@@ -5,6 +5,7 @@ const UserContext = createContext({
   token: null,
   login: () => {},
   logout: () => {},
+  refreshUser: () => {},
 });
 
 export default UserContext;
