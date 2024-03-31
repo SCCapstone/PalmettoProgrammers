@@ -2,7 +2,7 @@ import Navbar from './components/Navbar';
 import Home from './components/pages/Home';
 import Discover from './components/pages/Discover';
 import Social from './components/pages/Social';
-import Create from './components/pages/Create';
+import CreatePost from './components/pages/CreatePost';
 import NoPage from './components/pages/NoPage';
 import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
@@ -11,10 +11,10 @@ import UserProfile from './components/pages/UserProfile';
 import { ThemeProvider } from '@mui/material/styles';
 import Theme from './Theme';
 import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import UserProvider from './context/userProvider';
-import './App.css';
 import AccountSettings from './components/pages/AccountSettings';
 import EditPost from './components/pages/EditPost';
 import { ReactNotifications } from 'react-notifications-component';
@@ -27,7 +27,7 @@ function App() {
       <CssBaseline />
       <UserProvider>
         <Navbar />
-        <div className="container">
+        <Box sx={{ margin: '1rem', textAlign: 'center' }}>
           <Routes>
             <Route index element={<Home />} />
             <Route path="/" element={<Home />} />
@@ -44,7 +44,7 @@ function App() {
               path="/create"
               element={
                 <ProtectedRoute>
-                  <Create />
+                  <CreatePost />
                 </ProtectedRoute>
               }
             />
@@ -66,7 +66,7 @@ function App() {
             <Route path="/profile/:userId" element={<UserProfile />} />
             <Route path="/posts/:postId/edit" element={<EditPost />} />
           </Routes>
-        </div>
+        </Box>
       </UserProvider>
     </ThemeProvider>
   );
