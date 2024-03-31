@@ -32,9 +32,7 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-
-  //Test post to show for preview.
-  const previewPost = {
+  const [previewPost, setPreviewPost] = useState({
     id: null,
     creator: {
       id: null,
@@ -47,7 +45,38 @@ export default function CreatePost() {
     endTime: endTime,
     description: description,
     tags: ['Tag1', 'Tag2'], //tags,
+  });
+
+  const handleGameChange = (game) => {
+    setGame(game);
+    setPreviewPost((prevPost) => ({
+    ...prevPost,
+    game: game ? game.name : '',
+    }));
   };
+
+  const handleTagsChange = (tags) => {
+    setTags(tags);
+    setPreviewPost((prevPost) => ({
+      ...prevPost,
+      tags: tags.map((tag) => tag.name),
+    }));
+  };
+  //Test post to show for preview.
+  // const previewPost = {
+  //   id: null,
+  //   creator: {
+  //     id: null,
+  //     username: user.username,
+  //     pfpUrl: 'previewTest_profile_pic',
+  //   },
+  //   title: title,
+  //   game: 'Game Name Here',
+  //   startTime: startTime,
+  //   endTime: endTime,
+  //   description: description,
+  //   tags: ['Tag1', 'Tag2'], //tags,
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -117,7 +146,8 @@ export default function CreatePost() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Grid item xs={12}>
-            <GameSelector onChange={setGame} />
+            {/* <GameSelector onChange={setGame} /> */}
+            <GameSelector onChange={handleGameChange} />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -132,7 +162,8 @@ export default function CreatePost() {
               onChange={(newValue) => setEndTime(newValue)}
             />
           </LocalizationProvider>
-          <TagsSelector onChange={setTags} />
+          {/* <TagsSelector onChange={setTags} /> */}
+          <TagsSelector onChange={handleTagsChange} />
           <Box
             sx={{
               display: 'flex',
@@ -171,7 +202,7 @@ const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
 const GameSelector = ({ onChange }) => {
-  const [gammeOptions, setGameOptions] = useState([]);
+  const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -209,7 +240,7 @@ const GameSelector = ({ onChange }) => {
       clearOnBlur
       value={value}
       onChange={onInputChange}
-      options={gammeOptions}
+      options={gameOptions}
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
       isOptionEqualToValue={(option, value) => option.name === value.name}
