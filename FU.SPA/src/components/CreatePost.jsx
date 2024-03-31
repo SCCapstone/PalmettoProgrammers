@@ -32,7 +32,7 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  
+
   const [previewPost, setPreviewPost] = useState({
     id: null,
     creator: {
@@ -51,40 +51,40 @@ export default function CreatePost() {
   const handleTitleChange = (title) => {
     setTitle(title);
     setPreviewPost((prevPost) => ({
-    ...prevPost,
-    title: title,
+      ...prevPost,
+      title: title,
     }));
   };
 
   const handleDescriptionChange = (description) => {
     setDescription(description);
     setPreviewPost((prevPost) => ({
-    ...prevPost,
-    description: description,
+      ...prevPost,
+      description: description,
     }));
   };
 
   const handleStartTimeChange = (startTime) => {
     setStartTime(startTime);
     setPreviewPost((prevPost) => ({
-    ...prevPost,
-    startTime: startTime,
+      ...prevPost,
+      startTime: startTime,
     }));
   };
 
   const handleEndTimeChange = (endTime) => {
     setEndTime(endTime);
     setPreviewPost((prevPost) => ({
-    ...prevPost,
-    endTime: endTime,
+      ...prevPost,
+      endTime: endTime,
     }));
   };
 
   const handleGameChange = (game) => {
     setGame(game);
     setPreviewPost((prevPost) => ({
-    ...prevPost,
-    game: game ? game.name : '',
+      ...prevPost,
+      game: game ? game.name : '',
     }));
   };
 
@@ -127,76 +127,76 @@ export default function CreatePost() {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyConent: 'center'}}>
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 1,
-          m: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Create Post
-        </Typography>
+    <Box sx={{ display: 'flex', justifyConent: 'center' }}>
+      <Container component="main" maxWidth="xs">
         <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') e.preventDefault();
-          }}
           sx={{
+            marginTop: 1,
+            m: 4,
             display: 'flex',
             flexDirection: 'column',
-            gap: 1,
+            alignItems: 'center',
           }}
         >
-          <TextField
-            required 
-            fullWidth
-            id="searchGames"
-            label="Title" 
-            autoFocus
-            value={title}
-            onChange={(e) => handleTitleChange(e.target.value)}
-          />
-          <Grid item xs={12}>
-            <GameSelector onChange={handleGameChange} />
-          </Grid>
-          <br />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker
-              label="Start Time"
-              value={startTime}
-              onChange={(newValue) => handleStartTimeChange(newValue)}
-            />
-            <DateTimePicker
-              label="End Time"
-              value={endTime}
-              onChange={(newValue) => handleEndTimeChange(newValue)}
-            />
-          </LocalizationProvider>
-          <TagsSelector onChange={handleTagsChange} />
+          <Typography component="h1" variant="h5">
+            Create Post
+          </Typography>
           <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.preventDefault();
+            }}
             sx={{
               display: 'flex',
+              flexDirection: 'column',
+              gap: 1,
             }}
-          ></Box>
-          <TextField
-            label="Description"
-            value={description}
-            onChange={(e) => handleDescriptionChange(e.target.value)}
-            multiline
-          ></TextField>
+          >
+            <TextField
+              required
+              fullWidth
+              id="searchGames"
+              label="Title"
+              autoFocus
+              value={title}
+              onChange={(e) => handleTitleChange(e.target.value)}
+            />
+            <Grid item xs={12}>
+              <GameSelector onChange={handleGameChange} />
+            </Grid>
+            <br />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                label="Start Time"
+                value={startTime}
+                onChange={(newValue) => handleStartTimeChange(newValue)}
+              />
+              <DateTimePicker
+                label="End Time"
+                value={endTime}
+                onChange={(newValue) => handleEndTimeChange(newValue)}
+              />
+            </LocalizationProvider>
+            <TagsSelector onChange={handleTagsChange} />
+            <Box
+              sx={{
+                display: 'flex',
+              }}
+            ></Box>
+            <TextField
+              label="Description"
+              value={description}
+              onChange={(e) => handleDescriptionChange(e.target.value)}
+              multiline
+            ></TextField>
 
-          <Button type="submit" fullWidth variant="contained" sx={{}}>
-            Create Post
-          </Button>
+            <Button type="submit" fullWidth variant="contained" sx={{}}>
+              Create Post
+            </Button>
+          </Box>
         </Box>
-      </Box>
       </Container>
       <Box
         sx={{
@@ -208,7 +208,6 @@ export default function CreatePost() {
       >
         <PostCard post={previewPost} showActions={false} />
       </Box>
-
     </Box>
   );
 }
