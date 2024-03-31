@@ -8,6 +8,8 @@ import {
   Checkbox,
   Autocomplete,
   createFilterOptions,
+  FormControl,
+  FormHelperText,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -24,8 +26,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 export default function CreatePost() {
   const [game, setGame] = useState(null);
   const [title, setTitle] = useState(null);
-  const [startTime, setStartTime] = useState(dayjs());
-  const [endTime, setEndTime] = useState(dayjs().add(5, 'minute'));
+  const [startTime, setStartTime] = useState(dayjs().add(5, 'minute'));
+  const [endTime, setEndTime] = useState(dayjs().add(15, 'minute'));
   const [originalTime, setOriginalTime] = useState(dayjs()); //Time for initial start time
   const [maxTime, setMaxTime] = useState(dayjs().add(31, 'days')); //Time for maximum end time
   const [description, setDescription] = useState('');
@@ -34,7 +36,6 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setOriginalTime(dayjs().subtract(1, 'minute'));
     if(startTime.isBefore(originalTime)) {
       setStartTimeError(true);
       return;
@@ -133,6 +134,7 @@ export default function CreatePost() {
             <GameSelector onChange={setGame} />
           </Grid>
           <br />
+          <FormControl error={startTimeError}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Start Time"
@@ -143,18 +145,21 @@ export default function CreatePost() {
                 <TextField 
                   {...params} 
                   helperText={startTimeError 
-                    ? 'Time must not be set before current time' 
+                    ? 'Time must not be set before current time'
                     : ''
                   } 
                 />
               )}
             />
+            {/* {startTimeError && <FormHelperText>Please select a time</FormHelperText>} */}
             <DateTimePicker
               label="End Time"
               value={endTime}
               onChange={(newValue) => setEndTime(newValue)}
             />
+            
           </LocalizationProvider>
+          </FormControl>
           <TagsSelector onChange={setTags} />
           <Box
             sx={{
