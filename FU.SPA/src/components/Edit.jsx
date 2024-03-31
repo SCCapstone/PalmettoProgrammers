@@ -165,7 +165,10 @@ export default function Edit({ postId }) {
             />
           </LocalizationProvider>
           {postsDetails.tags !== undefined && (
-            <TagsSelector initialValue={postsDetails.tags} onChange={setTags} />
+            <TagsSelector
+              initialValues={postsDetails.tags}
+              onChange={setTags}
+            />
           )}
           <Box
             sx={{
@@ -270,7 +273,7 @@ const GameSelector = ({ onChange, initialValue }) => {
   );
 };
 
-const TagsSelector = ({ onChange, initialValue }) => {
+const TagsSelector = ({ onChange, initialValues }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
 
@@ -280,9 +283,9 @@ const TagsSelector = ({ onChange, initialValue }) => {
         const tags = await TagService.searchTags('');
         setTagOptions(tags);
         //if tags aren't null and isn't empty string.
-        if (initialValue && initialValue.length > 0) {
+        if (initialValues && initialValues.length > 0) {
           const initialTags = tags.filter((tag) =>
-            initialValue.includes(tag.name),
+            initialValues.includes(tag.name),
           );
           setValue(initialTags);
           onChange(initialTags);
@@ -292,7 +295,7 @@ const TagsSelector = ({ onChange, initialValue }) => {
       }
     };
     getTags();
-  }, [initialValue, onChange]);
+  }, [initialValues, onChange]);
 
   const onInputChange = (event, newValues) => {
     for (const newValue of newValues) {
