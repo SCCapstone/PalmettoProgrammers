@@ -26,24 +26,94 @@ export default function CreatePost() {
   const { user } = useContext(UserContext);
   const [game, setGame] = useState(null);
   const [title, setTitle] = useState('');
-  const [startTime, setStartTime] = useState(dayjs().add(30, 'minute'));
-  const [endTime, setEndTime] = useState(dayjs().add(35, 'minute'));
+  const [startTime, setStartTime] = useState(dayjs().add(5, 'minute'));
+  const [endTime, setEndTime] = useState(dayjs().add(15, 'minute'));
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+
+  const [gameError, setGameError] = useState('');
+  const [titleError, setTitleError] = useState('');
+  const [startDateError, setStartDateError] = useState('');
+  const [endDateError, setEndDateError] = useState('');
+
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  // Checks for the length
+  useEffect(() => {
+    if (title.length >= 3 && game?.name.length >= 3) {
+      setIsEnabled(true);
+    } else {
+      setIsEnabled(false);
+    }
+    console.log(isEnabled);
+  }, [title, game, isEnabled]);
+
+  // Handles title state error
+  const handleTitleChange = (e) => {
+    if (e.target.value < 3) {
+      setTitleError('Title must be longer than 3 characters');
+      setTitle(e.target.value);
+    } else {
+      setTitle(e.target.value);
+      setTitleError('');
+    }
+  };
+
+  // Handles game state error
+  const handleGameChange = (e) => {
+    if (e.length < 3) {
+      setGameError('Game must be longer than 3 characters');
+      setGame(e);
+    } else {
+      setGameError('');
+      setGame(e);
+    }
+  };
+
+  // Handles start date state error
+  const handleStartDateChange = (e) => {
+    if (e.isBefore(dayjs())) {
+      setStartDateError('Time cannot be before current time');
+      setStartTime(e);
+    } else if (e.isAfter(endTime)) {
+      setStartDateError('Time cannot be after end time');
+      setStartTime(e);
+    } else {
+      setStartDateError('');
+      setStartTime(e);
+    }
+  };
+
+  // Handles end date state error
+  const handleEndDateChange = (e) => {
+    if (e.isAfter(dayjs().add(31, 'days'))) {
+      setEndDateError('Time cannot exceed 1 month');
+      setEndTime(e);
+    } else if (e.isBefore(startTime)) {
+      setEndDateError('Time cannot be before start time');
+      setEndTime(e);
+    } else {
+      setEndDateError('');
+      setEndTime(e);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let tagIds = [];
 
+    // Gets tags from API or creates them
     for (const tag of tags) {
       const newTag = await TagService.findOrCreateTagByName(tag.name);
       tagIds.push(newTag.id);
     }
 
+    // Gets game from API or creates it
     var findGame = await GameService.findOrCreateGameByTitle(game.name);
 
+    // Form payload
     const post = {
       title: title,
       description: description,
@@ -57,7 +127,7 @@ export default function CreatePost() {
       const newPost = await PostService.createPost(post);
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
-      window.alert('Error creating post');
+      window.alert(e);
       console.error(e);
     }
   };
@@ -97,7 +167,7 @@ export default function CreatePost() {
       <Box
         sx={{
           marginTop: 1,
-          m: 4,
+          m: 0,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -117,33 +187,58 @@ export default function CreatePost() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            mt: 3,
-            gap: 2,
+            mt: 0,
+            gap: 1,
           }}
         >
           <TextField
-            required
             fullWidth
+            error={title?.length < 3}
             id="searchGames"
-            label="Title"
+            helperText={titleError}
+            minLength={3}
+            maxLength={25}
+            label="Title *"
             autoFocus
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleTitleChange}
           />
-          <Grid item xs={12}>
-            <GameSelector onChange={setGame} />
+          <Grid item xs={0}>
+            <GameSelector
+              onChange={handleGameChange}
+              helperText={gameError}
+              error={game?.length < 3}
+            />
           </Grid>
           <br />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Start Time"
               value={startTime}
-              onChange={(newValue) => setStartTime(newValue)}
+              onChange={handleStartDateChange}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error:
+                    startTime.isBefore(dayjs()) || startTime.isAfter(endTime),
+                  helperText: startDateError,
+                },
+              }}
             />
             <DateTimePicker
               label="End Time"
               value={endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              helperText={endDateError}
+              onChange={handleEndDateChange}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error:
+                    endTime.isAfter(dayjs().add(31, 'days')) ||
+                    endTime.isBefore(startTime),
+                  helperText: endDateError,
+                },
+              }}
             />
           </LocalizationProvider>
           <TagsSelector onChange={setTags} />
@@ -151,25 +246,19 @@ export default function CreatePost() {
             sx={{
               display: 'flex',
             }}
-          >
-            <Typography component="h1" variant="h6">
-              {' '}
-              {/* Need to have 2 radius buttons below for 'Any' and 'Between' */}
-              Description
-            </Typography>
-          </Box>
+          ></Box>
           <TextField
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             multiline
           ></TextField>
-
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 0, mb: 0 }}
+            disabled={!isEnabled}
           >
             Create Post
           </Button>
@@ -183,15 +272,37 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
+// Game selector that displays a drop down and lets you choose a game
+// or create one
 const GameSelector = ({ onChange }) => {
-  const [gammeOptions, setGameOptions] = useState([]);
+  const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    GameService.searchGames('').then((games) => setGameOptions(games));
+    const fetchGameOptions = async () => {
+      try {
+        GameService.searchGames('').then((games) => setGameOptions(games));
+        GameService.searchGames('').then((games) => setGameOptions(games));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchGameOptions();
   }, []);
 
   const onInputChange = (event, newValue) => {
+    try {
+      setValue(newValue);
+      if (newValue && newValue.name && newValue.name.length < 3) {
+        setError(true);
+      } else {
+        setError(false);
+      }
+      onChange(newValue);
+    } catch (err) {
+      setError(true);
+    }
     setValue(newValue);
     onChange(newValue);
   };
@@ -215,11 +326,11 @@ const GameSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       clearOnBlur
       value={value}
       onChange={onInputChange}
-      options={gammeOptions}
-      disableCloseOnSelect
+      options={gameOptions}
       filterOptions={onFilterOptions}
       getOptionLabel={(o) => (o ? o.name : '')}
       isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -227,15 +338,22 @@ const GameSelector = ({ onChange }) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Game"
-          required
-          placeholder="Select or create a game"
+          fullWidth
+          error={error}
+          label="Game *"
+          minLength={3}
+          maxLength={25}
+          helperText={
+            error || value === null ? 'Must be at least 3 characters' : ''
+          }
         />
       )}
     />
   );
 };
 
+// Tag selector that displays a drop down and lets you choose a tag
+// or create one
 const TagsSelector = ({ onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
@@ -278,6 +396,7 @@ const TagsSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      autoHighlight
       multiple
       clearOnBlur
       value={value}
