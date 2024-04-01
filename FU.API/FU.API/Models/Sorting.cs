@@ -3,6 +3,8 @@ namespace FU.API.Models;
 public enum UserSortType
 {
     Username,
+    DOB,
+    ChatActivity,
 }
 
 public enum PostSortType
@@ -11,6 +13,7 @@ public enum PostSortType
     NewestCreated,
     NumberOfPlayers,
     Title,
+    ChatActivity,
 }
 
 public enum SortDirection

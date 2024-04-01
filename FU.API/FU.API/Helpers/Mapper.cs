@@ -12,7 +12,7 @@ using FU.API.DTOs;
 
 public static class Mapper
 {
-    public static UserProfile ToProfile(this ApplicationUser appUser)
+    public static UserProfile ToProfile(this ApplicationUser appUser, Message? lastChatMessage = null)
     {
         return new UserProfile()
         {
@@ -24,6 +24,7 @@ public static class Mapper
             IsOnline = appUser.IsOnline,
             FavoriteGames = appUser.FavoriteGames.Select(g => g.Game).ToList(),
             FavoriteTags = appUser.FavoriteTags.Select(t => t.Tag).ToList(),
+            LastMessage = lastChatMessage?.ToDto(),
         };
     }
 
@@ -107,6 +108,8 @@ public static class Mapper
         query.SortType = arr[0] switch
         {
             "username" => UserSortType.Username,
+            "dob" => UserSortType.DOB,
+            "chatactivity" => UserSortType.ChatActivity,
             _ => UserSortType.Username,
         };
 
@@ -177,6 +180,7 @@ public static class Mapper
             "soonest" => PostSortType.EarliestToScheduledTime,
             "newest" => PostSortType.NewestCreated,
             "title" => PostSortType.Title,
+            "chatactivity" => PostSortType.ChatActivity,
             _ => PostSortType.NewestCreated
         };
 
@@ -207,6 +211,7 @@ public static class Mapper
             Creator = post.Creator == null ? new UserProfile { Username = "Deleted User" } : post.Creator.ToProfile(),
             Tags = post.Tags.Select(t => t.Tag.Name).ToList(),
             HasJoined = hasJoined,
+            LastMessage = post.Chat.LastMessage?.ToDto(),
         };
     }
 

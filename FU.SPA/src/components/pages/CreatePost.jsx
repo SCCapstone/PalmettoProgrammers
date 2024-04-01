@@ -2,26 +2,28 @@ import {
   Button,
   TextField,
   Box,
-  Container,
   Typography,
   Grid,
   Checkbox,
   Autocomplete,
   createFilterOptions,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import PostService from '../services/postService';
-import TagService from '../services/tagService';
-import GameService from '../services/gameService';
+import PostService from '../../services/postService';
+import TagService from '../../services/tagService';
+import GameService from '../../services/gameService';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import PostCard from '../PostCard';
+import UserContext from '../../context/userContext';
 
 export default function CreatePost() {
+  const { user } = useContext(UserContext);
   const [game, setGame] = useState(null);
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs().add(5, 'minute'));
@@ -130,8 +132,38 @@ export default function CreatePost() {
     }
   };
 
+  const getTagsForPreview = () => {
+    if (tags.length === 0) {
+      return ['Tag1', 'Tag2'];
+    }
+
+    return tags.map((tag) => tag.name);
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '30px',
+        paddingRight: '10%',
+      }}
+    >
+      <div style={{ alignContent: 'center' }}>
+        <PostCard
+          post={{
+            creator: user,
+            game: game?.name ?? 'Game Name',
+            title: title.length > 0 ? title : 'Post Title',
+            description:
+              description.length > 0 ? description : 'Post Description',
+            startTime: startTime,
+            endTime: endTime,
+            tags: getTagsForPreview(),
+          }}
+          showActions={false}
+        />
+      </div>
       <Box
         sx={{
           marginTop: 1,
@@ -139,6 +171,7 @@ export default function CreatePost() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          width: 'fit-content',
         }}
       >
         <Typography component="h1" variant="h5">
@@ -231,7 +264,7 @@ export default function CreatePost() {
           </Button>
         </Box>
       </Box>
-    </Container>
+    </div>
   );
 }
 

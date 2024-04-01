@@ -10,6 +10,8 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Replace with logo eventually
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -23,10 +25,13 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmedReadTerms, setConfirmedReadTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -40,6 +45,12 @@ export default function SignUp() {
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
     setUsernameError('');
+  };
+
+  // Update state for email
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+    setEmailError('');
   };
 
   // Update state for password
@@ -56,7 +67,11 @@ export default function SignUp() {
 
   // Check if all fields are filled
   const isEnabled =
-    username.length > 0 && password.length > 0 && confirmPassword.length > 0;
+    username.length > 0 &&
+    email.length > 0 &&
+    password.length > 0 &&
+    confirmPassword.length > 0 &&
+    confirmedReadTerms;
 
   // Function called when button is pressed
   const handleSubmit = async (event) => {
@@ -65,6 +80,7 @@ export default function SignUp() {
 
     const creds = {
       username: data.get('username'),
+      email: data.get('email'),
       password: data.get('password'),
     };
 
@@ -78,7 +94,6 @@ export default function SignUp() {
     // errors in signup, and redirect to signin/last page if there are no errors
     try {
       await AuthService.signUp(creds);
-      navigate('/SignIn');
       var returnUrl = searchParams.get('returnUrl');
       if (returnUrl !== null && returnUrl !== '') {
         navigate(`/SignIn?returnUrl=${encodeURIComponent(returnUrl)}`);
@@ -87,8 +102,9 @@ export default function SignUp() {
       }
       //Display SignUp success
       Store.addNotification({
-        title: 'Account SignUp Confirmation',
-        message: 'Your account has been successfully created!',
+        title: 'Account Signup Confirmation',
+        message:
+          'Your account has been successfully created! Please check your email to verify your account.',
         type: 'success',
         insert: 'top',
         container: 'top-center',
@@ -104,15 +120,16 @@ export default function SignUp() {
       const errorResponse = JSON.parse(event.message);
 
       //If username already exists
-      if (errorResponse && errorResponse.title === 'Duplicate User') {
+      if (errorResponse?.title === 'Duplicate User') {
         setUsernameError(errorResponse.detail);
       } // Check if there is a specific error message for Username
-      else if (
-        errorResponse &&
-        errorResponse.errors &&
-        errorResponse.errors.Username
-      ) {
+      else if (errorResponse?.errors?.Username) {
         setUsernameError(errorResponse.errors.Username[0]);
+      } else if (errorResponse?.status === 409) {
+        // Duplicate email
+        setEmailError(errorResponse.detail);
+      } else if (errorResponse?.errors?.Email) {
+        setEmailError(errorResponse.errors.Email[0]);
       } else {
         // Handles other general errors
         setUsernameError('An unexpected error occurred. Please try again.');
@@ -157,6 +174,20 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={!!emailError}
+                helperText={emailError}
+                onChange={handleEmailChange}
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                type="email"
+                name="email"
+                autoComplete="email"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
                 error={!!passwordError}
                 helperText={passwordError}
                 onChange={handlePasswordChange}
@@ -197,19 +228,29 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
+          <Grid item sx={{ mt: 1 }}>
+            <ConfirmedCheckbox
+              name="agreeTerms"
+              label="terms and conditions"
+              link="https://www.termsofusegenerator.net/live.php?token=l9sB7PUlIGU397WXEeCPZXSM90sEXn02"
+              checked={confirmedReadTerms}
+              onChange={(event) => setConfirmedReadTerms(event.target.checked)}
+              description="I agree to the"
+            />
+          </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             disabled={!isEnabled}
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 1, mb: 2 }}
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container direction="column" alignItems="flex-end">
             <Grid item>
               <Link
-                class="signin-link"
+                className="signin-link"
                 onClick={() => navigate(`/SignIn`)}
                 variant="body2"
                 style={{
@@ -226,4 +267,54 @@ export default function SignUp() {
       </Box>
     </Container>
   );
+  function ConfirmedCheckbox({
+    name,
+    label,
+    link,
+    checked,
+    onChange,
+    description,
+  }) {
+    return (
+      <FormControlLabel
+        control={
+          <Checkbox
+            name={name}
+            color="primary"
+            size="extra small"
+            checked={checked}
+            onChange={onChange}
+            style={{ padding: 5 }}
+          />
+        }
+        label={
+          <span>
+            <Typography
+              component="span"
+              variant="body2"
+              style={{
+                color: Theme.palette.primary.main,
+                marginRight: 3,
+              }}
+            >
+              {description}
+            </Typography>
+            <Link
+              href={link}
+              variant="body2"
+              target="_blank"
+              style={{
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                color: Theme.palette.primary.main,
+              }}
+            >
+              {label}
+            </Link>
+          </span>
+        }
+        style={{ marginRight: 0 }}
+      />
+    );
+  }
 }

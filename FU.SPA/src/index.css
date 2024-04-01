@@ -1,4 +1,4 @@
-:root {
+#root {
   color-scheme: dark;
 
   font-synthesis: none;
@@ -6,4 +6,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+* {
+  box-sizing: border-box;
 }

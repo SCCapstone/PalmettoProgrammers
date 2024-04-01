@@ -17,7 +17,7 @@ public class CommonService : ICommonService
         _dbContext = dbContext;
     }
 
-    public async Task<ApplicationUser?> GetCurrentUser(ClaimsPrincipal claims)
+    public async Task<ApplicationUser?> GetAuthorizedUser(ClaimsPrincipal claims, bool mustBeConfirmed = true)
     {
         var stringId = claims.FindFirstValue(CustomClaimTypes.UserId);
 
@@ -27,12 +27,25 @@ public class CommonService : ICommonService
         }
 
         // Get the user from the database
-        return await _dbContext.Users.FindAsync(userId);
+        var user = await _dbContext.Users.FindAsync(userId);
+
+        // If the user is not confirmed and it must be, throw an unauthorized exception
+        if (mustBeConfirmed && user is not null && !user.AccountConfirmed)
+        {
+            throw new UnauthorizedException("Account not confirmed");
+        }
+
+        return user;
     }
 
     public async Task<ApplicationUser?> GetUser(int userId)
     {
         return await _dbContext.Users.FindAsync(userId);
+    }
+
+    public async Task<ApplicationUser?> GetUser(string username)
+    {
+        return await _dbContext.Users.Where(u => u.NormalizedUsername == username.ToUpper()).FirstOrDefaultAsync();
     }
 
     public async Task<bool> HasJoinedPost(int userId, int postId)

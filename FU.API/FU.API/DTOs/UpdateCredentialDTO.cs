@@ -12,4 +12,6 @@ public record UpdateCredentailsDTO
     public string? NewPassword { get; set; }
 
     public string? OldPassword { get; set; }
+
+    public string? NewEmail { get; set; }
 }
