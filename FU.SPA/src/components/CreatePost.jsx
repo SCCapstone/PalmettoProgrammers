@@ -8,8 +8,6 @@ import {
   Checkbox,
   Autocomplete,
   createFilterOptions,
-  FormControl,
-  FormHelperText,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -31,7 +29,7 @@ export default function CreatePost() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
-  
+
   const [gameError, setGameError] = useState('');
   const [titleError, setTitleError] = useState('');
   const [startDateError, setStartDateError] = useState('');
@@ -39,8 +37,7 @@ export default function CreatePost() {
 
   const [isEnabled, setIsEnabled] = useState(false);
 
-  // Checks for the length 
-  // Small bug, if 
+  // Checks for the length
   useEffect(() => {
     if (title.length >= 3 && game?.name.length >= 3) {
       setIsEnabled(true);
@@ -48,8 +45,8 @@ export default function CreatePost() {
       setIsEnabled(false);
     }
     console.log(isEnabled);
-  })
-  
+  }, [title, game, isEnabled]);
+
   // Handles title state error
   const handleTitleChange = (e) => {
     if (e.target.value < 3) {
@@ -59,18 +56,18 @@ export default function CreatePost() {
       setTitle(e.target.value);
       setTitleError('');
     }
-  }
+  };
 
   // Handles game state error
   const handleGameChange = (e) => {
-   if (e.length < 3) {
+    if (e.length < 3) {
       setGameError('Game must be longer than 3 characters');
       setGame(e);
     } else {
       setGameError('');
       setGame(e);
     }
-  }
+  };
 
   // Handles start date state error
   const handleStartDateChange = (e) => {
@@ -84,7 +81,7 @@ export default function CreatePost() {
       setStartDateError('');
       setStartTime(e);
     }
-  }
+  };
 
   // Handles end date state error
   const handleEndDateChange = (e) => {
@@ -98,7 +95,7 @@ export default function CreatePost() {
       setEndDateError('');
       setEndTime(e);
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -186,11 +183,13 @@ export default function CreatePost() {
               label="Start Time"
               value={startTime}
               onChange={handleStartDateChange}
-              slotProps={{ textField: {
-                fullWidth: true,
-                error: startTime.isBefore(dayjs()) || startTime.isAfter(endTime),
-                helperText: startDateError
-              }
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error:
+                    startTime.isBefore(dayjs()) || startTime.isAfter(endTime),
+                  helperText: startDateError,
+                },
               }}
             />
             <DateTimePicker
@@ -198,11 +197,15 @@ export default function CreatePost() {
               value={endTime}
               helperText={endDateError}
               onChange={handleEndDateChange}
-              slotProps={{ textField: {
-                fullWidth: true,
-                error: endTime.isAfter(dayjs().add(31, 'days')) || endTime.isBefore(startTime),
-                helperText: endDateError
-              }}}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error:
+                    endTime.isAfter(dayjs().add(31, 'days')) ||
+                    endTime.isBefore(startTime),
+                  helperText: endDateError,
+                },
+              }}
             />
           </LocalizationProvider>
           <TagsSelector onChange={setTags} />
