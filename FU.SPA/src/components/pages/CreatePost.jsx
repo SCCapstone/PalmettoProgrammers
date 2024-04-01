@@ -46,7 +46,6 @@ export default function CreatePost() {
     } else {
       setIsEnabled(false);
     }
-    console.log(isEnabled);
   }, [title, game, isEnabled]);
 
   // Handles title state error
@@ -87,8 +86,8 @@ export default function CreatePost() {
 
   // Handles end date state error
   const handleEndDateChange = (e) => {
-    if (e.isAfter(dayjs().add(31, 'days'))) {
-      setEndDateError('Time cannot exceed 1 month');
+    if (e.isAfter(dayjs().add(24, 'hours'))) {
+      setEndDateError('Time cannot exceed 24 hours');
       setEndTime(e);
     } else if (e.isBefore(startTime)) {
       setEndDateError('Time cannot be before start time');
@@ -234,7 +233,7 @@ export default function CreatePost() {
                 textField: {
                   fullWidth: true,
                   error:
-                    endTime.isAfter(dayjs().add(31, 'days')) ||
+                    endTime.isAfter(dayjs().add(24, 'hours')) ||
                     endTime.isBefore(startTime),
                   helperText: endDateError,
                 },
@@ -285,7 +284,7 @@ const GameSelector = ({ onChange }) => {
         GameService.searchGames('').then((games) => setGameOptions(games));
         GameService.searchGames('').then((games) => setGameOptions(games));
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     fetchGameOptions();
