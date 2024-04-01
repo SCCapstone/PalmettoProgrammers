@@ -25,46 +25,96 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 export default function CreatePost() {
   const [game, setGame] = useState(null);
-  const [title, setTitle] = useState(null);
+  const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState(dayjs().add(5, 'minute'));
   const [endTime, setEndTime] = useState(dayjs().add(15, 'minute'));
-  const [originalTime, setOriginalTime] = useState(dayjs()); //Time for initial start time
-  const [maxTime, setMaxTime] = useState(dayjs().add(31, 'days')); //Time for maximum end time
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
-  const [startTimeError, setStartTimeError] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if(startTime.isBefore(originalTime)) {
-      setStartTimeError(true);
-      return;
-    }
-  }, []);
   
+  const [gameError, setGameError] = useState('');
+  const [titleError, setTitleError] = useState('');
+  const [startDateError, setStartDateError] = useState('');
+  const [endDateError, setEndDateError] = useState('');
+
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  // Checks for the length 
+  // Small bug, if 
+  useEffect(() => {
+    if (title.length >= 3 && game?.name.length >= 3) {
+      setIsEnabled(true);
+    } else {
+      setIsEnabled(false);
+    }
+    console.log(isEnabled);
+  })
+  
+  // Handles title state error
+  const handleTitleChange = (e) => {
+    if (e.target.value < 3) {
+      setTitleError('Title must be longer than 3 characters');
+      setTitle(e.target.value);
+    } else {
+      setTitle(e.target.value);
+      setTitleError('');
+    }
+  }
+
+  // Handles game state error
+  const handleGameChange = (e) => {
+   if (e.length < 3) {
+      setGameError('Game must be longer than 3 characters');
+      setGame(e);
+    } else {
+      setGameError('');
+      setGame(e);
+    }
+  }
+
+  // Handles start date state error
+  const handleStartDateChange = (e) => {
+    if (e.isBefore(dayjs())) {
+      setStartDateError('Time cannot be before current time');
+      setStartTime(e);
+    } else if (e.isAfter(endTime)) {
+      setStartDateError('Time cannot be after end time');
+      setStartTime(e);
+    } else {
+      setStartDateError('');
+      setStartTime(e);
+    }
+  }
+
+  // Handles end date state error
+  const handleEndDateChange = (e) => {
+    if (e.isAfter(dayjs().add(31, 'days'))) {
+      setEndDateError('Time cannot exceed 1 month');
+      setEndTime(e);
+    } else if (e.isBefore(startTime)) {
+      setEndDateError('Time cannot be before start time');
+      setEndTime(e);
+    } else {
+      setEndDateError('');
+      setEndTime(e);
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let tagIds = [];
 
+    // Gets tags from API or creates them
     for (const tag of tags) {
       const newTag = await TagService.findOrCreateTagByName(tag.name);
       tagIds.push(newTag.id);
     }
 
-    if (
-      game === '' ||
-      game === null ||
-      game.name === null ||
-      game.name === '' ||
-      game.name.length < 3
-    ) {
-      return;
-    }
-
+    // Gets game from API or creates it
     var findGame = await GameService.findOrCreateGameByTitle(game.name);
 
+    // Form payload
     const post = {
       title: title,
       description: description,
@@ -75,14 +125,11 @@ export default function CreatePost() {
     };
 
     try {
-      if (game === null || game === '' || game.length < 3) {
-        return;
-      } else {
-        const newPost = await PostService.createPost(post);
-        navigate(`/posts/${newPost.id}`);
-      }
+      const newPost = await PostService.createPost(post);
+      navigate(`/posts/${newPost.id}`);
     } catch (e) {
       window.alert(e);
+      console.error(e);
     }
   };
 
@@ -90,7 +137,7 @@ export default function CreatePost() {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 0,
+          marginTop: 1,
           m: 0,
           display: 'flex',
           flexDirection: 'column',
@@ -118,48 +165,46 @@ export default function CreatePost() {
             fullWidth
             error={title?.length < 3}
             id="searchGames"
-            helperText={
-              title?.length < 3 || title === null
-                ? 'Must be at least 3 characters'
-                : ''
-            }
+            helperText={titleError}
             minLength={3}
             maxLength={25}
             label="Title *"
             autoFocus
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleTitleChange}
           />
           <Grid item xs={0}>
-            <GameSelector onChange={setGame} />
+            <GameSelector
+              onChange={handleGameChange}
+              helperText={gameError}
+              error={game?.length < 3}
+            />
           </Grid>
           <br />
-          <FormControl error={startTimeError}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Start Time"
               value={startTime}
-              error={startTime.isBefore(originalTime)}
-              onChange={(newValue) => setStartTime(newValue)}
-              renderInput={(params) => (
-                <TextField 
-                  {...params} 
-                  helperText={startTimeError 
-                    ? 'Time must not be set before current time'
-                    : ''
-                  } 
-                />
-              )}
+              onChange={handleStartDateChange}
+              slotProps={{ textField: {
+                fullWidth: true,
+                error: startTime.isBefore(dayjs()) || startTime.isAfter(endTime),
+                helperText: startDateError
+              }
+              }}
             />
-            {/* {startTimeError && <FormHelperText>Please select a time</FormHelperText>} */}
             <DateTimePicker
               label="End Time"
               value={endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              helperText={endDateError}
+              onChange={handleEndDateChange}
+              slotProps={{ textField: {
+                fullWidth: true,
+                error: endTime.isAfter(dayjs().add(31, 'days')) || endTime.isBefore(startTime),
+                helperText: endDateError
+              }}}
             />
-            
           </LocalizationProvider>
-          </FormControl>
           <TagsSelector onChange={setTags} />
           <Box
             sx={{
@@ -177,16 +222,7 @@ export default function CreatePost() {
             fullWidth
             variant="contained"
             sx={{ mt: 0, mb: 0 }}
-            disabled={
-              !game ||
-              !title ||
-              game?.length < 3 ||
-              title?.length < 3 ||
-              game?.length == 2 ||
-              title?.length === 2 ||
-              title?.length === 1 ||
-              game?.length === 1
-            }
+            disabled={!isEnabled}
           >
             Create Post
           </Button>
@@ -200,6 +236,8 @@ const checkboxIconBlank = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkboxIconChecked = <CheckBoxIcon fontSize="small" />;
 const filter = createFilterOptions();
 
+// Game selector that displays a drop down and lets you choose a game
+// or create one
 const GameSelector = ({ onChange }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
@@ -278,6 +316,8 @@ const GameSelector = ({ onChange }) => {
   );
 };
 
+// Tag selector that displays a drop down and lets you choose a tag
+// or create one
 const TagsSelector = ({ onChange }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
