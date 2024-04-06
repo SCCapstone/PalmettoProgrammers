@@ -31,6 +31,9 @@ export default function Chat({ chatId }) {
     const initializeChat = async () => {
       try {
         const messages = await getMessages(chatId, 1, limit);
+        if (!messages) {
+          messages = [];
+        }
         setMessages(messages);
         // See #281: We need to wait for the signalR connection to be started before joining the chat
         await new Promise((resolve) => setTimeout(resolve, config.WAIT_TIME));
