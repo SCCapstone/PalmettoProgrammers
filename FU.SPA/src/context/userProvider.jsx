@@ -42,6 +42,22 @@ const UserProvider = ({ children }) => {
     fetchCurrentUser(token);
   };
 
+  // Listen for changes in local storage token
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === 'token') {
+        setToken(event.newValue);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <UserContext.Provider value={{ user, token, login, logout, refreshUser }}>
       {children}
