@@ -30,7 +30,7 @@ export default function Chat({ chatId }) {
   useEffect(() => {
     const initializeChat = async () => {
       try {
-        const messages = await getMessages(chatId, 1, limit);
+        var messages = await getMessages(chatId, 1, limit);
         if (!messages) {
           messages = [];
         }
