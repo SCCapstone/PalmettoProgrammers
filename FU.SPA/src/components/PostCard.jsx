@@ -168,7 +168,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
             <Chip
               key={t}
               label={'# ' + t}
-              onClick={showActions ? () => handleTagClick(t) : null}
+              onClick={onTagClick ? () => handleTagClick(t) : null}
             />
           ))}
         </div>
