@@ -21,6 +21,7 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import UserContext from '../context/userContext';
+import { Store } from 'react-notifications-component';
 
 export default function Edit({ postId }) {
   const [game, setGame] = useState();
@@ -44,7 +45,20 @@ export default function Edit({ postId }) {
         setStartTime(dayjs(ogPostDetails.startTime));
         setEndTime(dayjs(ogPostDetails.endTime));
         if (user.id !== ogPostDetails.creator.id) {
-          alert('You are not authorized to edit this post');
+          // authorization error notification
+          Store.addNotification({
+            title: 'Authorization Error',
+            message: 'You are not authorized to edit this post',
+            type: 'danger',
+            insert: 'bottom',
+            container: 'bottom-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 8000,
+              onScreen: true,
+            },
+          });
           navigate(`/discover`);
         }
       } catch (e) {
@@ -69,7 +83,20 @@ export default function Edit({ postId }) {
     try {
       var findGame = await GameService.findOrCreateGameByTitle(game.name);
     } catch (e) {
-      alert(e);
+      // generic error notification
+      Store.addNotification({
+        title: 'Error has occured',
+        message: 'An error has occured.\n' + e,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error(e);
     }
 
@@ -87,7 +114,20 @@ export default function Edit({ postId }) {
       alert('Post updated successfully!');
       navigate(`/posts/${postId}`);
     } catch (e) {
-      window.alert(e);
+      // generic error notification
+      Store.addNotification({
+        title: 'Error has occured',
+        message: 'An error has occured.\n' + e,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error(e);
     }
   };

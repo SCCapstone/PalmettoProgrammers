@@ -32,10 +32,36 @@ export default function AccountSettings() {
 
     // Error checking common cases
     if (newPassword !== confirmPassword) {
-      alert('Passwords do not match');
+      // passwords not matching notification
+      Store.addNotification({
+        title: 'Password Error',
+        message: 'Passwords must match',
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
       return;
     } else if (newPassword !== '' && oldPassword === '') {
-      alert('Old password must be supplied when updating password');
+      // old password missing notification
+      Store.addNotification({
+        title: 'Password Error',
+        message: 'Old password must be supplied when updating password',
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
       return;
     }
 
@@ -59,7 +85,20 @@ export default function AccountSettings() {
         navigate('/signin');
       }
     } catch (e) {
-      alert(e);
+      // error notification
+      Store.addNotification({
+        title: 'Error has occured',
+        message: 'An error has occured.\n' + e,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error(e);
     }
   };

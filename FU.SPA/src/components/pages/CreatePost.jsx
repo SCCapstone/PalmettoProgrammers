@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PostCard from '../PostCard';
 import UserContext from '../../context/userContext';
+import { Store } from 'react-notifications-component';
 
 export default function CreatePost() {
   const { user } = useContext(UserContext);
@@ -147,7 +148,20 @@ export default function CreatePost() {
       const newPost = await PostService.createPost(post);
       navigate(`/posts/${newPost.id}`);
     } catch (e) {
-      window.alert(e);
+      // generic error notification
+      Store.addNotification({
+        title: 'Error has occured',
+        message: 'An error has occured.\n' + e,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error(e);
     }
   };
