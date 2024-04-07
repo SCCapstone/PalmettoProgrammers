@@ -44,6 +44,7 @@ export default function CreatePost() {
     if (
       title.length >= 3 &&
       game?.name.length >= 3 &&
+      game !== null &&
       startTime !== null &&
       endTime !== null &&
       startTime.isAfter(dayjs()) &&
