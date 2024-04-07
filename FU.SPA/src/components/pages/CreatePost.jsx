@@ -45,14 +45,13 @@ export default function CreatePost() {
     if (
       title.length >= 3 &&
       game?.name.length >= 3 &&
-      description.length <= 1500 &&
-      (descriptionError !== '' || descriptionError !== null)
+      description.length <= 1500
     ) {
       setIsEnabled(true);
     } else {
       setIsEnabled(false);
     }
-  }, [title, game, isEnabled, descriptionError, description.length]);
+  }, [title, game, isEnabled, description.length]);
 
   // Handles title state error
   const handleTitleChange = (e) => {
