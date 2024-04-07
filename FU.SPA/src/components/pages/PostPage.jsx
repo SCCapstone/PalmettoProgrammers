@@ -58,7 +58,7 @@ const PostPage = () => {
   }, [postId, update]);
 
   const renderChat = () => {
-    if (post.hasJoined) {
+    if (user && post.hasJoined) {
       return <Chat chatId={post.chatId} />;
     } else {
       var reason = user ? 'not-joined' : 'no-user';
