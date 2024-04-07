@@ -74,11 +74,7 @@ export default function CreatePost() {
 
   // Handles game state error
   const handleGameChange = (e) => {
-    if (e === null || e.length === 0) {
-      setGameError('Game must be longer than 3 characters');
-      setGame(e);
-      setIsEnabled(false);
-    } else if (e.length < 3) {
+    if (e === null || e.length === 0 || e.length < 3) {
       setGameError('Game must be longer than 3 characters');
       setGame(e);
       setIsEnabled(false);
