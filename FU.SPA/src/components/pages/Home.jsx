@@ -20,18 +20,19 @@ const Home = () => {
         </Box>
         <Screenshot src="../../../assets/discover-posts-view.png" />
         <Typography variant="h5" sx={{ pt: 2 }}>
-          Don&apos;t limit yourself to restrictive, or non-existent, in game
-          match making. Search for exactly what you want play, when you want to
-          play, with who you want to play with.
+          Don&apos;t limit yourself to restrictive or random in-game match
+          making. <br />
+          Find like-minded players and play how who you want when you want.
+          Whether that be now or next week.
         </Typography>
-        <SectionBig headerText="Play Your Way">
-          If you can&apos;t find a match, make a new post that perfectly matches
-          what you&apos;re looking for.
+        <SectionBig headerText="Lead the Way">
+          If you can&apos;t find a match, make a new post and invite others to
+          join!
         </SectionBig>
         <Screenshot src="../../../assets/create-post-view.png" />
         <SectionBig headerText="Link Up">
           As a post member, discuss meetup detail, strategize a game plan, or
-          just chat. Don&apos;t forget to invite your friends!
+          just chat.
         </SectionBig>
         <Screenshot src="../../../assets/post-view.png" />
         <SectionBig headerText="Stay Connected">
@@ -59,11 +60,11 @@ const Home = () => {
           </Link>
           , and{' '}
           <Link href="https://github.com/jbytes1027">James Pretorius</Link>. The
-          project can be found at{' '}
+          project is available on{' '}
           <Link href="https://github.com/SCCapstone/PalmettoProgrammers">
-            this
+            github
           </Link>{' '}
-          github repo.
+          .
         </SectionBig>
       </Stack>
     </Box>
