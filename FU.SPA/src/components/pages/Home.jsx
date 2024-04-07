@@ -21,9 +21,8 @@ const Home = () => {
         <Screenshot src="../../../assets/discover-posts-view.png" />
         <Typography variant="h5" sx={{ pt: 2 }}>
           Don&apos;t limit yourself to restrictive or random in-game match
-          making. <br />
-          Find like-minded players and play how who you want when you want.
-          Whether that be now or next week.
+          making. Find like-minded players and play how who you want when you
+          want. Whether that be now or next week.
         </Typography>
         <SectionBig headerText="Lead the Way">
           If you can&apos;t find a match, make a new post and invite others to
