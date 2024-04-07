@@ -72,7 +72,10 @@ export default function CreatePost() {
 
   // Handles start date state error
   const handleStartDateChange = (e) => {
-    if (e.isBefore(dayjs())) {
+    if (e === null) {
+      setStartDateError('Time cannot be empty');
+      setStartTime(e);
+    } else if (e.isBefore(dayjs())) {
       setStartDateError('Time cannot be before current time');
       setStartTime(e);
     } else if (e.isAfter(endTime)) {
@@ -86,7 +89,10 @@ export default function CreatePost() {
 
   // Handles end date state error
   const handleEndDateChange = (e) => {
-    if (e.isAfter(dayjs().add(24, 'hours'))) {
+    if (e === null) {
+      setEndDateError('Time cannot be empty');
+      setEndTime(e);
+    } else if (e.isAfter(dayjs().add(24, 'hours'))) {
       setEndDateError('Time cannot exceed 24 hours');
       setEndTime(e);
     } else if (e.isBefore(startTime)) {
@@ -219,7 +225,9 @@ export default function CreatePost() {
                 textField: {
                   fullWidth: true,
                   error:
-                    startTime.isBefore(dayjs()) || startTime.isAfter(endTime),
+                    startTime === null || 
+                    startTime.isBefore(dayjs()) || 
+                    startTime.isAfter(endTime),
                   helperText: startDateError,
                 },
               }}
@@ -233,6 +241,7 @@ export default function CreatePost() {
                 textField: {
                   fullWidth: true,
                   error:
+                    endTime === null ||
                     endTime.isAfter(dayjs().add(24, 'hours')) ||
                     endTime.isBefore(startTime),
                   helperText: endDateError,
