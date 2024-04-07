@@ -39,14 +39,23 @@ export default function CreatePost() {
 
   const [isEnabled, setIsEnabled] = useState(false);
 
-  // Checks for the length
+  // Checks for the length and appropriate constrictions
   useEffect(() => {
-    if (title.length >= 3 && game?.name.length >= 3) {
+    if (
+      title.length >= 3 &&
+      game?.name.length >= 3 &&
+      startTime !== null &&
+      endTime !== null &&
+      startTime.isAfter(dayjs()) &&
+      startTime.isBefore(endTime) &&
+      endTime.isBefore(dayjs().add(24, 'hours')) &&
+      endTime.isAfter(startTime)
+    ) {
       setIsEnabled(true);
     } else {
       setIsEnabled(false);
     }
-  }, [title, game, isEnabled]);
+  }, [title, game, isEnabled, endTime, startTime]);
 
   // Handles title state error
   const handleTitleChange = (e) => {
