@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import UserContext from '../context/userContext';
+import RelationService from '../services/relationService';
 import { useContext, useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import AppBar from '@mui/material/AppBar';
@@ -9,6 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import './Navbar.css';
@@ -21,12 +23,32 @@ export default function Navbar() {
   const location = useLocation();
   const [previousPath, setPreviousPath] = useState(location.pathname);
   const [currentPath, setCurrentPath] = useState(location.pathname);
+  const [hasNewRequests, setHasNewRequests] = useState(false);
 
   useEffect(() => {
     setPreviousPath(currentPath);
     setCurrentPath(location.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  useEffect(() => {
+    const checkForNewRequests = async () => {
+      if (user && user.id) {
+        const query = {
+          relation: RelationService.STATUS.PENDING,
+        };
+        try {
+          const { totalCount } = await RelationService.getRelations(user.id, query);
+          setHasNewRequests(totalCount > 0);
+        } catch (error) {
+          console.error('Failed to fetch new requests:', error);
+        }
+      }
+    };
+
+    checkForNewRequests();
+    
+  }, [user]);
 
   const isActiveMenuItem = (menuItemTitle) => {
     // If the current path contains the menuItemTitle and it's not the post page, then it is active
@@ -55,6 +77,13 @@ export default function Navbar() {
         <Typography textAlign="center">{user?.username}</Typography>
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Badge 
+              color="secondary"
+              overlap="circular"
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              variant="dot"
+              invisible={!hasNewRequests}
+              >
             <Avatar
               alt={user?.username}
               src={user?.pfpUrl}
@@ -62,6 +91,7 @@ export default function Navbar() {
                 border: '2px solid #ffffff',
               }}
             />
+            </Badge>
           </IconButton>
         </Tooltip>
       </div>
