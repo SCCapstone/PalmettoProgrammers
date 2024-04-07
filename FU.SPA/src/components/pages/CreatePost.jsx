@@ -225,8 +225,8 @@ export default function CreatePost() {
                 textField: {
                   fullWidth: true,
                   error:
-                    startTime === null || 
-                    startTime.isBefore(dayjs()) || 
+                    startTime === null ||
+                    startTime.isBefore(dayjs()) ||
                     startTime.isAfter(endTime),
                   helperText: startDateError,
                 },
