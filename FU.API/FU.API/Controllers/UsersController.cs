@@ -18,11 +18,13 @@ public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly ISearchService _searchService;
+    private readonly IStorageService _storageService;
 
-    public UsersController(IUserService userService, ISearchService searchService)
+    public UsersController(IUserService userService, ISearchService searchService, IStorageService storageService)
     {
         _userService = userService;
         _searchService = searchService;
+        _storageService = storageService;
     }
 
     [HttpGet]
@@ -74,7 +76,28 @@ public class UsersController : ControllerBase
         // Overrides any client given id that may differ from userId.
         profileChanges.Id = userId;
 
-        var newProfile = await _userService.UpdateUserProfile(profileChanges);
+        // Make sure its an image already in our blob storage
+        // Otherwise we are unure if the image is cropped, resized, and in the right format
+        if (profileChanges?.PfpUrl is not null)
+        {
+            Uri avatarUri;
+
+            try
+            {
+                avatarUri = new(profileChanges.PfpUrl);
+            }
+            catch (UriFormatException)
+            {
+                throw new UnprocessableException("Invalid avatar url format.");
+            }
+
+            if (!(await _storageService.IsInStorageAsync(avatarUri)))
+            {
+                throw new UnprocessableException("Invalid profile picture. The image must be uploaded to our storage system");
+            }
+        }
+
+        var newProfile = await _userService.UpdateUserProfile(profileChanges!);
 
         return Ok(newProfile);
     }

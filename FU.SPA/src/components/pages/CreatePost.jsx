@@ -36,6 +36,7 @@ export default function CreatePost() {
   const [titleError, setTitleError] = useState('');
   const [startDateError, setStartDateError] = useState('');
   const [endDateError, setEndDateError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
 
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -44,6 +45,7 @@ export default function CreatePost() {
     if (
       title.length >= 3 &&
       game?.name.length >= 3 &&
+      description.length <= 1500 &&
       game !== null &&
       game !== '' &&
       game.name !== null &&
@@ -59,7 +61,7 @@ export default function CreatePost() {
     } else {
       setIsEnabled(false);
     }
-  }, [title, game, isEnabled, endTime, startTime]);
+  }, [title, game, isEnabled, endTime, startTime, description.length]);
 
   // Handles title state error
   const handleTitleChange = (e) => {
@@ -99,6 +101,16 @@ export default function CreatePost() {
     } else {
       setStartDateError('');
       setStartTime(e);
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    if (e.length > 1500) {
+      setDescriptionError('Description cannot exceed 1500 characters');
+      setDescription(e);
+    } else {
+      setDescriptionError('');
+      setDescription(e);
     }
   };
 
@@ -271,9 +283,11 @@ export default function CreatePost() {
             }}
           ></Box>
           <TextField
+            error={description.length > 1500}
             label="Description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => handleDescriptionChange(e.target.value)}
+            helperText={descriptionError}
             multiline
           ></TextField>
           <Button
