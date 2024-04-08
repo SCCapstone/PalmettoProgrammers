@@ -87,7 +87,7 @@ const SocialRelationActionButton = ({ requesteeId }) => {
 
   let handleClick = () => {};
   let buttonText = '';
-  let declineButtonText = '';
+  let declineButtonText = 'Decline Friend Request';
 
   // don't render if current user and viewed user are not loaded
   if (!requesteeId || !currentUser) return;
@@ -121,12 +121,6 @@ const SocialRelationActionButton = ({ requesteeId }) => {
     };
   } else if (relationStatus === RelationService.STATUS.FRIENDS) {
     buttonText = 'Unfriend';
-    handleClick = async () => {
-      await RelationService.removeRelation(requesteeId);
-      UpdateStatus();
-    };
-  } if (relationStatus === RelationService.STATUS.PENDING) {
-    declineButtonText = 'Decline Friend Request';
     handleClick = async () => {
       await RelationService.removeRelation(requesteeId);
       UpdateStatus();
