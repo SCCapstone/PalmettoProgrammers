@@ -135,7 +135,7 @@ export default function ProfileSettings() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Date of Birth"
-            value={null} // Leave null as to not change date
+            value={dateOfBirth} // Leave null as to not change date
             fullWidth
             onChange={(newValue) => setDateOfBirth(newValue)}
           />
