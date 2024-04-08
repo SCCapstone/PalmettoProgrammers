@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
+import { styled } from '@mui/material/styles';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -24,6 +25,7 @@ export default function Navbar() {
   const [previousPath, setPreviousPath] = useState(location.pathname);
   const [currentPath, setCurrentPath] = useState(location.pathname);
   const [hasNewRequests, setHasNewRequests] = useState(false);
+  const [newRequestsCount, setNewRequestsCount] = useState(0);
 
   useEffect(() => {
     setPreviousPath(currentPath);
@@ -40,6 +42,7 @@ export default function Navbar() {
         try {
           const { totalCount } = await RelationService.getRelations(user.id, query);
           setHasNewRequests(totalCount > 0);
+          setNewRequestsCount(totalCount);
         } catch (error) {
           console.error('Failed to fetch new requests:', error);
         }
@@ -71,6 +74,14 @@ export default function Navbar() {
     return containsMatch || postMatch;
   };
 
+  
+const StyledBadge = styled(Badge)(() => ({
+  '& .MuiBadge-badge': {
+    right: -7,
+    top: 3,
+  },
+}));
+
   const renderProfile = () => (
     <>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -81,7 +92,7 @@ export default function Navbar() {
               color="secondary"
               overlap="circular"
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-              variant="dot"
+              badgeContent={newRequestsCount}
               invisible={!hasNewRequests}
               sx={{
                 '& .MuiBadge-dot': {
@@ -131,15 +142,16 @@ export default function Navbar() {
             handleCloseUserMenu();
             navigate('/social?o=Users&page=1&r=Pending');
             setHasNewRequests(false);
+            setNewRequestsCount(0);
           }}
         >
-          <Badge
+          <StyledBadge
             color="secondary"
             variant="dot"
             invisible={!hasNewRequests}
             >
             <Typography textAlign="center">Friend Requests</Typography>
-          </Badge>
+          </StyledBadge>
         </MenuItem>
         <MenuItem
           onClick={() => {
