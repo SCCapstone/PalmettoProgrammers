@@ -36,17 +36,13 @@ export default function Navbar() {
   useEffect(() => {
     const checkForNewRequests = async () => {
       if (user && user.id) {
-        const viewed = localStorage.getItem('friendRequestsViewed');
-
         const query = {
           relation: RelationService.STATUS.PENDING,
         };
         try {
           const { totalCount } = await RelationService.getRelations(user.id, query);
-          if (!viewed) {
             setHasNewRequests(totalCount > 0);
             setNewRequestsCount(totalCount);
-          }
         } catch (error) {
           console.error('Failed to fetch new requests:', error);
         }
@@ -147,8 +143,6 @@ const StyledBadge = styled(Badge)(() => ({
             navigate('/social?o=Users&page=1&r=Pending');
             setHasNewRequests(false);
             setNewRequestsCount(0);
-            localStorage.setItem('friendRequestsViewed', true);
-
           }}
         >
           <StyledBadge
