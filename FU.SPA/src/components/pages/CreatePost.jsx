@@ -45,7 +45,7 @@ export default function CreatePost() {
     if (
       title.length >= 3 &&
       game?.name.length >= 3 &&
-      description.length <= 1500
+      description.length <= 1500 &&
       game !== null &&
       game !== '' &&
       game.name !== null &&
