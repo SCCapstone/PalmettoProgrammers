@@ -43,7 +43,7 @@ const UserProfile = () => {
   const renderChat = () => {
     if (isOwnProfile) {
       return null;
-    } else if (user) {
+    } else if (user && chatId) {
       return <Chat chatId={chatId} />;
     } else {
       return <ChatLocked chatType="direct" reason="no-user" />;
