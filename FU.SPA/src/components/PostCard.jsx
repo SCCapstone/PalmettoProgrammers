@@ -14,6 +14,7 @@ import './PostCard.css';
 import Theme from '../Theme';
 import dayjs from 'dayjs';
 import { Done } from '@mui/icons-material';
+import ChatMessagePreview from './ChatMessagePreview';
 
 const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
   const navigate = useNavigate();
@@ -87,7 +88,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
 
   return (
     <Card sx={{ width: 250 }}>
-      <CardContent sx={{ textAlign: 'left', height: 300 }}>
+      <CardContent sx={{ textAlign: 'left', height: 350 }}>
         <div
           className="user-header"
           onClick={() => navigate(`/profile/${user.id}`)}
@@ -134,21 +135,30 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
             margin: '5px 0',
           }}
         />
-        <Typography
-          variant="body2"
-          sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            height: 80,
-          }}
-        >
-          {post.description}
-        </Typography>
+        <Tooltip title={post.description}>
+          <Typography
+            variant="body2"
+            sx={{
+              maxHeight: 80,
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
+              textOverflow: 'ellipsis',
+              overflowWrap: 'break-word',
+            }}
+          >
+            {post.description}
+          </Typography>
+        </Tooltip>
+        {post.lastMessage && (
+          <ChatMessagePreview chatMessage={post.lastMessage} />
+        )}
         <div
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            paddingTop: '10px',
+            paddingTop: 10,
             gap: '5px',
             maxHeight: 80,
             overflow: 'hidden',
@@ -158,7 +168,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
             <Chip
               key={t}
               label={'# ' + t}
-              onClick={showActions ? () => handleTagClick(t) : null}
+              onClick={onTagClick ? () => handleTagClick(t) : null}
             />
           ))}
         </div>

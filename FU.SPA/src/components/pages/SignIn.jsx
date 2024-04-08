@@ -122,14 +122,14 @@ export default function SignIn() {
     try {
       const response = await AuthService.signIn(creds);
       login(response.token);
-      navigate(returnUrl ?? '/');
+      navigate(returnUrl ?? '/discover');
     } catch (event) {
       const errorResponse = await JSON.parse(event.message);
       if (errorResponse && errorResponse.detail === 'Account not confirmed') {
         setCredentialsError('Account not yet verified');
         setUnconfirmedAccountDialogOpen(true);
       } else {
-        setCredentialsError('Incorrect credentails');
+        setCredentialsError('Incorrect credentials');
       }
       console.error('Error in sign in:', event);
     }

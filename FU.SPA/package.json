@@ -10,7 +10,7 @@
     "preview": "npx vite preview",
     "format": "npx prettier . --write",
     "format-check": "npx prettier . --check",
-    "selenium-test": "npx selenium-side-runner tests/*.side -c browserName=firefox",
+    "selenium-test": "npx selenium-side-runner tests/Forces_Unite.side -c browserName=firefox",
     "selenium-test:clean": "npm run container-setup && npm run selenium-test && npm run container-teardown",
     "container-setup": "npm run container-teardown && docker compose -f tests/docker-compose.yml up --build -d",
     "container-teardown": "docker compose -f tests/docker-compose.yml down",

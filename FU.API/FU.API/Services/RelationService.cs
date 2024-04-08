@@ -10,10 +10,13 @@ public class RelationService : CommonService, IRelationService
 {
     private readonly AppDbContext _dbContext;
 
-    public RelationService(AppDbContext dbContext)
+    private readonly IChatService _chatService;
+
+    public RelationService(AppDbContext dbContext, IChatService chatService)
         : base(dbContext)
     {
         _dbContext = dbContext;
+        _chatService = chatService;
     }
 
     public async Task HandleRelationAction(int initiatedById, int otherUserId, UserRelationAction action)
@@ -134,6 +137,14 @@ public class RelationService : CommonService, IRelationService
 
     private async Task HandleNewRelation(ApplicationUser initiatedBy, ApplicationUser otherUser, UserRelationAction action)
     {
+        // Create or find a chat between the two users
+        var chat = await _chatService.GetChat(initiatedBy.UserId, otherUser.UserId) ?? await _chatService.CreateChat(initiatedBy, otherUser);
+
+        if (chat is null)
+        {
+            throw new ServerError("Chat creation failed");
+        }
+
         switch (action)
         {
             case UserRelationAction.Friend:
@@ -144,12 +155,14 @@ public class RelationService : CommonService, IRelationService
                         User1 = initiatedBy,
                         User2 = otherUser,
                         Status = UserRelationStatus.Requested,
+                        Chat = chat,
                     },
                     new UserRelation
                     {
                         User1 = otherUser,
                         User2 = initiatedBy,
                         Status = UserRelationStatus.Pending,
+                        Chat = chat,
                     },
                 };
 
@@ -163,12 +176,14 @@ public class RelationService : CommonService, IRelationService
                         User1 = initiatedBy,
                         User2 = otherUser,
                         Status = UserRelationStatus.Blocked,
+                        Chat = chat,
                     },
                     new UserRelation
                     {
                         User1 = otherUser,
                         User2 = initiatedBy,
                         Status = UserRelationStatus.BlockedBy,
+                        Chat = chat,
                     },
                 };
 

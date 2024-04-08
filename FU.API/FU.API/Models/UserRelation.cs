@@ -35,6 +35,10 @@ public class UserRelation
     /// Gets or sets the status of this relation.
     /// </summary>
     public UserRelationStatus Status { get; set; }
+
+    public Chat Chat { get; set; } = new Chat();
+
+    public int ChatId { get; set; }
 }
 
 /// <summary>
