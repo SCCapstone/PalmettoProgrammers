@@ -7,7 +7,6 @@ services:
         condition: service_healthy
       storage:
         condition: service_started
-    restart: on-failure
     environment:
       JWT_SECRET: my-32-character-ultra-secure-and-ultra-long-secret
       CONNECTION_STRING: Host=db; Database=fu_db; Username=fu_user; Password=fu_pass
