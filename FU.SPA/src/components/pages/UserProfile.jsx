@@ -87,6 +87,7 @@ const SocialRelationActionButton = ({ requesteeId }) => {
 
   let handleClick = () => {};
   let buttonText = '';
+  let declineButtonText = '';
 
   // don't render if current user and viewed user are not loaded
   if (!requesteeId || !currentUser) return;
@@ -124,12 +125,25 @@ const SocialRelationActionButton = ({ requesteeId }) => {
       await RelationService.removeRelation(requesteeId);
       UpdateStatus();
     };
+  } if (relationStatus === RelationService.STATUS.PENDING) {
+    declineButtonText = 'Decline Friend Request';
+    handleClick = async () => {
+      await RelationService.removeRelation(requesteeId);
+      UpdateStatus();
+    };
   }
 
   return (
-    <Button onClick={handleClick} variant="contained" style={{ width: 'auto' }}>
-      {buttonText}
-    </Button>
+    <>
+      <Button onClick={handleClick} variant="contained" style={{ width: 'auto' }}>
+        {buttonText}
+      </Button>
+      {relationStatus === RelationService.STATUS.PENDING && (
+        <Button onClick={handleClick} variant="outlined" style={{ width: 'auto' }}>
+          {declineButtonText}
+        </Button>
+      )}
+    </>
   );
 };
 
