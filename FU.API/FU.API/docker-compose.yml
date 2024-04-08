@@ -20,6 +20,23 @@ services:
       POSTGRES_DB: fu_db
     ports:
       - "5432:5432"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-h",
+          "localhost",
+          "-p",
+          "5432",
+          "-U",
+          "fu_user",
+          "-d",
+          "fu_db",
+        ]
+      interval: 2s
+      timeout: 2s
+      retries: 10
   storage:
     image: mcr.microsoft.com/azure-storage/azurite
     environment:
