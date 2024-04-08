@@ -40,9 +40,12 @@ export default function Navbar() {
           relation: RelationService.STATUS.PENDING,
         };
         try {
-          const { totalCount } = await RelationService.getRelations(user.id, query);
-            setHasNewRequests(totalCount > 0);
-            setNewRequestsCount(totalCount);
+          const { totalCount } = await RelationService.getRelations(
+            user.id,
+            query,
+          );
+          setHasNewRequests(totalCount > 0);
+          setNewRequestsCount(totalCount);
         } catch (error) {
           console.error('Failed to fetch new requests:', error);
         }
@@ -50,7 +53,6 @@ export default function Navbar() {
     };
 
     checkForNewRequests();
-    
   }, [user]);
 
   const isActiveMenuItem = (menuItemTitle) => {
@@ -74,13 +76,12 @@ export default function Navbar() {
     return containsMatch || postMatch;
   };
 
-  
-const StyledBadge = styled(Badge)(() => ({
-  '& .MuiBadge-badge': {
-    right: -7,
-    top: 3,
-  },
-}));
+  const StyledBadge = styled(Badge)(() => ({
+    '& .MuiBadge-badge': {
+      right: -7,
+      top: 3,
+    },
+  }));
 
   const renderProfile = () => (
     <>
@@ -88,7 +89,7 @@ const StyledBadge = styled(Badge)(() => ({
         <Typography textAlign="center">{user?.username}</Typography>
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Badge 
+            <Badge
               color="secondary"
               overlap="circular"
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -98,17 +99,17 @@ const StyledBadge = styled(Badge)(() => ({
                 '& .MuiBadge-dot': {
                   height: '12px',
                   width: '12px',
-                  borderRadius: '6px',       
+                  borderRadius: '6px',
                 },
               }}
-              >
-            <Avatar
-              alt={user?.username}
-              src={user?.pfpUrl}
-              sx={{
-                border: '2px solid #ffffff',
-              }}
-            />
+            >
+              <Avatar
+                alt={user?.username}
+                src={user?.pfpUrl}
+                sx={{
+                  border: '2px solid #ffffff',
+                }}
+              />
             </Badge>
           </IconButton>
         </Tooltip>
@@ -149,7 +150,7 @@ const StyledBadge = styled(Badge)(() => ({
             color="secondary"
             variant="dot"
             invisible={!hasNewRequests}
-            >
+          >
             <Typography textAlign="center">Friend Requests</Typography>
           </StyledBadge>
         </MenuItem>
