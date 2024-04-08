@@ -80,9 +80,16 @@ export default function Navbar() {
             <Badge 
               color="secondary"
               overlap="circular"
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               variant="dot"
               invisible={!hasNewRequests}
+              sx={{
+                '& .MuiBadge-dot': {
+                  height: '12px',
+                  width: '12px',
+                  borderRadius: '6px',       
+                },
+              }}
               >
             <Avatar
               alt={user?.username}
@@ -118,6 +125,21 @@ export default function Navbar() {
           }}
         >
           <Typography textAlign="center">Profile</Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleCloseUserMenu();
+            navigate('/social?o=Users&page=1&r=Pending');
+            setHasNewRequests(false);
+          }}
+        >
+          <Badge
+            color="secondary"
+            variant="dot"
+            invisible={!hasNewRequests}
+            >
+            <Typography textAlign="center">Friend Requests</Typography>
+          </Badge>
         </MenuItem>
         <MenuItem
           onClick={() => {
