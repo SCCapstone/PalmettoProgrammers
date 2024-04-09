@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import PostService from '../../services/postService';
 import { useNavigate } from 'react-router-dom';
 import PostForm from '../PostForm';
@@ -16,9 +15,5 @@ export default function CreatePost() {
     }
   };
 
-  return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
-      <PostForm onSubmit={handleSubmit} submitButtonText="Create Post" />
-    </Box>
-  );
+  return <PostForm onSubmit={handleSubmit} submitButtonText="Create Post" />;
 }

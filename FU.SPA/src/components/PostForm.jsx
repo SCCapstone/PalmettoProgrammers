@@ -155,8 +155,8 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
   };
 
   return (
-    <>
-      <div style={{ alignContent: 'center' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
+      <div>
         <PostCard
           post={{
             creator: user,
@@ -178,12 +178,7 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
         onKeyDown={(e) => {
           if (e.key === 'Enter') e.preventDefault();
         }}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          mt: 0,
-          gap: 1,
-        }}
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: 300 }}
       >
         <TextField
           fullWidth
@@ -235,11 +230,6 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
             }}
           />
         </LocalizationProvider>
-        <Box
-          sx={{
-            display: 'flex',
-          }}
-        ></Box>
         <TagsSelector onChange={setTags} />
         <TextField
           error={description.length > 1500}
@@ -248,8 +238,8 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
           onChange={(e) => handleDescriptionChange(e.target.value)}
           helperText={descriptionError}
           multiline
+          rows={3}
         ></TextField>
-
         <Button
           type="submit"
           variant="contained"
@@ -260,7 +250,7 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
           {submitButtonText}
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 
