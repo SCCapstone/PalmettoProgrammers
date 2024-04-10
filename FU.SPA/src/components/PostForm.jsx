@@ -18,7 +18,7 @@ import GameService from '../services/gameService';
 import UserContext from '../context/userContext';
 import dayjs from 'dayjs';
 
-const PostForm = ({ onSubmit, submitButtonText }) => {
+const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
   const { user } = useContext(UserContext);
 
   const [title, setTitle] = useState('');
@@ -35,6 +35,21 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
   const [startDateError, setStartDateError] = useState('');
   const [endDateError, setEndDateError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+
+  // Load data from initial value
+  // Note: initialValue is not used for default useState value because initalValue data will not be avalible on first render
+  useEffect(() => {
+    const updateValues = async () => {
+      setTitle(initialValue.title);
+      setDescription(initialValue.description);
+      setStartTime(dayjs(initialValue.startTime));
+      setEndTime(dayjs(initialValue.endTime));
+    };
+
+    if (initialValue) {
+      updateValues();
+    }
+  }, [initialValue]);
 
   // Manage enabled state
   useEffect(() => {
@@ -197,6 +212,7 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
           onChange={handleGameChange}
           helperText={gameError}
           error={game?.length < 3}
+          initialValue={initialValue?.game}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DateTimePicker
@@ -231,7 +247,7 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
             }}
           />
         </LocalizationProvider>
-        <TagsSelector onChange={setTags} />
+        <TagsSelector onChange={setTags} initialValues={initialValue?.tags} />
         <TextField
           error={description.length > 1500}
           label="Description"
@@ -261,22 +277,31 @@ const filter = createFilterOptions();
 
 // Game selector that displays a drop down and lets you choose a game
 // or create one
-const GameSelector = ({ onChange }) => {
+const GameSelector = ({ onChange, initialValue }) => {
   const [gameOptions, setGameOptions] = useState([]);
   const [value, setValue] = useState('');
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchGameOptions = async () => {
+    const getGames = async () => {
       try {
-        GameService.searchGames('').then((games) => setGameOptions(games));
-        GameService.searchGames('').then((games) => setGameOptions(games));
-      } catch (err) {
-        console.error(err);
+        const game = await GameService.searchGames('');
+        setGameOptions(game);
+        const gameChoice = game.find((g) => g.name === initialValue);
+        if (gameChoice) {
+          setValue(gameChoice);
+        }
+      } catch (e) {
+        console.error('Problem getting games', e);
       }
     };
-    fetchGameOptions();
-  }, []);
+
+    getGames();
+  }, [initialValue]);
+
+  useEffect(() => {
+    onChange(value);
+  }, [value, onChange]);
 
   const onInputChange = (event, newValue) => {
     try {
@@ -286,12 +311,10 @@ const GameSelector = ({ onChange }) => {
       } else {
         setError(false);
       }
-      onChange(newValue);
     } catch (err) {
       setError(true);
     }
     setValue(newValue);
-    onChange(newValue);
   };
 
   const onFilterOptions = (options, params) => {
@@ -342,13 +365,29 @@ const GameSelector = ({ onChange }) => {
 
 // Tag selector that displays a drop down and lets you choose a tag
 // or create one
-const TagsSelector = ({ onChange }) => {
+const TagsSelector = ({ onChange, initialValues }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
 
+  // Load initial values
   useEffect(() => {
-    TagService.searchTags('').then((tags) => setTagOptions(tags));
-  }, []);
+    const getTags = async () => {
+      try {
+        const tags = await TagService.searchTags('');
+        setTagOptions(tags);
+
+        if (initialValues?.length > 0) {
+          const initialTags = tags.filter((tag) =>
+            initialValues.includes(tag.name),
+          );
+          setValue(initialTags);
+        }
+      } catch (e) {
+        console.error('Something went wrong getting tags: ', e);
+      }
+    };
+    getTags();
+  }, [initialValues]);
 
   const onInputChange = (event, newValues) => {
     for (const newValue of newValues) {
@@ -362,8 +401,11 @@ const TagsSelector = ({ onChange }) => {
     }
 
     setValue(newValues);
-    onChange(newValues);
   };
+
+  useEffect(() => {
+    onChange(value);
+  }, [onChange, value]);
 
   const onFilterOptions = (options, params) => {
     const filtered = filter(options, params);
