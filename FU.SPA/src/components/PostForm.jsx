@@ -46,7 +46,7 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
       endTime !== null &&
       startTime.isAfter(dayjs()) &&
       startTime.isBefore(endTime) &&
-      endTime.isBefore(dayjs().add(24, 'hours')) &&
+      endTime.isBefore(startTime.add(24, 'hours')) &&
       endTime.isAfter(startTime),
     );
   }, [game, title, isEnabled, endTime, startTime, description.length]);
@@ -107,7 +107,7 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
     if (e === null) {
       setEndDateError('Time cannot be empty');
       setEndTime(e);
-    } else if (e.isAfter(dayjs().add(24, 'hours'))) {
+    } else if (e.isAfter(startTime.add(24, 'hours'))) {
       setEndDateError('Time cannot exceed 24 hours');
       setEndTime(e);
     } else if (e.isBefore(startTime)) {
@@ -223,7 +223,7 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
                 fullWidth: true,
                 error:
                   endTime === null ||
-                  endTime.isAfter(dayjs().add(24, 'hours')) ||
+                  endTime.isAfter(startTime.add(24, 'hours')) ||
                   endTime.isBefore(startTime),
                 helperText: endDateError,
               },
