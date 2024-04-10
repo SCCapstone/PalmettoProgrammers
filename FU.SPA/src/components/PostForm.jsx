@@ -181,13 +181,14 @@ const PostForm = ({ onSubmit, submitButtonText }) => {
         sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: 300 }}
       >
         <TextField
+          required
           fullWidth
           error={title?.length < 3}
           id="searchGames"
           helperText={titleError}
           minLength={3}
           maxLength={25}
-          label="Title *"
+          label="Title"
           autoFocus
           value={title}
           onChange={handleTitleChange}
@@ -312,6 +313,7 @@ const GameSelector = ({ onChange }) => {
 
   return (
     <Autocomplete
+      required
       autoHighlight
       clearOnBlur
       value={value}
@@ -326,7 +328,7 @@ const GameSelector = ({ onChange }) => {
           {...params}
           fullWidth
           error={error}
-          label="Game *"
+          label="Game"
           minLength={3}
           maxLength={25}
           helperText={
