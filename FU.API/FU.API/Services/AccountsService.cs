@@ -71,6 +71,13 @@ public class AccountsService : CommonService
             throw new ConflictException("User with email already exists");
         }
 
+        // Make sure the password is valid
+        // Must be 5 characters or longer, and contain at least one special character or number
+        if (credentials.Password.Length < 5 || !credentials.Password.Any(c => char.IsDigit(c) || char.IsPunctuation(c)))
+        {
+            throw new BadRequestException("Password must be at least 5 characters long and contain at least one special character or number");
+        }
+
         _dbContext.Users.Add(new ApplicationUser()
         {
             Username = credentials.Username,
