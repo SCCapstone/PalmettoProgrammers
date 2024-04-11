@@ -56,31 +56,6 @@ export default function ChatMessage({ chatMessage, userIsSender }) {
     );
   };
 
-  const breakLongWords = (content) => {
-    // Split the content by spaces
-    const words = content.split(' ');
-
-    // Define the maximum length for a word
-    const maxLength = 20;
-
-    // Iterate over words and break long ones
-    const brokenWords = words.map((word) => {
-      if (word.length > maxLength) {
-        // Split the word into chunks of maxLength characters
-        const chunks = [];
-        for (let i = 0; i < word.length; i += maxLength) {
-          chunks.push(word.slice(i, i + maxLength));
-        }
-        // Join the chunks with zero-width spaces
-        return chunks.join('\u200B');
-      }
-      return word;
-    });
-
-    // Join the broken words back into a string
-    return brokenWords.join(' ');
-  };
-
   return (
     <div
       className={`chat-message-container ${userIsSender ? 'is-sender' : ''}`}
@@ -98,9 +73,7 @@ export default function ChatMessage({ chatMessage, userIsSender }) {
             {DateUtils.timeDifference(chatMessage.createdAt)}
           </div>
         </div>
-        <div className="chat-message-content">
-          {breakLongWords(chatMessage.content)}
-        </div>
+        <div className="chat-message-content">{chatMessage.content}</div>
       </div>
     </div>
   );
