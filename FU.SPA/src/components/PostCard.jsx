@@ -73,6 +73,8 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
   }
 
   const stringToColor = (string) => {
+    if (!string) return null;
+
     let hash = 0;
     let i;
     for (i = 0; i < string.length; i += 1) {
@@ -111,7 +113,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
                 bgcolor: stringToColor(user?.username),
               }}
             />
-            <Typography variant="subtitle2">{`by ${user.username}`}</Typography>
+            <Typography variant="subtitle2">{`by ${user?.username}`}</Typography>
           </div>
           {renderJoinedStatus()}
         </div>
