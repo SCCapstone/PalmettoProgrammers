@@ -159,7 +159,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         // Act
         (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
-            StartOnOrAfterDate = searchDate,
+            StartOnOrAfterDateTime = searchDate.ToDateTime(new TimeOnly(1, 1, 1)),
         });
 
         // Assert
@@ -196,7 +196,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         // Act
         (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
-            EndOnOrBeforeDate = searchDate,
+            EndOnOrBeforeDateTime = searchDate.ToDateTime(new TimeOnly(1, 1, 1)),
         });
 
         // Assert
@@ -232,7 +232,7 @@ public class SearchServiceSearchPostsTests : IDisposable
         // Act
         (List<Post> posts, var totalResults) = await _searchService.SearchPosts(new PostQuery()
         {
-            StartOnOrAfterDate = DateOnly.FromDateTime(DateTime.UtcNow),
+            StartOnOrAfterDateTime = DateTime.UtcNow,
         });
 
         // Assert
