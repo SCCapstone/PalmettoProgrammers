@@ -55,14 +55,14 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
   useEffect(() => {
     setIsEnabled(
       game?.name?.length >= 3 &&
-      title.length >= 3 &&
-      description.length <= 1500 &&
-      startTime !== null &&
-      endTime !== null &&
-      startTime.isAfter(dayjs()) &&
-      startTime.isBefore(endTime) &&
-      endTime.isBefore(startTime.add(24, 'hours')) &&
-      endTime.isAfter(startTime),
+        title.length >= 3 &&
+        description.length <= 1500 &&
+        startTime !== null &&
+        endTime !== null &&
+        startTime.isAfter(dayjs()) &&
+        startTime.isBefore(endTime) &&
+        endTime.isBefore(startTime.add(24, 'hours')) &&
+        endTime.isAfter(startTime),
     );
   }, [game, title, isEnabled, endTime, startTime, description.length]);
 
