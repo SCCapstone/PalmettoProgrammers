@@ -23,7 +23,7 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
     }
 
     return (
-      <Typography variant="h4" gutterBottom style={{ color: 'white' }}>
+      <Typography variant="h6" gutterBottom style={{ color: 'white' }}>
         {reasonMessage}
       </Typography>
     );
@@ -36,7 +36,6 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
     return (
       <Button
         variant="contained"
-        style={{ width: '95%', maxWidth: '300px' }}
         onClick={() => {
           if (reason === 'no-user') {
             navigate('/signin?returnUrl=' + encodeURIComponent(path));
