@@ -7,6 +7,7 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Microsoft.Extensions.Hosting;
 
 public class PostService : CommonService, IPostService
 {
@@ -75,6 +76,8 @@ public class PostService : CommonService, IPostService
         {
             throw new PostException("The updated post's creator does not match the old post's creator", HttpStatusCode.UnprocessableEntity);
         }
+
+        AssertValidDateAndTime(postChanges, updatingPost: true);
 
         ogPost.Game = await _dbContext.Games.FindAsync(postChanges.GameId) ?? throw new NonexistentGameException();
         ogPost.Description = postChanges.Description;
@@ -211,7 +214,7 @@ public class PostService : CommonService, IPostService
         await _dbContext.SaveChangesAsync();
     }
 
-    private static void AssertValidDateAndTime(Post post)
+    private static void AssertValidDateAndTime(Post post, bool updatingPost = false)
     {
         // Check if either start time or end time is present when the other is present
         bool isInvalidTimeRange = (post.StartTime is null) != (post.EndTime is null);
@@ -221,8 +224,9 @@ public class PostService : CommonService, IPostService
         }
 
         // Make sure the post is not in the past
+        // Only check if we are not updating the post so that we can allow for posts to be updated
         bool isPostInPast = post.StartTime < DateTime.UtcNow;
-        if (isPostInPast)
+        if (!updatingPost && isPostInPast)
         {
             throw new PostException("Post cannot be in the past", HttpStatusCode.UnprocessableEntity);
         }
