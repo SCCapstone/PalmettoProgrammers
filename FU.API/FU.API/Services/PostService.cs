@@ -7,7 +7,6 @@ using FU.API.Interfaces;
 using FU.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using Microsoft.Extensions.Hosting;
 
 public class PostService : CommonService, IPostService
 {
