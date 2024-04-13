@@ -6,9 +6,23 @@ const API_BASE_URL = process.env.API_BASE_URL;
 
 const setup = async () => {
   console.log('Setting up');
-
-  const response = await fetch(`${API_BASE_URL}/Games`);
-  console.log(await response.json());
+  const gameData = {
+    name: "Insurgency",
+    id: "1"
+  };
+  try {
+    const response = await fetch(`${API_BASE_URL}/Games`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(gameData),
+    });
+    const result = await response.json();
+    console.log('Data inserted:', result);
+  } catch (error) {
+    console.error('Failed to insert data:', error);
+  }
 
   console.log('Setup done');
 };
