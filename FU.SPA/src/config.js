@@ -24,14 +24,17 @@ const config = {
     window.location.hostname === 'jolly-glacier-0ae92c40f.4.azurestaticapps.net'
       ? 'https://fuapi.azurewebsites.net/api'
       : window.location.hostname === 'forces-unite.com'
-      ? 'https://fuapi.azurewebsites.net/api'
-      : import.meta.env.VITE_API_URL || 'https://fuapi.azurewebsites.net/api',
+        ? 'https://fuapi.azurewebsites.net/api'
+        : import.meta.env.VITE_API_URL || 'https://fuapi.azurewebsites.net/api',
   CHAT_HUB_URL:
     window.location.hostname === 'jolly-glacier-0ae92c40f.4.azurestaticapps.net'
       ? 'https://fuapi.azurewebsites.net/chathub'
       : window.location.hostname === 'forces-unite.com'
-      ? 'https://fuapi.azurewebsites.net/chathub'
-      : (import.meta.env.VITE_API_URL || 'https://fuapi.azurewebsites.net/api').replace(/\/api$/, '') + '/chathub',
+        ? 'https://fuapi.azurewebsites.net/chathub'
+        : (
+            import.meta.env.VITE_API_URL ||
+            'https://fuapi.azurewebsites.net/api'
+          ).replace(/\/api$/, '') + '/chathub',
   WAIT_TIME:
     import.meta.env.VITE_WAIT_TIME !== undefined
       ? import.meta.env.VITE_WAIT_TIME
