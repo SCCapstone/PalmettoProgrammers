@@ -60,7 +60,7 @@ export default function SignUp() {
   const isEnabled =
     username.length > 0 &&
     email.length > 0 &&
-    password.length >= 5 &&
+    password.length >= 8 &&
     confirmedReadTerms;
 
   // Function called when button is pressed
@@ -178,7 +178,7 @@ export default function SignUp() {
                 error={!!passwordError}
                 helperText={
                   passwordError ||
-                  'Password must be 5 characters long and contain either 1 special character or number'
+                  'Password must be 8 characters long and contain either 1 special character or number'
                 }
                 onChange={handlePasswordChange}
                 required
