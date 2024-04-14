@@ -351,7 +351,7 @@ const GameSelector = ({ onChange, initialValue }) => {
           {...params}
           fullWidth
           error={error}
-          label="Game"
+          label="Add/Create a Game"
           minLength={3}
           maxLength={25}
           helperText={
@@ -447,7 +447,12 @@ const TagsSelector = ({ onChange, initialValues }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Tags" placeholder="" />
+        <TextField
+          {...params}
+          label="Add/Create Tags"
+          placeholder=""
+          helperText="Maximum of 6 tags"
+        />
       )}
     />
   );
