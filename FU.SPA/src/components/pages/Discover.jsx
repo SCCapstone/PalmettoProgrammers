@@ -458,10 +458,8 @@ export default function Discover() {
           <TextSearch.SearchBar
             searchText={searchText}
             onSearchSubmit={(newSearchText) => {
-              if (newSearchText.trim() !== '') {
-                setPage(1);
-              }
               setSearchText(newSearchText);
+              setPage(1);
             }}
           />
           {tabOption === tabOptions.Posts && renderPostSortSelector()}
