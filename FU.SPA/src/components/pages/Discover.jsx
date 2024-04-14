@@ -35,6 +35,8 @@ const paramKey = {
   games: 'games',
   tags: 'tags',
   page: 'page',
+  postSort: 'psort',
+  userSort: 'usort',
 };
 
 const paramToDayjs = (searchParams, paramKey) => {
@@ -49,7 +51,7 @@ export default function Discover() {
     Users: 'Users',
   };
 
-  const queryLimit = 10;
+  const queryLimit = 12;
   const [totalResults, setTotalResults] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('o') || tabOptions.Posts;
@@ -78,8 +80,13 @@ export default function Discover() {
   const [gameOptions, setGameOptions] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
 
-  const [postSortOption, setPostSortOption] = useState(null);
-  const [userSortOption, setUserSortOption] = useState(null);
+  const [postSortOption, setPostSortOption] = useState(
+    searchParams.get(paramKey.postSort) ||
+      config.POST_SORT_OPTIONS[1].value + ':asc',
+  );
+  const [userSortOption, setUserSortOption] = useState(
+    searchParams.get(paramKey.userSort) || null,
+  );
 
   const [dateRangeRadioValue, setDateRangeRadioValue] = useState(() => {
     const paramValue = searchParams.get(paramKey.dateRadio);
@@ -166,6 +173,20 @@ export default function Discover() {
             params.set('o', tabOption);
           } else {
             params.set('o', tabOption);
+          }
+
+          if (postSortOption) {
+            params.set(paramKey.postSort, postSortOption);
+          }
+
+          if (userSortOption) {
+            params.set(paramKey.userSort, userSortOption);
+          }
+
+          if (tabOption === tabOptions.Posts) {
+            params.delete(paramKey.userSort);
+          } else {
+            params.delete(paramKey.postSort);
           }
 
           return params;
@@ -316,6 +337,7 @@ export default function Discover() {
   const renderPostSortSelector = () => {
     return (
       <SortOptionsSelector
+        initialValue={postSortOption}
         options={config.POST_SORT_OPTIONS}
         onChange={(newValue) => {
           setPostSortOption(newValue);
@@ -328,6 +350,7 @@ export default function Discover() {
   const renderUserSortSelector = () => {
     return (
       <SortOptionsSelector
+        initialValue={userSortOption}
         options={config.USER_SORT_OPTIONS}
         onChange={(newValue) => {
           setUserSortOption(newValue);

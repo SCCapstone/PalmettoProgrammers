@@ -37,7 +37,7 @@ export default function Social() {
   const [searchText, setSearchText] = useState(searchParams.get('q') || '');
   const initialPage = parseInt(searchParams.get(paramKey.page), 10) || 1;
 
-  const queryLimit = 10;
+  const queryLimit = 12;
   const [totalResults, setTotalResults] = useState(0);
 
   const [posts, setPosts] = useState([]);
@@ -47,10 +47,12 @@ export default function Social() {
   const [page, setPage] = useState(initialPage);
 
   const [postSortOption, setPostSortOption] = useState(
-    searchParams.get('psort') || null,
+    searchParams.get('psort') ||
+      config.SOCIAL_POST_SORT_OPTIONS[1].value + ':asc',
   );
   const [userSortOption, setUserSortOption] = useState(
-    searchParams.get('usort') || null,
+    searchParams.get('usort') ||
+      config.SOCIAL_USER_SORT_OPTIONS[2].value + ':desc',
   );
 
   const { user } = useContext(UserContext);
