@@ -58,7 +58,8 @@ export default function ProfileSettings() {
         // if the date of birth is null, pass and clear DOB
         // otherwise convert to iso time format and update DOB
         dob:
-          dateOfBirth !== null ? dateOfBirth.toISOString().substring(0, 10)
+          dateOfBirth !== null
+            ? dateOfBirth.toISOString().substring(0, 10)
             : null,
       };
 
@@ -136,6 +137,7 @@ export default function ProfileSettings() {
             value={dateOfBirth} // Leave null as to not change date
             fullWidth
             onChange={(newValue) => setDateOfBirth(newValue)}
+            slotProps={{ field: { clearable: true } }}
           />
         </LocalizationProvider>
         <TextField
