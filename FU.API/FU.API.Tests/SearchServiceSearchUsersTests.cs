@@ -56,19 +56,19 @@ public class SearchServiceSearchUsersTests : IDisposable
         {
             Username = "User1",
             Email = "fake1@email.com",
-            Password = "Pass1"
+            Password = "Test12345"
         });
         var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials()
         {
             Username = "User2",
             Email = "fake2@email.com",
-            Password = "Pass2"
+            Password = "Test12345"
         });
         var user3 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials()
         {
             Username = "User3",
             Email = "fake3@email.com",
-            Password = "Pass3"
+            Password = "Test12345"
         });
         await _userService.UpdateUserProfile(new UserProfile() { Bio = "Bio3", Id = user3.UserId });
 
