@@ -1,7 +1,7 @@
 ## Recording Notes
 - Set recording resolution and browser webpage to 1280x720
     - The easiest way to set the browser webpage to 1280x720 is to set your desktop resolution to 1280x720 and make the website fullscreen.
-- Record video and audio separately https://www.youtube.com/watch?v=FF3DhiLY3CY
+- Record video and audio separately. [Here's a tutorial](https://www.youtube.com/watch?v=FF3DhiLY3CY).
 - Do a 10s test recording. Make sure you can hear your voice. Make sure your cursor is visible.
 - Look at camera
 - If you make a mistake, it's best to pick up from at least the last pause. It's easier on the editor.
@@ -37,7 +37,7 @@
 - No easy searching
     - must manually text search and scroll through the chat history
 
-### Forms
+### Forums
 - > Reddit for example
 - Mixed in with other content
     - have to sift through irrelevant and outdated posts
@@ -115,7 +115,7 @@
 ## Demo
 ### User 1
 - Profile
-    - Avatar: [[Guiseppe-Verdi-in-a-Top-Hat-Giovanni-Boldini-oil-painting.webp]]
+    - Avatar: `Guiseppe-Verdi-in-a-Top-Hat-Giovanni-Boldini-oil-painting.webp`
     - Set description to "I love top hats."
 - > Hi I'm [name] and I want to find some people to 3v3 rocket league with this monday.
 - > Now I'm really like top hats and I want to start up a new top hat team where we can talk about tophats and play some 3v3 rocket league. So I'm going to create a post to find others with a simmilar interests.
@@ -146,7 +146,7 @@
 
 ### User 3
 - FedoraFanatic365
-    - Avatar: [[a-gray-tabby-cat-wearing-a-black-fedora-and-a-pair-of-sunglasses-with-a-hat-nearby-cat-as-breaking-bad-character-illustration-generative-ai-photo.jpg]]
+    - Avatar: `a-gray-tabby-cat-wearing-a-black-fedora-and-a-pair-of-sunglasses-with-a-hat-nearby-cat-as-breaking-bad-character-illustration-generative-ai-photo.jpg`
 - Start on discover page
 - > Hi I'm [name] and I like fedoras
 - > I'm looking for some people to play rocket league with so I'm going to set the game to rocket league
