@@ -48,7 +48,7 @@ public class AccountServiceTests : IDisposable
     public async void CreateUser_WithValidCredentials_ReturnsUser()
     {
         // Arange
-        Credentials credentials = new() { Username = "Test", Password = "Test" };
+        Credentials credentials = new() { Username = "Test", Password = "Test12345" };
 
         // Act
         ApplicationUser user = await _accountsService.Register(credentials);
@@ -62,7 +62,7 @@ public class AccountServiceTests : IDisposable
     public async void ChangeUsername_WithValidUsername_ChangesUsername()
     {
         // Arange
-        Credentials credentials = new() { Username = "Username1", Password = "Test" };
+        Credentials credentials = new() { Username = "Username1", Password = "Test12345" };
         string newUsername = "Username2";
         ApplicationUser user = await _accountsService.Register(credentials);
 
