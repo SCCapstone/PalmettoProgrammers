@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
 import { Store } from 'react-notifications-component';
-import {serializeError} from 'serialize-error';
+import { serializeError } from 'serialize-error';
 
 export default function AccountSettings() {
   const { logout, user } = useContext(UserContext);
