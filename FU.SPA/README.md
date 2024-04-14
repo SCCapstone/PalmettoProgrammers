@@ -22,7 +22,7 @@ Add the following to your `hosts` file (`/etc/hosts` on Linux and `C:\Windows\Sy
     127.0.0.1	fu-api
     127.0.0.1	fu-spa
 
-To test with a clean API and SPA run
+To test with a clean API and SPA and test all suites, run
 
     npm run selenium-test:clean
 
@@ -30,7 +30,7 @@ To startup a clean API and SPA for test development, run
 
     npm run container-setup
 
-To stop run
+To stop containers, run
 
     npm run container-teardown
 
@@ -38,7 +38,7 @@ To start just the API for SPA development, run
 
     npm run api-start
 
-To pause the container press `CTRL-C`. To resume it run the above command. To stop and remove the container run
+To pause the container press `CTRL-C`. To resume it run the above command. To stop and remove the container, run
 
     npm run api-teardown
 
@@ -56,7 +56,13 @@ or
 
     selenium-side-runner tests/*.side -c browserName=firefox
 
-You can also change the browserName option to chrome/chromium if you want to test that browser engine instead.
+To run a specific test suite, run
+
+    npm run selenium-test:suite arg
+
+where `arg` is a regex string that will match the test suite. i.e. testing a suite named "Login, SignIn, and SignUp" only requires you to put "Login" as an argument.
+
+You can also change the browserName option to Chrome/Chromium if you want to test that browser engine instead. However, there are issues if the installed version of Chrome/Chromium is different from the Selenium driver version.
 
 ### Coding Style
 
