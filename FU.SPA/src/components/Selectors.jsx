@@ -130,7 +130,6 @@ export const SortOptionsSelector = ({ options, onChange, initialValue }) => {
   const [initialOption, initialOrder] = initialValue
     ? initialValue.split(':')
     : [null, null];
-  console.log(initialOption);
   // Default sort order in the api is descending
   const [ascSortOrder, setAscSortOrder] = useState(initialOrder === 'asc');
   const [optionValue, setOptionValue] = useState(

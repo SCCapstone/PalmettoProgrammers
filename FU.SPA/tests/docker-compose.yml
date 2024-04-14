@@ -1,0 +1,11 @@
+include:
+  - ../docker-compose.yml
+  - ../../FU.API/FU.API/docker-compose.yml
+
+services:
+  fu-test-setup:
+    build:
+      context: .
+    depends_on:
+      - fu-api
+      - fu-spa

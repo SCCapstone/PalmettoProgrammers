@@ -23,7 +23,7 @@ public class AzureBlobStorageService : IStorageService
 
     public async Task<Uri> UploadAsync(Stream stream, string fileName)
     {
-        BlobClient blob = GetBlobClient(fileName);
+        BlobClient blob = await GetBlobClientAsync(fileName);
 
         if (await blob.ExistsAsync())
         {
@@ -43,7 +43,7 @@ public class AzureBlobStorageService : IStorageService
 
     public async Task DeleteOldUnusedFilesAsync()
     {
-        BlobContainerClient container = GetBlobContainer();
+        BlobContainerClient container = await GetBlobContainerAsync();
 
         // Assumes file name like 355975c6-7c1e-42dc-99c6-a62ddacf0452.jpg with a length of 40
         // Assumes PfpUrl doesn't have any parameters
@@ -86,20 +86,32 @@ public class AzureBlobStorageService : IStorageService
         }
     }
 
+    public async Task<bool> IsInStorageAsync(Uri uri)
+    {
+        BlobClient blobClient = new(uri);
+
+        return await blobClient.ExistsAsync();
+    }
+
     private async Task<bool> DeleteFileAsync(string fileName)
     {
-        BlobClient blob = GetBlobClient(fileName);
+        BlobClient blob = await GetBlobClientAsync(fileName);
 
         return await blob.DeleteIfExistsAsync();
     }
 
-    private BlobContainerClient GetBlobContainer()
+    private async Task<BlobContainerClient> GetBlobContainerAsync()
     {
-        return new BlobContainerClient(_config[ConfigKey.StorageConnectionString], _config[ConfigKey.AvatarContainerName]);
+        BlobContainerClient containerClient = new(_config[ConfigKey.StorageConnectionString], _config[ConfigKey.AvatarContainerName]);
+
+        await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+        return containerClient;
     }
 
-    private BlobClient GetBlobClient(string blobName)
+    private async Task<BlobClient> GetBlobClientAsync(string blobName)
     {
-        return GetBlobContainer().GetBlobClient(blobName);
+        BlobContainerClient containerClient = await GetBlobContainerAsync();
+        return containerClient.GetBlobClient(blobName);
     }
 }

@@ -21,6 +21,7 @@ internal class Program
     {
         WebApplication app = BuildApp(args);
         ConfigureApp(app);
+        ApplyDbMigrations(app.Configuration);
         app.Run();
     }
 
@@ -39,7 +40,7 @@ internal class Program
         }
 
         app.UseCors(x => x
-            .WithOrigins("http://localhost:5173", "https://jolly-glacier-0ae92c40f.4.azurestaticapps.net")
+            .WithOrigins("http://localhost:5173", "https://jolly-glacier-0ae92c40f.4.azurestaticapps.net", "https://www.forces-unite.com")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()
@@ -54,6 +55,17 @@ internal class Program
 
         // Add SignalR hub endpoint
         app.MapHub<ChatHub>("/chathub");
+    }
+
+    private static void ApplyDbMigrations(IConfiguration config)
+    {
+        // Create a DbContext
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseNpgsql(config[ConfigKey.ConnectionString]);
+        using AppDbContext dbContext = new(optionsBuilder.Options);
+
+        // Dangerous. See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli#apply-migrations-at-runtime
+        dbContext.Database.Migrate();
     }
 
     private static WebApplication BuildApp(string[] args)
@@ -115,7 +127,25 @@ internal class Program
         builder.Services.AddScoped<IRelationService, RelationService>();
         builder.Services.AddScoped<ICommonService, CommonService>();
         builder.Services.AddScoped<IStorageService, AzureBlobStorageService>();
-        builder.Services.AddSingleton<IEmailService, EmailService>();
+
+        if (builder.Configuration[ConfigKey.BaseSpaUrl] is null || builder.Configuration[ConfigKey.EmailConnectionString] is null)
+        {
+            if (builder.Configuration[ConfigKey.EmailConnectionString] is null)
+            {
+                Console.WriteLine($"Email service connection string is not configured. Missing {ConfigKey.EmailConnectionString}. See README for adding. Will use mock email service.");
+            }
+
+            if (builder.Configuration[ConfigKey.BaseSpaUrl] is null)
+            {
+                Console.WriteLine($"The base SPA Url is not configured. Missing {ConfigKey.BaseSpaUrl}. See README for adding. Will use mock email service.");
+            }
+
+            builder.Services.AddSingleton<IEmailService, MockEmailService>();
+        }
+        else
+        {
+            builder.Services.AddSingleton<IEmailService, EmailService>();
+        }
 
         builder.Services.AddSignalR(options =>
         {
@@ -199,16 +229,6 @@ internal class Program
         if (config[ConfigKey.StorageConnectionString] is null)
         {
             throw new Exception($"Storage connection string is not configured. Missing {ConfigKey.StorageConnectionString}. See README for adding.");
-        }
-
-        if (config[ConfigKey.EmailConnectionString] is null)
-        {
-            throw new Exception($"Email service connection string is not configured. Missing {ConfigKey.EmailConnectionString}. See README for adding.");
-        }
-
-        if (config[ConfigKey.BaseSpaUrl] is null)
-        {
-            throw new Exception($"The base SPA Url is not configured. Missing {ConfigKey.BaseSpaUrl}. See README for adding.");
         }
     }
 }
