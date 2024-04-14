@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Store } from 'react-notifications-component';
 
-
 export default function EditPost() {
   const { postId } = useParams();
   const [ogPost, setOgPost] = useState();
@@ -22,6 +21,7 @@ export default function EditPost() {
   const handleSubmit = async (newPost) => {
     try {
       await PostService.updatePost(newPost, postId);
+      // Success notification
       Store.addNotification({
         title: 'Post Updated',
         message: 'Successfully updated post\n',
@@ -37,6 +37,7 @@ export default function EditPost() {
       });
       navigate(`/posts/${postId}`);
     } catch (e) {
+      // Error notification
       Store.addNotification({
         title: 'Error has occured',
         message: 'An error has occured.\n' + e,
