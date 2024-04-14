@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
 import { Store } from 'react-notifications-component';
-import { serializeError } from 'serialize-error';
 
 export default function AccountSettings() {
   const { logout, user } = useContext(UserContext);
@@ -101,9 +100,6 @@ export default function AccountSettings() {
       }
     } catch (e) {
       // Error notification
-      // var test = JSON.stringify(e, Object.getOwnPropertyNames(e));
-      const err = serializeError(e);
-      console.log(err);
       Store.addNotification({
         title: 'Error has occured',
         message: 'An error has occured.\n' + e,
