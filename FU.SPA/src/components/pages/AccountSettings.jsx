@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router';
 import UserContext from '../../context/userContext';
 import { useContext } from 'react';
 import { Store } from 'react-notifications-component';
+import {serializeError} from 'serialize-error';
 
 export default function AccountSettings() {
   const { logout, user } = useContext(UserContext);
@@ -32,7 +33,7 @@ export default function AccountSettings() {
 
     // Error checking common cases
     if (newPassword !== confirmPassword) {
-      // passwords not matching notification
+      // Passwords not matching notification
       Store.addNotification({
         title: 'Password Error',
         message: 'Passwords must match',
@@ -48,7 +49,7 @@ export default function AccountSettings() {
       });
       return;
     } else if (newPassword !== '' && oldPassword === '') {
-      // old password missing notification
+      // Old password missing notification
       Store.addNotification({
         title: 'Password Error',
         message: 'Old password must be supplied when updating password',
@@ -76,16 +77,33 @@ export default function AccountSettings() {
       await UserService.updateAccountInfo(data);
       let alertMessage = 'Info updated successfully!';
       if (data.newPassword !== null) {
-        alertMessage += '\nYou will be logged out.';
+        alertMessage += '\nYou have been logged out.';
       }
-      alert(alertMessage);
+      // Info update notification
+      Store.addNotification({
+        title: 'Info Updated',
+        message: alertMessage,
+        type: 'success',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
+      // redirect to signin & logout if password was changed
       if (data.newPassword !== null) {
         localStorage.clear();
         logout();
         navigate('/signin');
       }
     } catch (e) {
-      // error notification
+      // Error notification
+      // var test = JSON.stringify(e, Object.getOwnPropertyNames(e));
+      const err = serializeError(e);
+      console.log(err);
       Store.addNotification({
         title: 'Error has occured',
         message: 'An error has occured.\n' + e,
