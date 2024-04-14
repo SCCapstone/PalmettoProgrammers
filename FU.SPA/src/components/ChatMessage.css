@@ -33,6 +33,7 @@
 
 .chat-message-content {
   text-align: left;
+  word-break: break-word;
 }
 
 .chat-message-info {
