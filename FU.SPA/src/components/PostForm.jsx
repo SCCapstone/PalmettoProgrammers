@@ -416,7 +416,7 @@ const TagsSelector = ({ onChange, initialValues }) => {
     if (inputValue !== '' && !isExisting) {
       filtered.push({
         id: null,
-        name: inputValue,
+        name: inputValue.toLowerCase(),
       });
     }
 
