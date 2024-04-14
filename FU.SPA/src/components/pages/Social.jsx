@@ -37,7 +37,7 @@ export default function Social() {
   const [searchText, setSearchText] = useState(searchParams.get('q') || '');
   const initialPage = parseInt(searchParams.get(paramKey.page), 10) || 1;
 
-  const queryLimit = 10;
+  const queryLimit = 12;
   const [totalResults, setTotalResults] = useState(0);
 
   const [posts, setPosts] = useState([]);
