@@ -239,7 +239,10 @@ export default function Social() {
         <div style={{ display: 'flex', gap: '50px', justifyContent: 'center' }}>
           <TextSearch.SearchBar
             searchText={searchText}
-            onSearchSubmit={setSearchText}
+            onSearchSubmit={(newSearchText) => {
+              setSearchText(newSearchText);
+              setPage(1);
+            }}
           />
           {tabOption === tabOptions.Posts && renderPostSortOptions()}
           {tabOption === tabOptions.Users && renderUserSortOptions()}
