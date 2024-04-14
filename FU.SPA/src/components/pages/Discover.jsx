@@ -49,7 +49,7 @@ export default function Discover() {
     Users: 'Users',
   };
 
-  const queryLimit = 10;
+  const queryLimit = 12;
   const [totalResults, setTotalResults] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('o') || tabOptions.Posts;
