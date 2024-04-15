@@ -125,7 +125,6 @@ export default function Chat({ chatId }) {
   }, [messages, prevScrollHeight]);
 
   // Use MUi card for chat
-  const chatHeight = window.innerHeight * 0.80;
 
   return (
     <Card
@@ -134,7 +133,7 @@ export default function Chat({ chatId }) {
         textAlign: 'left',
         minWidth: '300px',
         width: '100%',
-        height: chatHeight,
+        height: '65vh',
         display: 'flex',
         flexDirection: 'column',
         right: '5%',
