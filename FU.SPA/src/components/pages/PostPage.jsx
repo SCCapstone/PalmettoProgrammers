@@ -14,7 +14,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-//import './hideScrollbar.css';
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -141,8 +140,8 @@ const PostPage = () => {
 
   if (post && !loading) {
     return (
-      <div style={{ display: 'flex', gap: '20px', overflow: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', overflow: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-end' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <PostCard post={post} showActions={false} />
           {renderLeaveButton()}
           <PostUsersList postId={post.id} />
@@ -156,4 +155,5 @@ const PostPage = () => {
     return <NoPage />;
   }
 };
+
 export default PostPage;
