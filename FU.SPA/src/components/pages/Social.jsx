@@ -183,9 +183,11 @@ export default function Social() {
         {Object.keys(relationOptions).map((option, index) => (
           <Button
             key={index}
-            className={`relation-button ${
-              relationOption === relationOptions[option] ? 'selected' : ''
-            }`}
+            variant={
+              relationOption === relationOptions[option]
+                ? 'contained'
+                : 'outlined'
+            }
             onClick={() => {
               setRelationOption(relationOptions[option]);
               setPage(1);
