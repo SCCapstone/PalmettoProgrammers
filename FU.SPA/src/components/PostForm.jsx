@@ -412,11 +412,13 @@ const TagsSelector = ({ onChange, initialValues }) => {
 
     const { inputValue } = params;
     // Suggest the creation of a new value
-    const isExisting = options.some((option) => inputValue === option.name);
+    const isExisting = options.some(
+      (option) => inputValue.toLowerCase() === option.name,
+    );
     if (inputValue !== '' && !isExisting) {
       filtered.push({
         id: null,
-        name: inputValue,
+        name: inputValue.toLowerCase(),
       });
     }
 
