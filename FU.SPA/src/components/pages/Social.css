@@ -20,3 +20,8 @@
 .page-content > div:nth-child(2) {
   flex-grow: 1;
 }
+
+.relation-button.selected {
+  background-color: #8a2be2;
+  color: #fff;
+}

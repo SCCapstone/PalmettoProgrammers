@@ -1,4 +1,4 @@
-import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Tabs, Tab, ButtonGroup, Button } from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import UserService from '../../services/userService';
 import RelationService from '../../services/relationService';
@@ -177,49 +177,43 @@ export default function Social() {
     );
   };
 
-  const renderTabSelectors = () => {
+  const renderRelationButtons = () => {
     return (
-      <div className="selectors-wrapper">
-        <FormControl>
-          <InputLabel id="social-option-label">Social</InputLabel>
-          <Select
-            labelId="social-option-label"
-            value={tabOption}
-            label="Social"
-            onChange={(e) => {
-              setTabOption(e.target.value);
+      <ButtonGroup orientation="vertical">
+        {Object.keys(relationOptions).map((option, index) => (
+          <Button
+            key={index}
+            className={`relation-button ${
+              relationOption === relationOptions[option] ? 'selected' : ''
+            }`}
+            onClick={() => {
+              setRelationOption(relationOptions[option]);
               setPage(1);
             }}
           >
-            {Object.keys(tabOptions).map((option, index) => (
-              <MenuItem key={index} value={tabOptions[option]}>
-                {tabOptions[option]}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {tabOption === tabOptions.Users && (
-          <FormControl>
-            <InputLabel id="status-selector-label">Relation Status</InputLabel>
-            <Select
-              labelId="status-selector-label"
-              label="Relation Status"
-              value={relationOption}
-              onChange={(e) => {
-                setRelationOption(e.target.value);
-                setPage(1);
-              }}
-              style={{ minWidth: '150px', textAlign: 'left' }}
-            >
-              {Object.keys(relationOptions).map((option, index) => (
-                <MenuItem key={index} value={relationOptions[option]}>
-                  {relationOptions[option]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-      </div>
+            {relationOptions[option]}
+          </Button>
+        ))}
+      </ButtonGroup>
+    );
+  };
+
+  const renderTabSelectors = () => {
+    return (
+      <>
+        <Tabs
+          value={tabOption}
+          onChange={(_, newValue) => {
+            setTabOption(newValue);
+            setPage(1);
+          }}
+          variant="fullWidth"
+        >
+          <Tab label={tabOptions.Posts} value={tabOptions.Posts} />
+          <Tab label={tabOptions.Users} value={tabOptions.Users} />
+        </Tabs>
+        {tabOption === tabOptions.Users && renderRelationButtons()}
+      </>
     );
   };
 

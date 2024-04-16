@@ -1,12 +1,6 @@
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
-import {
-  Typography,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Select,
-} from '@mui/material';
+import { Typography, Tabs, Tab } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { TagsSelector, GamesSelector, SortOptionsSelector } from '../Selectors';
 import SearchService from '../../services/searchService';
@@ -362,28 +356,20 @@ export default function Discover() {
 
   const renderTabSelectors = () => {
     return (
-      <div className="selectors-wrapper">
-        <FormControl>
-          <InputLabel id="social-option-label">Discover</InputLabel>
-          <Select
-            labelId="social-option-label"
-            value={tabOption}
-            label="Discover"
-            onChange={(e) => {
-              setTabOption(e.target.value);
-              setPage(1);
-            }}
-          >
-            {Object.keys(tabOptions).map((option, index) => (
-              <MenuItem key={index} value={tabOptions[option]}>
-                {tabOptions[option]}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+      <Tabs
+        value={tabOption}
+        onChange={(_, newValue) => {
+          setTabOption(newValue);
+          setPage(1);
+        }}
+        variant="fullWidth"
+      >
+        <Tab label={tabOptions.Posts} value={tabOptions.Posts} />
+        <Tab label={tabOptions.Users} value={tabOptions.Users} />
+      </Tabs>
     );
   };
+
   return (
     <div className="page-content">
       <div
