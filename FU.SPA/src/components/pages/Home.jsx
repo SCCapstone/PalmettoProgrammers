@@ -20,8 +20,8 @@ const Home = () => {
         </Box>
         <Screenshot src="../../../assets/discover-posts-view.png" />
         <Typography variant="h5" sx={{ pt: 2 }}>
-          Don&apos;t limit yourself to restrictive or random in-game match
-          making. Find like-minded players and play how who you want when you
+          Don&apos;t limit yourself to restrictive or random in-game
+          matchmaking. Find like-minded players and play how you want when you
           want. Whether that be now or next week.
         </Typography>
         <SectionBig headerText="Lead the Way">
@@ -61,8 +61,8 @@ const Home = () => {
           <Link href="https://github.com/jbytes1027">James Pretorius</Link>. The
           project is available on{' '}
           <Link href="https://github.com/SCCapstone/PalmettoProgrammers">
-            github
-          </Link>{' '}
+            GitHub
+          </Link>
           .
         </SectionBig>
       </Stack>
