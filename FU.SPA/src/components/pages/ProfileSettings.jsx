@@ -55,11 +55,10 @@ export default function ProfileSettings() {
         pfpUrl: newPfpUrl,
         id: idJson.userId,
         bio: bio,
-        // if the date of birth is the same as today, ignore and set as null
-        // if not same day, update
+        // if the date of birth is null, pass and clear DOB
+        // otherwise convert to iso time format and update DOB
         dob:
-          dateOfBirth.toISOString().substring(0, 10) !==
-          dayjs().toISOString().substring(0, 10)
+          dateOfBirth !== null
             ? dateOfBirth.toISOString().substring(0, 10)
             : null,
       };
@@ -135,9 +134,10 @@ export default function ProfileSettings() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Date of Birth"
-            value={null} // Leave null as to not change date
+            value={dateOfBirth} // Leave null as to not change date
             fullWidth
             onChange={(newValue) => setDateOfBirth(newValue)}
+            slotProps={{ field: { clearable: true } }}
           />
         </LocalizationProvider>
         <TextField

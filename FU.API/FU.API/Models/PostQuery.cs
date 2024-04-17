@@ -4,8 +4,8 @@ public record PostQuery
 {
     public List<int> GameIds { get; set; } = new();
     public List<int> TagIds { get; set; } = new();
-    public DateOnly? StartOnOrAfterDate { get; set; } = null;
-    public DateOnly? EndOnOrBeforeDate { get; set; } = null;
+    public DateTime? StartOnOrAfterDateTime { get; set; } = null;
+    public DateTime? EndOnOrBeforeDateTime { get; set; } = null;
     public TimeOnly? StartOnOrAfterTime { get; set; } = null;
     public TimeOnly? EndOnOrBeforeTime { get; set; } = null;
     public int MinimumRequiredPlayers { get; set; } = 0;

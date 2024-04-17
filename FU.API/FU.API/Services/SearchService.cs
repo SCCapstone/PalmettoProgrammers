@@ -192,25 +192,24 @@ public class SearchService : CommonService, ISearchService
         // Generally filer out as much as as possible first
 
         // Filter by posts that start after the given date
-        if (query.StartOnOrAfterDate is not null)
+        if (query.StartOnOrAfterDateTime is not null)
         {
             // Convert start after date to datetime with time starting at 00:00:00
-            DateTime startAfterDateTime = ((DateOnly)query.StartOnOrAfterDate).ToDateTime(new TimeOnly(0, 0, 0), DateTimeKind.Utc);
-            dbQuery = dbQuery.Where(p => p.StartTime >= startAfterDateTime);
+            dbQuery = dbQuery.Where(p => p.StartTime >= query.StartOnOrAfterDateTime);
 
             // If no time params and search start day is today, then get all posts after the current time
-            if (query.StartOnOrAfterTime is null && query.EndOnOrBeforeTime is null && query.StartOnOrAfterDate.Equals(DateOnly.FromDateTime(DateTime.UtcNow)))
+            if (query.StartOnOrAfterTime is null && query.EndOnOrBeforeTime is null
+                    && DateOnly.FromDateTime(query.StartOnOrAfterDateTime.Value).Equals(DateOnly.FromDateTime(DateTime.UtcNow)))
             {
                 dbQuery = dbQuery.Where(p => p.StartTime >= DateTime.UtcNow);
             }
         }
 
         // Filter by posts that end before the given date
-        if (query.EndOnOrBeforeDate is not null)
+        if (query.EndOnOrBeforeDateTime is not null)
         {
             // Convert start before date to datetime with time ending at 23:59:59
-            DateTime endBeforeDateTime = ((DateOnly)query.EndOnOrBeforeDate).ToDateTime(new TimeOnly(23, 59, 59), DateTimeKind.Utc);
-            dbQuery = dbQuery.Where(p => p.EndTime <= endBeforeDateTime);
+            dbQuery = dbQuery.Where(p => p.EndTime <= query.EndOnOrBeforeDateTime);
         }
 
         // Filter by games

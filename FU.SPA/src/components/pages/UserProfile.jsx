@@ -43,7 +43,7 @@ const UserProfile = () => {
   const renderChat = () => {
     if (isOwnProfile) {
       return null;
-    } else if (user) {
+    } else if (user && chatId) {
       return <Chat chatId={chatId} />;
     } else {
       return <ChatLocked chatType="direct" reason="no-user" />;
@@ -87,6 +87,11 @@ const SocialRelationActionButton = ({ requesteeId }) => {
 
   let handleClick = () => {};
   let buttonText = '';
+  let declineButtonText = 'Decline Friend Request';
+  const declineRequest = async () => {
+    await RelationService.removeRelation(requesteeId);
+    UpdateStatus();
+  };
 
   // don't render if current user and viewed user are not loaded
   if (!requesteeId || !currentUser) return;
@@ -127,9 +132,24 @@ const SocialRelationActionButton = ({ requesteeId }) => {
   }
 
   return (
-    <Button onClick={handleClick} variant="contained" style={{ width: 'auto' }}>
-      {buttonText}
-    </Button>
+    <>
+      <Button
+        onClick={handleClick}
+        variant="contained"
+        style={{ width: 'auto' }}
+      >
+        {buttonText}
+      </Button>
+      {relationStatus === RelationService.STATUS.PENDING && (
+        <Button
+          onClick={declineRequest}
+          variant="outlined"
+          style={{ width: 'auto' }}
+        >
+          {declineButtonText}
+        </Button>
+      )}
+    </>
   );
 };
 

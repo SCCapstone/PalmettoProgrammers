@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import UserContext from '../context/userContext';
+import RelationService from '../services/relationService';
 import { useContext, useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import AppBar from '@mui/material/AppBar';
@@ -9,8 +10,10 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
+import { styled } from '@mui/material/styles';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -21,12 +24,36 @@ export default function Navbar() {
   const location = useLocation();
   const [previousPath, setPreviousPath] = useState(location.pathname);
   const [currentPath, setCurrentPath] = useState(location.pathname);
+  const [hasNewRequests, setHasNewRequests] = useState(false);
+  const [newRequestsCount, setNewRequestsCount] = useState(0);
 
   useEffect(() => {
     setPreviousPath(currentPath);
     setCurrentPath(location.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  useEffect(() => {
+    const checkForNewRequests = async () => {
+      if (user && user.id) {
+        const query = {
+          relation: RelationService.STATUS.PENDING,
+        };
+        try {
+          const { totalCount } = await RelationService.getRelations(
+            user.id,
+            query,
+          );
+          setHasNewRequests(totalCount > 0);
+          setNewRequestsCount(totalCount);
+        } catch (error) {
+          console.error('Failed to fetch new requests:', error);
+        }
+      }
+    };
+
+    checkForNewRequests();
+  }, [user]);
 
   const isActiveMenuItem = (menuItemTitle) => {
     // If the current path contains the menuItemTitle and it's not the post page, then it is active
@@ -49,19 +76,41 @@ export default function Navbar() {
     return containsMatch || postMatch;
   };
 
+  const StyledBadge = styled(Badge)(() => ({
+    '& .MuiBadge-badge': {
+      right: -7,
+      top: 3,
+    },
+  }));
+
   const renderProfile = () => (
     <>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <Typography textAlign="center">{user?.username}</Typography>
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar
-              alt={user?.username}
-              src={user?.pfpUrl}
+            <Badge
+              color="secondary"
+              overlap="circular"
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              badgeContent={newRequestsCount}
+              invisible={!hasNewRequests}
               sx={{
-                border: '2px solid #ffffff',
+                '& .MuiBadge-dot': {
+                  height: '12px',
+                  width: '12px',
+                  borderRadius: '6px',
+                },
               }}
-            />
+            >
+              <Avatar
+                alt={user?.username}
+                src={user?.pfpUrl}
+                sx={{
+                  border: '2px solid #ffffff',
+                }}
+              />
+            </Badge>
           </IconButton>
         </Tooltip>
       </div>
@@ -88,6 +137,22 @@ export default function Navbar() {
           }}
         >
           <Typography textAlign="center">Profile</Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleCloseUserMenu();
+            navigate('/social?o=Users&page=1&r=Pending');
+            setHasNewRequests(false);
+            setNewRequestsCount(0);
+          }}
+        >
+          <StyledBadge
+            color="secondary"
+            variant="dot"
+            invisible={!hasNewRequests}
+          >
+            <Typography textAlign="center">Friend Requests</Typography>
+          </StyledBadge>
         </MenuItem>
         <MenuItem
           onClick={() => {
