@@ -18,7 +18,7 @@ const Home = () => {
             make friends.
           </Typography>
         </Box>
-        <Screenshot src="../../../assets/discover-posts-view.png" />
+        <Screenshot src="https://storagefu.blob.core.windows.net/screenshots/discover-posts-view.png" />
         <Typography variant="h5" sx={{ pt: 2 }}>
           Don&apos;t limit yourself to restrictive or random in-game
           matchmaking. Find like-minded players and play how you want when you
@@ -28,16 +28,16 @@ const Home = () => {
           If you can&apos;t find a match, make a new post and invite others to
           join!
         </SectionBig>
-        <Screenshot src="../../../assets/create-post-view.png" />
+        <Screenshot src="https://storagefu.blob.core.windows.net/screenshots/create-post-view.png" />
         <SectionBig headerText="Link Up">
           As a post member, discuss meetup detail, strategize a game plan, or
           just chat.
         </SectionBig>
-        <Screenshot src="../../../assets/post-view.png" />
+        <Screenshot src="https://storagefu.blob.core.windows.net/screenshots/post-view.png" />
         <SectionBig headerText="Stay Connected">
           Befriend others to keep in touch and meet up later.
         </SectionBig>
-        <Screenshot src="../../../assets/friends-view.png" />
+        <Screenshot src="https://storagefu.blob.core.windows.net/screenshots/friends-view.png" />
         <SectionBig headerText="Showcase" />
         <iframe
           style={{ width: '100%', aspectRatio: '16/9' }}
