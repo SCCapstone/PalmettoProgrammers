@@ -53,7 +53,10 @@ const Home = () => {
           Capstone project. The team consists of{' '}
           <Link href="https://github.com/AaronKeys">Aaron Keys</Link>,{' '}
           <Link href="https://github.com/epadams">Ethan Adams</Link>,{' '}
-          <Link href="https://www.linkedin.com/in/evan-m-scales/">Evan Scales</Link>,{' '}
+          <Link href="https://www.linkedin.com/in/evan-m-scales/">
+            Evan Scales
+          </Link>
+          ,{' '}
           <Link href="https://github.com/Jackson-Williams-15">
             Jackson Williams
           </Link>
