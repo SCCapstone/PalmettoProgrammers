@@ -29,6 +29,8 @@ export default function ProfileSettings() {
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [newPfpUrl, setNewPfpUrl] = useState();
   const { refreshUser } = useContext(UserContext);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [bioError, setBioError] = useState('');
 
   useEffect(() => {
     async function fetchUserInfo() {
@@ -43,6 +45,21 @@ export default function ProfileSettings() {
 
     fetchUserInfo();
   }, []);
+
+  useEffect(() => {
+    setIsEnabled(bio.length <= 1500);
+  }, [bio, isEnabled]);
+
+  // Handles the errors and value changes for the bio(About) section.
+  const handleBioChange = (e) => {
+    if (e.length > 1500) {
+      setBioError('About cannot exceed 1500 characters');
+      setBio(e);
+    } else {
+      setBioError('');
+      setBio(e);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -141,12 +158,14 @@ export default function ProfileSettings() {
           />
         </LocalizationProvider>
         <TextField
+          error={bio.length > 1500}
+          helperText={bioError}
           fullWidth
           id="setBio"
           label="About"
           value={bio}
           multiline
-          onChange={(e) => setBio(e.target.value)}
+          onChange={(e) => handleBioChange(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -162,7 +181,12 @@ export default function ProfileSettings() {
           }}
         />
         <UploadAvatar onNewPreview={handlePreviewUrl} />
-        <Button type="submit" fullWidth variant="contained">
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          disabled={!isEnabled}
+        >
           Update Profile
         </Button>
       </Box>
