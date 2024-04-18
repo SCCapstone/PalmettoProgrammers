@@ -223,7 +223,6 @@ public class PostService : CommonService, IPostService
         }
 
         // Make sure the post is not in the past
-        // Only check if we are not updating the post so that we can allow for posts to be updated
         bool isPostInPast = post.StartTime < DateTime.UtcNow;
         if (isPostInPast)
         {
