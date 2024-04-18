@@ -48,7 +48,7 @@ const postGameData = async (gameData) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(gameData)
   });
@@ -62,6 +62,57 @@ const postGameData = async (gameData) => {
   console.log('Game data inserted:', result);
 };
 
+const postTagData = async (tagData) => {
+  const token = tokenStorage.token;
+  const response = await fetch(`${API_BASE_URL}/Tags`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(tagData),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to post tag data: ${errorText}`);
+  }
+
+  const result = await response.json();
+  console.log('Tag data inserted:', result);
+};
+
+
+const createPost = async (postData) => {
+  const token = tokenStorage.token;
+
+  if (postData.StartTime && postData.EndTime) {
+    postData.StartTime = new Date(postData.StartTime).toISOString();
+    postData.EndTime = new Date(postData.EndTime).toISOString();
+  } else {
+    console.error("Invalid or missing date fields");
+    throw new Error("Invalid or missing date fields");
+  }
+
+  const response = await fetch(`${API_BASE_URL}/Posts`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(postData),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Failed to create post data: ${errorText}`);
+    throw new Error(`Failed to create post data: ${errorText}`);
+  }
+
+  const result = await response.json();
+  console.log('post data inserted:', result);
+};
+
 const setup = async () => {
   console.log('setting up');
   try {
@@ -69,21 +120,51 @@ const setup = async () => {
     
     await signUp(credentials);
     await signIn(credentials);
+
     const gameData = [
       { name: "Insurgency", id: "1" },
       { name: "RainBow Six Siege", id: "2" },
-      { name: "Rocket League", id: "3" }
+      { name: "Rocket League", id: "3" },
+      { name: "Call of Duty", id: "4" },
+      { name: "Counter Strike 2", id: "5" }
     ];
+
+    const tagData = [ 
+      { name: "mic", id: "1" },
+      { name: "fun", id: "2"},
+      { name: "casual", id: "3"},
+      { name: "east", id: "4"},
+      { name: "open", id: "5"}
+    ];
+
+    const postData = {
+        Title: "Exciting Game Night",
+        Description: "Join us for an exciting night of gaming!",
+        GameId: 1,
+        StartTime: "2024-07-20T18:00:00",
+        EndTime: "2024-07-20T21:00:00",
+        MaxPlayers: 10,
+        TagIds: [1, 3, 5]
+        };
+
 
     for (const game of gameData) {
       await postGameData(game);
     }
+
+    for (const tag of tagData) {
+      await postTagData(tag);
+    }
+
+    await createPost(postData);
+
   } catch (error) {
     console.error('Setup failed:', error);
   }
 
   console.log('Setup complete');
 };
+
 
 // Run the setup after a delay to give the API time to start up
 setTimeout(setup, 3000);
