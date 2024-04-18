@@ -137,7 +137,7 @@ public class PostServiceTests : IDisposable
         // Arrange
         // Note: CreateTestPostAsync creates one user as part of creating a post
         Post post = await TestsHelper.CreateTestPostAsync(_dbContext);
-        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "pass2", Email = "fake2@email.com" });
+        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "Test12345", Email = "fake2@email.com" });
         await _postService.JoinPost(post.Id, user2);
 
         // Act
@@ -166,7 +166,7 @@ public class PostServiceTests : IDisposable
     {
         // Arrange
         Post post = await TestsHelper.CreateTestPostAsync(_dbContext);
-        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "pass2", Email = "fake2@email.com" });
+        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "Test12345", Email = "fake2@email.com" });
         await _postService.JoinPost(post.Id, user2);
 
         // Act & Assert
@@ -180,7 +180,7 @@ public class PostServiceTests : IDisposable
     {
         // Arrange
         Post post = await TestsHelper.CreateTestPostAsync(_dbContext);
-        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "pass2", Email = "fake2@email.com" });
+        var user2 = await TestsHelper.CreateUserAsync(_dbContext, new Credentials() { Username = "user2", Password = "Test12345", Email = "fake2@email.com" });
         await _postService.JoinPost(post.Id, user2);
 
         // Act

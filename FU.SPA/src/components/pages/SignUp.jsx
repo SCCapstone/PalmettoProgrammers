@@ -30,15 +30,12 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmedReadTerms, setConfirmedReadTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Showing passwords when user wants
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
-    setShowConfirmPassword(!showConfirmPassword);
   };
 
   // Update state for username
@@ -59,18 +56,11 @@ export default function SignUp() {
     setPasswordError('');
   };
 
-  // Update state for confirmed password
-  const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
-    setPasswordError('');
-  };
-
   // Check if all fields are filled
   const isEnabled =
     username.length > 0 &&
     email.length > 0 &&
-    password.length > 0 &&
-    confirmPassword.length > 0 &&
+    password.length >= 8 &&
     confirmedReadTerms;
 
   // Function called when button is pressed
@@ -83,12 +73,6 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
     };
-
-    // Checking if passwords are identical
-    if (creds.password !== data.get('confirmPassword')) {
-      setPasswordError('Passwords do not match');
-      return;
-    }
 
     // This try/catch block will attempt to sign the user up, check for any
     // errors in signup, and redirect to signin/last page if there are no errors
@@ -128,6 +112,9 @@ export default function SignUp() {
       } else if (errorResponse?.status === 409) {
         // Duplicate email
         setEmailError(errorResponse.detail);
+      } else if (errorResponse?.status === 400) {
+        // bad password
+        setPasswordError(errorResponse.detail);
       } else if (errorResponse?.errors?.Email) {
         setEmailError(errorResponse.errors.Email[0]);
       } else {
@@ -189,7 +176,10 @@ export default function SignUp() {
             <Grid item xs={12}>
               <TextField
                 error={!!passwordError}
-                helperText={passwordError}
+                helperText={
+                  passwordError ||
+                  'Password must be 8 characters long and contain either 1 special character or number'
+                }
                 onChange={handlePasswordChange}
                 required
                 fullWidth
@@ -211,20 +201,6 @@ export default function SignUp() {
                     </InputAdornment>
                   ),
                 }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                error={!!passwordError}
-                helperText={passwordError}
-                onChange={handleConfirmPasswordChange}
-                required
-                fullWidth
-                name="confirmPassword"
-                label="Confirm Password"
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="confirmPassword"
-                autoComplete="new-password"
               />
             </Grid>
           </Grid>

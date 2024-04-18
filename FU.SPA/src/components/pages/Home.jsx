@@ -3,6 +3,10 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
 import Theme from '../../Theme';
+import CreatePostScreenshot from '../../../assets/create-post-view.png';
+import DiscoverPostScreenshot from '../../../assets/discover-posts-view.png';
+import PostViewScreenshot from '../../../assets/post-view.png';
+import FriendsViewScreenshot from '../../../assets/friends-view.png';
 
 const Home = () => {
   return (
@@ -18,26 +22,26 @@ const Home = () => {
             make friends.
           </Typography>
         </Box>
-        <Screenshot src="../../../assets/discover-posts-view.png" />
+        <Screenshot src={DiscoverPostScreenshot} />
         <Typography variant="h5" sx={{ pt: 2 }}>
-          Don&apos;t limit yourself to restrictive or random in-game match
-          making. Find like-minded players and play how who you want when you
+          Don&apos;t limit yourself to restrictive or random in-game
+          matchmaking. Find like-minded players and play how you want when you
           want. Whether that be now or next week.
         </Typography>
         <SectionBig headerText="Lead the Way">
           If you can&apos;t find a match, make a new post and invite others to
           join!
         </SectionBig>
-        <Screenshot src="../../../assets/create-post-view.png" />
+        <Screenshot src={CreatePostScreenshot} />
         <SectionBig headerText="Link Up">
           As a post member, discuss meetup detail, strategize a game plan, or
           just chat.
         </SectionBig>
-        <Screenshot src="../../../assets/post-view.png" />
+        <Screenshot src={PostViewScreenshot} />
         <SectionBig headerText="Stay Connected">
           Befriend others to keep in touch and meet up later.
         </SectionBig>
-        <Screenshot src="../../../assets/friends-view.png" />
+        <Screenshot src={FriendsViewScreenshot} />
         <SectionBig headerText="Showcase" />
         <iframe
           style={{ width: '100%', aspectRatio: '16/9' }}
@@ -53,7 +57,10 @@ const Home = () => {
           Capstone project. The team consists of{' '}
           <Link href="https://github.com/AaronKeys">Aaron Keys</Link>,{' '}
           <Link href="https://github.com/epadams">Ethan Adams</Link>,{' '}
-          <Link href="https://github.com/evan-scales">Evan Scales</Link>,{' '}
+          <Link href="https://www.linkedin.com/in/evan-m-scales/">
+            Evan Scales
+          </Link>
+          ,{' '}
           <Link href="https://github.com/Jackson-Williams-15">
             Jackson Williams
           </Link>
@@ -61,8 +68,8 @@ const Home = () => {
           <Link href="https://github.com/jbytes1027">James Pretorius</Link>. The
           project is available on{' '}
           <Link href="https://github.com/SCCapstone/PalmettoProgrammers">
-            github
-          </Link>{' '}
+            GitHub
+          </Link>
           .
         </SectionBig>
       </Stack>

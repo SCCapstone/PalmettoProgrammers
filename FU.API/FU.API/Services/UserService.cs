@@ -46,10 +46,8 @@ public class UserService : CommonService, IUserService
             user.Bio = profileChanges.Bio;
         }
 
-        if (profileChanges.DOB is not null)
-        {
-            user.DOB = profileChanges.DOB;
-        }
+        // Allows a user to clear DOB if they desire
+        user.DOB = profileChanges.DOB;
 
         _dbContext.Update(user);
         _dbContext.SaveChanges();

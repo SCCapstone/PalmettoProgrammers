@@ -351,7 +351,7 @@ const GameSelector = ({ onChange, initialValue }) => {
           {...params}
           fullWidth
           error={error}
-          label="Game"
+          label="Add/Create a Game"
           minLength={3}
           maxLength={25}
           helperText={
@@ -412,11 +412,13 @@ const TagsSelector = ({ onChange, initialValues }) => {
 
     const { inputValue } = params;
     // Suggest the creation of a new value
-    const isExisting = options.some((option) => inputValue === option.name);
+    const isExisting = options.some(
+      (option) => inputValue.toLowerCase() === option.name,
+    );
     if (inputValue !== '' && !isExisting) {
       filtered.push({
         id: null,
-        name: inputValue,
+        name: inputValue.toLowerCase(),
       });
     }
 
@@ -447,7 +449,12 @@ const TagsSelector = ({ onChange, initialValues }) => {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Tags" placeholder="" />
+        <TextField
+          {...params}
+          label="Add/Create Tags"
+          placeholder=""
+          helperText="Maximum of 6 tags"
+        />
       )}
     />
   );
