@@ -147,15 +147,17 @@ const credentials = Array.from({ length: numberOfUsers }, (v, i) => ({
       { name: "open", id: "5"}
     ];
 
-    const postData = {
-        Title: "Exciting Game Night",
-        Description: "Join us for an exciting night of gaming!",
-        GameId: 1,
-        StartTime: "2024-07-20T18:00:00",
-        EndTime: "2024-07-20T21:00:00",
-        MaxPlayers: 10,
-        TagIds: [1, 3, 5]
-        };
+    const NewPostData = (index) => {
+      return {
+        Title: `Exciting Game Night ${index}`,
+        Description: `Join us for an exciting night of gaming at event ${index}!`,
+        GameId: (index % 5) + 1,
+        StartTime: `2024-07-${20 + (index % 2)}T18:00:00`,
+        EndTime: `2024-07-${20 + (index % 2)}T21:00:00`,
+        MaxPlayers: 10 + (index % 10),
+        TagIds: [(index % 5) + 1, ((index + 1) % 5) + 1, ((index + 2) % 5) + 1]
+      };
+    };
 
 
     for (const game of gameData) {
@@ -166,7 +168,20 @@ const credentials = Array.from({ length: numberOfUsers }, (v, i) => ({
       await postTagData(tag);
     }
 
-    await createPost(postData);
+// Function to post all generated posts
+const AllGeneratedPosts = async () => {
+  for (let i = 0; i < 48; i++) {
+    const postData = NewPostData(i + 1);
+    try {
+      await createPost(postData);
+      console.log(`Post ${i + 1} created successfully.`);
+    } catch (error) {
+      console.error(`Failed to create post ${i + 1}:`, error);
+    }
+  }
+};
+
+AllGeneratedPosts();
 
   } catch (error) {
     console.error('Setup failed:', error);
