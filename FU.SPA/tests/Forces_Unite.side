@@ -1976,22 +1976,22 @@
       "id": "6c1848b3-7462-491e-81d8-d6acc1361953",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2)",
+      "target": "css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2) .PrivateSwitchBase-input",
       "targets": [
-        ["css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2)", "css:finder"],
-        ["xpath=//div[@id='root']/div[2]/div/div/div[4]/div/label[2]", "xpath:idRelative"],
-        ["xpath=//label[2]", "xpath:position"],
-        ["xpath=//label[contains(.,'Between')]", "xpath:innerText"]
+        ["css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2) .PrivateSwitchBase-input", "css:finder"],
+        ["xpath=(//input[@name=':r45:'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/div/div/div[4]/div/label[2]/span/input", "xpath:idRelative"],
+        ["xpath=//label[2]/span/input", "xpath:position"]
       ],
       "value": ""
     }, {
       "id": "184eb39e-f133-459a-8e6f-68506005b776",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiPaper-root:nth-child(1) .MuiButtonBase-root",
+      "target": "css=.MuiPaper-root:nth-child(1) > .MuiCardActions-root > .MuiButtonBase-root",
       "targets": [
-        ["css=.MuiPaper-root:nth-child(1) .MuiButtonBase-root", "css:finder"],
-        ["xpath=(//button[@type='button'])[11]", "xpath:attributes"],
+        ["css=.MuiPaper-root:nth-child(1) > .MuiCardActions-root > .MuiButtonBase-root", "css:finder"],
+        ["xpath=(//button[@type='button'])[14]", "xpath:attributes"],
         ["xpath=//div[@id='root']/div[2]/div/div[2]/div[2]/div/div[2]/button", "xpath:idRelative"],
         ["xpath=//div[2]/div[2]/div/div[2]/button", "xpath:position"]
       ],
@@ -2021,7 +2021,7 @@
         ["xpath=//div[@id='root']/div[2]/main/div/form/div/div/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "Captain Adam"
+      "value": "user1"
     }, {
       "id": "447f2f6a-a09d-4394-81ce-5a3190653d84",
       "comment": "",
@@ -2035,7 +2035,7 @@
         ["xpath=//div[@id='root']/div[2]/main/div/form/div[2]/div/input", "xpath:idRelative"],
         ["xpath=//div[2]/div/input", "xpath:position"]
       ],
-      "value": "123456"
+      "value": "password1"
     }, {
       "id": "6c1802dd-1155-491f-8ca1-1cc0c939dee1",
       "comment": "",
@@ -2115,37 +2115,37 @@
       ],
       "value": ""
     }, {
-      "id": "ea98207e-9c94-4007-95c0-0cb2ccca27a4",
+      "id": "6e4f5a02-ce64-4bbc-ab29-13a56d487b37",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiButton-textPrimary:nth-child(2)",
+      "target": "css=.Mui-focusVisible",
       "targets": [
-        ["css=.MuiButton-textPrimary:nth-child(2)", "css:finder"],
+        ["css=.Mui-focusVisible", "css:finder"],
         ["xpath=(//button[@type='button'])[8]", "xpath:attributes"],
         ["xpath=//div[2]/button[2]", "xpath:position"]
       ],
       "value": ""
     }, {
-      "id": "4c6f9e47-7741-4399-86b2-12e82663168d",
+      "id": "7d2d0b34-08d6-450e-bfc6-a1833d4e978d",
       "comment": "",
       "command": "click",
       "target": "css=.MuiAvatar-img",
       "targets": [
         ["css=.MuiAvatar-img", "css:finder"],
-        ["xpath=//img[@alt='Captain Adam']", "xpath:img"],
-        ["xpath=//div[@id='root']/header/div/div[2]/div/button/div/img", "xpath:idRelative"],
-        ["xpath=//button/div/img", "xpath:position"]
+        ["xpath=//img[@alt='user1']", "xpath:img"],
+        ["xpath=//div[@id='root']/header/div/div[2]/div/button/span/div/img", "xpath:idRelative"],
+        ["xpath=//span/div/img", "xpath:position"]
       ],
       "value": ""
     }, {
-      "id": "4308b6f2-e8ab-4e27-bc53-c79caafff126",
+      "id": "349a499e-aad2-4722-a3f2-963b20506286",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiMenuItem-root:nth-child(3)",
+      "target": "css=.MuiButtonBase-root:nth-child(4)",
       "targets": [
-        ["css=.MuiMenuItem-root:nth-child(3)", "css:finder"],
-        ["xpath=//div[@id='menu-appbar']/div[3]/ul/li[3]", "xpath:idRelative"],
-        ["xpath=//li[3]", "xpath:position"],
+        ["css=.MuiButtonBase-root:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='menu-appbar']/div[3]/ul/li[4]", "xpath:idRelative"],
+        ["xpath=//li[4]", "xpath:position"],
         ["xpath=//li[contains(.,'Logout')]", "xpath:innerText"]
       ],
       "value": ""
