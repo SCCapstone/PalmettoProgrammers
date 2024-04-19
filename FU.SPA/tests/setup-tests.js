@@ -150,19 +150,20 @@ const setup = async () => {
       const currentYear = currentDate.getFullYear();
       const currentMonth = currentDate.getMonth() + 1;
       const currentDay = currentDate.getDate();
-    
-      const month = Math.floor(Math.random() * (12 - currentMonth + 1)) + currentMonth;
-      
+
+      const month =
+        Math.floor(Math.random() * (12 - currentMonth + 1)) + currentMonth;
+
       let day;
       if (month === currentMonth) {
         day = Math.floor(Math.random() * (28 - currentDay)) + currentDay + 1;
       } else {
         day = Math.floor(Math.random() * 28) + 1;
       }
-    
+
       const hourStart = Math.floor(Math.random() * 5) + 16;
       const hourEnd = hourStart + Math.floor(Math.random() * 3) + 1;
-    
+
       return {
         Title: `Exciting Game Night ${index}`,
         Description: `Join us for an exciting night of gaming at event ${index}!`,
