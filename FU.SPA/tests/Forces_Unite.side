@@ -1427,9 +1427,9 @@
       "id": "97eb3172-6cda-4d75-8c6b-7f42e526b2c1",
       "comment": "",
       "command": "click",
-      "target": "css=.css-1ekild3-MuiButtonBase-root-MuiButton-root",
+      "target": "css=.css-1twddc0",
       "targets": [
-        ["css=.css-1ekild3-MuiButtonBase-root-MuiButton-root", "css:finder"],
+        ["css=.css-1twddc0", "css:finder"],
         ["xpath=//button[@type='button']", "xpath:attributes"],
         ["xpath=//div[@id='root']/header/div/div/button", "xpath:idRelative"],
         ["xpath=//button", "xpath:position"]
@@ -1439,25 +1439,24 @@
       "id": "ff6a6d73-6263-4356-9a1a-f10cba513983",
       "comment": "",
       "command": "waitForElementVisible",
-      "target": "css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2)",
+      "target": "css=.MuiTab-root:nth-child(2)",
       "targets": [
-        ["id=outlined-basic", "id"],
-        ["css=#outlined-basic", "css:finder"],
-        ["xpath=//input[@id='outlined-basic']", "xpath:attributes"],
-        ["xpath=//div[@id='search-bar']/div/div/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div/div/div/input", "xpath:position"]
+        ["css=.MuiTab-root:nth-child(2)", "css:finder"],
+        ["xpath=(//button[@type='button'])[5]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/div/div/div/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div/div/div/button[2]", "xpath:position"]
       ],
       "value": "30000"
     }, {
       "id": "e452e08d-894b-44b4-a27b-afbfb60044b0",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2)",
+      "target": "css=.MuiTab-root:nth-child(2)",
       "targets": [
-        ["css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2) .PrivateSwitchBase-input", "css:finder"],
-        ["xpath=(//input[@name=':rd:'])[2]", "xpath:attributes"],
-        ["xpath=//div[@id='root']/div[2]/div/div/div[4]/div/label[2]/span/input", "xpath:idRelative"],
-        ["xpath=//label[2]/span/input", "xpath:position"]
+        ["css=.MuiTab-root:nth-child(2)", "css:finder"],
+        ["xpath=(//button[@type='button'])[5]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/div/div/div/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div/div/div/button[2]", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -1472,7 +1471,7 @@
         ["xpath=//div[@id='search-bar']/div/div/input", "xpath:idRelative"],
         ["xpath=//div[2]/div/div/div/div/input", "xpath:position"]
       ],
-      "value": "Test"
+      "value": "user23"
     }, {
       "id": "55da43aa-86ca-4a73-877d-741e0443f79a",
       "comment": "",
