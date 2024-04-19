@@ -1507,9 +1507,9 @@
       "id": "1bcd9d2b-3e5b-42c9-ab6d-a6a47bd052ec",
       "comment": "",
       "command": "click",
-      "target": "css=.css-1ekild3-MuiButtonBase-root-MuiButton-root",
+      "target": "css=.css-1twddc0",
       "targets": [
-        ["css=.css-1ekild3-MuiButtonBase-root-MuiButton-root", "css:finder"],
+        ["css=.css-1twddc0", "css:finder"],
         ["xpath=//button[@type='button']", "xpath:attributes"],
         ["xpath=//div[@id='root']/header/div/div/button", "xpath:idRelative"],
         ["xpath=//button", "xpath:position"]
@@ -1528,72 +1528,73 @@
       ],
       "value": ""
     }, {
-      "id": "c5b9594c-df97-46e9-8ee7-90d154188da3",
+      "id": "b31b9f7a-72ad-4a32-9a05-2874bf9341cb",
       "comment": "",
       "command": "click",
-      "target": "css=li:nth-child(3) > .MuiButtonBase-root",
+      "target": "css=li:nth-child(6) > .MuiButtonBase-root",
       "targets": [
-        ["css=li:nth-child(3) > .MuiButtonBase-root", "css:finder"],
-        ["xpath=(//button[@type='button'])[23]", "xpath:attributes"],
-        ["xpath=//div[@id='root']/div[2]/div/div[2]/div[3]/div/nav/ul/li[3]/button", "xpath:idRelative"],
-        ["xpath=//li[3]/button", "xpath:position"],
-        ["xpath=//button[contains(.,'2')]", "xpath:innerText"]
+        ["css=li:nth-child(6) > .MuiButtonBase-root", "css:finder"],
+        ["xpath=(//button[@type='button'])[31]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/div/div[2]/div[3]/div/nav/ul/li[6]/button", "xpath:idRelative"],
+        ["xpath=//li[6]/button", "xpath:position"]
       ],
       "value": ""
     }, {
-      "id": "9ec4b4f1-a5f1-43be-bc50-04d78458707f",
+      "id": "99b9f6fa-2f50-4c1e-b00b-657e413efd0e",
       "comment": "",
       "command": "click",
-      "target": "css=li:nth-child(4) > .MuiButtonBase-root",
+      "target": "css=li:nth-child(6) > .MuiButtonBase-root",
       "targets": [
-        ["css=li:nth-child(4) > .MuiButtonBase-root", "css:finder"],
-        ["xpath=(//button[@type='button'])[24]", "xpath:attributes"],
-        ["xpath=//div[@id='root']/div[2]/div/div[2]/div[3]/div/nav/ul/li[4]/button", "xpath:idRelative"],
-        ["xpath=//li[4]/button", "xpath:position"],
-        ["xpath=//button[contains(.,'3')]", "xpath:innerText"]
+        ["css=li:nth-child(6) > .MuiButtonBase-root", "css:finder"],
+        ["xpath=(//button[@type='button'])[31]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/div/div[2]/div[3]/div/nav/ul/li[6]/button", "xpath:idRelative"],
+        ["xpath=//li[6]/button", "xpath:position"]
       ],
       "value": ""
     }, {
-      "id": "4e9bc160-e551-426a-a414-22360166c0ea",
+      "id": "f2049c45-8a84-4df8-86ed-0edb5b8859c6",
       "comment": "",
       "command": "click",
-      "target": "css=li:nth-child(6) .MuiSvgIcon-root",
+      "target": "css=li:nth-child(6) > .MuiButtonBase-root",
       "targets": [
-        ["css=li:nth-child(6) .MuiSvgIcon-root", "css:finder"]
+        ["css=li:nth-child(6) > .MuiButtonBase-root", "css:finder"],
+        ["xpath=(//button[@type='button'])[31]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/div/div[2]/div[3]/div/nav/ul/li[6]/button", "xpath:idRelative"],
+        ["xpath=//li[6]/button", "xpath:position"]
       ],
       "value": ""
     }, {
-      "id": "f807b815-5054-45c0-abc4-e58982e60030",
+      "id": "84b87273-e641-4438-ad01-ca153719622b",
       "comment": "",
       "command": "click",
       "target": "css=li:nth-child(1) > .MuiButtonBase-root",
       "targets": [
         ["css=li:nth-child(1) > .MuiButtonBase-root", "css:finder"],
-        ["xpath=(//button[@type='button'])[14]", "xpath:attributes"],
+        ["xpath=(//button[@type='button'])[26]", "xpath:attributes"],
         ["xpath=//div[@id='root']/div[2]/div/div[2]/div[3]/div/nav/ul/li/button", "xpath:idRelative"],
         ["xpath=//li/button", "xpath:position"]
       ],
       "value": ""
     }, {
-      "id": "ebd086a0-f49e-4586-83b1-206d4e29af7f",
+      "id": "cb4157e8-76ae-467b-be3b-ad73b6ec70f5",
       "comment": "",
       "command": "click",
       "target": "css=li:nth-child(1) > .MuiButtonBase-root",
       "targets": [
         ["css=li:nth-child(1) > .MuiButtonBase-root", "css:finder"],
-        ["xpath=(//button[@type='button'])[14]", "xpath:attributes"],
+        ["xpath=(//button[@type='button'])[26]", "xpath:attributes"],
         ["xpath=//div[@id='root']/div[2]/div/div[2]/div[3]/div/nav/ul/li/button", "xpath:idRelative"],
         ["xpath=//li/button", "xpath:position"]
       ],
       "value": ""
     }, {
-      "id": "d1a91590-2d04-4c19-9acd-e27155317faf",
+      "id": "c18b6889-937b-4463-9aa8-4f287696361a",
       "comment": "",
       "command": "click",
       "target": "css=li:nth-child(1) > .MuiButtonBase-root",
       "targets": [
         ["css=li:nth-child(1) > .MuiButtonBase-root", "css:finder"],
-        ["xpath=(//button[@type='button'])[14]", "xpath:attributes"],
+        ["xpath=(//button[@type='button'])[26]", "xpath:attributes"],
         ["xpath=//div[@id='root']/div[2]/div/div[2]/div[3]/div/nav/ul/li/button", "xpath:idRelative"],
         ["xpath=//li/button", "xpath:position"]
       ],
