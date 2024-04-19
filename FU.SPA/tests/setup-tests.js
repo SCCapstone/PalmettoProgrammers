@@ -116,11 +116,21 @@ const createPost = async (postData) => {
 const setup = async () => {
   console.log('setting up');
   try {
-    const credentials = { username: 'user', password: 'pass', email: 'user@example.com' };
-    
-    await signUp(credentials);
-    await signIn(credentials);
+  
+  const numberOfUsers = 25;
 
+const credentials = Array.from({ length: numberOfUsers }, (v, i) => ({
+  username: `user${i + 1}`,
+  password: `password${i + 1}`,
+  email: `user${i + 1}@example.com`
+}));
+
+  for(const user of credentials) {
+    await signUp(user);
+  }
+  for(const user of credentials) {
+    await signIn(user);
+  }
     const gameData = [
       { name: "Insurgency", id: "1" },
       { name: "RainBow Six Siege", id: "2" },
