@@ -1962,66 +1962,6 @@
       "value": "800PM"
     }]
   }, {
-    "id": "935f27d9-3714-44bf-ba1f-232de8fc9947",
-    "name": "Discover User Search",
-    "commands": [{
-      "id": "1789131e-3083-47ca-9493-1339cceae700",
-      "comment": "",
-      "command": "open",
-      "target": "/discover",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "6f2b02b4-323c-4070-a130-3d87c4548345",
-      "comment": "",
-      "command": "click",
-      "target": "xpath=//div[@id='root']/div[2]/div/div/div/div/div/div",
-      "targets": [
-        ["css=.Mui-focused > .MuiSelect-select", "css:finder"],
-        ["xpath=//div[@id='root']/div[2]/div/div/div/div/div/div", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div/div/div/div/div", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "e2644799-ad40-4d22-972b-73ef974324d4",
-      "comment": "",
-      "command": "click",
-      "target": "css=.MuiMenuItem-root:nth-child(2)",
-      "targets": [
-        ["css=.MuiMenuItem-root:nth-child(2)", "css:finder"],
-        ["xpath=//ul[@id=':r3i:']/li[2]", "xpath:idRelative"],
-        ["xpath=//div[3]/ul/li[2]", "xpath:position"],
-        ["xpath=//li[contains(.,'Users')]", "xpath:innerText"]
-      ],
-      "value": ""
-    }, {
-      "id": "c2093b7d-2c44-4d10-acd6-646361090102",
-      "comment": "",
-      "command": "type",
-      "target": "id=outlined-basic",
-      "targets": [
-        ["id=outlined-basic", "id"],
-        ["css=#outlined-basic", "css:finder"],
-        ["xpath=//input[@id='outlined-basic']", "xpath:attributes"],
-        ["xpath=//div[@id='search-bar']/div/div/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div/div/div/input", "xpath:position"]
-      ],
-      "value": "person"
-    }, {
-      "id": "d12e3dee-636d-445b-8e5d-2531c0cd9311",
-      "comment": "",
-      "command": "sendKeys",
-      "target": "id=outlined-basic",
-      "targets": [
-        ["id=outlined-basic", "id"],
-        ["css=#outlined-basic", "css:finder"],
-        ["xpath=//input[@id='outlined-basic']", "xpath:attributes"],
-        ["xpath=//div[@id='search-bar']/div/div/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div/div/div/input", "xpath:position"]
-      ],
-      "value": "${KEY_ENTER}"
-    }]
-  }, {
     "id": "1bb69d13-f52d-426e-8353-79b801b6d59b",
     "name": "Discover Post Card",
     "commands": [{
@@ -2634,7 +2574,7 @@
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": ["d71ad0ec-d136-4f9d-91d7-0b316006b5f5", "755fd4a9-6ce5-4d61-b96b-c7f9dfc19155", "a7a4da97-252f-43e0-8352-50d4dcb7ca5d", "935f27d9-3714-44bf-ba1f-232de8fc9947", "1bb69d13-f52d-426e-8353-79b801b6d59b"]
+    "tests": ["d71ad0ec-d136-4f9d-91d7-0b316006b5f5", "755fd4a9-6ce5-4d61-b96b-c7f9dfc19155", "a7a4da97-252f-43e0-8352-50d4dcb7ca5d", "1bb69d13-f52d-426e-8353-79b801b6d59b"]
   }, {
     "id": "644d0938-5d18-4542-9205-a1ad7c2c4d69",
     "name": "Create",
