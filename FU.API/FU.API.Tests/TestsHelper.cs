@@ -17,7 +17,7 @@ public static class TestsHelper
 
     public static async Task<ApplicationUser> CreateUserAsync(AppDbContext context)
     {
-        Credentials credentials = new() { Username = "Test", Password = "Test", Email = "fake@email.com" };
+        Credentials credentials = new() { Username = "Test", Password = "Test12345", Email = "fake@email.com" };
         return await CreateUserAsync(context, credentials);
     }
 

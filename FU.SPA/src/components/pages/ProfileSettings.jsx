@@ -29,6 +29,8 @@ export default function ProfileSettings() {
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [newPfpUrl, setNewPfpUrl] = useState();
   const { refreshUser } = useContext(UserContext);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [bioError, setBioError] = useState('');
 
   useEffect(() => {
     async function fetchUserInfo() {
@@ -44,6 +46,21 @@ export default function ProfileSettings() {
     fetchUserInfo();
   }, []);
 
+  useEffect(() => {
+    setIsEnabled(bio.length <= 1500);
+  }, [bio, isEnabled]);
+
+  // Handles the errors and value changes for the bio(About) section.
+  const handleBioChange = (e) => {
+    if (e.length > 1500) {
+      setBioError('About cannot exceed 1500 characters');
+      setBio(e);
+    } else {
+      setBioError('');
+      setBio(e);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,11 +72,10 @@ export default function ProfileSettings() {
         pfpUrl: newPfpUrl,
         id: idJson.userId,
         bio: bio,
-        // if the date of birth is the same as today, ignore and set as null
-        // if not same day, update
+        // if the date of birth is null, pass and clear DOB
+        // otherwise convert to iso time format and update DOB
         dob:
-          dateOfBirth.toISOString().substring(0, 10) !==
-          dayjs().toISOString().substring(0, 10)
+          dateOfBirth !== null
             ? dateOfBirth.toISOString().substring(0, 10)
             : null,
       };
@@ -135,18 +151,21 @@ export default function ProfileSettings() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Date of Birth"
-            value={null} // Leave null as to not change date
+            value={dateOfBirth} // Leave null as to not change date
             fullWidth
             onChange={(newValue) => setDateOfBirth(newValue)}
+            slotProps={{ field: { clearable: true } }}
           />
         </LocalizationProvider>
         <TextField
+          error={bio.length > 1500}
+          helperText={bioError}
           fullWidth
           id="setBio"
           label="About"
           value={bio}
           multiline
-          onChange={(e) => setBio(e.target.value)}
+          onChange={(e) => handleBioChange(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -162,7 +181,12 @@ export default function ProfileSettings() {
           }}
         />
         <UploadAvatar onNewPreview={handlePreviewUrl} />
-        <Button type="submit" fullWidth variant="contained">
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          disabled={!isEnabled}
+        >
           Update Profile
         </Button>
       </Box>
