@@ -206,6 +206,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+// Component that handles avatar uploading
 const UploadAvatar = ({ onNewPreview }) => {
   const [file, setFile] = useState();
   const [uploadedImageUrl, setUploadedImageUrl] = useState();
@@ -228,6 +229,7 @@ const UploadAvatar = ({ onNewPreview }) => {
     setLoading(true);
     setFile(event.target.files[0]);
 
+    // Try to upload image and throw error if fail
     try {
       const response = await AvatarService.upload(event.target.files[0]);
       setUploadedImageUrl(response.imageUrl);
@@ -244,6 +246,7 @@ const UploadAvatar = ({ onNewPreview }) => {
     setFile();
   };
 
+  // Display component
   return (
     <>
       <Button

@@ -105,6 +105,7 @@ const PostPage = () => {
       setLeaveDialogOpen(false);
     };
 
+    // Displays leave confirmation Dialog for a post
     return (
       <>
         <Dialog

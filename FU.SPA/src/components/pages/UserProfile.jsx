@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import UserCard from '../UserCard';
 import ProfileSettings from './ProfileSettings';
 
+// Component for UserProfile
 const UserProfile = () => {
   const { userId } = useParams();
   const { user } = useContext(UserContext);
@@ -40,6 +41,7 @@ const UserProfile = () => {
     update();
   }, [userId, update]);
 
+  // Renders a chat if on another user's profile
   const renderChat = () => {
     if (isOwnProfile) {
       return null;
@@ -99,6 +101,7 @@ const SocialRelationActionButton = ({ requesteeId }) => {
   // don't render if viewing your own profile
   if (requesteeId === currentUser.id) return;
 
+  // Handles button displayed for different relations
   if (relationStatus === RelationService.STATUS.NONE) {
     buttonText = 'Send Friend Request';
     handleClick = async () => {

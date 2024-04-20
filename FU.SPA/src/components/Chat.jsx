@@ -44,6 +44,7 @@ export default function Chat({ chatId }) {
       }
     };
 
+    // Handles receiving messages
     const handleReceiveMessage = (receivedMessage) => {
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
 

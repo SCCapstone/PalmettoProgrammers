@@ -2,6 +2,7 @@ import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 
+// Component search bar that handles searching of posts and users
 function SearchBar({ searchText, onSearchSubmit }) {
   const [localSearchText, setLocalSearchText] = useState(searchText);
 

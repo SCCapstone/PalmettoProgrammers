@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Store } from 'react-notifications-component';
 import PostForm from '../PostForm';
 
+// Create post page
 export default function CreatePost() {
   const navigate = useNavigate();
 

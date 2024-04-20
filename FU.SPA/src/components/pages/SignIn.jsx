@@ -192,6 +192,7 @@ export default function SignIn() {
       }
     };
 
+    // Display error Dialog for invalid/expired token for email confirmation
     return (
       <Dialog open={invalidTokenDialogOpen} onClose={handleClose}>
         <DialogTitle>Invalid Token</DialogTitle>

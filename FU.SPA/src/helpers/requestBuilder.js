@@ -1,3 +1,4 @@
+// Builds a URL query string for post searching based on input arguments
 const buildPostQueryString = (query) => {
   let queryString = '';
   if (query.keywords) {
@@ -49,6 +50,7 @@ const buildPostQueryString = (query) => {
   return queryString;
 };
 
+// Builds a URL query string for user searching based on input arguments
 const buildUserQueryString = (query) => {
   let queryString = '';
   if (query && query.keywords) {

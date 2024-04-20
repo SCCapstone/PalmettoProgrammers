@@ -1,3 +1,4 @@
+// NOTE: unused component and deprecated
 import {
   Button,
   TextField,
@@ -11,15 +12,6 @@ import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-//const defaultTheme = createTheme();
-
-//Look at changing to const CreatePost = () => {
-//    CreatingPost();
-//} or something similiar.
-//Design of the page.// TODO START OF PAGE CODE, WHICH I'M CHANGING TO CREATE GROUP, BEFORE MAKING IT A BUTTON FUNCTION (semi-completed)
-// need to add a group image and an upload button to the left under the buttons that will be placed there, as well.
 export default function CreateGroup() {
   return (
     <ThemeProvider theme={createTheme}>

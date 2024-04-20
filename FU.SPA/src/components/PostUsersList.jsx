@@ -6,6 +6,7 @@ import PostService from '../services/postService';
 import './PostUsersList.css';
 import { useNavigate } from 'react-router-dom';
 
+// Component that displays all users that have joined a post
 export default function PostUsersList({ postId }) {
   const [users, setUsers] = useState([]);
 
@@ -91,6 +92,7 @@ const UserListItem = ({ user }) => {
     return initials;
   };
 
+  // Display profile picture and names of users in a post
   const renderPfp = () => {
     return defaultPfp ? (
       <Avatar
@@ -111,6 +113,7 @@ const UserListItem = ({ user }) => {
     );
   };
 
+  // Display status of users in a post
   const renderOnlineStatus = (isOnline) => {
     if (!isOnline) return;
 
