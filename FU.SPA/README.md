@@ -4,8 +4,8 @@
 
 - SPA is built with React
 - - Material UI is used for common components, some components are custom or modified versions of MUI components
-- - Vite is used for local development hosting of the SPA
-- NPM for package management
+- - Vite is used for local development hosting of the SPA and building the SPA for deployment
+- npm for package management and scripting of installed packages
 
 ### Understanding Components
 
