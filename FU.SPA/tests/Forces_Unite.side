@@ -1832,14 +1832,9 @@
     }, {
       "id": "6c1848b3-7462-491e-81d8-d6acc1361953",
       "comment": "",
-      "command": "click",
+      "command": "//click",
       "target": "css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2) .PrivateSwitchBase-input",
-      "targets": [
-        ["css=.MuiFormControl-root:nth-child(5) .MuiFormControlLabel-root:nth-child(2) .PrivateSwitchBase-input", "css:finder"],
-        ["xpath=(//input[@name=':r45:'])[2]", "xpath:attributes"],
-        ["xpath=//div[@id='root']/div[2]/div/div/div[4]/div/label[2]/span/input", "xpath:idRelative"],
-        ["xpath=//label[2]/span/input", "xpath:position"]
-      ],
+      "targets": [],
       "value": ""
     }, {
       "id": "184eb39e-f133-459a-8e6f-68506005b776",
@@ -1857,7 +1852,7 @@
       "id": "7e69b332-7bbe-4ef1-9fd4-0e44b1bbc8a7",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiButton-contained",
+      "target": "xpath=(//button[@type='button'])[4]",
       "targets": [
         ["css=.MuiButton-contained", "css:finder"],
         ["xpath=(//button[@type='button'])[4]", "xpath:attributes"],
@@ -1897,7 +1892,7 @@
       "id": "6c1802dd-1155-491f-8ca1-1cc0c939dee1",
       "comment": "",
       "command": "click",
-      "target": "css=.MuiButton-contained",
+      "target": "xpath=//button[@type='submit']",
       "targets": [
         ["css=.MuiButton-contained", "css:finder"],
         ["xpath=//button[@type='submit']", "xpath:attributes"],
