@@ -17,6 +17,7 @@ import TagService from '../services/tagService';
 import GameService from '../services/gameService';
 import UserContext from '../context/userContext';
 import dayjs from 'dayjs';
+import { Store } from 'react-notifications-component';
 
 const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
   const { user } = useContext(UserContext);
@@ -137,28 +138,46 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let tagIds = [];
+    try {
+      let tagIds = [];
 
-    // Gets tags from API or creates them
-    for (const tag of tags) {
-      const newTag = await TagService.findOrCreateTagByName(tag.name);
-      tagIds.push(newTag.id);
+      // Gets tags from API or creates them
+      for (const tag of tags) {
+        const newTag = await TagService.findOrCreateTagByName(tag.name);
+        tagIds.push(newTag.id);
+      }
+
+      // Gets game from API or creates it
+      var findGame = await GameService.findOrCreateGameByTitle(game.name);
+
+      // Form payload
+      const post = {
+        title: title,
+        description: description,
+        startTime: startTime !== null ? startTime.toISOString() : null,
+        endTime: endTime !== null ? endTime.toISOString() : null,
+        tagIds: tagIds,
+        gameId: findGame.id,
+      };
+
+      onSubmit(post);
+    } catch (e) {
+      // Error notification
+      Store.addNotification({
+        title: 'Error has occured',
+        message: 'An error has occured.\n' + e,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
+      console.error('Error in post form: ', e);
     }
-
-    // Gets game from API or creates it
-    var findGame = await GameService.findOrCreateGameByTitle(game.name);
-
-    // Form payload
-    const post = {
-      title: title,
-      description: description,
-      startTime: startTime !== null ? startTime.toISOString() : null,
-      endTime: endTime !== null ? endTime.toISOString() : null,
-      tagIds: tagIds,
-      gameId: findGame.id,
-    };
-
-    onSubmit(post);
   };
 
   const getPreviewTags = () => {
