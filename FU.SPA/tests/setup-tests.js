@@ -119,7 +119,7 @@ const setup = async () => {
 
     const credentials = Array.from({ length: numberOfUsers }, (v, i) => ({
       username: `user${i + 1}`,
-      password: `password${i + 1}`,
+      password: `pass_word${i + 1}`,
       email: `user${i + 1}@example.com`,
     }));
 
@@ -146,8 +146,21 @@ const setup = async () => {
     ];
 
     const NewPostData = (index) => {
-      const month = Math.floor(Math.random() * 12) + 1;
-      const day = Math.floor(Math.random() * 28) + 1;
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentDay = currentDate.getDate();
+
+      const month =
+        Math.floor(Math.random() * (12 - currentMonth + 1)) + currentMonth;
+
+      let day;
+      if (month === currentMonth) {
+        day = Math.floor(Math.random() * (28 - currentDay)) + currentDay + 1;
+      } else {
+        day = Math.floor(Math.random() * 28) + 1;
+      }
+
       const hourStart = Math.floor(Math.random() * 5) + 16;
       const hourEnd = hourStart + Math.floor(Math.random() * 3) + 1;
 
@@ -155,10 +168,10 @@ const setup = async () => {
         Title: `Exciting Game Night ${index}`,
         Description: `Join us for an exciting night of gaming at event ${index}!`,
         GameId: (index % 5) + 1,
-        StartTime: `2024-${month.toString().padStart(2, '0')}-${day
+        StartTime: `${currentYear}-${month.toString().padStart(2, '0')}-${day
           .toString()
           .padStart(2, '0')}T${hourStart.toString().padStart(2, '0')}:00:00`,
-        EndTime: `2024-${month.toString().padStart(2, '0')}-${day
+        EndTime: `${currentYear}-${month.toString().padStart(2, '0')}-${day
           .toString()
           .padStart(2, '0')}T${hourEnd.toString().padStart(2, '0')}:00:00`,
         MaxPlayers: 10 + (index % 10),
