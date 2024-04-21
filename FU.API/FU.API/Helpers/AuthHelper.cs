@@ -6,6 +6,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+/// <summary>
+/// Helper class for creating authentication tokens.
+/// Used when a user logs in or sending account verification emails.
+/// </summary>
 public static class AuthHelper
 {
     public static AuthenticationInfo CreateAuthInfo(IConfiguration configuration, DateTime expires, int userId)
