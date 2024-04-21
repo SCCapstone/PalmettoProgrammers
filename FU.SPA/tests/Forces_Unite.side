@@ -2413,6 +2413,120 @@
       ],
       "value": ""
     }]
+  }, {
+    "id": "f7b4376d-147f-44e3-83ea-220bb1b0b05c",
+    "name": "Delete Account",
+    "commands": [{
+      "id": "bd05f09c-a985-4852-a6ba-366aedd5b95e",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "28660447-d188-4b24-a5a5-f0d24e2a85f5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.css-1qee35r",
+      "targets": [
+        ["css=.css-1qee35r", "css:finder"],
+        ["xpath=(//button[@type='button'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/header/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "96e1ae6e-74a2-4635-ba1a-3a8577aea622",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/main/div/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "user10"
+    }, {
+      "id": "b637a96d-2936-4ff0-9931-afbe98fff82d",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [],
+      "value": "pass_word10"
+    }, {
+      "id": "d7140357-946e-4b9f-80fe-bbed1e959ab6",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiButton-contained",
+      "targets": [
+        ["css=.MuiButton-contained", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/main/div/form/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a1847607-67aa-40e7-8b83-49c637bf25bb",
+      "comment": "",
+      "command": "click",
+      "target": "css=.css-158fiia > .MuiAvatar-img",
+      "targets": [
+        ["css=.css-158fiia > .MuiAvatar-img", "css:finder"],
+        ["xpath=//img[@alt='user10']", "xpath:img"],
+        ["xpath=//div[@id='root']/header/div/div[2]/div/button/span/div/img", "xpath:idRelative"],
+        ["xpath=//span/div/img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2ca4353f-6da8-46c9-973f-e0806e432a04",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiButtonBase-root:nth-child(3) > .MuiTypography-root",
+      "targets": [
+        ["css=.MuiButtonBase-root:nth-child(3) > .MuiTypography-root", "css:finder"],
+        ["xpath=//div[@id='menu-appbar']/div[3]/ul/li[3]/p", "xpath:idRelative"],
+        ["xpath=//li[3]/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Account')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f8275205-bb2f-403a-9d51-a96e8de57e18",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiButton-containedError",
+      "targets": [
+        ["css=.MuiButton-containedError", "css:finder"],
+        ["xpath=(//button[@type='button'])[6]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div[2]/main/div/div/button", "xpath:idRelative"],
+        ["xpath=//main/div/div/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e6e03248-6692-40c0-9030-003ccf635ab9",
+      "comment": "",
+      "command": "type",
+      "target": "xpath=//div/div/div/input",
+      "targets": [
+        ["css=.Mui-focused > #confirmPassword", "css:finder"],
+        ["xpath=(//input[@id='confirmPassword'])[2]", "xpath:attributes"],
+        ["xpath=//div/div/div/input", "xpath:position"]
+      ],
+      "value": "pass_word10"
+    }, {
+      "id": "cdbf48c3-fcd9-41a9-b02c-8ced865f94cd",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiButton-textPrimary:nth-child(2)",
+      "targets": [
+        ["css=.MuiButton-textPrimary:nth-child(2)", "css:finder"],
+        ["xpath=(//button[@type='button'])[8]", "xpath:attributes"],
+        ["xpath=//div[2]/button[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
   }],
   "suites": [{
     "id": "81ed32f4-9c63-4cf5-8567-e789f1afb8ad",
