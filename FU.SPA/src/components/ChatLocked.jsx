@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 export default function ChatLocked({ chatType, reason, onResolutionClick }) {
   const navigate = useNavigate();
 
+  // Render the message based on the reason
   const renderMessage = () => {
     let reasonMessage;
 
@@ -29,6 +30,7 @@ export default function ChatLocked({ chatType, reason, onResolutionClick }) {
     );
   };
 
+  // Render the resolution button based on the reason
   const renderResolution = () => {
     // get the current path
     var path = window.location.pathname;
