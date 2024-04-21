@@ -81,13 +81,13 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
 
   // Handles title state error
   const handleTitleChange = (e) => {
-    if (e.target.value < 3) {
+    if (e.target.value.length < 3 && e.target.value.length > 0) {
       setTitleError('Title must be longer than 3 characters');
       setTitle(e.target.value);
     } else {
-      setTitle(e.target.value);
       setTitleError('');
     }
+    setTitle(e.target.value);
   };
 
   // Handles start date state error
@@ -198,7 +198,7 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
         <TextField
           required
           fullWidth
-          error={title?.length < 3}
+          error={titleError !== ''}
           id="searchGames"
           helperText={titleError}
           minLength={3}
