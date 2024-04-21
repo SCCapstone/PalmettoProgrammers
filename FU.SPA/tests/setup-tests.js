@@ -119,7 +119,7 @@ const setup = async () => {
 
     const credentials = Array.from({ length: numberOfUsers }, (v, i) => ({
       username: `user${i + 1}`,
-      password: `password${i + 1}`,
+      password: `pass_word${i + 1}`,
       email: `user${i + 1}@example.com`,
     }));
 
