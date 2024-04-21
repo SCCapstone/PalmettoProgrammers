@@ -3,6 +3,9 @@
 using FU.API.Validation;
 using System.ComponentModel.DataAnnotations;
 
+/// <summary>
+/// Used for updating credentials.
+/// </summary>
 public record UpdateCredentailsDTO
 {
     [NonEmptyString]

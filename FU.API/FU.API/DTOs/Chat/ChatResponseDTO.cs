@@ -1,5 +1,9 @@
 ﻿namespace FU.API.DTOs.Chat;
 
+/// <summary>
+/// The response DTO for chat.
+/// Members is a collection of usernames.
+/// </summary>
 public class ChatResponseDTO
 {
     public int Id { get; set; }
