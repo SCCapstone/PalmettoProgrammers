@@ -31,7 +31,7 @@ export default function ProfileSettings() {
   const { refreshUser } = useContext(UserContext);
   const [isEnabled, setIsEnabled] = useState(false);
   const [bioError, setBioError] = useState('');
-  const [dateError, setDateError] = useState('');  
+  const [dateError, setDateError] = useState('');
 
   useEffect(() => {
     async function fetchUserInfo() {
@@ -46,10 +46,10 @@ export default function ProfileSettings() {
 
     fetchUserInfo();
   }, []);
-
+  // Shows or hides the update profile button
   useEffect(() => {
     setIsEnabled(bio.length <= 1500 && !dateError);
-  }, [bio, isEnabled, dateOfBirth]);
+  }, [bio, isEnabled, dateError]);
 
   // Handles the errors and value changes for the bio(About) section.
   const handleBioChange = (e) => {
@@ -61,7 +61,7 @@ export default function ProfileSettings() {
       setBio(e);
     }
   };
-
+  // Handles the errors and value changes for the date of birth section.
   const handleDOBChange = (e) => {
     const today = dayjs();
     const ageEntered = today.diff(e, 'year');
@@ -75,7 +75,7 @@ export default function ProfileSettings() {
       setDateError('');
       setDateOfBirth(e);
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -175,7 +175,7 @@ export default function ProfileSettings() {
         </LocalizationProvider>
         {dateError && (
           <Typography variant="caption" color="error">
-            {dateError}
+            {dateError} {/* Error message */}
           </Typography>
         )}
         <TextField
