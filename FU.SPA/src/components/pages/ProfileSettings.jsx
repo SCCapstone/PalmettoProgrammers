@@ -31,6 +31,7 @@ export default function ProfileSettings() {
   const { refreshUser } = useContext(UserContext);
   const [isEnabled, setIsEnabled] = useState(false);
   const [bioError, setBioError] = useState('');
+  const [dateError, setDateError] = useState('');  
 
   useEffect(() => {
     async function fetchUserInfo() {
@@ -47,8 +48,8 @@ export default function ProfileSettings() {
   }, []);
 
   useEffect(() => {
-    setIsEnabled(bio.length <= 1500);
-  }, [bio, isEnabled]);
+    setIsEnabled(bio.length <= 1500 && !dateError);
+  }, [bio, isEnabled, dateOfBirth]);
 
   // Handles the errors and value changes for the bio(About) section.
   const handleBioChange = (e) => {
@@ -60,6 +61,21 @@ export default function ProfileSettings() {
       setBio(e);
     }
   };
+
+  const handleDOBChange = (e) => {
+    const today = dayjs();
+    const ageEntered = today.diff(e, 'year');
+    if (ageEntered < 13) {
+      setDateError('You must be at least 13 years of age.');
+      setDateOfBirth(e);
+    } else if (ageEntered > 120) {
+      setDateError('You must enter an age less than 120');
+      setDateOfBirth(e);
+    } else {
+      setDateError('');
+      setDateOfBirth(e);
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -153,10 +169,15 @@ export default function ProfileSettings() {
             label="Date of Birth"
             value={dateOfBirth} // Leave null as to not change date
             fullWidth
-            onChange={(newValue) => setDateOfBirth(newValue)}
+            onChange={(newValue) => handleDOBChange(newValue)}
             slotProps={{ field: { clearable: true } }}
           />
         </LocalizationProvider>
+        {dateError && (
+          <Typography variant="caption" color="error">
+            {dateError}
+          </Typography>
+        )}
         <TextField
           error={bio.length > 1500}
           helperText={bioError}
