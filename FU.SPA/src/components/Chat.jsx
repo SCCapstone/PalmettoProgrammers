@@ -19,8 +19,8 @@ import config from '../config';
 
 /**
  * The Chat component is used to render the chat interface
- * 
- * @param {number} chatId The id of the chat 
+ *
+ * @param {number} chatId The id of the chat
  * @returns The rendered chat component
  */
 export default function Chat({ chatId }) {
@@ -32,7 +32,6 @@ export default function Chat({ chatId }) {
   const { user } = useContext(UserContext);
   const [isNewMessageReceived, setIsNewMessageReceived] = useState(false);
   const limit = 25;
-
 
   // Set the chat messages and join the chat group
   useEffect(() => {

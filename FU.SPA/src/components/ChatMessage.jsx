@@ -5,10 +5,10 @@ import DateUtils from '../helpers/dateUtils';
 
 /**
  * This component is used to render a chat message
- * 
+ *
  * @param {object} chatMessage The chat message object
  * @param {boolean} userIsSender A boolean to check if the current user is the sender
- * 
+ *
  * @returns The rendered chat message component
  */
 export default function ChatMessage({ chatMessage, userIsSender }) {

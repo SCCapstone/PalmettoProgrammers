@@ -3,10 +3,10 @@ import DateUtils from '../helpers/dateUtils';
 
 /**
  * The ChatMessagePreview component is used to render a chat message preview
- * 
+ *
  * @param {object} chatMessage The chat message object
- *  
- * @returns The rendered chat message preview component 
+ *
+ * @returns The rendered chat message preview component
  */
 export default function ChatMessage({ chatMessage }) {
   return (
