@@ -389,7 +389,10 @@ const TagsSelector = ({ onChange, initialValues }) => {
     getTags();
   }, [initialValues]);
 
-  const onInputChange = (event, newValues) => {
+  const onInputChange = (event, newValues, change) => {
+    if (change === 'selectOption' && newValues.length > 6) {
+      return;
+    }
     for (const newValue of newValues) {
       if (newValue.id === null) {
         // if not in options add to options
