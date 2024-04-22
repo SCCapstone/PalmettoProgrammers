@@ -477,7 +477,7 @@ const TagsSelector = ({ onChange, initialValues }) => {
           {...params}
           label="Add/Create Tags"
           placeholder=""
-          helperText="Maximum of 6 tags"
+          helperText={value.length > 6 ? 'Maximum of 6 tags' : ''}
         />
       )}
     />
