@@ -10,6 +10,11 @@ using FU.API.DTOs.Group;
 using FU.API.DTOs.User;
 using FU.API.DTOs;
 
+/// <summary>
+/// A static class that contains extension methods for mapping between DTOs and models.
+/// Used to keep the controllers clean.
+/// Simple mapping, and no complex logic.
+/// </summary>
 public static class Mapper
 {
     public static UserProfile ToProfile(this ApplicationUser appUser, Message? lastChatMessage = null)

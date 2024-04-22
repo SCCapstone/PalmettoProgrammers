@@ -14,6 +14,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { Store } from 'react-notifications-component';
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -29,6 +30,20 @@ const PostPage = () => {
       await PostService.joinPost(post.id);
       update();
     } catch (error) {
+      // Error notification
+      Store.addNotification({
+        title: 'Error joining post',
+        message: 'An error has occured. Please try again.',
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error('Error joining post:', error);
     }
   };
@@ -38,6 +53,20 @@ const PostPage = () => {
       await PostService.leavePost(post.id);
       navigate(-1);
     } catch (error) {
+      // Error notification
+      Store.addNotification({
+        title: 'Error leaving post',
+        message: 'An error has occured. Please try again.',
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error('Error leaving post:', error);
     }
   };
@@ -48,6 +77,20 @@ const PostPage = () => {
       const data = await PostService.getPostDetails(postId);
       setPost(data);
     } catch (error) {
+      // Error notification
+      Store.addNotification({
+        title: 'Error getting details',
+        message: 'An error has occured.\n' + error,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
       console.error('Error fetching post details:', error);
     }
     setLoading(false);

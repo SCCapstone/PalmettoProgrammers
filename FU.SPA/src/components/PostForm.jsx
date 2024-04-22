@@ -17,6 +17,7 @@ import TagService from '../services/tagService';
 import GameService from '../services/gameService';
 import UserContext from '../context/userContext';
 import dayjs from 'dayjs';
+import { Store } from 'react-notifications-component';
 
 // Function that displays a post form when creating or editing posts
 const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
@@ -82,13 +83,13 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
 
   // Handles title state error
   const handleTitleChange = (e) => {
-    if (e.target.value < 3) {
+    if (e.target.value.length < 3 && e.target.value.length > 0) {
       setTitleError('Title must be longer than 3 characters');
       setTitle(e.target.value);
     } else {
-      setTitle(e.target.value);
       setTitleError('');
     }
+    setTitle(e.target.value);
   };
 
   // Handles start date state error
@@ -139,28 +140,46 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let tagIds = [];
+    try {
+      let tagIds = [];
 
-    // Gets tags from API or creates them
-    for (const tag of tags) {
-      const newTag = await TagService.findOrCreateTagByName(tag.name);
-      tagIds.push(newTag.id);
+      // Gets tags from API or creates them
+      for (const tag of tags) {
+        const newTag = await TagService.findOrCreateTagByName(tag.name);
+        tagIds.push(newTag.id);
+      }
+
+      // Gets game from API or creates it
+      var findGame = await GameService.findOrCreateGameByTitle(game.name);
+
+      // Form payload
+      const post = {
+        title: title,
+        description: description,
+        startTime: startTime !== null ? startTime.toISOString() : null,
+        endTime: endTime !== null ? endTime.toISOString() : null,
+        tagIds: tagIds,
+        gameId: findGame.id,
+      };
+
+      onSubmit(post);
+    } catch (e) {
+      // Error notification
+      Store.addNotification({
+        title: 'Error has occured',
+        message: 'An error has occured.\n' + e,
+        type: 'danger',
+        insert: 'bottom',
+        container: 'bottom-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
+      console.error('Error in post form: ', e);
     }
-
-    // Gets game from API or creates it
-    var findGame = await GameService.findOrCreateGameByTitle(game.name);
-
-    // Form payload
-    const post = {
-      title: title,
-      description: description,
-      startTime: startTime !== null ? startTime.toISOString() : null,
-      endTime: endTime !== null ? endTime.toISOString() : null,
-      tagIds: tagIds,
-      gameId: findGame.id,
-    };
-
-    onSubmit(post);
   };
 
   const getPreviewTags = () => {
@@ -201,7 +220,7 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
         <TextField
           required
           fullWidth
-          error={title?.length < 3}
+          error={titleError !== ''}
           id="searchGames"
           helperText={titleError}
           minLength={3}
