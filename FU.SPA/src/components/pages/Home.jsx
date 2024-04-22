@@ -3,7 +3,12 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
 import Theme from '../../Theme';
+import CreatePostScreenshot from '../../../assets/create-post-view.png';
+import DiscoverPostScreenshot from '../../../assets/discover-posts-view.png';
+import PostViewScreenshot from '../../../assets/post-view.png';
+import FriendsViewScreenshot from '../../../assets/friends-view.png';
 
+// Home landing page
 const Home = () => {
   return (
     <Box sx={{ maxWidth: 800, p: 2, mx: 'auto', textAlign: 'left' }}>
@@ -18,7 +23,7 @@ const Home = () => {
             make friends.
           </Typography>
         </Box>
-        <Screenshot src="https://storagefu.blob.core.windows.net/screenshots/discover-posts-view.png" />
+        <Screenshot src={DiscoverPostScreenshot} />
         <Typography variant="h5" sx={{ pt: 2 }}>
           Don&apos;t limit yourself to restrictive or random in-game
           matchmaking. Find like-minded players and play how you want when you
@@ -28,25 +33,25 @@ const Home = () => {
           If you can&apos;t find a match, make a new post and invite others to
           join!
         </SectionBig>
-        <Screenshot src="https://storagefu.blob.core.windows.net/screenshots/create-post-view.png" />
+        <Screenshot src={CreatePostScreenshot} />
         <SectionBig headerText="Link Up">
           As a post member, discuss meetup detail, strategize a game plan, or
           just chat.
         </SectionBig>
-        <Screenshot src="https://storagefu.blob.core.windows.net/screenshots/post-view.png" />
+        <Screenshot src={PostViewScreenshot} />
         <SectionBig headerText="Stay Connected">
           Befriend others to keep in touch and meet up later.
         </SectionBig>
-        <Screenshot src="https://storagefu.blob.core.windows.net/screenshots/friends-view.png" />
+        <Screenshot src={FriendsViewScreenshot} />
         <SectionBig headerText="Showcase" />
         <iframe
           style={{ width: '100%', aspectRatio: '16/9' }}
-          src="https://www.youtube.com/embed/lAGrIrY7h3o?si=P-e0W_LpiEpUJZTa&color=white"
+          src="https://www.youtube.com/embed/jp-dW9j6vXE?si=53bW1NUOMyGjDHJ5&color=white"
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
-          allowfullscreen
+          allowFullScreen
         />
         <SectionBig headerText="About" maxBodyWidth="100%">
           This website was created by PalmettoProgrammers for a 2023-2024 UofSC

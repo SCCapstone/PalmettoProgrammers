@@ -17,6 +17,12 @@ import ChatMessage from './ChatMessage';
 import UserContext from '../context/userContext';
 import config from '../config';
 
+/**
+ * The Chat component is used to render the chat interface
+ *
+ * @param {number} chatId The id of the chat
+ * @returns The rendered chat component
+ */
 export default function Chat({ chatId }) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -27,6 +33,7 @@ export default function Chat({ chatId }) {
   const [isNewMessageReceived, setIsNewMessageReceived] = useState(false);
   const limit = 25;
 
+  // Set the chat messages and join the chat group
   useEffect(() => {
     const initializeChat = async () => {
       try {
@@ -44,6 +51,7 @@ export default function Chat({ chatId }) {
       }
     };
 
+    // Handles receiving messages
     const handleReceiveMessage = (receivedMessage) => {
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
 
@@ -68,6 +76,7 @@ export default function Chat({ chatId }) {
     };
   }, [chatId, user]);
 
+  // Load more messages when user is scrolled near the top
   useEffect(() => {
     const loadMoreMessages = async () => {
       try {
@@ -91,6 +100,7 @@ export default function Chat({ chatId }) {
     }
   }, [offset, chatId]);
 
+  // Save the message to the database
   async function handleSendMessage() {
     try {
       if (message === '') {
@@ -103,6 +113,7 @@ export default function Chat({ chatId }) {
     }
   }
 
+  // Handle scrolling to load more messages
   const handleScroll = (event) => {
     if (event.target.scrollTop === 0) {
       if (hasMoreMessages) {
@@ -111,6 +122,7 @@ export default function Chat({ chatId }) {
     }
   };
 
+  // Scroll to the bottom when messages are updated
   useEffect(() => {
     // Scroll to the bottom when messages are updated
     const chatContainer = document
@@ -123,8 +135,6 @@ export default function Chat({ chatId }) {
       setPrevScrollHeight(chatContainer.scrollHeight);
     }
   }, [messages, prevScrollHeight]);
-
-  // Use MUi card for chat
 
   return (
     <Card
@@ -160,8 +170,9 @@ export default function Chat({ chatId }) {
           />
         ))}
       </CardContent>
-      <CardActions className="chat-actions">
+      <CardActions className="chat-actions" style={{ width: '100%' }}>
         <TextField
+          style={{ width: '100%' }}
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}

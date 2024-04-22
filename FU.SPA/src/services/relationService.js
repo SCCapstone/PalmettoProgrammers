@@ -112,6 +112,7 @@ const getRelations = async (userId, query) => {
     },
   );
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error in getting relation status');
   }

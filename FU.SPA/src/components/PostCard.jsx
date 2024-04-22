@@ -16,6 +16,7 @@ import dayjs from 'dayjs';
 import { Done } from '@mui/icons-material';
 import ChatMessagePreview from './ChatMessagePreview';
 
+// Function that displays a card with details of a given post
 const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
   const navigate = useNavigate();
   const user = post.creator;
@@ -24,6 +25,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
     showActions = true;
   }
 
+  //
   const handleTagClick = (tag) => {
     if (onTagClick) {
       onTagClick(tag);
@@ -46,8 +48,10 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
   if (post.startTime) {
     let startOfToday = dayjs().startOf('day');
     let postStartDateTime = dayjs(post.startTime);
+    let postEndDateTime = dayjs(post.endTime);
 
     let startDate = dayjs(post.startTime).format('MMM D, YYYY');
+    // This block handles formatting of start date display on card
     if (postStartDateTime < startOfToday) {
       // Use default
     } else if (postStartDateTime < startOfToday.add(1, 'day')) {
@@ -60,6 +64,23 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
       startDate = dayjs(post.startTime).format('MMM D');
     }
 
+    let endDate = '';
+    if (!postEndDateTime.isSame(postStartDateTime, 'day')) {
+      endDate = dayjs(post.endTime).format('MMM D, YYYY');
+      // This block handles formatting of end date display on card
+      if (postEndDateTime < startOfToday) {
+        // Use default
+      } else if (postEndDateTime < startOfToday.add(1, 'day')) {
+        endDate = 'Today';
+      } else if (postEndDateTime < startOfToday.add(2, 'day')) {
+        endDate = 'Tomorrow';
+      } else if (postEndDateTime < startOfToday.add(6, 'day')) {
+        endDate = dayjs(post.endTime).format('ddd');
+      } else if (postEndDateTime < startOfToday.add(1, 'year')) {
+        endDate = dayjs(post.endTime).format('MMM D');
+      }
+    }
+
     var startTime = new Date(post.startTime).toLocaleString('en-US', {
       timeStyle: 'short',
     });
@@ -67,7 +88,11 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
       timeStyle: 'short',
     });
 
-    dateTimeString = `${startDate}, ${startTime} - ${endTime}`;
+    dateTimeString = `${startDate}, ${startTime} - `;
+    if (endDate !== '') {
+      dateTimeString += `${endDate}, `;
+    }
+    dateTimeString += `${endTime}`;
   } else {
     dateTimeString = 'No time';
   }
@@ -88,6 +113,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
     return color;
   };
 
+  // Returns card with post details to be displayed
   return (
     <Card sx={{ width: 250 }}>
       <CardContent sx={{ textAlign: 'left', height: 350 }}>
@@ -127,9 +153,11 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
             {post.game}
           </Typography>
         </Tooltip>
-        <Typography variant="body2" noWrap>
-          {dateTimeString}
-        </Typography>
+        <Tooltip title={dateTimeString}>
+          <Typography variant="body2" noWrap>
+            {dateTimeString}
+          </Typography>
+        </Tooltip>
         <Divider
           sx={{
             borderColor: Theme.palette.primary.main,

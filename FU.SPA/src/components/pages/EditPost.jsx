@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Store } from 'react-notifications-component';
 
+// Edit post page
 export default function EditPost() {
   const { postId } = useParams();
   const [ogPost, setOgPost] = useState();

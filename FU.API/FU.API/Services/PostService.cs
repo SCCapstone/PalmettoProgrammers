@@ -76,6 +76,8 @@ public class PostService : CommonService, IPostService
             throw new PostException("The updated post's creator does not match the old post's creator", HttpStatusCode.UnprocessableEntity);
         }
 
+        AssertValidDateAndTime(postChanges);
+
         ogPost.Game = await _dbContext.Games.FindAsync(postChanges.GameId) ?? throw new NonexistentGameException();
         ogPost.Description = postChanges.Description;
         ogPost.MaxPlayers = postChanges.MaxPlayers;

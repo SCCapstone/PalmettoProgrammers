@@ -29,6 +29,9 @@ export default function ProfileSettings() {
   const [dateOfBirth, setDateOfBirth] = useState(dayjs());
   const [newPfpUrl, setNewPfpUrl] = useState();
   const { refreshUser } = useContext(UserContext);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [bioError, setBioError] = useState('');
+  const [dateError, setDateError] = useState('');
 
   useEffect(() => {
     async function fetchUserInfo() {
@@ -43,6 +46,45 @@ export default function ProfileSettings() {
 
     fetchUserInfo();
   }, []);
+  // Shows or hides the update profile button
+  useEffect(() => {
+    setIsEnabled(bio.length <= 1500 && !dateError);
+  }, [bio, isEnabled, dateError]);
+
+  // Handles the errors and value changes for the bio(About) section.
+  const handleBioChange = (e) => {
+    if (e.length > 1500) {
+      setBioError('About cannot exceed 1500 characters');
+      setBio(e);
+    } else {
+      setBioError('');
+      setBio(e);
+    }
+  };
+  // Handles the errors and value changes for the date of birth section.
+  const handleDOBChange = (e) => {
+    try {
+      const today = dayjs();
+      const ageEntered = today.diff(e, 'year');
+      console.log(ageEntered);
+      // allows clearing date of birth
+      if (e == null) {
+        setDateError('');
+        setDateOfBirth(e);
+      } else if (ageEntered < 13) {
+        setDateError('You must be at least 13 years old.');
+        setDateOfBirth(e);
+      } else if (ageEntered > 120) {
+        setDateError('You must enter an age less than 120 years old.');
+        setDateOfBirth(e);
+      } else {
+        setDateError('');
+        setDateOfBirth(e);
+      }
+    } catch (e) {
+      console.error('Error in DOB change: ', e);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -134,19 +176,27 @@ export default function ProfileSettings() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Date of Birth"
-            value={dateOfBirth} // Leave null as to not change date
+            value={dateOfBirth}
             fullWidth
-            onChange={(newValue) => setDateOfBirth(newValue)}
-            slotProps={{ field: { clearable: true } }}
+            onChange={(newValue) => handleDOBChange(newValue)}
+            slotProps={{
+              field: {
+                clearable: true,
+                helperText: dateError,
+                error: !!dateError,
+              },
+            }}
           />
         </LocalizationProvider>
         <TextField
+          error={bio.length > 1500}
+          helperText={bioError}
           fullWidth
           id="setBio"
           label="About"
           value={bio}
           multiline
-          onChange={(e) => setBio(e.target.value)}
+          onChange={(e) => handleBioChange(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -162,7 +212,12 @@ export default function ProfileSettings() {
           }}
         />
         <UploadAvatar onNewPreview={handlePreviewUrl} />
-        <Button type="submit" fullWidth variant="contained">
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          disabled={!isEnabled}
+        >
           Update Profile
         </Button>
       </Box>
@@ -182,6 +237,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+// Component that handles avatar uploading
 const UploadAvatar = ({ onNewPreview }) => {
   const [file, setFile] = useState();
   const [uploadedImageUrl, setUploadedImageUrl] = useState();
@@ -204,6 +260,7 @@ const UploadAvatar = ({ onNewPreview }) => {
     setLoading(true);
     setFile(event.target.files[0]);
 
+    // Try to upload image and throw error if fail
     try {
       const response = await AvatarService.upload(event.target.files[0]);
       setUploadedImageUrl(response.imageUrl);
@@ -220,6 +277,7 @@ const UploadAvatar = ({ onNewPreview }) => {
     setFile();
   };
 
+  // Display component
   return (
     <>
       <Button

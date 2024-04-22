@@ -10,6 +10,7 @@ const signIn = async (credentials) => {
     body: JSON.stringify(credentials),
   });
 
+  // Error checking
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(errorText || 'Error in sign in');
@@ -31,6 +32,7 @@ const signUp = async (credentials) => {
     body: JSON.stringify(credentials),
   });
 
+  // Error checking
   if (!response.ok) {
     // Get the error message
     const errorText = await response.text();
@@ -38,6 +40,7 @@ const signUp = async (credentials) => {
   }
 };
 
+// Function for email account confirmation
 const confirmAccount = async (token) => {
   const response = await fetch(`${API_BASE_URL}/Accounts/confirm`, {
     method: 'POST',
@@ -46,6 +49,7 @@ const confirmAccount = async (token) => {
     },
   });
 
+  // Error checking
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(errorText || 'Error in confirming account');
@@ -55,6 +59,7 @@ const confirmAccount = async (token) => {
   return jsonResponse;
 };
 
+// Function for resending confirmation email
 const resendConfirmation = async (resendConfirmationData) => {
   const response = await fetch(`${API_BASE_URL}/Accounts/resendconfirmation`, {
     method: 'POST',
@@ -62,17 +67,21 @@ const resendConfirmation = async (resendConfirmationData) => {
     body: JSON.stringify(resendConfirmationData),
   });
 
+  // Error checking
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(errorText || 'Error in resending confirmation');
   }
 };
 
+// Function that retrieves users' auth token from localStorage
 const getToken = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
   return token;
 };
 
+// Function that gets a logged in users account token and easily formats it
+// for API calls
 const getAuthHeader = () => {
   const token = getToken();
   return { Authorization: `Bearer ${token}` };
