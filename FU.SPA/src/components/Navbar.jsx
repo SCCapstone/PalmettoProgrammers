@@ -83,6 +83,7 @@ export default function Navbar() {
     },
   }));
 
+  // Renders the profile picture and username on the navbar
   const renderProfile = () => (
     <>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -182,6 +183,7 @@ export default function Navbar() {
     setAnchorElUser(null);
   };
 
+  // Displays navbar component
   return (
     <AppBar position="sticky" enableColorOnDark>
       <Toolbar>

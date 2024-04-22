@@ -8,6 +8,7 @@ export const hubConnection = new signalR.HubConnectionBuilder()
   })
   .build();
 
+// Function that tries to start a connection to a signalR hub
 export const startConnection = async () => {
   try {
     // Only start if connection is not in the Connected state
@@ -18,7 +19,7 @@ export const startConnection = async () => {
     // console.error('Error starting SignalR connection:', err);
   }
 };
-
+// Function that tries to stop a connection to a signalR hub
 export const stopConnection = async () => {
   try {
     // Only stop if connection is not in the Disconnected state

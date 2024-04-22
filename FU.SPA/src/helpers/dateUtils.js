@@ -1,3 +1,7 @@
+/* Calculates time difference for chat messages based on when they were sent
+ * Ie a message sent 3 days ago should display '3 days' rather than
+ * '4320 minutes'
+ */
 const timeDifference = (timestamp) => {
   const messageDate = new Date(timestamp);
   const currentTimestamp = Date.now();

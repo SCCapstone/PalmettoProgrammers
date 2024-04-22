@@ -14,6 +14,7 @@ const searchGames = async (keyword) => {
   return await response.json();
 };
 
+// Finds a game by its title
 const findGameByTitle = async (title) => {
   let games = await searchGames(title);
 
@@ -27,9 +28,11 @@ const findGameByTitle = async (title) => {
   return game;
 };
 
+// Finds a game by title, and if it doesn't exist, creates the game
 const findOrCreateGameByTitle = async (title) => {
   let game = await findGameByTitle(title);
 
+  // Creates a game if it does not exist
   if (!game) {
     game = await createGame({ Name: title });
   }
@@ -48,6 +51,7 @@ const createGame = async (params) => {
     body: JSON.stringify(params),
   });
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error in game creation');
   }

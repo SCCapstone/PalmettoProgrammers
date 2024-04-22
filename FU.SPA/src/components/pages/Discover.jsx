@@ -33,6 +33,7 @@ const paramKey = {
   userSort: 'usort',
 };
 
+// Converts a search paramater to its dayjs equivalent
 const paramToDayjs = (searchParams, paramKey) => {
   let paramValue = searchParams.get(paramKey);
   if (!paramValue || !dayjs(paramValue).isValid()) return undefined;
@@ -45,6 +46,7 @@ export default function Discover() {
     Users: 'Users',
   };
 
+  // STATE VARIABLES START
   const queryLimit = 12;
   const [totalResults, setTotalResults] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -112,11 +114,17 @@ export default function Discover() {
   const [endTime, setEndTime] = useState(
     paramToDayjs(searchParams, paramKey.endTime),
   );
+  // STATE VARIABLES END
 
+  // useEffect to update search params
   useEffect(() => {
     const updateSearchParams = async () => {
       setSearchParams(
         (params) => {
+          /* This large block sets the search paramters for a query
+           * Also handles error checking so that invalid params cannot
+           * be included
+           */
           if (
             dateRangeRadioValue === DateFilterRadioValues.between &&
             startDate?.isValid()
@@ -189,7 +197,6 @@ export default function Discover() {
       );
     };
 
-    //TODO pull this out to directly call
     const updateSearchResults = async () => {
       if (tabOption === tabOptions.Posts) {
         const query = {
@@ -318,6 +325,7 @@ export default function Discover() {
     }
   };
 
+  // Render posts or users based on tab option selected
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
       return (
@@ -328,6 +336,7 @@ export default function Discover() {
     }
   };
 
+  // Displays post sort selector for sort options
   const renderPostSortSelector = () => {
     return (
       <SortOptionsSelector
@@ -341,6 +350,7 @@ export default function Discover() {
     );
   };
 
+  // Displays user sort selector for sort options
   const renderUserSortSelector = () => {
     return (
       <SortOptionsSelector
@@ -354,6 +364,7 @@ export default function Discover() {
     );
   };
 
+  // Displays tab options, currently for posts or users
   const renderTabSelectors = () => {
     return (
       <Tabs
@@ -370,6 +381,7 @@ export default function Discover() {
     );
   };
 
+  // Display page
   return (
     <div className="page-content">
       <div

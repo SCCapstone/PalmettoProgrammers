@@ -30,6 +30,7 @@ const relationOptions = {
 };
 
 export default function Social() {
+  // STATE VARIABLES START
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get(paramKey.tabOption) || tabOptions.Posts;
   const initialRelation =
@@ -56,8 +57,9 @@ export default function Social() {
   );
 
   const { user } = useContext(UserContext);
+  // STATE VARIABLES END
 
-  // use effect to update search params
+  // useEffect to update search params
   useEffect(() => {
     const updateSearchParams = () => {
       setSearchParams(
@@ -89,7 +91,7 @@ export default function Social() {
       );
     };
 
-    // TODO pull this out to call directly
+    // function that updates search results depending on tab
     const updateSearchResults = async () => {
       if (tabOption === tabOptions.Posts) {
         const query = {
@@ -141,6 +143,7 @@ export default function Social() {
     userSortOption,
   ]);
 
+  // Renders either posts or users components based on tab
   const renderTabContent = () => {
     if (tabOption === tabOptions.Posts) {
       return <Posts posts={posts} showJoinedStatus={false} />;
@@ -219,6 +222,7 @@ export default function Social() {
     );
   };
 
+  // Display component
   return (
     <div className="page-content">
       <div

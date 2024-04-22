@@ -13,6 +13,7 @@ import UserCard from '../UserCard';
 import ProfileSettings from './ProfileSettings';
 import { Store } from 'react-notifications-component';
 
+// Component for UserProfile
 const UserProfile = () => {
   const { userId } = useParams();
   const { user } = useContext(UserContext);
@@ -41,6 +42,7 @@ const UserProfile = () => {
     update();
   }, [userId, update]);
 
+  // Renders a chat if on another user's profile
   const renderChat = () => {
     if (isOwnProfile) {
       return null;

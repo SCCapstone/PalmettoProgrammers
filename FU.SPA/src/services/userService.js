@@ -11,6 +11,7 @@ const getConnectedPosts = async (query) => {
     { headers: { ...AuthService.getAuthHeader() } },
   );
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error getting posts');
   }
@@ -26,6 +27,7 @@ const getConnectedGroups = async () => {
     { headers: { ...AuthService.getAuthHeader() } },
   );
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error getting groups');
   }
@@ -33,11 +35,13 @@ const getConnectedGroups = async () => {
   return await response.json();
 };
 
+// Gets a given user's profile
 const getUserprofile = async (userString) => {
   const response = await fetch(`${API_BASE_URL}/users/${userString}`, {
     headers: { ...AuthService.getAuthHeader() },
   });
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error getting groups');
   }
@@ -53,6 +57,7 @@ const getUserIdJson = async () => {
     method: 'GET',
   });
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error in retrieving ID');
   }
@@ -86,6 +91,7 @@ const updateAccountInfo = async (data) => {
     body: JSON.stringify(data),
   });
 
+  // Error checking
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(errorText || 'Error in resending confirmation');
@@ -103,6 +109,7 @@ const deleteAccount = async (credentials) => {
     body: JSON.stringify(credentials),
   });
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error in deleting account');
   }

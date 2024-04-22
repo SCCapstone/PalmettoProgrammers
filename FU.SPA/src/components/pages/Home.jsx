@@ -8,6 +8,7 @@ import DiscoverPostScreenshot from '../../../assets/discover-posts-view.png';
 import PostViewScreenshot from '../../../assets/post-view.png';
 import FriendsViewScreenshot from '../../../assets/friends-view.png';
 
+// Home landing page
 const Home = () => {
   return (
     <Box sx={{ maxWidth: 800, p: 2, mx: 'auto', textAlign: 'left' }}>

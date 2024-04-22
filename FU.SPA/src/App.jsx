@@ -20,6 +20,10 @@ import EditPost from './components/pages/EditPost';
 import { ReactNotifications } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 
+/* Top level of application
+ * Provides theme, notifications, general CSS, User Context, Navbar,
+ * and top level routes
+ */
 function App() {
   return (
     <ThemeProvider theme={Theme}>

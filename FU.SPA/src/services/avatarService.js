@@ -2,6 +2,7 @@ import config from '../config';
 const API_BASE_URL = config.API_URL;
 import AuthService from './authService';
 
+// Function that uploads an image to be used as a profile picture
 const upload = async (file) => {
   const formData = new FormData();
   formData.append('avatarFile', file);
@@ -14,6 +15,7 @@ const upload = async (file) => {
     },
   });
 
+  // Error checking
   if (response.status === 422) {
     throw new Error('Invalid file format');
   } else if (!response.ok) {

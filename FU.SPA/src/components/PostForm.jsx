@@ -19,6 +19,7 @@ import UserContext from '../context/userContext';
 import dayjs from 'dayjs';
 import { Store } from 'react-notifications-component';
 
+// Function that displays a post form when creating or editing posts
 const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
   const { user } = useContext(UserContext);
 
@@ -108,6 +109,7 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
     }
   };
 
+  // Handles description change state error
   const handleDescriptionChange = (e) => {
     if (e.length > 1500) {
       setDescriptionError('Description cannot exceed 1500 characters');
@@ -188,6 +190,7 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
     return tags?.map((tag) => tag.name);
   };
 
+  // Returns form component to be displayed
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
       <div>
@@ -353,6 +356,7 @@ const GameSelector = ({ onChange, initialValue }) => {
     return filtered;
   };
 
+  // Returns Game selector field
   return (
     <Autocomplete
       required
@@ -444,6 +448,7 @@ const TagsSelector = ({ onChange, initialValues }) => {
     return filtered;
   };
 
+  // Returns tag selector field
   return (
     <Autocomplete
       autoHighlight
