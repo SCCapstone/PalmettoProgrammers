@@ -1930,6 +1930,13 @@
         ["xpath=//li[contains(.,'Logout')]", "xpath:innerText"]
       ],
       "value": ""
+    }, {
+      "id": "bef58758-450e-48de-b1fd-e48d5859422a",
+      "comment": "",
+      "command": "",
+      "target": "css=.css-158fiia > .MuiAvatar-img",
+      "targets": [],
+      "value": ""
     }]
   }, {
     "id": "3834bfb9-a1bb-4d9e-8db9-847e00dbcb5f",
@@ -3389,11 +3396,9 @@
     }, {
       "id": "34b40323-6b20-44ce-82fe-141a6c4145f7",
       "comment": "",
-      "command": "click",
-      "target": "css=.MuiAutocomplete-endAdornment:nth-child(3) > .MuiAutocomplete-clearIndicator > .MuiSvgIcon-root",
-      "targets": [
-        ["css=.MuiAutocomplete-endAdornment:nth-child(3) > .MuiAutocomplete-clearIndicator > .MuiSvgIcon-root", "css:finder"]
-      ],
+      "command": "//click",
+      "target": "xpath=//div[@id='root']/div[2]/div/form/div[5]/div/div/div[3]/button",
+      "targets": [],
       "value": ""
     }, {
       "id": "95a504c0-103d-4308-b745-63a6f26682e4",
