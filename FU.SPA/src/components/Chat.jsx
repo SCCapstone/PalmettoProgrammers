@@ -170,8 +170,9 @@ export default function Chat({ chatId }) {
           />
         ))}
       </CardContent>
-      <CardActions className="chat-actions">
+      <CardActions className="chat-actions" style={{ width: '100%' }}>
         <TextField
+          style={{ width: '100%' }}
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
