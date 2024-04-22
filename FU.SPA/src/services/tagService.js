@@ -7,6 +7,7 @@ import AuthService from './authService';
     keywords: "",
   }
 */
+// Searches for given tag(s)
 const searchTags = async (keyword) => {
   keyword = encodeURIComponent(keyword);
   const response = await fetch(`${API_BASE_URL}/tags?$keyword=${keyword}`);
@@ -14,6 +15,7 @@ const searchTags = async (keyword) => {
   return await response.json();
 };
 
+// Function that searchs for a tag
 const findTagByName = async (name) => {
   let tags = await searchTags(name);
 
@@ -26,6 +28,7 @@ const findTagByName = async (name) => {
   return tag;
 };
 
+// Finds a tag by title, and if it doesn't exist, creates the tag
 const findOrCreateTagByName = async (name) => {
   let tag = await findTagByName(name);
 

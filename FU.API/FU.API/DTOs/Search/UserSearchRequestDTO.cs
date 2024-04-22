@@ -2,6 +2,11 @@ namespace FU.API.DTOs.Search;
 
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// The request DTO for searching for users.
+/// All properties are optional.
+/// Will be converted to a UserQuery.
+/// </summary>
 public record UserSearchRequestDTO
 {
     [FromQuery]

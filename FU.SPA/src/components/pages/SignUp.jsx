@@ -20,6 +20,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import { Store } from 'react-notifications-component';
 import Theme from '../../Theme';
+import validator from 'validator';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -112,6 +113,9 @@ export default function SignUp() {
       } else if (errorResponse?.status === 409) {
         // Duplicate email
         setEmailError(errorResponse.detail);
+      } else if (!validator.isEmail(email)) {
+        // Invalid email format
+        setEmailError('Invalid Email');
       } else if (errorResponse?.status === 400) {
         // bad password
         setPasswordError(errorResponse.detail);

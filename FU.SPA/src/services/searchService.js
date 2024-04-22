@@ -29,6 +29,7 @@ const searchPosts = async (query) => {
   return { data: responseData, totalCount: totalCount };
 };
 
+// Search users based on query
 const searchUsers = async (query) => {
   var queryString = RequestBuilder.buildUserQueryString(query);
 

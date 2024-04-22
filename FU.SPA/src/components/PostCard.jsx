@@ -16,6 +16,7 @@ import dayjs from 'dayjs';
 import { Done } from '@mui/icons-material';
 import ChatMessagePreview from './ChatMessagePreview';
 
+// Function that displays a card with details of a given post
 const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
   const navigate = useNavigate();
   const user = post.creator;
@@ -24,6 +25,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
     showActions = true;
   }
 
+  //
   const handleTagClick = (tag) => {
     if (onTagClick) {
       onTagClick(tag);
@@ -49,6 +51,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
     let postEndDateTime = dayjs(post.endTime);
 
     let startDate = dayjs(post.startTime).format('MMM D, YYYY');
+    // This block handles formatting of start date display on card
     if (postStartDateTime < startOfToday) {
       // Use default
     } else if (postStartDateTime < startOfToday.add(1, 'day')) {
@@ -64,6 +67,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
     let endDate = '';
     if (!postEndDateTime.isSame(postStartDateTime, 'day')) {
       endDate = dayjs(post.endTime).format('MMM D, YYYY');
+      // This block handles formatting of end date display on card
       if (postEndDateTime < startOfToday) {
         // Use default
       } else if (postEndDateTime < startOfToday.add(1, 'day')) {
@@ -109,6 +113,7 @@ const PostCard = ({ post, showActions, onTagClick, showJoinedStatus }) => {
     return color;
   };
 
+  // Returns card with post details to be displayed
   return (
     <Card sx={{ width: 250 }}>
       <CardContent sx={{ textAlign: 'left', height: 350 }}>
