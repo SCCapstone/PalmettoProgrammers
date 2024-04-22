@@ -1,10 +1,6 @@
 .chat-actions {
   gap: 10px;
 
-  input {
-    width: 1500px;
-  }
-
   button {
     /* background-color: #23194f; */
     height: 100%;
