@@ -82,9 +82,8 @@ export default function ProfileSettings() {
         setDateOfBirth(e);
       }
     } catch (e) {
-      console.error("Error in DOB change: ", e);
+      console.error('Error in DOB change: ', e);
     }
-    
   };
 
   const handleSubmit = async (e) => {
@@ -182,7 +181,13 @@ export default function ProfileSettings() {
             error={dateError}
             fullWidth
             onChange={(newValue) => handleDOBChange(newValue)}
-            slotProps={{ field: { clearable: true, helperText: dateError, error: !!dateError }}}
+            slotProps={{
+              field: {
+                clearable: true,
+                helperText: dateError,
+                error: !!dateError,
+              },
+            }}
           />
         </LocalizationProvider>
         <TextField
