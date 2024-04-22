@@ -11,7 +11,9 @@ import RelationService from '../../services/relationService';
 import Button from '@mui/material/Button';
 import UserCard from '../UserCard';
 import ProfileSettings from './ProfileSettings';
+import { Store } from 'react-notifications-component';
 
+// Component for UserProfile
 const UserProfile = () => {
   const { userId } = useParams();
   const { user } = useContext(UserContext);
@@ -40,6 +42,7 @@ const UserProfile = () => {
     update();
   }, [userId, update]);
 
+  // Renders a chat if on another user's profile
   const renderChat = () => {
     if (isOwnProfile) {
       return null;
@@ -99,36 +102,55 @@ const SocialRelationActionButton = ({ requesteeId }) => {
   // don't render if viewing your own profile
   if (requesteeId === currentUser.id) return;
 
-  if (relationStatus === RelationService.STATUS.NONE) {
-    buttonText = 'Send Friend Request';
-    handleClick = async () => {
-      await RelationService.postRelation(
-        requesteeId,
-        RelationService.ACTIONS.FRIEND,
-      );
-      UpdateStatus();
-    };
-  } else if (relationStatus === RelationService.STATUS.REQUESTED) {
-    buttonText = 'Cancel Friend Request';
-    handleClick = async () => {
-      await RelationService.removeRelation(requesteeId);
-      UpdateStatus();
-    };
-  } else if (relationStatus === RelationService.STATUS.PENDING) {
-    buttonText = 'Accept Friend Request';
-    handleClick = async () => {
-      await RelationService.postRelation(
-        requesteeId,
-        RelationService.ACTIONS.FRIEND,
-      );
-      UpdateStatus();
-    };
-  } else if (relationStatus === RelationService.STATUS.FRIENDS) {
-    buttonText = 'Unfriend';
-    handleClick = async () => {
-      await RelationService.removeRelation(requesteeId);
-      UpdateStatus();
-    };
+  // Render friend button options and try to handle requests
+  try {
+    if (relationStatus === RelationService.STATUS.NONE) {
+      buttonText = 'Send Friend Request';
+      handleClick = async () => {
+        await RelationService.postRelation(
+          requesteeId,
+          RelationService.ACTIONS.FRIEND,
+        );
+        UpdateStatus();
+      };
+    } else if (relationStatus === RelationService.STATUS.REQUESTED) {
+      buttonText = 'Cancel Friend Request';
+      handleClick = async () => {
+        await RelationService.removeRelation(requesteeId);
+        UpdateStatus();
+      };
+    } else if (relationStatus === RelationService.STATUS.PENDING) {
+      buttonText = 'Accept Friend Request';
+      handleClick = async () => {
+        await RelationService.postRelation(
+          requesteeId,
+          RelationService.ACTIONS.FRIEND,
+        );
+        UpdateStatus();
+      };
+    } else if (relationStatus === RelationService.STATUS.FRIENDS) {
+      buttonText = 'Unfriend';
+      handleClick = async () => {
+        await RelationService.removeRelation(requesteeId);
+        UpdateStatus();
+      };
+    }
+  } catch (e) {
+    // Error notification
+    Store.addNotification({
+      title: 'Error has occured',
+      message: 'An error has occured.\n' + e,
+      type: 'danger',
+      insert: 'bottom',
+      container: 'bottom-right',
+      animationIn: ['animate__animated', 'animate__fadeIn'],
+      animationOut: ['animate__animated', 'animate__fadeOut'],
+      dismiss: {
+        duration: 8000,
+        onScreen: true,
+      },
+    });
+    console.error('Error in UserProfile: ', e);
   }
 
   return (

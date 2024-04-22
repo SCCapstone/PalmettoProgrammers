@@ -32,7 +32,8 @@
     "react-dom": "^18.2.0",
     "react-notifications-component": "^4.0.1",
     "react-router": "^6.18.0",
-    "selenium-side-runner": "^4.0.0-alpha.66"
+    "selenium-side-runner": "^4.0.0-alpha.66",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

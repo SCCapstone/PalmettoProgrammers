@@ -163,6 +163,7 @@ export default function AccountSettings() {
       }
     };
 
+    // Returns a Dialog that displays the delete action confirmation
     return (
       <Dialog open={deleteDialogOpen} onClose={handleClose}>
         <DialogTitle>Are you sure you want to delete your account?</DialogTitle>

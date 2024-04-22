@@ -13,6 +13,7 @@ const createPost = async (params) => {
     body: JSON.stringify(params),
   });
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error in post creation');
   }
@@ -32,6 +33,7 @@ const updatePost = async (params, postId) => {
     body: JSON.stringify(params),
   });
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error in updating post');
   }
@@ -49,6 +51,7 @@ const getPostDetails = async (postId) => {
     },
   });
 
+  // Error checking
   if (!response.ok) {
     throw new Error('Error in post creation');
   }

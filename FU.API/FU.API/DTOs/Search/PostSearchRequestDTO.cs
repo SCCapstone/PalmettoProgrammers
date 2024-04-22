@@ -2,6 +2,11 @@ namespace FU.API.DTOs.Search;
 
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Represents a request to search for posts.
+/// All properties are optional.
+/// Will be converted to a PostQuery.
+/// </summary>
 public record PostSearchRequestDTO
 {
     [FromQuery]

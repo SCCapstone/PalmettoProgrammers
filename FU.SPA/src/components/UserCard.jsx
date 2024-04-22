@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { People, PendingActions, CallMade } from '@mui/icons-material';
 import ChatMessagePreview from './ChatMessagePreview';
 
+// Function that displays a card with details of a given user
 const UserCard = ({ user, showRelationStatus, showActions }) => {
   if (showRelationStatus === undefined) {
     showRelationStatus = false;
@@ -42,6 +43,7 @@ const UserCard = ({ user, showRelationStatus, showActions }) => {
     (today.getTime() - dob.getTime()) / (1000 * 3600 * 24 * 365),
   );
 
+  // Handles displaying relationship status with another user
   const renderRelationStatus = () => {
     if (!showRelationStatus) {
       return null;
@@ -70,6 +72,7 @@ const UserCard = ({ user, showRelationStatus, showActions }) => {
     }
   };
 
+  // Return card to be displayed
   return (
     <Card
       style={{
