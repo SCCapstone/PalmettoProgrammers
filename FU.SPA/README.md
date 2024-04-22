@@ -61,10 +61,6 @@ __Note: there are currently issues with running tests on the command line. This 
 running and tests being completely unable to run with the Chrome driver. Run them through Selenium IDE for
 the best experience.__
 
-To run tests with a clean API and SPA, run
-
-    npm run selenium-test:clean
-
 To startup a clean API and SPA for test development, run
 
     npm run container-setup
@@ -81,27 +77,14 @@ To pause the container press `CTRL-C`. To resume it run the above command. To st
 
     npm run api-teardown
 
+To run tests, go to the Selenium IDE extension in your browser of choice, load the `tests/Forces_Unite.side` project file, and run the tests. You can run tests indivdually
+or run them all together in the `default` test suite.
+
 ### Developing Selenium Tests
 
 Tests are located in `FU.SPA/tests`.
 
 To add initial testing data, add API calls to `tests/setup-tests.js`. The file can be run manually with `node tests/setup-tests.js`. If run manually, the `API_BASE_URL` environment variable must be set. See [here](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs) for details.
-
-To run behavioral tests with a API and SPA already running, run
-
-    npm run selenium-test
-
-or
-
-    selenium-side-runner tests/*.side -c browserName=firefox
-
-To run a specific test suite, run
-
-    npm run selenium-test:suite arg
-
-where `arg` is a regex string that will match the test suite. i.e. testing a suite named "Login, SignIn, and SignUp" only requires you to put "Login" as an argument.
-
-You can also change the browserName option to Chrome/Chromium if you want to test that browser engine instead. However, there are issues if the installed version of Chrome/Chromium is different from the Selenium driver version.
 
 ### Coding Style
 
