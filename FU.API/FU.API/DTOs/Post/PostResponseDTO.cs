@@ -3,6 +3,13 @@
 using FU.API.DTOs.Chat;
 using FU.API.Models;
 
+/// <summary>
+/// The response DTO for post.
+/// May contain reference to the last message in the chat.
+/// Includes the creator of the post.
+/// Include the game name, and list of tag names.
+/// Indicates if the current user has joined the post.
+/// </summary>
 public class PostResponseDTO
 {
     public int Id { get; set; }

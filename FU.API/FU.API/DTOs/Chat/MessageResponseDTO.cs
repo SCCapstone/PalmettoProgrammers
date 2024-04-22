@@ -2,6 +2,10 @@
 
 using FU.API.Models;
 
+/// <summary>
+/// The response DTO for message.
+/// Sender is the user who sent the message, and contains the username and avatar.
+/// </summary>
 public class MessageResponseDTO
 {
     public int Id { get; set; }
