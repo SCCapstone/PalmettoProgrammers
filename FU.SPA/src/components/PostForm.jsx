@@ -54,7 +54,7 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
 
   // Manage enabled state
   useEffect(() => {
-    const validTags = tags.every(tag => tag.name.length <= 10);
+    const validTags = tags.every((tag) => tag.name.length <= 10);
     const validTagCount = tags.length <= 4;
     setIsEnabled(
       game?.name?.length >= 3 &&
@@ -86,9 +86,11 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
 
   // Handles tag state error
   const handleTagChange = (e) => {
-    const validTags = e.length <= 4 && e.every(tag => tag.name.length <= 10);
+    const validTags = e.length <= 4 && e.every((tag) => tag.name.length <= 10);
     if (!validTags) {
-      setTagError('Ensure tags are up to 10 characters and no more than 4 tags.');
+      setTagError(
+        'Ensure tags are up to 10 characters and no more than 4 tags.',
+      );
       setIsEnabled(false);
     } else {
       setTagError('');
@@ -264,10 +266,10 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
             }}
           />
         </LocalizationProvider>
-        <TagsSelector 
-        onChange={handleTagChange}
-        helperText={tagError}
-        initialValues={initialValue?.tags} 
+        <TagsSelector
+          onChange={handleTagChange}
+          helperText={tagError}
+          initialValues={initialValue?.tags}
         />
         <TextField
           error={description.length > 1500}
@@ -414,7 +416,7 @@ const TagsSelector = ({ onChange, initialValues }) => {
   const onInputChange = (event, newValues) => {
     if (newValues.length > 4) {
       setError(true);
-    } else if (newValues.some(tag => tag.name.length > 10)) {
+    } else if (newValues.some((tag) => tag.name.length > 10)) {
       setError(true);
     } else {
       setError(false);
@@ -474,7 +476,13 @@ const TagsSelector = ({ onChange, initialValues }) => {
           label="Add/Create Tags"
           error={error}
           placeholder=""
-          helperText={error ? (value.length > 4 ? `You can only add up to 4 tags.` : `Tag cannot exceed 10 characters.`) : ""}
+          helperText={
+            error
+              ? value.length > 4
+                ? `You can only add up to 4 tags.`
+                : `Tag cannot exceed 10 characters.`
+              : ''
+          }
         />
       )}
     />
