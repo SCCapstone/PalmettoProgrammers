@@ -177,8 +177,6 @@ export default function ProfileSettings() {
           <DatePicker
             label="Date of Birth"
             value={dateOfBirth}
-            helperText={dateError}
-            error={dateError}
             fullWidth
             onChange={(newValue) => handleDOBChange(newValue)}
             slotProps={{
