@@ -63,18 +63,28 @@ export default function ProfileSettings() {
   };
   // Handles the errors and value changes for the date of birth section.
   const handleDOBChange = (e) => {
-    const today = dayjs();
-    const ageEntered = today.diff(e, 'year');
-    if (ageEntered < 13) {
-      setDateError('You must be at least 13 years of age.');
-      setDateOfBirth(e);
-    } else if (ageEntered > 120) {
-      setDateError('You must enter an age less than 120');
-      setDateOfBirth(e);
-    } else {
-      setDateError('');
-      setDateOfBirth(e);
+    try {
+      const today = dayjs();
+      const ageEntered = today.diff(e, 'year');
+      console.log(ageEntered);
+      // allows clearing date of birth
+      if (e == null) {
+        setDateError('');
+        setDateOfBirth(e);
+      } else if (ageEntered < 13) {
+        setDateError('You must be at least 13 years old.');
+        setDateOfBirth(e);
+      } else if (ageEntered > 120) {
+        setDateError('You must enter an age less than 120 years old.');
+        setDateOfBirth(e);
+      } else {
+        setDateError('');
+        setDateOfBirth(e);
+      }
+    } catch (e) {
+      console.error("Error in DOB change: ", e);
     }
+    
   };
 
   const handleSubmit = async (e) => {
@@ -167,17 +177,14 @@ export default function ProfileSettings() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Date of Birth"
-            value={dateOfBirth} // Leave null as to not change date
+            value={dateOfBirth}
+            helperText={dateError}
+            error={dateError}
             fullWidth
             onChange={(newValue) => handleDOBChange(newValue)}
-            slotProps={{ field: { clearable: true } }}
+            slotProps={{ field: { clearable: true, helperText: dateError, error: !!dateError }}}
           />
         </LocalizationProvider>
-        {dateError && (
-          <Typography variant="caption" color="error">
-            {dateError} {/* Error message */}
-          </Typography>
-        )}
         <TextField
           error={bio.length > 1500}
           helperText={bioError}
