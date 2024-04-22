@@ -46,12 +46,12 @@ const Home = () => {
         <SectionBig headerText="Showcase" />
         <iframe
           style={{ width: '100%', aspectRatio: '16/9' }}
-          src="https://www.youtube.com/embed/lAGrIrY7h3o?si=P-e0W_LpiEpUJZTa&color=white"
+          src="https://www.youtube.com/embed/jp-dW9j6vXE?si=53bW1NUOMyGjDHJ5&color=white"
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
-          allowfullscreen
+          allowFullScreen
         />
         <SectionBig headerText="About" maxBodyWidth="100%">
           This website was created by PalmettoProgrammers for a 2023-2024 UofSC

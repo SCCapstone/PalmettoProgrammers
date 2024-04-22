@@ -33,6 +33,7 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
   const [isEnabled, setIsEnabled] = useState(false);
 
   const [gameError, setGameError] = useState('');
+  const [tagError, setTagError] = useState('');
   const [titleError, setTitleError] = useState('');
   const [startDateError, setStartDateError] = useState('');
   const [endDateError, setEndDateError] = useState('');
@@ -55,6 +56,8 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
 
   // Manage enabled state
   useEffect(() => {
+    const validTags = tags.every((tag) => tag.name.length <= 10);
+    const validTagCount = tags.length <= 4;
     setIsEnabled(
       game?.name?.length >= 3 &&
         title.length >= 3 &&
@@ -64,9 +67,11 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
         startTime.isAfter(dayjs()) &&
         startTime.isBefore(endTime) &&
         endTime.isBefore(startTime.add(24, 'hours')) &&
-        endTime.isAfter(startTime),
+        endTime.isAfter(startTime) &&
+        validTags &&
+        validTagCount,
     );
-  }, [game, title, isEnabled, endTime, startTime, description.length]);
+  }, [game, title, endTime, startTime, description.length, tags]);
 
   // Handles game state error
   const handleGameChange = (e) => {
@@ -78,6 +83,20 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
       setGameError('');
       setGame(e);
       setIsEnabled(true);
+    }
+  };
+
+  // Handles tag state error
+  const handleTagChange = (e) => {
+    const validTags = e.length <= 4 && e.every((tag) => tag.name.length <= 10);
+    if (!validTags) {
+      setTagError(
+        'Ensure tags are up to 10 characters and no more than 4 tags.',
+      );
+      setIsEnabled(false);
+    } else {
+      setTagError('');
+      setTags(e);
     }
   };
 
@@ -269,7 +288,11 @@ const PostForm = ({ onSubmit, submitButtonText, initialValue }) => {
             }}
           />
         </LocalizationProvider>
-        <TagsSelector onChange={setTags} initialValues={initialValue?.tags} />
+        <TagsSelector
+          onChange={handleTagChange}
+          helperText={tagError}
+          initialValues={initialValue?.tags}
+        />
         <TextField
           error={description.length > 1500}
           label="Description"
@@ -391,6 +414,7 @@ const GameSelector = ({ onChange, initialValue }) => {
 const TagsSelector = ({ onChange, initialValues }) => {
   const [tagOptions, setTagOptions] = useState([]);
   const [value, setValue] = useState([]);
+  const [error, setError] = useState(false);
 
   // Load initial values
   useEffect(() => {
@@ -413,14 +437,12 @@ const TagsSelector = ({ onChange, initialValues }) => {
   }, [initialValues]);
 
   const onInputChange = (event, newValues) => {
-    for (const newValue of newValues) {
-      if (newValue.id === null) {
-        // if not in options add to options
-        if (!tagOptions.some((o) => o.name === newValue.name)) {
-          const newOptions = tagOptions.concat([newValue]);
-          setTagOptions(newOptions);
-        }
-      }
+    if (newValues.length > 4) {
+      setError(true);
+    } else if (newValues.some((tag) => tag.name.length > 10)) {
+      setError(true);
+    } else {
+      setError(false);
     }
 
     setValue(newValues);
@@ -476,8 +498,15 @@ const TagsSelector = ({ onChange, initialValues }) => {
         <TextField
           {...params}
           label="Add/Create Tags"
+          error={error}
           placeholder=""
-          helperText={value.length > 6 ? 'Maximum of 6 tags' : ''}
+          helperText={
+            error
+              ? value.length > 4
+                ? `You can only add up to 4 tags.`
+                : `Tag cannot exceed 10 characters.`
+              : ''
+          }
         />
       )}
     />
