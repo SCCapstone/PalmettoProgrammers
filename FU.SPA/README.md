@@ -57,15 +57,15 @@ Add the following to your `hosts` file (`/etc/hosts` on Linux and `C:\Windows\Sy
     127.0.0.1	fu-api
     127.0.0.1	fu-spa
 
-To test with a clean API and SPA run
-
-    npm run selenium-test:clean
+**Note: there are currently issues with running tests on the command line. This includes some tests not properly
+running and tests being completely unable to run with the Chrome driver. Run them through Selenium IDE for
+the best experience.**
 
 To startup a clean API and SPA for test development, run
 
     npm run container-setup
 
-To stop run
+To stop containers, run
 
     npm run container-teardown
 
@@ -73,25 +73,18 @@ To start just the API for SPA development, run
 
     npm run api-start
 
-To pause the container press `CTRL-C`. To resume it run the above command. To stop and remove the container run
+To pause the container press `CTRL-C`. To resume it run the above command. To stop and remove the container, run
 
     npm run api-teardown
+
+To run tests, go to the Selenium IDE extension in your browser of choice, load the `tests/Forces_Unite.side` project file, and run the tests. You can run tests indivdually
+or run them all together in the `default` test suite.
 
 ### Developing Selenium Tests
 
 Tests are located in `FU.SPA/tests`.
 
 To add initial testing data, add API calls to `tests/setup-tests.js`. The file can be run manually with `node tests/setup-tests.js`. If run manually, the `API_BASE_URL` environment variable must be set. See [here](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs) for details.
-
-To run behavioral tests with a API and SPA already running, run
-
-    npm run selenium-test
-
-or
-
-    selenium-side-runner tests/*.side -c browserName=firefox
-
-You can also change the browserName option to chrome/chromium if you want to test that browser engine instead.
 
 ### Coding Style
 
