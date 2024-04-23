@@ -1291,9 +1291,9 @@
       "id": "6e4f5a02-ce64-4bbc-ab29-13a56d487b37",
       "comment": "",
       "command": "click",
-      "target": "css=.Mui-focusVisible",
+      "target": "css=.MuiButton-textPrimary:nth-child(2)",
       "targets": [
-        ["css=.Mui-focusVisible", "css:finder"],
+        ["css=.MuiButton-textPrimary:nth-child(2)", "css:finder"],
         ["xpath=(//button[@type='button'])[8]", "xpath:attributes"],
         ["xpath=//div[2]/button[2]", "xpath:position"]
       ],
