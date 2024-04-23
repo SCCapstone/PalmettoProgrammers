@@ -1,6 +1,6 @@
 # Forces Unite
 
-The Forces Unite website is a platform designed to bring gamers together, form groups, and connect over their favorite gaming interests. Read our [wiki](https://github.com/SCCapstone/PalmettoProgrammers/wiki/Project-Description) for more details.
+The Forces Unite website is a platform designed to bring gamers together, chat, and connect over their favorite gaming interests. Read our [wiki](https://github.com/SCCapstone/PalmettoProgrammers/wiki/Project-Description) for more details.
 
 ## Running
 
