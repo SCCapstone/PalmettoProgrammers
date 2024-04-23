@@ -57,9 +57,9 @@ Add the following to your `hosts` file (`/etc/hosts` on Linux and `C:\Windows\Sy
     127.0.0.1	fu-api
     127.0.0.1	fu-spa
 
-__Note: there are currently issues with running tests on the command line. This includes some tests not properly
+**Note: there are currently issues with running tests on the command line. This includes some tests not properly
 running and tests being completely unable to run with the Chrome driver. Run them through Selenium IDE for
-the best experience.__
+the best experience.**
 
 To startup a clean API and SPA for test development, run
 
